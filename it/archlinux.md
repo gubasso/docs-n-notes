@@ -5,7 +5,7 @@
 ## Packages to install
 
 1) create a text file with the list
-2) run/create script with this structure: `sudo pacman -S $(awk '{print $1}'  input_file)` [^1]
+2) run/create script with this structure: `sudo pacman -S $(awk '{print $1}'  input_file)`
 
 ### pacstrap list
 
@@ -81,7 +81,17 @@ bat
 xclip
 fd
 rmtrash
-nerd-fonts-complete
+libreoffice-fresh
+libreoffice-extension-texmaths
+libreoffice-extension-writer2latex
+hunspell
+hunspell-en_us
+hyphen
+hyphen-en
+libmythes
+mythes-en
+firefox
+
 
 ### pacman dwm
 
@@ -96,6 +106,8 @@ nitrogen
 libinput
 picom
 sxhkd 
+brightnessctl
+acpi
 
 ### aur packages
 
@@ -103,10 +115,40 @@ apulse
 brave-bin
 librewolf-bin
 asdf-vm
+mons
+hunspell-pt-br
+hyphen-pt-br
+mythes-pt-br
+libreoffice-extension-languagetool
+
+### fonts pacman
+
+nerd-fonts-complete
+ttf-caladea
+ttf-carlito
+ttf-dejavu
+ttf-liberation
+ttf-linux-libertine-g
+ttf-inconsolata
+ttf-font-awesome
+noto-fonts
+noto-fonts-emoji
+adobe-source-code-pro-fonts
+adobe-source-sans-fonts
+adobe-source-serif-fonts
+
+
+### fonts aur
+
+ttf-gentium-basic
+ttf-ms-fonts
+ttf-twemoji-color
 
 ### optional packages (pacman)
 
 starship
+zathura
+mupdf
 
 ## References:
 
