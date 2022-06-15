@@ -13,6 +13,13 @@
 
 ## General
 
+Teste da aplicação web no chrome:
+chrome lighthouse teste e report
+fazer um audit por vez
+tem uma versão pra rodar no node, pra fazer teste automatizado
+
+JavaScript Cookies vs Local Storage vs Session https://youtu.be/GihQAC1I39Q
+
 performance site web app / optimizations
 https://developer.chrome.com/docs/devtools/performance-insights/
 3. https://gtmetrix.com

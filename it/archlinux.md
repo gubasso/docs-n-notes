@@ -1,5 +1,28 @@
 
 
+## General
+
+- [How to prevent the keyboard backlight from turning on when the laptop is woken from sleep?](https://askubuntu.com/questions/1028368/how-to-prevent-the-keyboard-backlight-from-turning-on-when-the-laptop-is-woken-f)
+- [systemd.service - Service unit configuration : Example](https://jlk.fjfi.cvut.cz/arch/manpages/man/systemd.service.5#EXAMPLES)
+
+```
+[Unit]
+Description=Turn off keyboard backlight as a default (after boot or resume)
+After=multi-user.target
+After=suspend.target
+After=hibernate.target
+After=hybrid-sleep.target
+[Service]
+# Type=oneshot
+# RemainAfterExit=yes
+ExecStart=/usr/bin/brightnessctl --device=dell* set 0
+[Install]
+WantedBy=multi-user.target
+WantedBy=suspend.target
+WantedBy=hibernate.target
+WantedBy=hybrid-sleep.target
+```
+
 
 
 ## Packages to install
