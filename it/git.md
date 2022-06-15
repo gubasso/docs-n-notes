@@ -20,6 +20,13 @@
 
 ## General
 
+[^android_note_git]
+note taking markdown mobile android integrated with git:
+https://play.google.com/store/apps/details?id=io.gitjournal.gitjournal
+https://play.google.com/store/apps/details?id=io.spck
+https://play.google.com/store/apps/details?id=com.foxdebug.acodefree
+https://play.google.com/store/apps/details?id=com.rhmsoft.edit
+
 - graphical and simple git log terminal:
     - `git log --online --graph master feature -m 15`
 - merge branch logic:
