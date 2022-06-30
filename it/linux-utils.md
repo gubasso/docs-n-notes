@@ -3,13 +3,33 @@
 <!-- vim-markdown-toc GitLab -->
 
 * [General](#general)
+* [rsync](#rsync)
 * [sxhkd](#sxhkd)
 * [ffmpeg](#ffmpeg)
 * [tmux](#tmux)
+* [References:](#references)
 
 <!-- vim-markdown-toc -->
 
 ## General
+
+**secure-delete**
+
+Better than `shred`. To shred files and full directory trees.[^1]
+
+```
+sudo apt-get install secure-delete
+iaur secure-delete
+srm -r pathname
+```
+
+Done. Secure delete is a lot more paranoid than shred, using 38 passes instead of 3. To do a fast single pass, use
+
+```
+srm -rfll pathname
+```
+
+---
 
 Zellij (rust) - A terminal multiplexer workspace with batteries included https://www.reddit.com/r/rust/comments/mwukhz/zellij_a_terminal_multiplexer_workspace_with/?utm_medium=android_app&utm_source=share (like tmux)
 rust replacement
@@ -26,6 +46,14 @@ REFERENCED:
 - bleach bit: clear system and browser files
 - dupeguru: find and clear duplicate files
 - qdirstat: stats for files and directories, find big files and directories
+
+## rsync
+
+Example of rsync being used to push/syncing files to server, with watchexec:
+
+```
+watchexec 'rsync -vurzP --delete-after ./* gubasso@projects.cwnt.io:/home/gubasso/cadelab-api-backend/'
+```
 
 ## sxhkd
 
@@ -108,3 +136,7 @@ manage sessions / shortcuts: https://github.com/tmux-plugins/tmux-sessionist
 save / log / “screen capture” to a file / save history: https://github.com/tmux-plugins/tmux-logging
 Restore tmux environment after system restart: https://github.com/tmux-plugins/tmux-resurrect
 
+
+## References:
+
+[^1]: [How do I recursively shred an entire directory tree?](https://unix.stackexchange.com/a/146078)

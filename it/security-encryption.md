@@ -18,6 +18,14 @@ test password strength: https://www.security.org/how-secure-is-my-password/
 
 test ip / vpn: http://ipleak.net/
 
+---
+
+Example of sending a command through ssh:
+
+```
+ssh gubasso@projects.cwnt.io 'mkdir -p cadelab-api-backend'
+```
+
 ## SSH / Openssh
 
 - Persistent ssh connection:
