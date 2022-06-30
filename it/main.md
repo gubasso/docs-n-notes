@@ -2,6 +2,14 @@
 
 Main and general notes
 
+
+- airtable-like database:
+    - https://www.cloudron.io/store/com.nocodb.cloudronapp.html
+    - cloudron https://baserow.io/
+
+- toggl time tracker alernative:
+    - kimai https://www.cloudron.io/store/org.kimai.cloudronapp.html
+
 random password in terminal
 https://devdojo.com/alexg/bash-random-password-generator
 

@@ -10,6 +10,10 @@
 
 ## General
 
+- data at rest encryption:
+    - gocryptfs <https://nuetzlich.net/gocryptfs/> / <https://mhogomchungu.github.io/sirikali/> (gui)
+    - <https://wiki.archlinux.org/title/Gocryptfs>
+
 test password strength: https://www.security.org/how-secure-is-my-password/
 
 test ip / vpn: http://ipleak.net/
