@@ -13,6 +13,14 @@
 ## General
 > `# Server / VPS`
 
+- https://dokku.com/
+    - dokku vs caprover https://www.mskog.com/posts/heroku-vs-self-hosted-paas
+
+- https://caprover.com/
+    - CapRover is an extremely easy to use app/database deployment & web server manager for your NodeJS, Python, PHP, ASP.NET, Ruby, MySQL, MongoDB, Postgres, WordPress (and etc...) applications!
+    - deploy application (cloudron like? heroku like?)
+    - docker
+
 ´setup_opensuse_leap_15_2.sh´ (personal notes for now...)
 - deploy static web site to be served with nginx, with rsync
 - script to install and config postgrest, postgresql, nginx, ufw

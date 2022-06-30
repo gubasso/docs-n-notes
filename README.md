@@ -39,9 +39,7 @@ My selected Methods for managing projects, issue trackers:
     - all milestones in all projects
     - others...
 
-
 cloud management options:
-
 
 - https://www.cloudron.io/
 - https://github.com/sandstorm-io/sandstorm

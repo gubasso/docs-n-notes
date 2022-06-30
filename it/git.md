@@ -17,8 +17,28 @@
 [Git merge conflict cheatsheet](https://wincent.com/wiki/Git_merge_conflict_cheatsheet)
 [Vim universe. Vim as a merge tool](https://www.youtube.com/watch?v=VxpCgQyUXlI)
 
-
 ## General
+
+**git workflows:**
+
+* <https://git-scm.com/book/en/v2/Distributed-Git-Distributed-Workflows>
+* <https://mirrors.edge.kernel.org/pub/software/scm/git/docs/gitworkflows.html>
+* <https://martinfowler.com/articles/branching-patterns.html>
+
+**git encryption**
+
+* few files (.env, passwords, database logins, etc...)
+* <https://git-secret.io/>
+* <https://github.com/AGWA/git-crypt>
+* <https://github.com/elasticdog/transcrypt>
+
+* hole repository
+* <https://gist.github.com/polonskiy/7e5d308ca6412765927a96bd74601a5e>
+* <https://github.com/spwhitton/git-remote-gcrypt>
+* <https://superuser.com/questions/1162907/setting-up-an-encrypted-git-repository>
+* [https://git-annex.branchable.com/tips/fully\\\_encrypted\\\_git\\\_repositories\\\_with\\\_gcrypt/](https://git-annex.branchable.com/tips/fully%5C_encrypted%5C_git%5C_repositories%5C_with%5C_gcrypt/)
+
+---
 
 [^android_note_git]
 note taking markdown mobile android integrated with git:

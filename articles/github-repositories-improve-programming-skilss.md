@@ -21,8 +21,10 @@ Roadmap to becoming a web developer in 2020
 https://t.co/aLeGg5gvEk
 
 5. Public APIs
+fake apis, dummy apis
 A collective list of free APIs for use in software and web development.
-https://t.co/Idwi300p0a
+- https://github.com/public-apis/public-apis
+- swapi.dev
 
 6. JavaScript Algorithms
 Algorithms and data structures implemented in JavaScript with explanations and links to further readings
