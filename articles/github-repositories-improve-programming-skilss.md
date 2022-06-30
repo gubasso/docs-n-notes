@@ -25,6 +25,7 @@ fake apis, dummy apis
 A collective list of free APIs for use in software and web development.
 - https://github.com/public-apis/public-apis
 - swapi.dev
+- https://t.co/Idwi300p0a
 
 6. JavaScript Algorithms
 Algorithms and data structures implemented in JavaScript with explanations and links to further readings

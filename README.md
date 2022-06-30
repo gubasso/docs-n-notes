@@ -12,12 +12,8 @@ Personal notes and documentations for tech and a bunch of unrelated topics.
 
 issue tracker, project manager, command line cli, terminal
 
-- * Bug: https://github.com/driusan/bug
+- Bug: https://github.com/driusan/bug
     - https://github.com/driusan/PoormanIssueTracker
-- https://github.com/jashmenn/ditz Ditz is a simple, light-weight distributed issue tracker designed to work with
-- https://github.com/jeffWelling/ticgit
-- https://codespeak.net/ciss/tutorial.html
-- https://sciit.gitlab.io/sciit/
 - Fossil: http://www.fossil-scm.org/
 - Git-bug: https://github.com/MichaelMure/git-bug
 - Git-dit: https://github.com/neithernut/git-dit
@@ -25,6 +21,8 @@ issue tracker, project manager, command line cli, terminal
 - Issue: https://github.com/marekjm/issue
 - Ticgit: https://github.com/jeffWelling/ticgit
 - Veracity: http://veracity-scm.com/compare/
+- https://codespeak.net/ciss/tutorial.html
+- https://sciit.gitlab.io/sciit/
 
 My selected Methods for managing projects, issue trackers:
 
