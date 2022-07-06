@@ -17,6 +17,12 @@
         * [Basic example:](#basic-example)
     * [Groups](#groups)
 * [Normal Usage (project/normal user)](#normal-usage-projectnormal-user)
+* [Advanced Cases](#advanced-cases)
+    * [separating "key admin" from "repo admin"](#separating-key-admin-from-repo-admin)
+    * [Automation: Gitolite Triggers / Git Hooks](#automation-gitolite-triggers--git-hooks)
+    * [Automation: "My own" Commands](#automation-my-own-commands)
+    * [Constraints: add additional constraints to a push (VREF)](#constraints-add-additional-constraints-to-a-push-vref)
+    * [](#)
 * [References](#references)
 
 <!-- vim-markdown-toc -->
@@ -37,13 +43,16 @@
 
 ## Instalation and setup[^2]
 
+- enter server as your user admin
+
 - install dependencies[^4]
     - git
     - perl
     - openssh
 
-
-- enter server as your user admin
+- install packages:
+    - debian 11: `gitolite3`
+    - arch: `gitolite`
 
 - create and setup user `git`[^1]
     - a dedicated userid to host the repos
@@ -53,12 +62,12 @@
 - login as `git` with `su - git`
     - check if `~/bin` is in `$PATH`
 
-- install packages:
-    - debian 11: `gitolite3`
-    - arch: `gitolite`
 
-- `server:/home/git`
-    - make sure ~/.ssh/authorized_keys is empty or non-existent
+- `server:/home/git`: make sure these files/dirs do not exists
+    - `~/.gitolite.rc`
+    - `~/.gitolite`
+    - `~/repositories`
+    - `~/.ssh/authorized_keys`
 
 - copy admin public key to server:/home/git/ as `<user_admin>.pub`
 
@@ -326,6 +335,41 @@ git clone git@host:foo
 ```
 
 - NOTE: again, if they are asked for a password, something is wrong.
+
+## Advanced Cases
+
+- ["non-core" gitolite](https://gitolite.com/gitolite/non-core)
+
+- Commands can be run from the shell command line. Among those, the ones in the ENABLE list in the rc file can also be run remotely.
+- Hooks are standard git hooks.
+- Sugar scripts change the conf language for your convenience. The word sugar comes from "syntactic sugar".
+- Triggers are to gitolite what hooks are to git. I just chose a different name to avoid confusion and constant disambiguation in the docs.
+- VREFs are extensions to the access control check part of gitolite.
+
+### [separating "key admin" from "repo admin"](https://gitolite.com/gitolite/cookbook#separating-key-admin-from-repo-admin)
+
+### Automation: Gitolite Triggers / Git Hooks
+
+- [gitolite triggers](https://gitolite.com/gitolite/triggers)
+- [appendix B: making a trigger run after the built-in ones](https://gitolite.com/gitolite/rc#appendix-b-making-a-trigger-run-after-the-built-in-ones)
+- [triggers / adding your own triggers](https://gitolite.com/gitolite/cookbook#triggers)
+
+- [Git Hooks](https://gitolite.com/gitolite/cookbook#hooks)
+    - adding your own update hooks
+    - adding other (non-update) hooks
+    - variation: maintain these hooks in the gitolite-admin repo
+    - (v3.6+) variation: repo-specific hooks
+
+### Automation: "My own" Commands
+
+- [adding your own commands / making commands available to remote users](https://gitolite.com/gitolite/cookbook#commands)
+
+### Constraints: add additional constraints to a push (VREF)
+
+- [virtual refs](https://gitolite.com/gitolite/vref#virtual-refs)
+
+### 
+
 
 
 ## References
