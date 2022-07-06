@@ -2,6 +2,8 @@
 
 ## General
 
+Vim Snippets: https://github.com/honza/vim-snippets
+
 
 ### Search / Replace
 
