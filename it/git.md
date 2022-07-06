@@ -3,10 +3,16 @@
 
 <!-- vim-markdown-toc GitLab -->
 
+* [Related](#related)
 * [Resources](#resources)
 * [General](#general)
 
 <!-- vim-markdown-toc -->
+
+## Related
+
+- [Gitolite](./it/git-gitolite.md)
+    - manage git users and repositories
 
 ## Resources
 
@@ -18,6 +24,10 @@
 [Vim universe. Vim as a merge tool](https://www.youtube.com/watch?v=VxpCgQyUXlI)
 
 ## General
+
+- `git rm` = `rm` + `git add`
+
+---
 
 **git workflows:**
 

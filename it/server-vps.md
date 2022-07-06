@@ -6,7 +6,12 @@
 * [General](#general)
 * [Setup a server / vps / domain name / security measures](#setup-a-server-vps-domain-name-security-measures)
     * [manage security](#manage-security)
+        * [change original root password](#change-original-root-password)
+        * [add a new user and set a password [^l1]](#add-a-new-user-and-set-a-password-l1)
+        * [create and add to group wheel](#create-and-add-to-group-wheel)
+        * [visudo: full root privileges](#visudo-full-root-privileges)
 * [Opensuse Server](#opensuse-server)
+* [References](#references)
 
 <!-- vim-markdown-toc -->
 
@@ -36,18 +41,18 @@ find my server/host ip address: `ifconfig`
 ## Setup a server / vps / domain name / security measures
 > `# Server / VPS`
 
-- deploy a server / vps (linode, vutr, etc...) [^nx1]
+- deploy a server / vps (linode, vutr, etc...)
     - enable ipv6
     - hostname: put the domain name with subdomain, like: projects.cwnt.io
 
-- epik, dns host records [^nx1]
+- epik, dns host records 
     - External Hosts: A (ipv4) , AAAA (ipv6)
     - host field: subdomain you want
         - normal path: add one with blank host field and other with `www`
             - can add a `*` to... to redirect any subdomain
             - do * if the subdomain is set in the same host vps
     - repeat same pattern to A (ipv4) and AAAA (ipv6) (find ipv6 address at linode)
-- (to setup a email server) at server host (e.g. linode) [^nx1]
+- (to setup a email server) at server host (e.g. linode) 
     - set ipv6 reverse dns: field `ipv6 number` to `landchad.net`
 
 (wait to dns propagate)
@@ -61,22 +66,34 @@ https://dnschecker.org
 ### manage security 
 $opsec
 
-- change original root password
+
+#### change original root password
+
 ```
 passwd root
 ```
 
-- add a new user and set a password [^l1]
+#### add a new user and set a password [^l1]
+
 ```
 useradd -m user_name
 passwd user_name
+```
+
+- `-m/--create-home`
+- The above useradd command will also automatically create a group called user_name and makes this the default group for the user archie. Making each user have their own group (with the group name same as the user name) is the preferred way to add users.
+
+#### create and add to group wheel
+
+```
+groupadd wheel # if does not exists
 usermod -aG wheel username
 ```
-    - `groupadd wheel`: if does not exists
-    - `-m/--create-home`
-    - The above useradd command will also automatically create a group called archie and makes this the default group for the user archie. Making each user have their own group (with the group name same as the user name) is the preferred way to add users.
+
+#### visudo: full root privileges
 
 - gain full root privileges [^l2]
+
 ```
 EDITOR=vim visudo
 ---
@@ -118,7 +135,7 @@ Host myserver.com
     - to copy local ssh credential to the server
 - test if login works `ssh user@host`
 
-- at host (remote), edit [^nx1]
+- at host (remote), edit 
 ```
 /etc/ssh/sshd_config
 ---
@@ -132,9 +149,8 @@ AllowUsers gubasso ismael
 ```
 
 - check if port 202 will be unbloced https://docs.cloudron.io/security/#securing-ssh-access
-- set config, run `systemctl restart sshd`
-
 (to just update a config, may run `systemctl reload sshd`)
+- set config, run `systemctl restart sshd`
 
 - set hostname [^pn1]
 ```
@@ -148,6 +164,7 @@ hostnamectl set-hostname myhostname
   (ip address from vps)   myhostname
 45.56.87.40     projects.cwnt.io        cadelab-linode
 2600:3c01::f03c:92ff:fe46:471c  projects.cwnt.io        cadelab-linode
+
 ```
 
 - `/etc/hostname` contains name of the machine, as known to applications that run locally.[^l5]
@@ -192,5 +209,8 @@ things to do after install opensuse
     sudo zypper install -y patterns-devel-base-devel_basis
     ```
 
+## References
+
+[^1]: [Setting up a Website and Email Server in One Sitting (Internet Landchad) - Luke Smith](https://www.youtube.com/watch?v=3dIVesHEAzc) $server $vps $host
 
 
