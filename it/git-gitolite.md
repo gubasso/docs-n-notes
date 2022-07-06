@@ -22,7 +22,6 @@
     * [Automation: Gitolite Triggers / Git Hooks](#automation-gitolite-triggers--git-hooks)
     * [Automation: "My own" Commands](#automation-my-own-commands)
     * [Constraints: add additional constraints to a push (VREF)](#constraints-add-additional-constraints-to-a-push-vref)
-    * [](#)
 * [References](#references)
 
 <!-- vim-markdown-toc -->
@@ -50,9 +49,6 @@
     - perl
     - openssh
 
-- install packages:
-    - debian 11: `gitolite3`
-    - arch: `gitolite`
 
 - create and setup user `git`[^1]
     - a dedicated userid to host the repos
@@ -62,12 +58,15 @@
 - login as `git` with `su - git`
     - check if `~/bin` is in `$PATH`
 
-
 - `server:/home/git`: make sure these files/dirs do not exists
     - `~/.gitolite.rc`
     - `~/.gitolite`
     - `~/repositories`
     - `~/.ssh/authorized_keys`
+
+- install packages:
+    - debian 11: `gitolite3`
+    - arch: `gitolite`
 
 - copy admin public key to server:/home/git/ as `<user_admin>.pub`
 
@@ -203,7 +202,6 @@ include "foo.conf"
 
 - Go to the server and rename the repo at the Unix command line. Don't forget to retain the ".git" extension on the directory name.
 - Change the name in the conf/gitolite.conf file in your gitolite-admin repo clone, and add/commit/push.
-
 
 ### Access Rules
 
@@ -367,9 +365,6 @@ git clone git@host:foo
 ### Constraints: add additional constraints to a push (VREF)
 
 - [virtual refs](https://gitolite.com/gitolite/vref#virtual-refs)
-
-### 
-
 
 
 ## References
