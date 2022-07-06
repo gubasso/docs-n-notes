@@ -15,4 +15,6 @@
     - firmware-11.3.0-amd64-i386-netinst.iso
 
 
+
 - https://www.debian.org/releases/stable/installmanual
+- https://www.linuxtechi.com/how-to-install-debian-11-bullseye/
