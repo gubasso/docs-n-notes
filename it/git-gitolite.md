@@ -11,6 +11,7 @@
         * [Users: Remove a user](#users-remove-a-user)
         * [Repos: Create new repos and manage users access](#repos-create-new-repos-and-manage-users-access)
         * [Repos: Add existing repo (Migrate repository)](#repos-add-existing-repo-migrate-repository)
+        * [Repos: Moving servers](#repos-moving-servers)
         * [Repos: removing/renaming a repo](#repos-removingrenaming-a-repo)
     * [Access Rules](#access-rules)
         * [Basic example:](#basic-example)
@@ -41,9 +42,6 @@
     - perl
     - openssh
 
-- install packages:
-    - debian 11: `gitolite3`
-    - arch: `gitolite`
 
 - enter server as your user admin
 
@@ -54,6 +52,10 @@
 
 - login as `git` with `su - git`
     - check if `~/bin` is in `$PATH`
+
+- install packages:
+    - debian 11: `gitolite3`
+    - arch: `gitolite`
 
 - `server:/home/git`
     - make sure ~/.ssh/authorized_keys is empty or non-existent
@@ -172,6 +174,10 @@ include "foo.conf"
 #### Repos: Add existing repo (Migrate repository)
 
 [Gitolite: appendix 1: bringing existing repos into gitolite](https://gitolite.com/gitolite/basic-admin#appendix-1-bringing-existing-repos-into-gitolite)
+
+#### Repos: Moving servers
+
+[moving servers](https://gitolite.com/gitolite/install#moving-servers)
 
 #### Repos: removing/renaming a repo
 
