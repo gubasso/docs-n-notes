@@ -1,6 +1,14 @@
 # Python
 
+<!-- vim-markdown-toc GFM -->
 
+* [Project Structure (files / directories)](#project-structure-files--directories)
+* [Poetry](#poetry)
+    * [Deploy Example 1: `requirements.txt`](#deploy-example-1-requirementstxt)
+    * [Deploy Example 2: Poetry inside container[^7]](#deploy-example-2-poetry-inside-container7)
+* [References](#references)
+
+<!-- vim-markdown-toc -->
 
 ## Project Structure (files / directories)
 

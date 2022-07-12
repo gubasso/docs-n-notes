@@ -6,6 +6,7 @@
 * [Related](#related)
 * [Resources](#resources)
 * [General](#general)
+* [References:](#references)
 
 <!-- vim-markdown-toc -->
 
@@ -25,12 +26,35 @@
 
 ## General
 
+Clear Entire Git Cache
+
+```
+git rm -r --cached .
+git add .
+git commit -am 'Removed files from the index (now ignored)'
+```
+
+---
+
+Git add all[^1]
+
+```
+git add .
+git add -A #--all
+```
+
+- `.`: from the relative path where command is executed
+- `-A`/`--all`: recursevely, from the root of the project (`.git`), all the project files
+
+---
+
 - `git rm` = `rm` + `git add`
 
 ---
 
 **git workflows:**
 
+- Learn to use email with git! https://git-send-email.io/ (git email workflow)
 * <https://git-scm.com/book/en/v2/Distributed-Git-Distributed-Workflows>
 * <https://mirrors.edge.kernel.org/pub/software/scm/git/docs/gitworkflows.html>
 * <https://martinfowler.com/articles/branching-patterns.html>
@@ -82,3 +106,7 @@ merge tools:
     - [Vim universe. Vim as a merge tool](https://www.youtube.com/watch?v=VxpCgQyUXlI)
     - [Github samoshkin/vim-mergetool: Efficient way of using Vim as a Git mergetool](https://www.reddit.com/r/vim/comments/b0jjgw/github_samoshkinvimmergetool_efficient_way_of/)
         - difference between vim-mergetool and fugitive
+
+## References:
+
+[^1]: [Git : How to recursively add all files or folders to a repository?](https://thispointer.com/git-how-to-recursively-add-all-files-or-folders-to-a-repository/)

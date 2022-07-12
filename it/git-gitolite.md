@@ -49,7 +49,6 @@
     - perl
     - openssh
 
-
 - create and setup user `git`[^1]
     - a dedicated userid to host the repos
     - this user id does NOT currently have any ssh pubkey-based access
