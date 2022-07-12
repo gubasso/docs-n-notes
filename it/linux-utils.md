@@ -3,6 +3,7 @@
 <!-- vim-markdown-toc GitLab -->
 
 * [General](#general)
+* [xargs](#xargs)
 * [rsync](#rsync)
 * [sxhkd](#sxhkd)
 * [ffmpeg](#ffmpeg)
@@ -12,6 +13,11 @@
 <!-- vim-markdown-toc -->
 
 ## General
+
+- Bulk rename files
+    - [Bulk rename files with vim](./it/vim-neovim.md#bulk-rename-files-with-vim)
+
+---
 
 **secure-delete**
 
@@ -46,6 +52,21 @@ REFERENCED:
 - bleach bit: clear system and browser files
 - dupeguru: find and clear duplicate files
 - qdirstat: stats for files and directories, find big files and directories
+
+## xargs
+
+- `-I`: -I allows {} to represents each file outputed from ls command
+
+```
+ls | xargs -I {} slugify {}
+ls | xargs -I {} mv {} $(slugify {})
+
+# rename files to append .old on the end of the filename
+ls *old | xargs -I {} mv {} {}.old
+```
+
+
+
 
 ## rsync
 

@@ -8,6 +8,9 @@
 
 ## Install Guide
 
+continue from here after working with internet
+https://www.debian.org/releases/stable/amd64/
+
 - Latest official release of the "stable" CD/DVD images: 11.3.0. 
 - multi-arch:  The files in this directory are designed to work on both 32-bit and 64-bit PCs (i386 and amd64). 
 - "amd64" i.e. 64-bit PC-compatible 
@@ -15,6 +18,26 @@
     - firmware-11.3.0-amd64-i386-netinst.iso
 
 
-
 - https://www.debian.org/releases/stable/installmanual
 - https://www.linuxtechi.com/how-to-install-debian-11-bullseye/
+
+**``**
+```
+
+```
+
+**``**
+```
+
+```
+
+home network domain name
+https://www.ctrl.blog/entry/homenet-domain-name.html
+
+cwnt network domain name: cwnt.arpa
+
+https://www.makeuseof.com/tag/5-best-dynamic-dns-providers-can-lookup-free-today/
+https://www.noip.com/
+
+
+

@@ -75,8 +75,9 @@ passwd root
 
 #### add a new user and set a password [^l1]
 
+**`Arch Linux`**
 ```
-useradd -m user_name
+useradd -m user_name -s /bin/bash
 passwd user_name
 ```
 
@@ -86,8 +87,9 @@ passwd user_name
 #### create and add to group wheel
 
 ```
-groupadd wheel # if does not exists
-usermod -aG wheel username
+groupadd wheel
+groupadd sudo
+usermod -aG wheel,sudo username
 ```
 
 #### visudo: full root privileges
@@ -123,6 +125,7 @@ alias ss='sudo systemctl'
 
 - config at **my local machine**: Agent forwarding [^l3]
     - SSH agent forwarding allows you to use your local keys when connected to a server. It is recommended to only enable agent forwarding for selected hosts.
+        - for `ssh-agent`
 ```
 at local (my cpu): ~/.ssh/config
 ---
@@ -136,12 +139,12 @@ Host myserver.com
 - test if login works `ssh user@host`
 
 - at host (remote), edit 
+
+**`/etc/ssh/sshd_config`**
 ```
-/etc/ssh/sshd_config
----
 PermitRootLogin no #[^l3][^pn1]
 PubkeyAuthentication yes #!!!!!!!! YESS!!!!
-UsePam no
+UsePAM no
 PasswordAuthentication no
 ChallengeResponseAuthentication no
 Port 202
@@ -157,14 +160,12 @@ AllowUsers gubasso ismael
 hostnamectl set-hostname myhostname
 ```
 
+**`/etc/hosts`**
 ```
-/etc/hosts
----
 # IP-Address  Full-Qualified-Hostname  Short-Hostname
   (ip address from vps)   myhostname
 45.56.87.40     projects.cwnt.io        cadelab-linode
 2600:3c01::f03c:92ff:fe46:471c  projects.cwnt.io        cadelab-linode
-
 ```
 
 - `/etc/hostname` contains name of the machine, as known to applications that run locally.[^l5]

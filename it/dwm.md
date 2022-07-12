@@ -1,5 +1,13 @@
 # dwm
 
+<!-- vim-markdown-toc GFM -->
+
+* [Instalation](#instalation)
+* [dwmblocks](#dwmblocks)
+* [References](#references)
+
+<!-- vim-markdown-toc -->
+
 ## Instalation
 
 ```
@@ -48,6 +56,25 @@ exec $HOME/bin/startdwm
 
 end the X session, simply execute
 killall xinit, or bind it to a convenient keybind
+
+## dwmblocks
+
+Send a signal to run a script: 
+
+```
+kill -39 $(pidof dwmblocks) #faster
+#or
+pkill -RTMIN+5 dwmblocks
+```
+
+- If signal number ir `5`, add `34` = `39`
+
+battery
+🔋
+plugged
+🔌
+
+
 
 ## References
 
