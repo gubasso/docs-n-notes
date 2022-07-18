@@ -1,13 +1,5 @@
 # Python-Eve
 
-- objective: build bullets for server course/training
-
-- for written product: write a complete step-by-step, objective, as much bullet points as possible
-    - with the extra steps (flask introduction, etc)
-
-- tools
-    - test api: https://hoppscotch.io/
-
 ## steps to setup server
 > last section of tutorial: sumup of steps to setup server and run in production, use real script and code
 

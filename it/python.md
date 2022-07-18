@@ -61,6 +61,7 @@ helloworld/
 - `__init__.py`: is not required anymore (3.3+), but needed for compatibilty issues (as for correct use of `pytest`)[^3][^4]
 
 - About python modules/import[^2][^1]
+    - Absolute / Relative paths to imports: https://realpython.com/absolute-vs-relative-python-imports/
 
 ## Poetry
 
@@ -82,6 +83,8 @@ python main.py
 or
 python myapp
 ```
+
+About `__main__.py` as entrypoint: https://docs.python.org/3/library/__main__.html
 
 ### Deploy Example 1: `requirements.txt`
 

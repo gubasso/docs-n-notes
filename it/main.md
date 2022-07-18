@@ -2,6 +2,9 @@
 
 Main and general notes
 
+- Fake API Data / Mock data:
+    - https://randomuser.me/
+    - https://www.mockaroo.com/
 
 - airtable-like database:
     - https://www.cloudron.io/store/com.nocodb.cloudronapp.html

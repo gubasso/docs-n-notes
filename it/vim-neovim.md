@@ -19,6 +19,14 @@
 
 ## General
 
+Find what filetype is loaded in vim / how to know which filetype
+
+```
+:set filetype?
+```
+
+---
+
 Vim Snippets: https://github.com/honza/vim-snippets
 
 - set a registry value: `:let @q=<any value>`
@@ -130,12 +138,6 @@ Explanation[^3]:
 ```
 
 - sends the rename shell commands (that's why mv is prepended to each file name) to an external shell for execution.
-
-
-
-
-
-
 
 ### Plugins to rename
 

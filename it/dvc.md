@@ -83,6 +83,93 @@ git commit data/data.xml.dvc -m "Dataset updates"
 dvc push
 ```
 
+---
+
+Change file name: https://dvc.org/doc/command-reference/move#example-change-the-file-name
+
+```
+dvc add data.csv
+...
+
+tree
+.
+├── data.csv
+└── data.csv.dvc
+
+dvc move data.csv other.csv
+...
+
+tree
+.
+├── other.csv
+└── other.csv.dvc
+```
+
+---
+
+[Example: Change a file location](https://dvc.org/doc/command-reference/move#example-change-a-file-location)
+
+```
+tree
+.
+├── data
+│   └── foo
+└── data2
+    └── subdir
+
+dvc add data/foo
+...
+
+tree
+.
+├── data
+│   ├── foo
+│   └── foo.dvc
+└── data2
+    └── subdir
+
+dvc move data/foo data2/subdir/
+...
+
+tree
+.
+├── data
+└── data2
+    └── subdir
+        ├── foo
+        └── foo.dvc
+```
+
+---
+
+[Example: Move a directory](https://dvc.org/doc/command-reference/move#example-move-a-directory)
+
+```
+dvc import ../another-repo data
+...
+
+tree
+.
+├── data
+│   ├── bar
+│   └── foo
+└── data.dvc
+
+dvc move data data2/data3
+...
+
+tree
+.
+└── data2
+    ├── data3
+    │   ├── bar
+    │   └── foo
+    └── data3.dvc
+```
+
+---
+
+
 If wants to access a different version of data, in a differente git branch or commit:
 
 ```
@@ -204,6 +291,14 @@ dvc import https://github.com/iterative/dataset-registry \
 ### Remove / Stop tracking files:
 
 [How to Stop Tracking Data](https://dvc.org/doc/user-guide/how-to/stop-tracking-data)
+
+```
+dvc remove data.csv.dvc
+rm data.csv
+dvc gc -w
+git add . && git commit
+```
+
 
 ### Merge Conflicts in DVC Files
 

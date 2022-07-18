@@ -3,6 +3,12 @@
 <!-- vim-markdown-toc GitLab -->
 
 * [General](#general)
+    * [sum numbers from a file](#sum-numbers-from-a-file)
+    * [xsv](#xsv)
+    * [mlr Miller](#mlr-miller)
+    * [split](#split)
+    * [bulk rename](#bulk-rename)
+    * [shred / secure-delete](#shred-secure-delete)
 * [xargs](#xargs)
 * [rsync](#rsync)
 * [sxhkd](#sxhkd)
@@ -14,10 +20,56 @@
 
 ## General
 
+### sum numbers from a file
+
+Each line is a number, sum them all:
+
+```
+paste -s -d+ lines_to_sum | \bc
+```
+
+### xsv
+
+csv manipulation (better than csvkit)
+
+```
+xsv index ./data/${tab}.csv
+xsv split -s 10000 ./data ./data/${tab}.csv --filename ${tab}.csv.part-{}
+xsv stats worldcitiespop.csv --everything | xsv table
+xsv search -s var0046 "0xBb505805" data/tab0220.csv
+xsv count ./data/${tab}.csv >> lines_to_sum
+```
+
+### mlr Miller
+
+https://github.com/johnkerl/miller
+Miller is like awk, sed, cut, join, and sort for data formats such as CSV, TSV, JSON, JSON Lines, and positionally-indexed.
+
+```
+mlr --icsv --ojson cat ./data/${tab}.csv > \
+    ./data/${tab}.json
+mlr --c2j --jvquoteall cat ./data/${tab}.csv > \
+    ./data/${tab}.json
+mlr --csv --quote-all cat ./data/tab0220.csv | mlr --icsv --ojson --jvquoteall cat > ./data/tab0220.json
+```
+
+conversion converter
+
+### split
+
+[Splitting A Large CSV Files Into Smaller Files In Ubuntu](http://burnignorance.com/linux-tips-and-tricks/splitting-a-large-csv-files-into-smaller-files-in-ubuntu/)
+
+```
+split -d -l 10000 source.csv tempfile.part.
+```
+
+
+### bulk rename
+
 - Bulk rename files
     - [Bulk rename files with vim](./it/vim-neovim.md#bulk-rename-files-with-vim)
 
----
+### shred / secure-delete
 
 **secure-delete**
 
