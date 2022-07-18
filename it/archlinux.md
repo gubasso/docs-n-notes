@@ -1,6 +1,31 @@
+# Arch Linux
+> archlinux
 
+<!-- vim-markdown-toc GFM -->
+
+* [General](#general)
+* [Packages to install](#packages-to-install)
+    * [pacstrap list](#pacstrap-list)
+    * [pacman list 1](#pacman-list-1)
+    * [pacman dwm](#pacman-dwm)
+    * [aur packages](#aur-packages)
+    * [fonts pacman](#fonts-pacman)
+    * [fonts aur](#fonts-aur)
+    * [optional packages (pacman)](#optional-packages-pacman)
+* [References:](#references)
+
+<!-- vim-markdown-toc -->
 
 ## General
+
+audio
+how to reconize external sound card (usb adapter):
+add user to `audio` group
+audio card is reconized by `lsusb` but not by `aplay -l`
+"The user need to log out and log in again for the effects to be applied."
+[Sound card not detected by ALSA, but detected by kernel](https://unix.stackexchange.com/questions/214514/sound-card-not-detected-by-alsa-but-detected-by-kernel)
+
+---
 
 - [How to prevent the keyboard backlight from turning on when the laptop is woken from sleep?](https://askubuntu.com/questions/1028368/how-to-prevent-the-keyboard-backlight-from-turning-on-when-the-laptop-is-woken-f)
 - [systemd.service - Service unit configuration : Example](https://jlk.fjfi.cvut.cz/arch/manpages/man/systemd.service.5#EXAMPLES)

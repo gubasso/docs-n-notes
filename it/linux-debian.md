@@ -8,6 +8,19 @@
 
 ## Install Guide
 
+https://wiki.debian.org/NetworkConfiguration
+https://wiki.debian.org/WiFi/HowToUse
+
+
+https://www.reddit.com/r/debian/comments/6lnakq/what_are_the_essential_packages/
+- apt install aptitude
+- aptitude search '?priority(required)'
+- aptitude search '?section(gnome)'
+
+tasksel
+- https://unix.stackexchange.com/questions/90523/what-packages-are-installed-by-default-in-debian-is-there-a-term-for-that-set
+- remove entire DE Gnome, for example
+
 continue from here after working with internet
 https://www.debian.org/releases/stable/amd64/
 
@@ -21,23 +34,11 @@ https://www.debian.org/releases/stable/amd64/
 - https://www.debian.org/releases/stable/installmanual
 - https://www.linuxtechi.com/how-to-install-debian-11-bullseye/
 
-**``**
-```
-
-```
-
-**``**
-```
-
-```
-
 home network domain name
 https://www.ctrl.blog/entry/homenet-domain-name.html
 
-cwnt network domain name: cwnt.arpa
 
-https://www.makeuseof.com/tag/5-best-dynamic-dns-providers-can-lookup-free-today/
-https://www.noip.com/
+cwnt network domain name: cwnt.arpa
 
 
 

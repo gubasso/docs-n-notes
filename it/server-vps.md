@@ -3,6 +3,7 @@
 
 <!-- vim-markdown-toc GitLab -->
 
+* [Related](#related)
 * [General](#general)
 * [Setup a server / vps / domain name / security measures](#setup-a-server-vps-domain-name-security-measures)
     * [manage security](#manage-security)
@@ -14,6 +15,10 @@
 * [References](#references)
 
 <!-- vim-markdown-toc -->
+
+## Related
+
+- [# Home Server](./it/server-vps-home_server.md) 
 
 ## General
 > `# Server / VPS`
@@ -89,7 +94,7 @@ passwd user_name
 ```
 groupadd wheel
 groupadd sudo
-usermod -aG wheel,sudo username
+usermod -aG wheel,sudo,audio username
 ```
 
 #### visudo: full root privileges
@@ -149,6 +154,7 @@ PasswordAuthentication no
 ChallengeResponseAuthentication no
 Port 202
 AllowUsers gubasso ismael
+AllowAgentForwarding yes
 ```
 
 - check if port 202 will be unbloced https://docs.cloudron.io/security/#securing-ssh-access

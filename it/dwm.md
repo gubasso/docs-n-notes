@@ -69,14 +69,7 @@ pkill -RTMIN+5 dwmblocks
 
 - If signal number ir `5`, add `34` = `39`
 
-battery
-🔋
-plugged
-🔌
-
-
-
 ## References
 
-[1]: [Dave's Visual Guide to dwm](https://ratfactor.com/dwm)
-[2]: (./it/archlinux.md)
+[^1]: [Dave's Visual Guide to dwm](https://ratfactor.com/dwm)
+[^2]: (./it/archlinux.md)

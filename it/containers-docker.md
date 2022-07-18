@@ -25,6 +25,7 @@
 * [Deploy in production](#deploy-in-production)
 * [Kubernetes](#kubernetes)
 * [Resources](#resources)
+* [General](#general)
 * [References](#references)
 
 <!-- vim-markdown-toc -->
@@ -112,7 +113,7 @@ remove commands / cleanup
     - remove images
     - just if is not used by any container (stoped or running)
 
-- `docker prune` / `docker container prune`
+- `docker container prune`
     - removes ALL stoped containers
 
 - `image prune`
@@ -176,7 +177,7 @@ docker run -p 3000:3000 <image_id>
 - Run `CMD`
 - `-p 3000:3000`: port fowarding
     - `<host_port>:<docker_internal_exposed_port>`
-- `<image_id>`: hash wish id of the image
+- `<image_id>`: hash with id of the image
 
 ### `.dockerignore`
 
@@ -329,7 +330,6 @@ Example for mongodb[^1]:
 
 - recommended, named volume: `-v data:/data/db`
 - bind moung: `docker run --name some-mongo -v /my/own/datadir:/data/db -d mongo`
-
 
 
 ## Networking
@@ -638,6 +638,18 @@ Keep in mind that this image will not be portable, but for the purpose of the Ut
 - [](https://yacht.sh/)
     - web ui for managing containers, available at linode
 - Udemy Course Academind: [Docker & Kubernetes: The Practical Guide [2022 Edition]](https://www.udemy.com/share/103Ia03@_LG5LvM93j_prIuRNO6TDsc6YuhwqudbXhJirjmPbdAU7lSzxDsoTeCwzbGUXkS6/)
+
+## General
+
+Python images to choose:
+
+[Don’t use Alpine Linux for Python images: Using Alpine can make Python Docker builds 50× slower](https://pythonspeed.com/articles/alpine-docker-python/)
+[The best Docker base image for your Python application (May 2022)](https://pythonspeed.com/articles/base-image-python-docker-images/)
+- summary: `python:<version>-slim-bullseye`
+
+Mongodb images
+
+
 
 ## References
 
