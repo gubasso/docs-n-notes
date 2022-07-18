@@ -1,6 +1,8 @@
 # SSH / Openssh
 
 
+
+
 Alias to connect to a server:
 
 
@@ -96,6 +98,15 @@ Enter passphrase:
 ```
 
 - `-y` option will read a private SSH key file and prints an SSH public key to stdout. 
+
+## ssh-agent
+
+You can kill ssh-agent by running:
+
+```
+eval "$(ssh-agent -k)"
+```
+
 
 
 ## References:
