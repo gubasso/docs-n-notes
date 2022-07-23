@@ -3,6 +3,7 @@
 <!-- vim-markdown-toc GFM -->
 
 * [Instalation](#instalation)
+* [Applying patches](#applying-patches)
 * [dwmblocks](#dwmblocks)
 * [References](#references)
 
@@ -57,6 +58,24 @@ exec $HOME/bin/startdwm
 end the X session, simply execute
 killall xinit, or bind it to a convenient keybind
 
+## Applying patches
+
+use git to control the changes, before do something
+e.g.: commit changes before and make git status clean, before apply any patch
+
+```
+patch < <my_patch>.diff
+```
+
+If it fails, will generate a `.rej` file. Open this at vim to see.
+
+Or using git:
+
+```
+git apply some_patch.diff
+```
+
+
 ## dwmblocks
 
 Send a signal to run a script: 
@@ -68,6 +87,8 @@ pkill -RTMIN+5 dwmblocks
 ```
 
 - If signal number ir `5`, add `34` = `39`
+
+
 
 ## References
 

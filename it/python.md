@@ -2,11 +2,12 @@
 
 <!-- vim-markdown-toc GFM -->
 
-* [Project Structure (files / directories)](#project-structure-files--directories)
-* [Poetry](#poetry)
-    * [Deploy Example 1: `requirements.txt`](#deploy-example-1-requirementstxt)
-    * [Deploy Example 2: Poetry inside container[^7]](#deploy-example-2-poetry-inside-container7)
-* [References](#references)
+    * [Project Structure (files / directories)](#project-structure-files--directories)
+* [Modules / Imports](#modules--imports)
+    * [Poetry](#poetry)
+        * [Deploy Example 1: `requirements.txt`](#deploy-example-1-requirementstxt)
+        * [Deploy Example 2: Poetry inside container[^7]](#deploy-example-2-poetry-inside-container7)
+    * [References](#references)
 
 <!-- vim-markdown-toc -->
 
@@ -60,8 +61,26 @@ helloworld/
 
 - `__init__.py`: is not required anymore (3.3+), but needed for compatibilty issues (as for correct use of `pytest`)[^3][^4]
 
+# Modules / Imports
+
 - About python modules/import[^2][^1]
     - Absolute / Relative paths to imports: https://realpython.com/absolute-vs-relative-python-imports/
+
+[How to load all modules in a folder?](https://stackoverflow.com/questions/1057431/how-to-load-all-modules-in-a-folder)
+
+Simple and working answer: https://stackoverflow.com/a/36231122
+
+**`__init__.py`** (inside module dir)
+```
+import os, pkgutil
+__all__ = list(module for _, module, _ in pkgutil.iter_modules([os.path.dirname(__file__)]))
+```
+
+From outside module, call:
+
+```
+from yourpackage import *
+```
 
 ## Poetry
 

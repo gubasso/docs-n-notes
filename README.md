@@ -44,3 +44,4 @@ cloud management options:
 - https://www.keyhelp.de/en/
 - https://selfhosted.libhunt.com/compare-sandstorm-vs-cloudron
 - https://selfhosted.libhunt.com/compare-sandstorm-vs-sovereign
+
