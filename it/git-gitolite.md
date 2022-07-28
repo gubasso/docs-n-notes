@@ -55,10 +55,7 @@
     - ideally, this user id has shell access ONLY by `su - git` from some other userid on the same server (this ensure minimal confusion for ssh newbies!)
 
 - login as `git` with `su - git`
-    - check if `~/bin` is in `$PATH`
-
-- `server:/home/git`: make sure these files/dirs do not exists
-    - `~/.gitolite.rc`
+    - gitolite must be in PATH: check if `~/bin` is in `$PATH` `server:/home/git`: make sure these files/dirs do not exists `~/.gitolite.rc`
     - `~/.gitolite`
     - `~/repositories`
     - `~/.ssh/authorized_keys`

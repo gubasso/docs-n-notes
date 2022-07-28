@@ -4,9 +4,10 @@ $firewall $opsec $it
 **setup a firewall ufw**[^pn1]
 
 ```
+sudo ufw default deny
 sudo ufw default allow outgoing
-sudo ufw default deny incoming
 sudo ufw allow ssh
+sudo ufw limit SSH
 sudo ufw allow http
 sudo ufw allow https
 sudo ufw enable

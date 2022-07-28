@@ -1,5 +1,23 @@
 # Python-Eve
 
+debug with gunicorn print console: https://stackoverflow.com/questions/27687867/is-there-a-way-to-log-python-print-statements-in-gunicorn
+
+---
+
+You may use flask’s abort() to interrupt the database operation:
+
+```
+from flask import abort
+
+def check_update_access(resource, updates, original):
+
+    abort(403)
+
+app = Eve()
+
+app.on_insert_item += check_update_access
+```
+
 ## steps to setup server
 > last section of tutorial: sumup of steps to setup server and run in production, use real script and code
 

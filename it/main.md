@@ -1,6 +1,9 @@
 # It
+> Main and general notes
 
-Main and general notes
+- [Github: dbohdan / automatic-api](https://github.com/dbohdan/automatic-api)
+    - Python-Eve
+    - PostgREST
 
 - Fake API Data / Mock data:
     - https://randomuser.me/
