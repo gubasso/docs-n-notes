@@ -31,10 +31,6 @@
     - deploy application (cloudron like? heroku like?)
     - docker
 
-´setup_opensuse_leap_15_2.sh´ (personal notes for now...)
-- deploy static web site to be served with nginx, with rsync
-- script to install and config postgrest, postgresql, nginx, ufw
-
 to logout the server
 - `<C-d>` or type `logout`
 
@@ -145,10 +141,12 @@ Host myserver.com
 
 - at host (remote), edit 
 
-**`/etc/ssh/sshd_config`**
+- Better way to configure sshd_config: https://www.reddit.com/r/openSUSE/comments/o9f7ru/ssh_config_on_tumbleweed/
+
+**`/etc/ssh/sshd_config.d/my_conf.conf`**
 ```
-PermitRootLogin no #[^l3][^pn1]
-PubkeyAuthentication yes #!!!!!!!! YESS!!!!
+PermitRootLogin no
+PubkeyAuthentication yes
 UsePAM no
 PasswordAuthentication no
 ChallengeResponseAuthentication no
@@ -156,6 +154,9 @@ Port 202
 AllowUsers gubasso ismael
 AllowAgentForwarding yes
 ```
+-  `PermitRootLogin`[^l3][^pn1]
+- Check configs at original **`/etc/ssh/sshd_config`**.
+- Check if `sshd_config` has the `Include /etc/ssh/sshd_config.d/*.conf`
 
 - check if port 202 will be unbloced https://docs.cloudron.io/security/#securing-ssh-access
 (to just update a config, may run `systemctl reload sshd`)

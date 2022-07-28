@@ -2,6 +2,9 @@
 
 <!-- vim-markdown-toc GitLab -->
 
+* [curl](#curl)
+* [NetworkManager](#networkmanager)
+* [time](#time)
 * [General](#general)
     * [sum numbers from a file](#sum-numbers-from-a-file)
     * [xsv](#xsv)
@@ -17,6 +20,39 @@
 * [References:](#references)
 
 <!-- vim-markdown-toc -->
+
+## curl
+
+Multiple parameters:
+
+```
+curl \
+    --data-urlencode "paramName=value" \
+    --data-urlencode "secondParam=value" \
+    http://example.com
+```
+
+Just GET request, with multiple parameters (query string):
+
+```
+curl -G "localhost:8000/tab0032" --data-urlencode 'where={"var0542": "1"}'
+```
+## NetworkManager
+
+[How to force Network Manager to rescan connections?](https://superuser.com/questions/164059/how-to-force-network-manager-to-rescan-connections)
+
+```
+nmcli device wifi rescan
+nmcli device wifi list
+```
+
+
+## time
+
+```
+time (curl -G "localhost:8000/tab0032" --data-urlencode 'where={"var0542": "1"}' &> /dev/null)
+```
+
 
 ## General
 
