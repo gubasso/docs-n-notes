@@ -2,6 +2,7 @@
 
 <!-- vim-markdown-toc GFM -->
 
+    * [General](#general)
     * [Project Structure (files / directories)](#project-structure-files--directories)
 * [Modules / Imports](#modules--imports)
     * [Poetry](#poetry)
@@ -10,6 +11,34 @@
     * [References](#references)
 
 <!-- vim-markdown-toc -->
+
+## General
+
+[Convert Python Tuple to Dictionary](https://appdividend.com/2020/12/22/how-to-convert-python-tuple-to-dictionary/)
+
+```
+tup = ((11, "eleven"), (21, "mike"), (19, "dustin"), (46, "caleb"))
+print(tup)
+
+dct = dict((y, x) for x, y in tup)
+print(dct)
+```
+
+Output:
+
+```
+((11, 'eleven'), (21, 'mike'), (19, 'dustin'), (46, 'caleb'))
+{'eleven': 11, 'mike': 21, 'dustin': 19, 'caleb': 46}
+```
+
+---
+
+Data validation with Cerberus:
+
+- https://github.com/pyeve/cerberus
+- https://zetcode.com/python/cerberus/
+- https://docs.python-cerberus.org/en/stable/usage.html
+
 
 ## Project Structure (files / directories)
 
