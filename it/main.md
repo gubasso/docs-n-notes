@@ -2,8 +2,11 @@
 > Main and general notes
 
 - [Github: dbohdan / automatic-api](https://github.com/dbohdan/automatic-api)
+- api generator
     - Python-Eve
     - PostgREST
+    - https://github.com/roapi/roapi
+      - ROAPI automatically spins up read-only APIs for static datasets without requiring you to write a single line of code. It builds on top of Apache Arrow and Datafusion. The core of its design can be boiled down to the following:
 
 - Fake API Data / Mock data:
     - https://randomuser.me/

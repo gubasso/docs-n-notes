@@ -1,6 +1,6 @@
 # docs-n-notes
 
-Personal notes and documentations for tech and a bunch of unrelated topics. 
+Personal notes and documentations for tech and a bunch of unrelated topics.
 
 <!-- vim-markdown-toc GitLab -->
 
@@ -9,6 +9,41 @@ Personal notes and documentations for tech and a bunch of unrelated topics.
 <!-- vim-markdown-toc -->
 
 ## Unorganized
+
+
+
+- office suite like
+  - https://cryptpad.org/
+
+
+- Cheap budget hosts / vps / servers
+- https://contabo.com/en/vps/?PID=100110903&SID
+- https://cloudfanatic.net/pricing.php
+  - https://cloudfanatic.net/promos.php
+- compare a lot:
+  - https://www.comfortvps.com/
+- ssdnodes.com
+- hostinger
+- https://us.ovhcloud.com/public-cloud/prices/#439
+- https://www.time4vps.com/linux-vps/
+- Buyvm
+- Hetzner
+- Netcup
+- Contabo
+- https://toys.lerdorf.com/low-cost-vps-testing
+- https://www.cheap-vps-hosting.co.uk/
+- https://my.racknerd.com/index.php?rp=/store/black-friday-2021
+- https://lowendstock.com/
+  - cheap budget vps
+  - [Cheap and Easy VPN in 5 Minutes!](https://www.youtube.com/watch?v=SMF301vQqJo&t=109s)
+  - dedicated ipv4 address (ipv4 = 1)
+  - virtualization = kvm
+  - bandwith = select the apropriate
+  - location
+    - no austria / no germany / no russia
+
+- Minio: Multi-Cloud Object Storage Kubernetes S3
+
 
 issue tracker, project manager, command line cli, terminal
 

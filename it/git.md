@@ -26,6 +26,14 @@
 
 ## General
 
+config git local info config
+[How to store a git config as part of the repository?](https://stackoverflow.com/questions/18329621/how-to-store-a-git-config-as-part-of-the-repository)
+```
+git config --local include.path ../.gitconfig
+```
+
+---
+
 Clear Entire Git Cache
 
 ```
@@ -59,7 +67,7 @@ git add -A #--all
 * <https://mirrors.edge.kernel.org/pub/software/scm/git/docs/gitworkflows.html>
 * <https://martinfowler.com/articles/branching-patterns.html>
 
-**git encryption**
+**git encryption / git secret**
 
 * few files (.env, passwords, database logins, etc...)
 * <https://git-secret.io/>

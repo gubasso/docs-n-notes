@@ -1,36 +1,34 @@
 # Containers
 > docker, kubernetes
 
-<!-- vim-markdown-toc GFM -->
+[toc]
 
-* [Commands](#commands)
-* [Dockerfile](#dockerfile)
-    * [`.dockerignore`](#dockerignore)
-    * [Environment variables](#environment-variables)
-* [Sharing Images](#sharing-images)
-    * [Arguments](#arguments)
-        * [Usefull example:](#usefull-example)
-* [Persistent Data Storages](#persistent-data-storages)
-    * [Volumes](#volumes)
-    * [Bind Mounts](#bind-mounts)
-    * [Database Persistence](#database-persistence)
-* [Networking](#networking)
-    * [Container to Host communication](#container-to-host-communication)
-    * [Container to Container comm](#container-to-container-comm)
-* [Docker-Compose](#docker-compose)
-    * [`docker-compose.yaml`](#docker-composeyaml)
-* [Utility Containers](#utility-containers)
-    * [Using with Docker-Compose](#using-with-docker-compose)
-* [Users / Permissions:[^3]](#users--permissions3)
-* [Deploy in production](#deploy-in-production)
-* [Kubernetes](#kubernetes)
-* [Resources](#resources)
-* [General](#general)
-* [References](#references)
+# Utils
 
-<!-- vim-markdown-toc -->
+- [Yacht - an Open Source, Self Hosted, Modern, Web GUI for Docker Management similar to Portainer. :awesome_open_source:](https://www.youtube.com/watch?v=eTQ2iB-hjkk)
 
-## Commands
+- [Portainer](./containers-docker-portainer.md)
+
+# After Install
+
+Check if instalation is correct:
+
+```
+sudo systemctl status docker
+sudo docker run hello-world
+sudo docker compose version
+```
+
+# Commands
+
+
+**execute commands inside container**
+```
+sudo docker exec <cont_name> ls
+sudo docker exec -it <cont_name> bash
+```
+
+---
 
 Listing things
 
@@ -105,6 +103,20 @@ flags:
 
 remove commands / cleanup
 
+stop all containers
+```
+sudo docker kill $(sudo docker ps -q)
+```
+
+- How To Remove Docker Images, Containers, and Volumes: https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
+
+```
+docker system prune -f
+sudo docker system prune -a -f && sudo docker volume prune -f
+sudo docker kill $(sudo docker ps -q)
+sudo docker system prune -a -f && sudo docker volume prune -f
+```
+
 - `docker rm [<container_name> <> ...]`
     - removes stoped conainters
     - `docker rm naed_dharen jafac_golen persad_thupac`
@@ -135,7 +147,7 @@ naming tagging
 
 
 
-## Dockerfile
+# Dockerfile
 
 To create my own image.
 
@@ -163,6 +175,7 @@ At terminal:
 
 ```
 docker build .
+sudo docker build -t {img_name} .
 ```
 
 - create a new custom image based on `Dockerfile`
@@ -190,7 +203,7 @@ Dockerfile
 .env
 ```
 
-### Environment variables
+## Environment variables
 
 - env can be used inside `Dockerfile`
 
@@ -222,7 +235,14 @@ PORT=8000
 
 - `--env-file ./.env`
 
-## Sharing Images
+# Sharing Images
+
+Login to a private registry:
+
+```
+docker login localhost:8080
+cat ~/my_password.txt | docker login --username foo --password-stdin
+```
 
 Docker Hub or a private registry
 
@@ -234,12 +254,26 @@ If wants to use a private registry:
 
 `docker share <host>:<image_name>` / `docker pull <host>:<image_name>`
 
-### Arguments
+## Image to file[^5]
+
+Save a docker image to file:
+
+```
+sudo docker save -o <path for generated tar file> <image name>
+```
+
+Load a docker image from file:
+
+```
+sudo docker load -i <path to image tar file>
+```
+
+# Arguments
 
 (todo)
 - when to use this instead of env variables?
 
-#### Usefull example:
+## Usefull example:
 
 ```
 FROM node:14-slim
@@ -265,9 +299,9 @@ And then build the Docker image using the following (which also gives you a nice
 $ docker build -t node-util:cliuser --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) .
 ```
 
-## Persistent Data Storages
+# Persistent Data Storages
 
-### Volumes
+## Volumes
 
 - Dir in host machine
 - Mapped inside a container (mounted)
@@ -294,7 +328,7 @@ $ docker build -t node-util:cliuser --build-arg USER_ID=$(id -u) --build-arg GRO
         - `feedback-node:volumes`: name of the image used to create this volume
         - `-v feedback:/app/feedback`: named volume `<volume_name>:<dir_path_inside_container>`
 
-### Bind Mounts
+## Bind Mounts
 
 - user define a path to host machine
 - a map from host dir path to container dir path
@@ -322,7 +356,7 @@ docker run -d -p 3000:80 --rm \
     - after `Dockerfile` is ran, container is created, than volumes are synced
     - this sets this subdir `node_modules` to remain the same
 
-### Database Persistence
+## Database Persistence
 
 - read specific database docker doc (at docker hub, for example)
 
@@ -332,9 +366,9 @@ Example for mongodb[^1]:
 - bind moung: `docker run --name some-mongo -v /my/own/datadir:/data/db -d mongo`
 
 
-## Networking
+# Networking
 
-### Container to Host communication
+## Container to Host communication
 
 connect from container to database at host
 
@@ -342,7 +376,7 @@ connect from container to database at host
 - access from container to host: `mongodb://host.docker.internal:27017/mydb`
     - `host.docker.internal` will be transformed to host IP address
 
-### Container to Container comm
+## Container to Container comm
 
 If want to hard code the container ip address:
 
@@ -369,7 +403,7 @@ docker run -d --name mongodb \
 
 
 
-## Docker-Compose
+# Docker-Compose
 
 - defaults with `--rm`
 - creates a `network` by default
@@ -396,7 +430,7 @@ docker run -d --name mongodb \
     - just builds all images
 
 
-### `docker-compose.yaml`
+## `docker-compose.yaml`
 
 - `services:`: each child is a container
     - key: is the service name (that can be used as a container name)
@@ -445,7 +479,7 @@ volumes:
 
 - `stdin_open:` / `tty:`: same as `-i` / `-t`
 
-## Utility Containers
+# Utility Containers
 
 Use as a isolated environment.
 
@@ -479,7 +513,7 @@ ENTRYPOINT [ "npm" ]
     - the appended commands will be appended to this entrypoint
     - usefull to allow only one kind of command
 
-### Using with Docker-Compose
+## Using with Docker-Compose
 
 ```docker-compose.yaml
 version: "3.8"
@@ -504,7 +538,7 @@ docker-compose run guganpm init
     - `--rm`: removes container after it stops
 
 
-## Users / Permissions:[^3]
+# Users / Permissions:[^3]
 
 I wanted to point out that on a Linux system, the Utility Container idea doesn't quite work as you describe it.  In Linux, by default Docker runs as the "Root" user, so when we do a lot of the things that you are advocating for with Utility Containers the files that get written to the Bind Mount have ownership and permissions of the Linux Root user.  (On MacOS and Windows10, since Docker is being used from within a VM, the user mappings all happen automatically due to NFS mounts.)
 
@@ -540,7 +574,7 @@ You'll see that the ownership and permissions for the package.json file are "roo
 
 Solution 1:  Use  predefined "node" user (if you're lucky)
 
-There is a lot of discussion out there in the docker community (devops) about security around running Docker as a non-privileged user (which might be a good topic for you to cover as a video lecture - or maybe you have; I haven't completed the course yet).  The Official Node.js Docker Container provides such a user that they call "node". 
+There is a lot of discussion out there in the docker community (devops) about security around running Docker as a non-privileged user (which might be a good topic for you to cover as a video lecture - or maybe you have; I haven't completed the course yet).  The Official Node.js Docker Container provides such a user that they call "node".
 
 https://github.com/nodejs/docker-node/blob/master/Dockerfile-slim.template
 
@@ -624,13 +658,13 @@ drwxr-xr-x 13 scott scott 4096 Oct 31 16:23 ../
 
 Keep in mind that this image will not be portable, but for the purpose of the Utility Containers like this, I don't think this is an issue at all for these "Utility Containers"
 
-## Deploy in production
+# Deploy in production
 
 - do NOT use bind mounts
 
 ## [Kubernetes](./it/containers-kubernetes.md)
 
-## Resources
+# Resources
 
 - [Docker Playground](https://labs.play-with-docker.com/)
 - [Docker hub](https://hub.docker.com/)
@@ -639,7 +673,7 @@ Keep in mind that this image will not be portable, but for the purpose of the Ut
     - web ui for managing containers, available at linode
 - Udemy Course Academind: [Docker & Kubernetes: The Practical Guide [2022 Edition]](https://www.udemy.com/share/103Ia03@_LG5LvM93j_prIuRNO6TDsc6YuhwqudbXhJirjmPbdAU7lSzxDsoTeCwzbGUXkS6/)
 
-## General
+# General
 
 Python images to choose:
 
@@ -649,13 +683,31 @@ Python images to choose:
 
 Mongodb images
 
+## Optimization: build image
+
+**[Reduce Build Context for Docker Build Command](https://www.baeldung.com/ops/docker-reduce-build-context)**
+
+- Understanding the Docker Build Context
+- Using EOF File Creation
+
+```
+$ docker build -t test -<<EOF
+FROM   centos:7
+MAINTAINER maintainer@baeldung.com
+RUN echo "Welcome to Bealdung"
+EOF
+```
+
+```
+echo "FROM mongo:5.0.9" | sudo docker build -t {img_name} -
+```
 
 
-## References
+
+# References
 
 [^1]: [official image mongo](https://hub.docker.com/_/mongo)
 [^2]: [Reference / Compose file reference / Compose Specification / Volume](https://docs.docker.com/compose/compose-file/#volumes)
 [^3]: [Utility Containers, Permissions & Linux from: Docker & Kubernetes: The Practical Guide [2022 Edition] ](https://www.udemy.com/course/docker-kubernetes-the-practical-guide/learn/#questions/12977214/)
 [^4]: [Avoiding Permission Issues With Docker-Created Files](https://vsupalov.com/docker-shared-permissions/)
-
-
+[^5]: [How to copy Docker images from one host to another without using a repository](https://stackoverflow.com/questions/23935141/how-to-copy-docker-images-from-one-host-to-another-without-using-a-repository)

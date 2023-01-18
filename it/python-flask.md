@@ -4,6 +4,10 @@ cache implementation: https://explore-flask.readthedocs.io/en/latest/views.html#
 
 [How to import function into main file in flask?](https://stackoverflow.com/questions/54090720/how-to-import-function-into-main-file-in-flask)
 
+# General
+
+- http://www.compjour.org/lessons/flask-single-page/multiple-dynamic-routes-in-flask/
+
 ## return a json
 
 From a Mongo (pymongo) Curse:

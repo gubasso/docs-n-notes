@@ -1,17 +1,24 @@
 # Web Development
 
-<!-- vim-markdown-toc GitLab -->
+[toc]
 
-* [General](#general)
-* [Accessibility](#accessibility)
-* [CSS](#css)
-    * [General CSS](#general-css)
-    * [Learning CSS](#learning-css)
-* [Svelte / Sapper](#svelte-sapper)
+# General
 
-<!-- vim-markdown-toc -->
+- https://bundlephobia.com/
+  - package size after compact
 
-## General
+- lodash + ramda = radash : https://github.com/rayepps/radash
+  - functional library
+
+- https://tabler.io/ : ui helper maker
+  - https://github.com/tabler/tabler
+- https://tabler-icons.io/
+
+tinysearch
+tinysearch is a lightweight, fast, full-text search engine. It is designed for static websites.
+tinysearch is written in Rust, and then compiled to WebAssembly to run in a browser.
+It can be used together with static site generators such as Jekyll, Hugo, Zola, Cobalt, or Pelican.
+https://github.com/tinysearch/tinysearch
 
 Teste da aplicação web no chrome:
 chrome lighthouse teste e report
@@ -63,17 +70,26 @@ Practice 💻
 → Frontend Mentor
 → TestDome
 
-## Accessibility
+# Domain DNS
+
+Free domains free dns:
+
+```
+http://www.dot.tk/
+https://www.freenom.com/
+```
+
+# Accessibility
 
 Aria is a complement for default tags in html, to help set accessibility. Used when needed if there is no native tag to represent the role. [^wd4]
 
-## CSS
+# CSS
 > `# Web Development`
 > $css $style $design
 > css, web design, style, layout
 
-### General CSS
-> `# Web Development > ## CSS`
+## General CSS
+> `# CSS`
 
 CSS tip:
 Use the `aspect-ratio` CSS property to create elements that maintain proportional dimensions.
@@ -167,7 +183,7 @@ Savio ⚡️
 Best websites to get Icons for web developers 🔥
 A Thread 🧵👇
 1. https://useanimations.com
-The animated icons from useAnimations will help make your future projects stand out. 
+The animated icons from useAnimations will help make your future projects stand out.
 2. https://getloaf.io
 Animated SVG icons everyone will love. Easy to use and integrate in projects.
 3. https://iconscout.com/unicons
@@ -217,13 +233,12 @@ A collection of over 1400 pixel-perfect icons designed to make your website or a
     - [CSS 3 Pagination Design with CSS 3 Hover effects - Web Design Tutorials](https://www.youtube.com/watch?v=pFFVySyBPBY&feature=em-uploademail)
     - [CSS 3 Pagination Design - Web Design Tutorial](https://www.youtube.com/watch?v=wYRDZMkA4aw)
 
-### Learning CSS
-> `# Web Development > ## CSS`
+## Learning CSS
+> `# CSS`
 
 - [Learn CSS](https://web.dev/learn/css/)
 
-## Svelte / Sapper
-> `# Web Development`
+# Svelte / Sapper
 
 
 call only in client

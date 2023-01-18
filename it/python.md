@@ -1,18 +1,40 @@
 # Python
 
-<!-- vim-markdown-toc GFM -->
+[toc]
 
-    * [General](#general)
-    * [Project Structure (files / directories)](#project-structure-files--directories)
-* [Modules / Imports](#modules--imports)
-    * [Poetry](#poetry)
-        * [Deploy Example 1: `requirements.txt`](#deploy-example-1-requirementstxt)
-        * [Deploy Example 2: Poetry inside container[^7]](#deploy-example-2-poetry-inside-container7)
-    * [References](#references)
+# General
 
-<!-- vim-markdown-toc -->
+**[Python – List Files in a Directory](https://www.geeksforgeeks.org/python-list-files-in-a-directory/)**
 
-## General
+---
+
+**Run shell command with python**
+
+[How to Execute Shell Commands with Python](https://janakiev.com/blog/python-shell-commands/)
+
+- Using the os Module
+- Using the subprocess Module
+- Conclusion
+- Resources
+
+Examples:
+
+```
+subprocess.call('echo $MY_SUDO_PASS | sudo -S chown -R username_here /home/username_here/folder_to_change_ownership_recursivley', shell=True)
+```
+
+```
+from subprocess import Popen, PIPE
+
+input = ['echo', 'FROM mongo:5.0.9']
+cmd = ['sudo', 'docker', 'build', '-t', img_name, '-']
+print(f"Shell style : {' '.join(input)} | {' '.join(cmd)}")
+p1 = Popen(input, stdout=PIPE)
+p2 = Popen(cmd, stdin=p1.stdout, stdout=PIPE)
+print("Output from last process : " + (p2.communicate()[0]).decode())
+```
+
+---
 
 [Convert Python Tuple to Dictionary](https://appdividend.com/2020/12/22/how-to-convert-python-tuple-to-dictionary/)
 
@@ -40,7 +62,7 @@ Data validation with Cerberus:
 - https://docs.python-cerberus.org/en/stable/usage.html
 
 
-## Project Structure (files / directories)
+# Project Structure (files / directories)
 
 - Models for apps layouts/structures (excelent resource)[^5]
 
@@ -111,7 +133,7 @@ From outside module, call:
 from yourpackage import *
 ```
 
-## Poetry
+# Poetry
 
 ```pyproject.toml
 [tool.poetry.scripts]
@@ -134,7 +156,7 @@ python myapp
 
 About `__main__.py` as entrypoint: https://docs.python.org/3/library/__main__.html
 
-### Deploy Example 1: `requirements.txt`
+## Deploy Example 1: `requirements.txt`
 
 - Generate `requirements.txt` with a shell script, and build image[^7][^9]:
 
@@ -154,7 +176,7 @@ RUN pip install /tmp/myapp
 ENTRYPOINT ["entrypoint.sh"]
 ```
 
-### Deploy Example 2: Poetry inside container[^7]
+## Deploy Example 2: Poetry inside container[^7]
 
 ```Dockerfile
 FROM python:3.8-slim-buster
@@ -167,7 +189,6 @@ COPY . .
 RUN poetry install --no-dev
 ENTRYPOINT ["entrypoint.sh"]
 ```
-
 
 ## References
 
