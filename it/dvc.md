@@ -1,25 +1,6 @@
 # DVC Data Versioning
 > https://dvc.org/doc
 
-<!-- vim-markdown-toc GFM -->
-
-* [Instalation and Setup](#instalation-and-setup)
-    * [Setup remote](#setup-remote)
-        * [Local remote](#local-remote)
-    * [Remote server/cloud](#remote-servercloud)
-* [Basic Usage](#basic-usage)
-* [Other Use Cases](#other-use-cases)
-    * [Space Optimization: Large datasets](#space-optimization-large-datasets)
-    * [Access a separate DVC repo](#access-a-separate-dvc-repo)
-    * [Remove / Stop tracking files:](#remove--stop-tracking-files)
-    * [Merge Conflicts in DVC Files](#merge-conflicts-in-dvc-files)
-    * [Share Cache Files](#share-cache-files)
-* [Commands](#commands)
-    * [DVC: fetch, checkout, pull](#dvc-fetch-checkout-pull)
-* [References](#references)
-
-<!-- vim-markdown-toc -->
-
 ## Instalation and Setup
 
 1. asdf python local env

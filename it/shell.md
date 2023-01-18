@@ -1,20 +1,27 @@
 # Shell
 > $shell $zsh $bash $terminal
 
-<!-- vim-markdown-toc GFM -->
-
-* [General](#general)
-* [read stdin in function in bash script ](#read-stdin-in-function-in-bash-script-)
-* [Key-value pair](#key-value-pair)
-* [Files maching list of files](#files-maching-list-of-files)
-* [Loop](#loop)
-* [Parameter Expansion](#parameter-expansion)
-* [Flags](#flags)
-    * [shflags](#shflags)
-
-<!-- vim-markdown-toc -->
+[toc]
 
 ## General
+
+[Linux Run Command As Another User](https://www.cyberciti.biz/open-source/command-line-hacks/linux-run-command-as-different-user/)
+```
+runuser -u www-data -- command
+## Run commands as www-data user ##
+runuser -u www-data -- composer update --no-dev
+runuser -u www-data -- php7 /app/maintenance/update.php
+```
+
+---
+
+running process
+ctrl+z
+process running and paused in background
+bg (check background process)
+disown (disown process from shell and it keeps running in background)
+
+---
 
 `!!` command
 
@@ -60,8 +67,6 @@ ls | myeggs
 
 
 
-
-
 ## Files maching list of files
 
 [find files not in a list](https://stackoverflow.com/questions/7306971/find-files-not-in-a-list)
@@ -74,7 +79,7 @@ Where:
 
 ```
 -F, --fixed-strings
-              Interpret PATTERN as a list of fixed strings, separated by newlines, any of which is to be matched.    
+              Interpret PATTERN as a list of fixed strings, separated by newlines, any of which is to be matched.
 -x, --line-regexp
               Select only those matches that exactly match the whole line.
 -v, --invert-match
@@ -83,6 +88,27 @@ Where:
               Obtain patterns from FILE, one per line.  The empty file contains zero patterns, and therefore matches nothing.
 ```
 
+## Case statement
+
+```
+function list_csvs() {
+    case ${1} in
+        in)
+            grep_flag="-f"
+            ;;
+        out)
+            grep_flag="-vf"
+            ;;
+        *)
+            echo 'Second arg must be "in" or "out".'
+            ;;
+    esac
+
+    find . -name "*.csv" | \
+        xargs -n 1 basename | \
+        grep ${grep_flag} ${2}
+}
+```
 
 ## Loop
 
@@ -93,6 +119,22 @@ https://stackoverflow.com/questions/35927760/how-can-i-loop-over-the-output-of-a
 pgrep -af python | while read -r line ; do
     echo "$line"
 done
+
+# in a function
+
+function convert_fmt_to_quotes() {
+    while read -r csv_fileext_path ; do
+        cp  ${csv_fileext_path} ${csv_fileext_path}.tmp
+        xsv fmt --quote-always ${csv_fileext_path}.tmp > ${csv_fileext_path}
+        rm ${csv_fileext_path}.tmp
+    done
+}
+
+find ${datapath} -name "${csv_fileext}.part*" | sort | \
+  tee >(convert_fmt_to_quotes) | \
+  while read -r part_fileext_path ; do
+   # ...
+  done
 ```
 
 ## Parameter Expansion

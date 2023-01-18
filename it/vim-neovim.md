@@ -1,23 +1,13 @@
 # Vim / Neovim
 > nvim
 
-<!-- vim-markdown-toc GFM -->
-
-* [General](#general)
-    * [From Macro to Commands (with keybinding)[^2]](#from-macro-to-commands-with-keybinding2)
-    * [Search / Replace](#search--replace)
-    * [Command line](#command-line)
-* [Plugins](#plugins)
-* [Bulk rename files with vim](#bulk-rename-files-with-vim)
-    * [Programs in shell](#programs-in-shell)
-    * [Pure Vim](#pure-vim)
-    * [Plugins to rename](#plugins-to-rename)
-        * [vim-dirvish](#vim-dirvish)
-* [References](#references)
-
-<!-- vim-markdown-toc -->
+[toc]
 
 ## General
+
+
+vimwiki:
+
 
 Find what filetype is loaded in vim / how to know which filetype
 
@@ -99,7 +89,7 @@ When in command line mode, copy the word under the cursor and insert into the co
 
 https://github.com/tpope/vim-eunuch: Vim sugar for the UNIX shell commands that need it the most
 
-https://github.com/tpope/vim-unimpaired : unimpaired.vim: Pairs of handy bracket mappings 
+https://github.com/tpope/vim-unimpaired : unimpaired.vim: Pairs of handy bracket mappings
 
 ## Bulk rename files with vim
 

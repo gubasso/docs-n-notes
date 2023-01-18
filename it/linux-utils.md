@@ -1,27 +1,53 @@
 # Linux General Utilities
 
-<!-- vim-markdown-toc GitLab -->
+[toc]
 
-* [curl](#curl)
-* [NetworkManager](#networkmanager)
-* [time](#time)
-* [General](#general)
-    * [sum numbers from a file](#sum-numbers-from-a-file)
-    * [xsv](#xsv)
-    * [mlr Miller](#mlr-miller)
-    * [split](#split)
-    * [bulk rename](#bulk-rename)
-    * [shred / secure-delete](#shred-secure-delete)
-* [xargs](#xargs)
-* [rsync](#rsync)
-* [sxhkd](#sxhkd)
-* [ffmpeg](#ffmpeg)
-* [tmux](#tmux)
-* [References:](#references)
+# stow
 
-<!-- vim-markdown-toc -->
+Manage dotfiles with stow.
 
-## curl
+Common command:
+
+- create all symlink from `.dotfiles` to `~`, for every dir inside dotfiles `*`
+- go to `~/.dotfiles`, run the command:
+
+```
+stow -vt ~ *
+stow -vt / zsh
+```
+
+**FLAGS:**
+
+- `-n`: for checking, no do, just show before, simulation mode
+- `-v`: verbose
+- `-`: target directory must be `~`
+- `*`: everything... all dirs inside .dotfiles
+- `--adopt`: adopt all the conflicts... it moves the original under home dir, and copies it to our .dotfile directory
+
+stow never overrides anything
+
+# [awk](./linux-utils-awk.md)
+
+# jq
+
+https://jqplay.org/
+https://programminghistorian.org/en/lessons/json-and-jq
+
+Filter/select a subset of fields from an object: https://stackoverflow.com/a/68664471
+
+```
+curl "https://api.airtable.com/v0/${airtable_base_id}/${airtable_table_variaveis}?maxRecords=3&view=Grid%20view" \
+-H "Authorization: Bearer ${AIRTABLE_API_KEY}" \
+| jq -c "[.records[] | {id, fields}]"
+```
+
+```
+$ cat file.json | jq -c '.users[] | {first}'
+{"first":"Stevie"}
+{"first":"Michael"}
+```
+
+# curl
 
 Multiple parameters:
 
@@ -37,7 +63,7 @@ Just GET request, with multiple parameters (query string):
 ```
 curl -G "localhost:8000/tab0032" --data-urlencode 'where={"var0542": "1"}'
 ```
-## NetworkManager
+# NetworkManager
 
 [How to force Network Manager to rescan connections?](https://superuser.com/questions/164059/how-to-force-network-manager-to-rescan-connections)
 
@@ -47,24 +73,13 @@ nmcli device wifi list
 ```
 
 
-## time
+# time
 
 ```
 time (curl -G "localhost:8000/tab0032" --data-urlencode 'where={"var0542": "1"}' &> /dev/null)
 ```
 
-
-## General
-
-### sum numbers from a file
-
-Each line is a number, sum them all:
-
-```
-paste -s -d+ lines_to_sum | \bc
-```
-
-### xsv
+# xsv
 
 csv manipulation (better than csvkit)
 
@@ -76,7 +91,7 @@ xsv search -s var0046 "0xBb505805" data/tab0220.csv
 xsv count ./data/${tab}.csv >> lines_to_sum
 ```
 
-### mlr Miller
+# mlr Miller
 
 https://github.com/johnkerl/miller
 Miller is like awk, sed, cut, join, and sort for data formats such as CSV, TSV, JSON, JSON Lines, and positionally-indexed.
@@ -91,7 +106,7 @@ mlr --csv --quote-all cat ./data/tab0220.csv | mlr --icsv --ojson --jvquoteall c
 
 conversion converter
 
-### split
+# split
 
 [Splitting A Large CSV Files Into Smaller Files In Ubuntu](http://burnignorance.com/linux-tips-and-tricks/splitting-a-large-csv-files-into-smaller-files-in-ubuntu/)
 
@@ -99,13 +114,7 @@ conversion converter
 split -d -l 10000 source.csv tempfile.part.
 ```
 
-
-### bulk rename
-
-- Bulk rename files
-    - [Bulk rename files with vim](./it/vim-neovim.md#bulk-rename-files-with-vim)
-
-### shred / secure-delete
+# shred / secure-delete
 
 **secure-delete**
 
@@ -123,25 +132,7 @@ Done. Secure delete is a lot more paranoid than shred, using 38 passes instead o
 srm -rfll pathname
 ```
 
----
-
-Zellij (rust) - A terminal multiplexer workspace with batteries included https://www.reddit.com/r/rust/comments/mwukhz/zellij_a_terminal_multiplexer_workspace_with/?utm_medium=android_app&utm_source=share (like tmux)
-rust replacement
-
-REFERENCED:
-► https://starship.rs/ - Starship Prompt
-► https://the.exa.website/ - exa
-► https://github.com/sharkdp/bat - bat
-► https://github.com/BurntSushi/ripgrep - ripgrep (rg)
-► https://github.com/sharkdp/fd - fd
-► https://github.com/XAMPPRocky/tokei - tokei
-► https://github.com/dalance/procs - procs
-
-- bleach bit: clear system and browser files
-- dupeguru: find and clear duplicate files
-- qdirstat: stats for files and directories, find big files and directories
-
-## xargs
+# xargs
 
 - `-I`: -I allows {} to represents each file outputed from ls command
 
@@ -153,18 +144,58 @@ ls | xargs -I {} mv {} $(slugify {})
 ls *old | xargs -I {} mv {} {}.old
 ```
 
+# rsync
 
+## general
 
+- rsync vs scp: rsync is "better"[^cli1]
+  - `scp` example:
+    - `scp -r my/directory username@landchad.net:~/`
+- rsync needs to be installed on both local and remote machines
+- rsync for large files: "use rsync with the -P option. If the transfer is interrupted, you can resume it where it stopped by reissuing the command."[^cli1]
+- rsync basic usage
+    - rsync must be installed on both the source and the destination machine.
 
-## rsync
+## examples
+
+```
+rsync -vurzP SOURCE/ DESTINATION/
+rsync source host:destination
+rsync host:source destination
+```
+
+- `-r`: recursive, dirs and subdirs
+- `-v` or `-verbose`
+- `-z` or `-compress`: during transfer
+- `-P`: same as using both `--partial --progress`
+- `-u / --update`: To updated more recently on the local filesystem. Files that don't exist are copied. Files that already exist, but have a newer timestamp are also copied.
+- `--delete`: Delete files that have been deleted in the original directory
+    - `--delete-after`: delete only after files are received
+- `--exclude`: This option will exclude files that we specify in the parameter
+    - `rsync -avhze ssh --exclude 'KEYWORD' SOURCE/ DESTINATION/`
+- `--dry-run`: This option perform a trial run and will not make any changes, but gives us the same result as a real run. If the results are as expected, then we can remove the --dry-run
+- `rsync --dry-run -avhze ssh --delete SOURCE/ DESTINATION/`
 
 Example of rsync being used to push/syncing files to server, with watchexec:
 
 ```
-watchexec 'rsync -vurzP --delete-after ./* gubasso@projects.cwnt.io:/home/gubasso/cadelab-api-backend/'
+watchexec 'rsync -vurzP --delete-after ./* user@host:/full/path/'
+watchexec 'rsync -vurzP --delete-after ./* user@host:relative/path/from/user/home'
+rsync -vrzP --delete-after ~/website/ user@host:/var/www/html/
 ```
 
-## sxhkd
+Example simple file copy
+
+```
+rsync -vurP SOURCE/ DESTINATION/
+```
+
+Example different ssh port:
+```
+rsync -a -e "ssh -p 2322" /opt/media/ remote_user@remote_host_or_ip:/opt/media/
+```
+
+# sxhkd
 
 Script to kill and refresh keybindings (shortcuts). Can be used in vim, after save file.[^5](gubasso/references)
 
@@ -181,7 +212,7 @@ autocmd BufWritePost *sxhkdrc !killall sxhkd; setsid sxhkd &
 - [Check if Directory is Mounted in Bash](https://www.baeldung.com/linux/bash-is-directory-mounted)
     - to use with gocryptfs, script to check if vault is already mounted
 
-## ffmpeg
+# ffmpeg
 
 OBS:
 - check your display # and resolution with `xrandr` command
@@ -234,7 +265,7 @@ OBS:
 - [(FFMPEG) HOW TO NORMALIZE AUDIO?](https://www.youtube.com/watch?v=Kb2JEYFyvqs)
     - `ffmpeg -i  input.mp3 -af loudnorm=I=-16:LRA=11:TP=-1.5 output.mp3`
 
-## tmux
+# tmux
 
 $tmux (later):
 https://github.com/tmux-plugins/tmux-resurrect
@@ -245,7 +276,41 @@ manage sessions / shortcuts: https://github.com/tmux-plugins/tmux-sessionist
 save / log / “screen capture” to a file / save history: https://github.com/tmux-plugins/tmux-logging
 Restore tmux environment after system restart: https://github.com/tmux-plugins/tmux-resurrect
 
+# General
 
-## References:
+## sum numbers from a file
+
+Each line is a number, sum them all:
+
+```
+paste -s -d+ lines_to_sum | \bc
+```
+
+## bulk rename
+
+- Bulk rename files
+    - [Bulk rename files with vim](./it/vim-neovim.md#bulk-rename-files-with-vim)
+
+
+---
+
+Zellij (rust) - A terminal multiplexer workspace with batteries included https://www.reddit.com/r/rust/comments/mwukhz/zellij_a_terminal_multiplexer_workspace_with/?utm_medium=android_app&utm_source=share (like tmux)
+rust replacement
+
+REFERENCED:
+► https://starship.rs/ - Starship Prompt
+► https://the.exa.website/ - exa
+► https://github.com/sharkdp/bat - bat
+► https://github.com/BurntSushi/ripgrep - ripgrep (rg)
+► https://github.com/sharkdp/fd - fd
+► https://github.com/XAMPPRocky/tokei - tokei
+► https://github.com/dalance/procs - procs
+
+- bleach bit: clear system and browser files
+- dupeguru: find and clear duplicate files
+- qdirstat: stats for files and directories, find big files and directories
+
+
+# References:
 
 [^1]: [How do I recursively shred an entire directory tree?](https://unix.stackexchange.com/a/146078)

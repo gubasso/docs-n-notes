@@ -1,35 +1,27 @@
 # Server / VPS
 > $it $server $vps $linux
 
-<!-- vim-markdown-toc GitLab -->
+[toc]
 
-* [Related](#related)
-* [General](#general)
-* [Setup a server / vps / domain name / security measures](#setup-a-server-vps-domain-name-security-measures)
-    * [manage security](#manage-security)
-        * [change original root password](#change-original-root-password)
-        * [add a new user and set a password [^l1]](#add-a-new-user-and-set-a-password-l1)
-        * [create and add to group wheel](#create-and-add-to-group-wheel)
-        * [visudo: full root privileges](#visudo-full-root-privileges)
-* [Opensuse Server](#opensuse-server)
-* [References](#references)
+# Related
+> `# Server / VPS`
 
-<!-- vim-markdown-toc -->
+- [# Home Server](./it/server-vps-home_server.md)
 
-## Related
+# Resources
+> `# Server / VPS`
 
-- [# Home Server](./it/server-vps-home_server.md) 
+- https://www.linode.com/docs/guides/platform/get-started/
+- https://www.linode.com/docs/guides/using-your-systems-hosts-file/
+- https://www.linode.com/docs/guides/using-fail2ban-to-secure-your-server-a-tutorial/
+- https://www.linode.com/docs/guides/running-a-mail-server/
+- How to Secure a VPS https://youtu.be/Nuv1mPuHFvg
 
-## General
+# General
 > `# Server / VPS`
 
 - https://dokku.com/
     - dokku vs caprover https://www.mskog.com/posts/heroku-vs-self-hosted-paas
-
-- https://caprover.com/
-    - CapRover is an extremely easy to use app/database deployment & web server manager for your NodeJS, Python, PHP, ASP.NET, Ruby, MySQL, MongoDB, Postgres, WordPress (and etc...) applications!
-    - deploy application (cloudron like? heroku like?)
-    - docker
 
 to logout the server
 - `<C-d>` or type `logout`
@@ -38,43 +30,62 @@ find my server/host ip address: `ifconfig`
 
 "PRO TIP - any time you make changes to authentication settings on a system - ssh, pam, sudoers, and so on - open a second root terminal to that system and leave it open until AFTER you verify your changes worked correctly, so you don't get locked out of your system."
 
+- proxmox: OS for bare metal manage VMs
 
-## Setup a server / vps / domain name / security measures
+# Setup a server / vps / domain name / security measures
 > `# Server / VPS`
 
 - deploy a server / vps (linode, vutr, etc...)
     - enable ipv6
-    - hostname: put the domain name with subdomain, like: projects.cwnt.io
+    - update system
+      - arch linux
+        - `pacman -S archlinux-keyring --noconfirm && pacman -Syyu --noconfirm`
+      - ubuntu: `apt update && apt upgrade`
+      - opensuse: `sudo zypper ref && sudo zypper dup -y`
+    - set timezone:
+      - `timedatectl list-timezones`
+      - `timedatectl set-timezone 'America/New_York'`
+        - us central: America/Chicago
+          - dallas/tx
+      - for ubuntu/debian:
+        - `dpkg-reconfigure tzdata`
+      - for opensuse:
+        - `yast2 timezone`
+    - set hostname:
+      - Descriptive and/or Structured (e.g. [purpose]-[number]-[environment] / `web-01-prod`)
+      - part of a FQDN (e.g. `web-01-prod.example.com`)
+        - full-qualified-domain-name
+      - command: `hostnamectl set-hostname example-hostname`
+    - `/etc/hosts`
+      - FQDN: `example-hostname.example.com`
+      - `<ipv4> example-hostname.example.com example-hostname`
+      - `<ipv6> example-hostname.example.com example-hostname`
+    - `etc/nsswitch.conf`
+      - `hosts:          files dns`
 
-- epik, dns host records 
-    - External Hosts: A (ipv4) , AAAA (ipv6)
-    - host field: subdomain you want
-        - normal path: add one with blank host field and other with `www`
-            - can add a `*` to... to redirect any subdomain
-            - do * if the subdomain is set in the same host vps
-    - repeat same pattern to A (ipv4) and AAAA (ipv6) (find ipv6 address at linode)
-- (to setup a email server) at server host (e.g. linode) 
-    - set ipv6 reverse dns: field `ipv6 number` to `landchad.net`
-
-(wait to dns propagate)
-DNS Checker - DNS Check Propagation Tool
-https://dnschecker.org
+- dns records: (e.g. epik / linode dns)
+  - A (ipv4) , AAAA (ipv6)
+  - FQDN: `example-hostname.example.com`
+  - https://www.linode.com/docs/guides/dns-manager/
+  - https://www.linode.com/docs/guides/configure-your-linode-for-reverse-dns/
+  - (wait to dns propagate)
+  - https://dnschecker.org
 
 - access server with `ssh root@landchad.net` or with ip address
 - or `ssh -p 202 root@ip`, when specify the port number
 
+## manage security
+> `# / ## Setup a server / vps / domain name / security measures`
 
-### manage security 
-$opsec
-
-
-#### change original root password
+### change original root password
+> `# / ## / ### manage security`
 
 ```
 passwd root
 ```
 
-#### add a new user and set a password [^l1]
+### add a new user and set a password [^l1]
+> `# / ## / ### manage security`
 
 **`Arch Linux`**
 ```
@@ -85,22 +96,26 @@ passwd user_name
 - `-m/--create-home`
 - The above useradd command will also automatically create a group called user_name and makes this the default group for the user archie. Making each user have their own group (with the group name same as the user name) is the preferred way to add users.
 
-#### create and add to group wheel
+### create and add to group wheel
+> `# / ## / ### manage security`
 
 ```
 groupadd wheel
 groupadd sudo
-usermod -aG wheel,sudo,audio username
+groupadd ssh-user
+usermod -aG wheel,sudo,ssh-user user_name
 ```
 
-#### visudo: full root privileges
+### visudo: full root privileges
+> `# / ## / ### manage security`
 
 - gain full root privileges [^l2]
 
+`EDITOR=vim visudo`
+or
+**`/etc/sudoers.d/99-local-sudoers`**
 ```
-EDITOR=vim visudo
----
-USER_NAME   ALL=(ALL) ALL
+user_name   ALL=(ALL) ALL
 %wheel      ALL=(ALL) ALL
 Defaults passwd_timeout=0
 Defaults timestamp_timeout=10
@@ -108,6 +123,11 @@ Defaults timestamp_timeout=10
 # Defaults targetpw
 # ALL       ALL=(ALL) ALL
 ```
+
+### make commands easier at server
+> `# / ## / ### manage security`
+
+- change user: `su username`
 
 - make it easier to work with commands
 ```
@@ -117,10 +137,15 @@ set -o vi
 alias sudo='sudo -v; sudo '
 alias s='systemctl'
 alias ss='sudo systemctl'
+alias d='sudo docker'
 ```
 
 - `alias sudo='sudo -v; sudo '`: Refreshing the timeout[^l2].1
+
 - test: exit and try to access ssh with new user `ssh user_name@landchad.net`
+
+### Harden SSH Access
+> `# / ## / ### manage security`
 
 (more secure way to access the server)
 
@@ -135,57 +160,143 @@ Host myserver.com
 ```
 
 - requisites: have a ssh identity / key pair
-- run at local computer: `ssh-copy-id user_name@landchad.net`
-    - to copy local ssh credential to the server
+- run at local computer:
+  - `ssh-copy-id -i [private_identity_file] user_name@landchad.net`
+  - to copy local ssh credential to the server
 - test if login works `ssh user@host`
 
-- at host (remote), edit 
+- at host (remote), edit
 
 - Better way to configure sshd_config: https://www.reddit.com/r/openSUSE/comments/o9f7ru/ssh_config_on_tumbleweed/
 
-**`/etc/ssh/sshd_config.d/my_conf.conf`**
+At server, run the commands to enable just the strong type of keys:
+
+```
+cd /etc/ssh
+sudo rm ssh_host_*key*
+sudo ssh-keygen -t ed25519 -f ssh_host_ed25519_key -N "" < /dev/null
+sudo ssh-keygen -t rsa -b 4096 -f ssh_host_rsa_key -N "" < /dev/null
+```
+
+check for:
+```
+sudo mkdir -p /etc/ssh/sshd_config.d/
+```
+
+add include at beginning:
+**`/etc/ssh/sshd_config`**
+```
+Include /etc/ssh/sshd_config.d/*.conf
+```
+- Check configs at original **`/etc/ssh/sshd_config`**.
+- Check if `sshd_config` has the `Include /etc/ssh/sshd_config.d/*.conf`
+At `sshd_config`:
+  - remove: `Protocol...` and `HostKey` lines...
+
+```
+sudo mkdir -p /etc/ssh/sshd_config.d
+```
+**`/etc/ssh/sshd_config.d/99-local-sshd.conf`**
 ```
 PermitRootLogin no
 PubkeyAuthentication yes
-UsePAM no
 PasswordAuthentication no
 ChallengeResponseAuthentication no
-Port 202
-AllowUsers gubasso ismael
 AllowAgentForwarding yes
+Port 202
+UsePAM no
+AllowGroups ssh-user
+KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+Protocol 2
+HostKey /etc/ssh/ssh_host_ed25519_key
+HostKey /etc/ssh/ssh_host_rsa_key
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
 ```
+- check applyed configs:
+
+```
+sudo systemctl restart sshd && sudo sshd -T
+```
+
 -  `PermitRootLogin`[^l3][^pn1]
-- Check configs at original **`/etc/ssh/sshd_config`**.
-- Check if `sshd_config` has the `Include /etc/ssh/sshd_config.d/*.conf`
+- add users to `ssh-user` group
 
 - check if port 202 will be unbloced https://docs.cloudron.io/security/#securing-ssh-access
 (to just update a config, may run `systemctl reload sshd`)
 - set config, run `systemctl restart sshd`
 
-- set hostname [^pn1]
+
+At server: (can be configured at client too, within `~/.ssh/config`)
+
+check for:
 ```
-hostnamectl set-hostname myhostname
+sudo mkdir -p /etc/ssh/ssh_config.d/
 ```
 
-**`/etc/hosts`**
+add include at beginning:
+**`/etc/ssh/ssh_config`**
 ```
-# IP-Address  Full-Qualified-Hostname  Short-Hostname
-  (ip address from vps)   myhostname
-45.56.87.40     projects.cwnt.io        cadelab-linode
-2600:3c01::f03c:92ff:fe46:471c  projects.cwnt.io        cadelab-linode
+Include /etc/ssh/ssh_config.d/*.conf
 ```
 
-- `/etc/hostname` contains name of the machine, as known to applications that run locally.[^l5]
-    - e.g. `myhostname`
-- `/etc/hosts`: and DNS associate names with IP addresses.[^l5]
-    - `myhostname` may be mapped to whichever IP address the machine can access itself, but mapping it to 127.0.0.1 is unæsthetic.
-- Note that you can use both the /etc/hosts file and a DNS server for name resolution. The content of the hosts file will usually be used for lookups before DNS. If there is no match in the hosts file, then the DNS server will be used. [^l6]
+**`/etc/ssh/ssh_config.d/99-local-ssh_config.conf`**
+```
+# Github needs diffie-hellman-group-exchange-sha1 some of the time but not always.
+#Host github.com
+#    KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256,diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1
+Host *
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+PubkeyAuthentication yes
+KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+HostKeyAlgorithms ssh-ed25519-cert-v01@openssh.com,ssh-rsa-cert-v01@openssh.com,ssh-ed25519,ssh-rsa
+Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,umac-128@openssh.com
+UseRoaming no
+```
+
+### Fail2Ban
+> `# / ## / ### manage security`
+
+Use Fail2Ban for SSH Login Protection
+
+- install fail2ban
+- install sendmail
+
+```
+systemctl enable fail2ban --now
+systemctl enable sendmail --now
+```
+
+```
+cd /etc/fail2ban
+sudo cp fail2ban.conf fail2ban.local
+sudo cp jail.conf jail.local
+```
+
+Check configs with:
+```
+sudo fail2ban-client status
+```
+
+Change configs in `*.local`
+
+- https://www.linode.com/docs/guides/running-a-mail-server/#sending-email-on-linode
+
+**`/etc/fail2ban/jail.local`**
+```
+destemail = myuseremail@email.com
+sender = myuseremail@email.com
+```
+
+
+## Other steps
+> `# / ## Setup a server / vps / domain name / security measures`
 
 - install and setup a firewall (e.g. ufw): [Firewall](articles/it-firewall.md)
 
-Other resources:
-
-- How to Secure a VPS https://youtu.be/Nuv1mPuHFvg
+# VPS Use Cases
 
 **what else do from here?**
 
@@ -193,31 +304,17 @@ Other resources:
 - host a backup?
 - host some application?
 
-## Opensuse Server
+# Nginx: Load balancer / reverse proxy
 
-**GENERAL NOTES:**
+If using with SSL/Let's encrypt/certbot:...
+Better to **NOT** use with docker/container...
 
-- zypper: opensuse zypper package manager (install from rpm too, as fedora)[^opsu2]
-    - --non-interactive means that the command is run without asking anything
-    - `sudo zypper rm --clean-deps PACKAGE_NAME` automatically want to remove any packages that become unneeded
+Simpler if it is installed directly on system.
 
-**AFTER INSTALL:**[^opsu1]
+- [Nginx installation and config](./nginx.md)
+- [certbot](./nginx-certbot.md)
 
-things to do after install opensuse
-
-1. Update System
-`sudo zypper ref && sudo zypper up`
-2. Add Community Repositories: opensuse site, additional packages repositories
-    - Packman (install it) https://en.opensuse.org/Additional_package_repositories#Packman
-    `sudo zypper ar -cfp 90 'https://ftp.gwdg.de/pub/linux/misc/packman/suse/openSUSE_Leap_$releasever/' packman`
-    - After adding packman repository be sure to switch system package to those in packman as a mix of both can cause a variety of issues.
-        - `sudo zypper dup --from packman --allow-vendor-change`
-3. Install build essentials (`make`, etc...)
-    ```
-    sudo zypper install -y patterns-devel-base-devel_basis
-    ```
-
-## References
+# References
 
 [^1]: [Setting up a Website and Email Server in One Sitting (Internet Landchad) - Luke Smith](https://www.youtube.com/watch?v=3dIVesHEAzc) $server $vps $host
 

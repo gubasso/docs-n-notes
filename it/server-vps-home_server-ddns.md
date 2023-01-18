@@ -2,7 +2,8 @@
 > ddns, dyndns
 > DDNS / DynDNS / Dynamic DNS
 
-
+- https://github.com/jc21/route53-ddns
+  - amazon route53
 
 https://www.makeuseof.com/tag/5-best-dynamic-dns-providers-can-lookup-free-today/
 
@@ -36,6 +37,7 @@ Access my server by public ip address (or dns/ddns), from inside same network:
 
 nat loopback, nat reflection, hairpin
 http://opensimulator.org/wiki/NAT_Loopback_Routers
+https://en.wikipedia.org/wiki/Network_address_translation#NAT_hairpinning
 
 [Cannot Access Public IP while connected Locally?](https://community.spiceworks.com/topic/2240145-cannot-access-public-ip-while-connected-locally)
 
@@ -50,7 +52,7 @@ https://github.com/ddclient/ddclient
 
 ### Debugging
 
-enable debugging and verbose messages: 
+enable debugging and verbose messages:
 
 ```
 ddclient -daemon=0 -debug -verbose -noquiet
