@@ -35,18 +35,28 @@ find my server/host ip address: `ifconfig`
 # Setup a server / vps / domain name / security measures
 > `# Server / VPS`
 
+- dns records: (e.g. epik / linode dns)
+  - A (ipv4) , AAAA (ipv6)
+  - FQDN: `example-hostname.example.com`
+  - https://www.linode.com/docs/guides/dns-manager/
+  - https://www.linode.com/docs/guides/configure-your-linode-for-reverse-dns/
+  - (wait to dns propagate)
+  - https://dnschecker.org
+
 - deploy a server / vps (linode, vutr, etc...)
     - enable ipv6
     - update system
       - arch linux
         - `pacman -S archlinux-keyring --noconfirm && pacman -Syyu --noconfirm`
-      - ubuntu: `apt update && apt upgrade`
+      - ubuntu: `apt update -y && apt upgrade -y`
       - opensuse: `sudo zypper ref && sudo zypper dup -y`
     - set timezone:
       - `timedatectl list-timezones`
       - `timedatectl set-timezone 'America/New_York'`
         - us central: America/Chicago
           - dallas/tx
+        - us east: America/New York
+          - atlanta/ga
       - for ubuntu/debian:
         - `dpkg-reconfigure tzdata`
       - for opensuse:
@@ -62,14 +72,6 @@ find my server/host ip address: `ifconfig`
       - `<ipv6> example-hostname.example.com example-hostname`
     - `etc/nsswitch.conf`
       - `hosts:          files dns`
-
-- dns records: (e.g. epik / linode dns)
-  - A (ipv4) , AAAA (ipv6)
-  - FQDN: `example-hostname.example.com`
-  - https://www.linode.com/docs/guides/dns-manager/
-  - https://www.linode.com/docs/guides/configure-your-linode-for-reverse-dns/
-  - (wait to dns propagate)
-  - https://dnschecker.org
 
 - access server with `ssh root@landchad.net` or with ip address
 - or `ssh -p 202 root@ip`, when specify the port number
@@ -219,7 +221,7 @@ MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,umac-128-etm@op
 sudo systemctl restart sshd && sudo sshd -T
 ```
 
--  `PermitRootLogin`[^l3][^pn1]
+- `PermitRootLogin`[^l3][^pn1]
 - add users to `ssh-user` group
 
 - check if port 202 will be unbloced https://docs.cloudron.io/security/#securing-ssh-access
