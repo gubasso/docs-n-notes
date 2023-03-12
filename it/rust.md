@@ -8,6 +8,43 @@
 
 <!-- vim-markdown-toc -->
 
+# General
+
+console output in `println!` (std out)
+https://stackoverflow.com/questions/25106554/why-doesnt-println-work-in-rust-unit-tests
+
+```
+cargo test -- --nocapture
+
+cargo test -p p997_find_the_town_judge -- --nocapture --test-threads 1
+
+cargo clippy --package p909_snakes_and_ladders
+
+```
+
+[Sorting Vector of vectors of f64](https://users.rust-lang.org/t/sorting-vector-of-vectors-of-f64/16264)
+```
+use std::cmp::Ordering;
+
+fn main() {
+    let mut items = vec![4.5, 11.5, -7.3, 14.0, 18.7, 11.5, 1.3, -2.1, 33.7];
+    println!("{:?}", items);
+    items.sort_by(cmp_f64);
+    println!("{:?}", items);
+}
+
+fn cmp_f64(a: &f64, b: &f64) -> Ordering {
+    if a < b {
+        return Ordering::Less;
+    } else if a > b {
+        return Ordering::Greater;
+    }
+    return Ordering::Equal;
+}
+```
+
+creating an interator from scratch: [Creating an Iterator in Rust](https://aloso.github.io/2021/03/09/creating-an-iterator)
+
 ## Study
 
 exercism.io lesson:
@@ -38,7 +75,7 @@ https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/
 - [Awesome Rust Streaming](https://github.com/jamesmunns/awesome-rust-streaming/blob/master/README.md)
     - This is a community curated list of livestreams about the programming language Rust.
 
-CIS 198: Rust Programming University of Pennsylvania https://cis198-2016s.github.io/schedule/ 
+CIS 198: Rust Programming University of Pennsylvania https://cis198-2016s.github.io/schedule/
 pure practice:
 Rust by example
 parei: https://doc.rust-lang.org/rust-by-example/primitives.html
