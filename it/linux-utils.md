@@ -203,10 +203,53 @@ Script to kill and refresh keybindings (shortcuts). Can be used in vim, after sa
 killall sxhkd; setsid sxhkd &
 ```
 
-with vim
+with vim (https://github.com/kovetskiy/sxhkd-vim)
 
 ```
 autocmd BufWritePost *sxhkdrc !killall sxhkd; setsid sxhkd &
+```
+
+vimux configs:
+
+```
+" Vimux config
+let g:VimuxOrientation = "v"
+let g:VimuxHeight = "40"
+
+function! VimuxInspectGoTop()
+  call VimuxInspectRunner()
+  call VimuxSendKeys("g")
+endfunction
+command -bar VimuxInspectGoTop :call VimuxInspectGoTop()
+
+function! VimuxZoomAndInspectGoTop()
+  call VimuxZoomRunner()
+  call VimuxInspectGoTop()
+endfunction
+command -bar VimuxZoomAndInspectGoTop :call VimuxZoomAndInspectGoTop()
+
+" Dev Workflow with Vimux
+" Prompt for a command to run [^10]
+nnoremap <leader>vp :wa<cr> \| :VimuxPromptCommand<cr>
+" Run last command executed by VimuxRunCommand [^10]
+nnoremap <leader>vl :wa<cr> \| :VimuxRunLastCommand<cr>
+" Inspect runner pane [^10]
+nnoremap <leader>vi :VimuxInspectGoTop<cr>
+" Zoom the tmux runner pane[^10]
+nnoremap <leader>vz :VimuxZoomAndInspectGoTop<CR>
+" Rust workflow
+" nnoremap <leader>cc :silent Redir !cargo clippy --all-targets --tests<cr>
+" nnoremap <leader>ct :silent Redir !cargo test<cr>G
+" nnoremap <leader>cf :silent !rustfmt %<cr>
+" nnoremap <leader>cp :silent Redir !cargo play %<cr>
+" call any command [^13]
+
+augroup rust_work
+    au!
+    au FileType rust nnoremap <Leader>r :wa<cr> \| :VimuxPromptCommand("clrm; cargo ")<CR>
+    au FileType rust nnoremap <Leader>t :wa<cr> \| :call VimuxRunCommand("clrm; cargo test -- --nocapture")<CR>
+    au FileType rust nnoremap <Leader>c :wa<cr> \| :call VimuxRunCommand("clrm; cargo clippy")<CR>
+augroup END
 ```
 
 - [Check if Directory is Mounted in Bash](https://www.baeldung.com/linux/bash-is-directory-mounted)

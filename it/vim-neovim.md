@@ -1,19 +1,94 @@
 # Vim / Neovim
+
 > nvim
 
 [toc]
 
 ## General
 
+Formatter / prettier for neovim in lua:
+- [Neovim - Null-ls: a quick explanation](https://www.youtube.com/watch?v=e3xxkEbhG0o)
+
+
+Spellcheck / spell:
+
+```vimscript
+:spellr
+```
+
+- repeats the last spelling correction for all matches that was corrected
 
 vimwiki:
 
-
 Find what filetype is loaded in vim / how to know which filetype
 
-```
+```vimscript
 :set filetype?
 ```
+
+function to simplify keymappings:
+
+```
+-- Functional wrapper for mapping custom keybindings
+-- https://blog.devgenius.io/create-custom-keymaps-in-neovim-with-lua-d1167de0f2c2
+
+local function map(mode, lhs, rhs, opts)
+    local options = { noremap = true }
+    if opts then
+        options = vim.tbl_extend("force", options, opts)
+    end
+    vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+end
+local default_opts = { noremap = true, silent = true }
+map("n", "<leader><tab>", "<cmd>b#<CR>", default_opts)
+map("n", "<leader>h", ":nohlsearch<CR>", default_opts)
+```
+
+
+```
+" Redir output to empty buffer [^5]
+command! -nargs=+ -complete=command Redir let s:reg = @@ | redir @"> | silent execute <q-args> | redir END | new | pu | 1,2d_ | let @@ = s:reg
+" [^5]: Dump the output of internal vim command into buffer (https://vi.stackexchange.com/questions/8378/dump-the-output-of-internal-vim-command-into-buffer)
+```
+
+Macro helpers to input common texts:
+
+```
+" js helpers
+augroup jshelpers
+    au! FileType javascript nnoremap <leader>c "cyiwoconsole.log(c)
+augroup END
+
+" auto create docs markdown helpers
+augroup mdhelpers
+    au!
+    "" reference structure with a sequence number
+    au FileType markdown nnoremap <leader>ri o[^1]: []()"+pT)
+    au FileType markdown nnoremap <leader>rs :norm 0ll:let @n=0"nyiwo[^=n+1]: []()"+pT)
+    "" code block: simple
+    au FileType markdown nnoremap <leader>cc o``````kk
+    au FileType markdown nnoremap <leader>cp o``````kk"+p
+    "" code block: with file name
+    au FileType markdown nnoremap <leader>ff o**``**``````kkkklll
+    au FileType markdown nnoremap <leader>fp o**``**``````kk"+p
+    "" link and paste at end
+    au FileType markdown nnoremap <leader>i i[]()"+pT)
+augroup END
+```
+
+
+associate different file types with extensions
+
+```
+augroup mdfiletypes
+    " associate *.foo with bar filetype
+    " do not override previouslly setted filetypes
+    au!
+    au BufNewFile,BufRead *.rmd setfiletype markdown
+    au BufNewFile,BufRead Description setfiletype markdown
+augroup END
+```
+
 
 ---
 
@@ -151,6 +226,42 @@ Workflow with dirvish:
 
     Run the shell script with Z!
 ```
+
+## tmux integration
+
+**`tmux.conf`**
+```
+# Smart pane switching with awareness of Vim splits.
+# See: https://github.com/christoomey/vim-tmux-navigator
+is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
+    | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
+is_fzf="ps -o state= -o comm= -t '#{pane_tty}' \
+  | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?fzf$'"
+bind-key -n 'C-h' if-shell "$is_vim" 'send-keys C-h'  'select-pane -L'
+bind-key -n 'C-l' if-shell "$is_vim" 'send-keys C-l'  'select-pane -R'
+# [^3]
+bind -n C-j run "($is_vim && tmux send-keys C-j)  || \
+                         ($is_fzf && tmux send-keys C-j) || \
+                         tmux select-pane -D"
+bind -n C-k run "($is_vim && tmux send-keys C-k) || \
+                          ($is_fzf && tmux send-keys C-k)  || \
+                          tmux select-pane -U"
+tmux_version='$(tmux -V | sed -En "s/^tmux ([0-9]+(.[0-9]+)?).*/\1/p")'
+if-shell -b '[ "$(echo "$tmux_version < 3.0" | bc)" = 1 ]' \
+    "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\'  'select-pane -l'"
+if-shell -b '[ "$(echo "$tmux_version >= 3.0" | bc)" = 1 ]' \
+    "bind-key -n 'C-\\' if-shell \"$is_vim\" 'send-keys C-\\\\'  'select-pane -l'"
+bind-key -T copy-mode-vi 'C-h' select-pane -L
+bind-key -T copy-mode-vi 'C-j' select-pane -D
+bind-key -T copy-mode-vi 'C-k' select-pane -U
+bind-key -T copy-mode-vi 'C-l' select-pane -R
+bind-key -T copy-mode-vi 'C-\' select-pane -l
+
+# bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j'  'select-pane -D'
+# bind-key -n 'C-k' if-shell "$is_vim" 'send-keys C-k'  'select-pane -U'
+# [^3]: [Tmux and Vim — even better together](https://www.bugsnag.com/blog/tmux-and-vim)
+```
+
 
 
 ## References
