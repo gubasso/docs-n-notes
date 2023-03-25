@@ -6,6 +6,16 @@
 
 ## General
 
+[How to generate a number sequence in file using vi or Vim?](https://stackoverflow.com/questions/9903660/how-to-generate-a-number-sequence-in-file-using-vi-or-vim)
+> column sum sequence numbers column numbered list
+
+```
+:help v_g_CTRL-A
+
+# to use a step count of 2
+2g Ctrl-a
+```
+
 Formatter / prettier for neovim in lua:
 - [Neovim - Null-ls: a quick explanation](https://www.youtube.com/watch?v=e3xxkEbhG0o)
 

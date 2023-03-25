@@ -1,12 +1,43 @@
 # Rust Programming Language
 > $rust $rust-lang
 
-<!-- vim-markdown-toc GitLab -->
+<!-- toc GitLab -->
 
-* [Study](#study)
-* [Resoures](#resoures)
++ [Arrays / Vectors](#arrays-vectors)
++ [General](#general)
+  * [Study](#study)
+  * [Resoures](#resoures)
 
-<!-- vim-markdown-toc -->
+<!-- toc -->
+
+# Arrays / Vectors
+
+avoid array index out of bounds
+
+basic brute example:
+```
+for i in points.len() {
+  let current = points[i];
+  let previous = points[i-1];
+  differences.push(current-previous);
+}
+```
+
+with array_windows
+```
+for [previous, current] in points.array_windows().copied() {
+  differences.push(current-previous);
+}
+
+# or
+
+let differences: Vec<_> = points
+  .array_windows()
+  .copied()
+  .map(|[previous, current]| current - previous)
+  .collect;
+```
+
 
 # General
 
