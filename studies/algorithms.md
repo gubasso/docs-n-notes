@@ -1,7 +1,8 @@
 # Algorithms
 
-<!-- toc GitLab -->
+<!-- toc GFM -->
 
++ [Recursive Functions](#recursive-functions)
 + [Binary Search](#binary-search)
 + [GCD (great common denominator) and LCM (least common multiplier)](#gcd-great-common-denominator-and-lcm-least-common-multiplier)
 + [KMP Knuth-Morris-Pratt](#kmp-knuth-morris-pratt)
@@ -9,6 +10,81 @@
 + [References:](#references)
 
 <!-- toc -->
+
+# Recursive Functions
+
+[How to write Recursive Functions](https://www.youtube.com/watch?v=ggk7HbcnLG8)
+
+**Basic Structure**
+```
+func()
+{
+  if(  )
+  {
+    // base case (2)
+  }
+  else
+  {
+    // recursive procedure (1)
+  }
+}
+```
+
+(1) First write recursive procedure
+(2) Then write the base case
+
+Step 1) Divide the problem into smaller sub-problems
+
+```
+Calculate the factorial(4)
+
+Fact(1) = 1;
+Fact(2) = 2 * 1 = 2 * Fact(1);
+Fact(3) = 3 * 2 * 1 = 3 * Fact(2);
+Fact(4) = 4 * 3 * 2 * 1 = 4 * Fact(3);
+```
+
+- Begin with the simplest cases
+
+```
+Fact(n) = n * Fact(n-1)
+```
+
+```
+Fact(int n)
+{
+  if(  )
+  {
+    // base case (2)
+  }
+  else
+  {
+    return n * Fact(n-1);
+  }
+}
+```
+
+Step 2) Specify the base condition to stop the recursion
+
+```
+Fact(1) = 1
+```
+
+```
+Fact(int n)
+{
+  if( n == 1 )
+  {
+    return 1;
+  }
+  else
+  {
+    return n * Fact(n-1);
+  }
+}
+```
+
+
 
 # Binary Search
 
@@ -48,6 +124,9 @@ explores nodes in layer:
 - start node: explore neighbours (1 layer)
 - neighbours (1): explores their neighbours (2)
 - neighbours (2): ...
+
+- can be used to convert/transform a tree/graph to an array/vector
+    - `convert_tree_node_to_vec` at leetcode `p226_invert_binary_tree`
 
 # References:
 

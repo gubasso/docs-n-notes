@@ -3,12 +3,15 @@
 
 <!-- toc GitLab -->
 
+    * [Debugging](#debugging)
 + [Arrays / Vectors](#arrays-vectors)
 + [General](#general)
-  * [Study](#study)
-  * [Resoures](#resoures)
+    * [Study](#study)
+    * [Resoures](#resoures)
 
 <!-- toc -->
+
+## Debugging
 
 # Arrays / Vectors
 
@@ -40,6 +43,15 @@ let differences: Vec<_> = points
 
 
 # General
+
+- list of usefull crates: blessed.rs
+
+- error handling crates:
+    - thiserror
+    - anyhow
+
+- continuous integration / delivery with rust:
+    - 5 Better ways to code in Rust https://www.youtube.com/watch?v=BU1LYFkpJuk
 
 console output in `println!` (std out)
 https://stackoverflow.com/questions/25106554/why-doesnt-println-work-in-rust-unit-tests
