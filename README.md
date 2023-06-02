@@ -10,6 +10,8 @@ Personal notes and documentations for tech and a bunch of unrelated topics.
 
 ## Unorganized
 
+kindle tips
+https://calibre-ebook.com/
 
 
 - office suite like
@@ -45,7 +47,7 @@ Personal notes and documentations for tech and a bunch of unrelated topics.
 - Minio: Multi-Cloud Object Storage Kubernetes S3
 
 
-issue tracker, project manager, command line cli, terminal
+bug tracker, issue tracker, project manager, command line cli, terminal
 
 - Bug: https://github.com/driusan/bug
     - https://github.com/driusan/PoormanIssueTracker

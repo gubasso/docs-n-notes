@@ -1,6 +1,17 @@
 # Web Development
 
-[toc]
+<!-- toc GFM -->
+
++ [General](#general)
+    * [Test: Jest](#test-jest)
++ [Domain DNS](#domain-dns)
++ [Accessibility](#accessibility)
++ [CSS](#css)
+    * [General CSS](#general-css)
+    * [Learning CSS](#learning-css)
++ [Svelte / Sapper](#svelte--sapper)
+
+<!-- toc -->
 
 # General
 
@@ -69,6 +80,15 @@ Motion One is an animation library, built on the Web Animations API for the smal
 Practice 💻
 → Frontend Mentor
 → TestDome
+
+## Test: Jest
+
+Run jest test and print `console.log`
+
+```
+npm run test -- --silent=false
+```
+
 
 # Domain DNS
 

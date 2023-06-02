@@ -6,6 +6,10 @@
 
 ## General
 
+fold / unfold
+https://neovim.io/doc/user/fold.html
+https://neovim.io/doc/user/fold.html
+
 [How to generate a number sequence in file using vi or Vim?](https://stackoverflow.com/questions/9903660/how-to-generate-a-number-sequence-in-file-using-vi-or-vim)
 > column sum sequence numbers column numbered list
 
