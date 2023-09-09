@@ -1,9 +1,63 @@
 # Shell
 > $shell $zsh $bash $terminal
 
-[toc]
+
+<!-- toc GFM -->
+
+* [General](#general)
+* [read stdin in function in bash script ](#read-stdin-in-function-in-bash-script-)
+* [Key-value pair](#key-value-pair)
+* [Files maching list of files](#files-maching-list-of-files)
+* [Case statement](#case-statement)
+* [Loop](#loop)
+* [Parameter Expansion](#parameter-expansion)
+* [Flags](#flags)
+    - [shflags](#shflags)
+
+<!-- toc -->
 
 ## General
+
+Functions to work with issues (bug issue tracker) and git:
+
+```sh
+function bcc() {
+    issue="$(fd . -td issues | fzf)"
+    closed_issues_dir="_closed/issues"
+    if [ ! -d "$closed_issues_dir" ]; then
+        mkdir -p $closed_issues_dir
+    fi
+    if [[ ! $issue ]]; then
+        echo "No issue selected"
+    else
+        mv $issue $closed_issues_dir
+        git add $issue $closed_issues_dir && git commit -m "closes: $issue"
+    fi
+}
+
+function bcw() {
+    issue="$(fd . -td issues | fzf)"
+    if [[ ! $issue ]]; then
+        echo "No issue selected"
+    elif [[ ! $(gstaged) ]]; then
+        echo "No staged files to commit $issue"
+    else
+        git add $issue && git commit -m "(WIP) $issue"
+    fi
+}
+
+function bcc() {
+    issue="Issue: $(bug list ${@} | awk -F ': ' '/Title/ {print $2}')"
+    if [[ $(gstaged) ]]; then
+        git commit -m "(locked) ${issue}"
+        bug close $@ && git add -A && git commit -m "(closed) ${issue}"
+        git push
+    else
+        echo "No staged files to close ${issue}"
+    fi
+}
+```
+
 
 [Linux Run Command As Another User](https://www.cyberciti.biz/open-source/command-line-hacks/linux-run-command-as-different-user/)
 ```

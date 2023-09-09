@@ -111,10 +111,10 @@ sudo docker kill $(sudo docker ps -q)
 - How To Remove Docker Images, Containers, and Volumes: https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
 
 ```
-docker system prune -f
-sudo docker system prune -a -f && sudo docker volume prune -f
 sudo docker kill $(sudo docker ps -q)
 sudo docker system prune -a -f && sudo docker volume prune -f
+sudo docker network prune -f
+
 ```
 
 - `docker rm [<container_name> <> ...]`

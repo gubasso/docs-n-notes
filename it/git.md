@@ -26,6 +26,13 @@
 
 ## General
 
+- libgit2
+    - python: https://www.pygit2.org/recipes/git-commit.html
+    - rust: https://docs.rs/git2/latest/git2/
+        - https://siciarz.net/24-days-rust-git2/
+
+- Git Objects: [10.2 Git Internals - Git Objects](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects)
+
 config git local info config
 [How to store a git config as part of the repository?](https://stackoverflow.com/questions/18329621/how-to-store-a-git-config-as-part-of-the-repository)
 ```
