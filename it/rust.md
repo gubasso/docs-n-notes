@@ -5,6 +5,7 @@
 
     * [Debugging](#debugging)
 + [Arrays / Vectors](#arrays-vectors)
++ [Iterators](#iterators)
 + [General](#general)
     * [Study](#study)
     * [Resoures](#resoures)
@@ -41,8 +42,84 @@ let differences: Vec<_> = points
   .collect;
 ```
 
+# Iterators
+
+Save a range iterator and/or reversed range to the same variable (e.g. when you want to apply some conditional)
+
+```rust
+let iter = if level % 2 != 0 {
+    Box::new(0..len) as Box<dyn Iterator<Item = _>>
+} else {
+    Box::new((0..len).rev())
+};
+
+for j in iter {
+    // do something
+}
+```
+
+Iterate over leafs/nodes:
+
+```rust
+// immutably
+for leaf in [&node.left, &node.right] {
+    if let Some(nd) = leaf {
+        queue.push_back(Rc::clone(nd));
+    }
+}
+// immutably: same as above
+for leaf in [&node.left, &node.right].into_iter().flatten() {
+    queue.push_back(Rc::clone(leaf));
+}
+
+// mutably, with Index/IndexMut
+use std::ops::{Index,IndexMut};
+impl Index<usize> for TreeNode {
+    type Output = Option<Rc<RefCell<TreeNode>>>;
+    fn index(&self, index: usize) -> &Self::Output {
+        match index {
+            0 => &self.left,
+            1 => &self.right,
+            n => panic!("Invalid TreeNode index: {}", n)
+        }
+    }
+}
+
+impl IndexMut<usize> for TreeNode {
+    fn index_mut(&mut self, index: usize) -> &mut Option<Rc<RefCell<TreeNode>>> {
+        match index {
+            0 => &mut self.left,
+            1 => &mut self.right,
+            n => panic!("Invalid TreeNode index: {}", n)
+        }
+    }
+}
+
+for j in 0..2 {
+    i += 1;
+    if let Some(&Some(val)) = vec.get(i) {
+        let new_node = Rc::new(RefCell::new(TreeNode::new(val)));
+        node.borrow_mut()[j] = Some(Rc::clone(&new_node));
+        queue.push_back(new_node)
+    }
+}
+```
+
+[In Rust, is there a way to iterate through the values of an enum?](https://stackoverflow.com/questions/21371534/in-rust-is-there-a-way-to-iterate-through-the-values-of-an-enum)
+
+working with enums: [A Gentle Introduction To Rust: 2. Structs, Enums and Matching](https://stevedonovan.github.io/rust-gentle-intro/2-structs-enums-lifetimes.html#simple-enums)
 
 # General
+
+Return the type of a variable as a string.
+
+```rust
+use std::any::type_name;
+
+fn type_of<T>(_: T) -> &'static str {
+    type_name::<T>()
+}
+```
 
 - list of usefull crates: blessed.rs
 
@@ -86,7 +163,7 @@ fn cmp_f64(a: &f64, b: &f64) -> Ordering {
 }
 ```
 
-creating an interator from scratch: [Creating an Iterator in Rust](https://aloso.github.io/2021/03/09/creating-an-iterator)
+creating an iterator from scratch: [Creating an Iterator in Rust](https://aloso.github.io/2021/03/09/creating-an-iterator)
 
 ## Study
 
@@ -99,6 +176,8 @@ https://stackoverflow.com/questions/37296351/is-there-any-trait-that-specifies-n
 
 
 ## Resoures
+
+**https://github.com/mre/idiomatic-rust**
 
 https://cfsamson.github.io/books-futures-explained/
 https://web.archive.org/web/20200808120044/https://stjepang.github.io/

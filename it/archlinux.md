@@ -55,6 +55,12 @@ WantedBy=hybrid-sleep.target
 1) create a text file with the list
 2) run/create script with this structure: `sudo pacman -S $(awk '{print $1}'  input_file)`
 
+install packages from a list https://wiki.archlinux.org/title/Pacman/Tips_and_tricks#Install_packages_from_a_list
+```
+pacman -S --needed - < pkglist.txt
+```
+
+
 ### pacstrap list
 
 base
@@ -153,7 +159,7 @@ pamixer
 nitrogen
 libinput
 picom
-sxhkd 
+sxhkd
 brightnessctl
 acpi
 
@@ -170,6 +176,11 @@ mythes-pt-br
 libreoffice-extension-languagetool
 
 ### fonts pacman
+
+search for nerd-fonts
+```
+pacman -Ssq nerd-fonts
+```
 
 nerd-fonts-complete
 ttf-caladea
