@@ -21,6 +21,8 @@
 Functions to work with issues (bug issue tracker) and git:
 
 ```sh
+# bug commit close issue (bcc)
+# bug commit WIP issue (bcw)
 function bcc() {
     issue="$(fd . -td issues | fzf)"
     closed_issues_dir="_closed/issues"

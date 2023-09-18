@@ -67,8 +67,9 @@ git add -A #--all
 
 ---
 
-**git workflows:**
+**git workflows / gitflow:**
 
+- [Git Team Workflows Best Practices: Merge or Rebase?](https://www.atlassian.com/git/articles/git-team-workflows-merge-or-rebase)
 - Learn to use email with git! https://git-send-email.io/ (git email workflow)
 * <https://git-scm.com/book/en/v2/Distributed-Git-Distributed-Workflows>
 * <https://mirrors.edge.kernel.org/pub/software/scm/git/docs/gitworkflows.html>

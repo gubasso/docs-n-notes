@@ -3,7 +3,7 @@
 
 <!-- toc GitLab -->
 
-    * [Debugging](#debugging)
++ [Modules / File / Dir structure](#modules-file-dir-structure)
 + [Arrays / Vectors](#arrays-vectors)
 + [Iterators](#iterators)
 + [General](#general)
@@ -12,7 +12,10 @@
 
 <!-- toc -->
 
-## Debugging
+# Modules / File / Dir structure
+
+- [Media: How to create a module hierarchy in Rust (improved version) ](https://www.reddit.com/r/rust/comments/ujry0b/media_how_to_create_a_module_hierarchy_in_rust/)
+    - [Chart](https://www.reddit.com/media?url=https%3A%2F%2Fi.redd.it%2Fmedia-how-to-create-a-module-hierarchy-in-rust-improved-v0-1yy98srxyvx81.png%3Fs%3Dc42117fd2140c83562936948de3441fe29f95559)
 
 # Arrays / Vectors
 
