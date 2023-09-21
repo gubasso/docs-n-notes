@@ -1,5 +1,12 @@
 # Anki
 
+<!-- toc GFM -->
+
+* [Hints for optimize study](#hints-for-optimize-study)
+* [References](#references)
+
+<!-- toc -->
+
 ## Hints for optimize study
 
 - Organize everything in one deck [^1]
