@@ -1,6 +1,13 @@
 # It
 > Main and general notes
 
+<!-- toc -->
+
+## General
+
+- email default plain text format convention
+  - https://mailformat.dan.info/quoting/
+
 - [Github: dbohdan / automatic-api](https://github.com/dbohdan/automatic-api)
 - api generator
     - Python-Eve

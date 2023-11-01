@@ -1,22 +1,12 @@
 # Arch Linux
 > archlinux
 
-<!-- vim-markdown-toc GFM -->
-
-* [General](#general)
-* [Packages to install](#packages-to-install)
-    * [pacstrap list](#pacstrap-list)
-    * [pacman list 1](#pacman-list-1)
-    * [pacman dwm](#pacman-dwm)
-    * [aur packages](#aur-packages)
-    * [fonts pacman](#fonts-pacman)
-    * [fonts aur](#fonts-aur)
-    * [optional packages (pacman)](#optional-packages-pacman)
-* [References:](#references)
-
-<!-- vim-markdown-toc -->
+<!-- toc -->
 
 ## General
+
+timezone
+- [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
 
 audio
 how to reconize external sound card (usb adapter):

@@ -1,19 +1,13 @@
 # Web Development
 
-<!-- toc GFM -->
-
-+ [General](#general)
-    * [Test: Jest](#test-jest)
-+ [Domain DNS](#domain-dns)
-+ [Accessibility](#accessibility)
-+ [CSS](#css)
-    * [General CSS](#general-css)
-    * [Learning CSS](#learning-css)
-+ [Svelte / Sapper](#svelte--sapper)
-
 <!-- toc -->
 
-# General
+## General
+
+- chart graph library
+  - GitHub Contributions Calendar chart / Calendar heatmap chart
+    - https://github.com/wa0x6e/cal-heatmap
+    - https://www.anychart.com/products/anychart/gallery/Calendar_Chart/GitHub_Contributions.php
 
 - https://bundlephobia.com/
   - package size after compact
@@ -23,7 +17,6 @@
 
 - https://tabler.io/ : ui helper maker
   - https://github.com/tabler/tabler
-- https://tabler-icons.io/
 
 tinysearch
 tinysearch is a lightweight, fast, full-text search engine. It is designed for static websites.
@@ -80,6 +73,29 @@ Motion One is an animation library, built on the Web Animations API for the smal
 Practice 💻
 → Frontend Mentor
 → TestDome
+
+## Examples / Templates / Inspirations
+
+- [Josh Collinsworth](https://joshcollinsworth.com/)
+  - personal website
+  - blog
+  - tutorials
+
+- [JOY OF CODE](https://joyofcode.xyz/)
+  - personal website
+  - blog
+  - tutorials
+
+- [This dot labs](https://www.thisdot.co/)
+  - enterprise site
+  - portfolio
+  - blog
+  - tutorials
+
+- [Shawn @swyx Wang](https://www.swyx.io/)
+  - personal website
+  - blog
+  - tutorials
 
 ## Test: Jest
 
@@ -191,12 +207,6 @@ CSS Libraries:
     - https://github.com/RazrFalcon/SVGCleaner
 - svg compact: SVGOMG jakearchibald (icons)
     - https://jakearchibald.github.io/svgomg/
-- icons, svg:
-    - https://icon-icons.com/
-    - https://heroicons.com/
-    - https://eos-icons.com/
-    - https://octet.design/resources/free-charts-icon-set/
-        - free icons charts set
 
 Savio ⚡️
 @saviomartin7
@@ -257,113 +267,4 @@ A collection of over 1400 pixel-perfect icons designed to make your website or a
 > `# CSS`
 
 - [Learn CSS](https://web.dev/learn/css/)
-
-# Svelte / Sapper
-
-
-call only in client
-```
-if (typeof window !== 'undefined') {
-
-}
-
-//or
-
-onMount(() => {
-
-        })
-```
-
-**TEST STRUCTURE: FILES/DIRECTORIES**
-
-Using Jest for unit and integration tests.
-
-Inspired by Rust Tests organization/pattern: [The Rust Programming Language: Test Organization](https://doc.rust-lang.org/stable/book/ch11-03-test-organization.html)
-
-- Unit tests: saved as `*.test.js` side by side functions/files that are being tested.
-- Integration tests: saved at `myproject/tests` directory, side-by-side with `src` dir.
-
-Separate tests with `jest-runner-groups`:
-- [Separating unit and integration tests in Jest](https://medium.com/coding-stones/separating-unit-and-integration-tests-in-jest-f6dd301f399c)
-- [npm: jest-runner-groups](https://www.npmjs.com/package/jest-runner-groups)
-
-**SERVE STATIC IN ANOTHER URI:**
-
-If want to serve a static web app in another URI (same domain, but not at root `/`), e.g.:
-- `projects.cwnt.io/cadelab` (and not at `projects.cwnt.io`): URI is `/cadelab`
-- `www.meuovo.com/mystaticapp`: URI is `/mystaticapp`
-
-Change the base path in all of these places to make `sapper export` work: (example with URI/Base path `cadelab`)
-
-```
-src/serve.js
----
-
-polka() // You can also use Express
-	.use(
-    '/cadelab', // <-- add this line[^wd1][^wd2]
-		compression({ threshold: 0 }),
-		sirv('static', { dev }),
-		sapper.middleware()
-	)
-	.listen(PORT, err => {
-		if (err) console.log('error', err);
-	});
-```
-
-```
-rollup.config.js
----
-
-export default {
-	client: {
-		input: config.client.input(),
-		output: config.client.output(),
-		plugins: [
-
-            //(...),
-
-			url({
-				sourceDir: path.resolve(__dirname, 'src/node_modules/images'),
-				publicPath: '/cadelab/client/' // <-- change this path
-			}),
-
-            //(...)
-
-        ]
-
-    //(...)
-
-	server: {
-		input: config.server.input(),
-		output: config.server.output(),
-		plugins: [
-
-            //(...),
-
-			url({
-				sourceDir: path.resolve(__dirname, 'src/node_modules/images'),
-				publicPath: '/cadelab/client/', // <-- change this path
-				emitFiles: false
-			}),
-
-            //(...)
-
-        ]
-
-```
-
-```
-package.json
----
-  "scripts": {
-    //(...),
-    "export": "npm run build:tailwind && sapper export --legacy --basepath cadelab", // <-- add `--basepath cadelab`[^wd2]
-```
-
-
-After that, to serve these files, map the webserver for the root directory, with `cadelab` directory in it.
-- file structure: `export/cadelab`
-- serve `export` dir
-- the URI/Base path will be `www.domain.com/cadelab`
 

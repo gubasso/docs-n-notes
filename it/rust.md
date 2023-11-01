@@ -1,16 +1,46 @@
 # Rust Programming Language
 > $rust $rust-lang
 
-<!-- toc GitLab -->
-
-+ [Modules / File / Dir structure](#modules-file-dir-structure)
-+ [Arrays / Vectors](#arrays-vectors)
-+ [Iterators](#iterators)
-+ [General](#general)
-    * [Study](#study)
-    * [Resoures](#resoures)
-
 <!-- toc -->
+
+# cargo release
+
+- release workflow: https://github.com/nextest-rs/nextest/blob/main/internal-docs/releasing.md
+
+# `git2` crate (`libgit2`)
+
+example of commit:
+
+```rust
+pub fn git_commit(files_to_add: Option<&[String]>, msg: &str) -> Result<()> {
+    let repo = Repository::open(".").with_context(|| "failed to open repository")?;
+    let signature = repo.signature()?;
+    let mut index = repo.index()?;
+    if let Some(files_to_add) = files_to_add {
+        index.add_all(files_to_add.iter(), IndexAddOption::DEFAULT, None)?;
+    }
+    index.write()?;
+    let oid = index.write_tree()?;
+    let tree = repo.find_tree(oid)?;
+    let head = repo.head()?;
+    let ref_name = head.name();
+    let parent_commit_res = head.peel_to_commit();
+    let parent_commit = if parent_commit_res.is_ok() {
+        vec![parent_commit_res.as_ref().unwrap()]
+    } else {
+        vec![]
+    };
+
+    repo.commit(ref_name, &signature, &signature, msg, &tree, &parent_commit)?;
+    Ok(())
+}
+```
+
+# Tests
+
+substitute / alternative for native cargo test:
+
+https://nexte.st/book/installation.html
 
 # Modules / File / Dir structure
 
