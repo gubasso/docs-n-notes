@@ -4,6 +4,9 @@
 
 # General
 
+- pre-commit examle in a python project
+  - https://github.com/GitGuardian/ggshield/blob/main/.pre-commit-config.yaml
+
 **[Python – List Files in a Directory](https://www.geeksforgeeks.org/python-list-files-in-a-directory/)**
 
 ---

@@ -1,27 +1,26 @@
 # Git
 > $git
 
-<!-- toc GFM -->
-
-* [Branches](#branches)
-    - [Clone and switch to a branch](#clone-and-switch-to-a-branch)
-    - [Rename a branch](#rename-a-branch)
-* [Merge](#merge)
-    - [merge from stash](#merge-from-stash)
-* [Git Workflow / gitflow](#git-workflow--gitflow)
-    - [Git Feature Branch Workflow](#git-feature-branch-workflow)
-        + [A) Implementation: `user-dev`](#a-implementation-user-dev)
-        + [B) Review: Open Pull Request (PR)](#b-review-open-pull-request-pr)
-        + [C) Close PR: Merge/Publish feature](#c-close-pr-mergepublish-feature)
-        + [References](#references)
-* [Related](#related)
-* [Resources](#resources)
-* [General](#general)
-* [References:](#references-1)
-
 <!-- toc -->
 
+# hooks
+
+- https://www.viget.com/articles/two-ways-to-share-git-hooks-with-your-team/
+
+## Commands
+
+### Checkout vs Switch
+
+- [What's the difference between git switch and git checkout branch](https://stackoverflow.com/questions/57265785/whats-the-difference-between-git-switch-and-git-checkout-branch)
+    - Command comparison
+
 ## Branches
+
+[Show git ahead and behind info for all branches, including remotes](https://stackoverflow.com/questions/7773939/show-git-ahead-and-behind-info-for-all-branches-including-remotes)
+
+```sh
+git for-each-ref --format="%(refname:short) %(upstream:track) %(upstream:remotename)" refs/heads
+```
 
 ### Clone and switch to a branch
 
@@ -54,14 +53,45 @@ git push origin :old-name new-name
 git push origin –u new-name
 ```
 
-## Merge
+### Delete branches
+
+delete branches multiple
+
+- [Delete multiple remote branches in git](https://stackoverflow.com/questions/10555136/delete-multiple-remote-branches-in-git)
+
+```sh
+git branch -r | awk -F/ '/\/PREFIX/{print $2}' | xargs -I {} git push origin :{}
+```
+
+Clean branches fetched from other (remotes) repositories:
+
+```sh
+git remote update --prune
+```
+
+
+## Merge / Diff conflicts
 
 https://github.com/sindrets/diffview.nvim
 https://stackoverflow.com/questions/6412516/configuring-diff-tool-with-gitconfig
 https://stackoverflow.com/questions/70552371/is-there-a-neovim-version-of-vimdiff
 https://smittie.de/posts/git-mergetool/
-create a merge conflict
+simulate / create a merge conflict
 https://www.rosipov.com/blog/use-vimdiff-as-git-mergetool/
+
+
+### Merge just a file/path from another branch
+
+merge file
+
+[How can I selectively merge or pick changes from another branch in Git?](https://stackoverflow.com/questions/449541/how-can-i-selectively-merge-or-pick-changes-from-another-branch-in-git)
+
+tldr;
+```sh
+git checkout source_branch -- path/to/file
+# resolve conflicts if any
+git commit -am '...'
+```
 
 ### merge from stash
 
@@ -201,6 +231,16 @@ Or, to cleanup branches from project, see[^clear-branches].
 [Vim universe. Vim as a merge tool](https://www.youtube.com/watch?v=VxpCgQyUXlI)
 
 ## General
+
+- [A Beginner’s Guide to Git — What is a Changelog and How to Generate it](https://www.freecodecamp.org/news/a-beginners-guide-to-git-what-is-a-changelog-and-how-to-generate-it/)
+
+squash commits
+
+- [How to Squash Commits in Git](https://phoenixnap.com/kb/git-squash)
+  - Squashing during git merge.
+  - Squashing via interactive git rebase.
+  - Squashing through a pull request.
+  - Squashing via git reset.
 
 - libgit2
     - python: https://www.pygit2.org/recipes/git-commit.html

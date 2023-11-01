@@ -1,10 +1,31 @@
 # Vim / Neovim
-
 > nvim
 
-[toc]
+<!-- toc GFM -->
+
+* [General](#general)
+    - [From Macro to Commands (with keybinding)[^2]](#from-macro-to-commands-with-keybinding2)
+    - [Search / Replace](#search--replace)
+    - [Command line](#command-line)
+* [Git](#git)
+    - [Tools / mergetool / diff tool](#tools--mergetool--diff-tool)
+        + [1) Fugitive + Trouble](#1-fugitive--trouble)
+        + [2) git-conflict.nvim](#2-git-conflictnvim)
+    - [Git workflow](#git-workflow)
+* [Plugins](#plugins)
+* [Bulk rename files with vim](#bulk-rename-files-with-vim)
+    - [Programs in shell](#programs-in-shell)
+    - [Pure Vim](#pure-vim)
+    - [Plugins to rename](#plugins-to-rename)
+        + [vim-dirvish](#vim-dirvish)
+* [tmux integration](#tmux-integration)
+* [References](#references)
+
+<!-- toc -->
 
 ## General
+
+https://mason-registry.dev/registry/list
 
 fold / unfold
 https://neovim.io/doc/user/fold.html
@@ -174,6 +195,47 @@ It uses `rg` instead of `grep`. `:grep` uses quickfix. `:copen` to view results.
 
 When in command line mode, copy the word under the cursor and insert into the command line using <C-r> <C-w>.
 
+## Git
+
+### Tools / mergetool / diff tool
+
+#### 1) Fugitive + Trouble
+
+**[Resolve Git Merge Conflicts with Neovim and Fugitive!](https://www.youtube.com/watch?v=vpwJ7fqD1CE)**
+
+vim-fugitive
+- `Gvdiff`: normal diff from last version (last commit)
+- `Gvdiffsplit!`: 3 way split
+    - `buffers` to identify which
+    - select diff from local or remote to be applied
+        - Pointer on top of conflict text area:
+            - `diffget [press-tab]`: show to select one of 3 buffers
+        - (or) at buffer you want to select, press: `dp` (diff push)
+    - `Gwrite` to stage conflict changes
+- `Gitsign` stage a hunk of file
+
+- lsp/troubble, jump between diagnostics (add shortcut)
+    - e.g. `]d` next, `[d` prev
+
+#### 2) git-conflict.nvim
+
+https://github.com/akinsho/git-conflict.nvim
+https://github.com/yorickpeterse/nvim-pqf
+
+### Git workflow
+
+[The ULTIMATE Git workflow using Neovim's Fugitive, Telescope & Git-Signs!](https://www.youtube.com/watch?v=IyBAuDPzdFY)
+
+vim-fugitive
+- `:Git`: status/staging area
+    - `Git help`: list of options
+    - select a file (pointer on top or visual area) and `-`: add a file
+    - `=` show file changes
+    - `<cr>` opens file
+- `Gvdiff` over a file / open its diffs
+    - `Gvdiff origin/master`
+    - e.g. mapping `]c` `[c` next/prev changes
+
 ## Plugins
 
 https://github.com/tpope/vim-eunuch: Vim sugar for the UNIX shell commands that need it the most
@@ -276,6 +338,30 @@ bind-key -T copy-mode-vi 'C-\' select-pane -l
 # [^3]: [Tmux and Vim — even better together](https://www.bugsnag.com/blog/tmux-and-vim)
 ```
 
+## config lua
+
+```lua
+local api = vim.api
+local M = {}
+-- function to create a list of commands and convert them to autocommands
+-------- This function is taken from https://github.com/norcalli/nvim_utils
+function M.nvim_create_augroups(definitions)
+    for group_name, definition in pairs(definitions) do
+        api.nvim_command('augroup '..group_name)
+        api.nvim_command('autocmd!')
+        for _, def in ipairs(definition) do
+            local command = table.concat(vim.tbl_flatten{'autocmd', def}, ' ')
+            api.nvim_command(command)
+        end
+        api.nvim_command('augroup END')
+    end
+end
+```
+
+other opts
+```lua
+vim.opt.hidden = true -- " allow [^13] 'E37: No write since last change (add ! to override)'. switch to a different buffer for referencing some code and switch back
+```
 
 
 ## References
