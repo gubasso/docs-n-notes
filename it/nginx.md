@@ -1,12 +1,13 @@
 # NEW Nginx
 
-[toc]
+<!-- toc -->
 
-# Utils
+
+## Utils
 
 - [NginX Proxy Manager](./nginx-nginx-proxy-manager.md)
 
-# Configutation
+## Configutation
 
 - config generators:
   - https://www.digitalocean.com/community/tools/nginx
@@ -169,7 +170,12 @@ Follow these steps: [^2]
 
 [^2]`# Step 3 — Verifying that HTTP/2 is Enabled`
 
-# General
+## General
+
+If using with SSL/Let's encrypt/certbot:...
+Better to **NOT** use with docker/container...
+
+Simpler if it is installed directly on system.
 
 **difference between `systemctl reload nginx` and `systemctl restart nginx**
 ```

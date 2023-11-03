@@ -1,5 +1,6 @@
 # Firewall
-$firewall $opsec $it
+
+> firewall, opsec, it
 
 **setup a firewall ufw**[^pn1]
 ```
