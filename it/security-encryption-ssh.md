@@ -1,8 +1,15 @@
 # SSH / Openssh
 
-[toc]
+<!-- toc -->
 
-Alias to connect to a server:
+## Basic access
+
+Examples:
+
+```
+ssh root@<fqdn>
+ssh -p 202 root@<ip-address>
+```
 
 ## Resources:
 
@@ -10,7 +17,40 @@ Alias to connect to a server:
   - awesome article about security ssh
   - a lot of best practice
 
-## Unorganized
+## Copying the public key to the remote server
+
+From `local`[^3]:
+
+```
+# if local user_name is the same of server's
+ssh-copy-id <server>
+# if different user names
+ssh-copy-id <server_user_name>@<server>
+# if want to specify the identityfile and/or ports
+ssh-copy-id -i <private_identity_file> -p 221 <user_name>@<server>
+```
+
+## Config Server
+
+- check applied configs, run command:
+
+```
+sudo systemctl restart sshd && sudo sshd -T
+```
+
+- Just update config:
+
+```
+systemctl reload sshd
+```
+
+- Set config:
+
+```
+systemctl restart sshd
+```
+
+## Config Client
 
 ### Managing multiple keys/identities[^2]
 
@@ -23,23 +63,6 @@ Match host=SERVER1
 Match host=SERVER2,SERVER3
    IdentitiesOnly yes
    IdentityFile ~/.ssh/id_ed25519_IDENTITY2
-```
-
-### Copying the public key to the remote server
-
-If the remote username is the same of the local one:
-```
-ssh-copy-id remote-server.org
-```
-
-If different usernames:
-```
-ssh-copy-id username@remote-server.org
-```
-
-With different file names and ports:
-```
-ssh-copy-id -i ~/.ssh/id_ed25519.pub -p 221 username@remote-server.org
 ```
 
 ### Unorganized
@@ -107,7 +130,7 @@ https://www.ssh.com/ssh/copy-id
 https://infosec.mozilla.org/guidelines/openssh
 https://stribika.github.io/2015/01/04/secure-secure-shell.html
 
-## Generate new ssh key:
+## Generate new ssh key
 
 Generate without comment:
 
@@ -116,11 +139,6 @@ ssh-keygen -f ~/.ssh/<myname>-ed25519 -t ed25519 -a 100 -C ''
 ssh-keygen -t rsa -b 4096 -a 100 -C ''
 ```
 
-Generate public key from private key:
-
-```
-ssh-keygen -f ~/.ssh/id_rsa -y > ~/.ssh/id_rsa.pub
-```
 
 ## Generate public SSH key from private SSH key[^1]
 
@@ -132,7 +150,6 @@ With the public key missing, the following command will show you that there is n
 $ ssh-keygen -l -f ~/.ssh/id_rsa
 test is not a public key file.
 ```
-
 - `-l` option instructs to show the fingerprint in the public key while the
 - `-f` option specifies the file of the key to list the fingerprint for.
 
@@ -140,10 +157,9 @@ test is not a public key file.
 
 
 ```
-$ ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
+ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
 Enter passphrase:
 ```
-
 - `-y` option will read a private SSH key file and prints an SSH public key to stdout.
 
 ## ssh-agent
@@ -154,18 +170,44 @@ You can kill ssh-agent by running:
 eval "$(ssh-agent -k)"
 ```
 
-https://github.com/funtoo/keychain
+### Agent forwarding
+
+SSH agent forwarding allows you to use your local keys when connected to a server. It is recommended to only enable agent forwarding for selected hosts.
+
+Setup to use `ssh-agent` to remote access a server:
+
+```
+at local (my cpu): ~/.ssh/config
+---
+# By host
+Host <fqdn>
+    ForwardAgent yes
+
+# or for everybody
+ForwardAgent yes
+  Host XXX
+    <configs>
+    ...
+  Host YYY
+    <configs>
+    ...
+  ...
+```
+
+
+
+### Tools for ssh-agent
+
+ssh-agent and gpg-agent: https://github.com/funtoo/keychain
 
 "Keychain helps you to manage ssh and GPG keys in a convenient and secure manner. It acts as a frontend to ssh-agent and ssh-add, but allows you to easily have one long running ssh-agent process per system, rather than the norm of one ssh-agent per login session.
 
 This dramatically reduces the number of times you need to enter your passphrase. With keychain, you only need to enter a passphrase once every time your local machine is rebooted. Keychain also makes it easy for remote cron jobs to securely "hook in" to a long running ssh-agent process, allowing your scripts to take advantage of key-based logins."
 
 
-
-## References:
-
 [^1]: [Generate public SSH key from private SSH key](https://blog.tinned-software.net/generate-public-ssh-key-from-private-ssh-key/)
 [^2]: [SSH keys (ArchWiki)](https://wiki.archlinux.org/title/SSH_keys)
+[^3]: `local`: your local machine, notebook, computer...
 
 
 

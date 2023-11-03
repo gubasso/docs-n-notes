@@ -1,24 +1,9 @@
 # Debian
 
-<!-- vim-markdown-toc GFM -->
-
-* [Install Guide](#install-guide)
-
-<!-- vim-markdown-toc -->
-
-# General
-
-**Update system**
-
-```
-sudo apt-get update -y && apt-get upgrade -y
-```
-
 ## Install Guide
 
 https://wiki.debian.org/NetworkConfiguration
 https://wiki.debian.org/WiFi/HowToUse
-
 
 https://www.reddit.com/r/debian/comments/6lnakq/what_are_the_essential_packages/
 - apt install aptitude

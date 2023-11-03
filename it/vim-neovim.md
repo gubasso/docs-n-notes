@@ -1,28 +1,6 @@
 # Vim / Neovim
 > nvim
 
-<!-- toc GFM -->
-
-* [General](#general)
-    - [From Macro to Commands (with keybinding)[^2]](#from-macro-to-commands-with-keybinding2)
-    - [Search / Replace](#search--replace)
-    - [Command line](#command-line)
-* [Git](#git)
-    - [Tools / mergetool / diff tool](#tools--mergetool--diff-tool)
-        + [1) Fugitive + Trouble](#1-fugitive--trouble)
-        + [2) git-conflict.nvim](#2-git-conflictnvim)
-    - [Git workflow](#git-workflow)
-* [Plugins](#plugins)
-* [Bulk rename files with vim](#bulk-rename-files-with-vim)
-    - [Programs in shell](#programs-in-shell)
-    - [Pure Vim](#pure-vim)
-    - [Plugins to rename](#plugins-to-rename)
-        + [vim-dirvish](#vim-dirvish)
-* [tmux integration](#tmux-integration)
-* [References](#references)
-
-<!-- toc -->
-
 ## General
 
 https://mason-registry.dev/registry/list

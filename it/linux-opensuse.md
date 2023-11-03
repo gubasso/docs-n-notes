@@ -1,14 +1,8 @@
-# Opensuse Distro Linux
+# Opensuse
 
-Tumbleweed:
+> distro linux
 
-- update server
-
-```
-sudo zypper ref && sudo zypper dup -y
-```
-
-- `ref` = `refresh`
+<!-- toc -->
 
 ## Opensuse Server
 
