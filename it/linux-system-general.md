@@ -59,7 +59,7 @@ EDITOR=vim visudo
 
 ### Ubuntu/Debian
 
-```
+```sh
 apt-get update -y && apt-get upgrade -y
 # or
 sudo apt-get update -y && sudo apt-get upgrade -y
@@ -67,7 +67,7 @@ sudo apt-get update -y && sudo apt-get upgrade -y
 
 ### Arch linux
 
-```
+```sh
 pacman -S archlinux-keyring --noconfirm && pacman -Syyu --noconfirm
 ```
 
@@ -77,8 +77,6 @@ pacman -S archlinux-keyring --noconfirm && pacman -Syyu --noconfirm
 sudo zypper ref && sudo zypper dup -y
 ```
 - `ref` = `refresh`
-
-
 
 ## Set Timezone
 

@@ -13,9 +13,9 @@
 
 - [[linux-general#Update System]]
 - [[dns#Setup a DNS]]
-- [[linux-general#Set Timezone]]
+- (optional) [[linux-general#Set Timezone]]
 - [[linux-general#Set Hostname]]
-- Access server with FQDN[^2]
+- test: Access server with FQDN[^2]
 
 ## Setup users and groups
 
@@ -37,7 +37,9 @@ usermod -aG wheel,sudo,ssh-user super_user
 
 - Grant `super_user` root/sudo privileges: [[linux-general#sudo]]
 
-`EDITOR=vim visudo`
+```
+EDITOR=vim visudo
+```
 or
 **`/etc/sudoers.d/99-local-sudoers`**
 ```
@@ -66,7 +68,7 @@ alias d='sudo docker'
 ```
 - `alias sudo='sudo -v; sudo '`: Refreshing the timeout
 
-- test exit and try to access ssh with new user
+- test open other terminal (or exit) and try to access ssh with new user
   - `ssh super_user@<fqdn>`
 
 ## Security steps
@@ -85,6 +87,12 @@ Steps to setup a more secure way to access the server.
 
 **At `server`[^5]:**
 
+Change user to `root`:
+
+```
+sudo su
+```
+
 Check if config file has (or add at the beginning) the following line:
 
 **`/etc/ssh/sshd_config`**
@@ -98,50 +106,28 @@ PermitRootLogin no
 PubkeyAuthentication yes
 PasswordAuthentication no
 ChallengeResponseAuthentication no
+KbdInteractiveAuthentication no
+UsePAM no
 AllowAgentForwarding yes
 Port 202
-UsePAM no
 AllowGroups ssh-user
 ```
 
 - check applied configs ([[ssh-openssh#Config Server]]), run command:
 
 ```
-sudo systemctl restart sshd && sudo sshd -T
+systemctl restart sshd && sshd -T
 ```
 
 ### Fail2Ban
 
-Use Fail2Ban for SSH Login Protection
-
-- install fail2ban
-- install sendmail
+Change user to `super_user`:
 
 ```
-systemctl enable fail2ban --now
-systemctl enable sendmail --now
+su super_user
 ```
 
-```
-cd /etc/fail2ban
-sudo cp fail2ban.conf fail2ban.local
-sudo cp jail.conf jail.local
-```
-
-Check configs with:
-```
-sudo fail2ban-client status
-```
-
-Change configs in `*.local`
-
-- https://www.linode.com/docs/guides/running-a-mail-server/#sending-email-on-linode
-
-**`/etc/fail2ban/jail.local`**
-```
-destemail = myuseremail@email.com
-sender = myuseremail@email.com
-```
+Install and config [[fail2ban]].
 
 ### Setup a firewall
 
@@ -150,7 +136,7 @@ See [[firewall]].
 - Install `ufw`
 - Run commands to config `ufw` to SSH access at port 202
 
-```
+```sh
 sudo ufw default deny
 sudo ufw default allow outgoing
 sudo ufw allow 202
@@ -158,10 +144,14 @@ sudo ufw limit 202
 sudo ufw enable
 ```
 
----
+Check status
+
+```sh
+sudo ufw status
+sudo systemctl status ufw
+```
 
 ## Related
-> `# Server / VPS`
 
 - [# Home Server](./it/server-vps-home_server.md)
 
@@ -192,6 +182,3 @@ find my server/host ip address: `ifconfig`
 [^3]: `local`: your local machine, notebook, computer...
 [^4]: [[ssh-openssh#Generate new ssh key]]
 [^5]: `server`: remote machine, host, vps...
-
-
-
