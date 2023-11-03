@@ -9,6 +9,13 @@
 
 <!-- toc -->
 
+- [Related](#related)
+- [General](#general)
+- [Todo](#todo)
+  - [Important and Useful links from all over the LeetCode](#important-and-useful-links-from-all-over-the-leetcode)
+
+<!-- tocstop -->
+
 # Related
 
 - [algorithms]('./algorithms.md')

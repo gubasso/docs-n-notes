@@ -2,6 +2,20 @@
 
 <!-- toc -->
 
+- [Create a VPS / Deploy a server](#create-a-vps--deploy-a-server)
+- [Initial setup](#initial-setup)
+- [Setup users and groups](#setup-users-and-groups)
+- [Make commands easier at server](#make-commands-easier-at-server)
+- [Security steps](#security-steps)
+  - [Harden SSH Access](#harden-ssh-access)
+  - [Fail2Ban](#fail2ban)
+  - [Setup a firewall](#setup-a-firewall)
+- [Related](#related)
+- [Resources](#resources)
+- [General](#general)
+
+<!-- tocstop -->
+
 ## Create a VPS / Deploy a server
 
 - From a provider: Linode, Vultr, Digital Ocean, Hostinger, Etc...

@@ -2,6 +2,13 @@
 
 <!-- toc -->
 
+- [General](#general)
+- [Sveltekit](#sveltekit)
+  - [Typing / Jsdoc / Typescript](#typing--jsdoc--typescript)
+  - [Markdown blog](#markdown-blog)
+
+<!-- tocstop -->
+
 ## General
 
 

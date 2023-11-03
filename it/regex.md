@@ -27,7 +27,7 @@ To be precise, the last one is "any string starting and ending with the same 'fo
 If you want to match an actual period, you need to say `\.`.
 
 `*`, `?`, and `+` are quantifiers.
-They apply to the previous token. `a*` means "zero or more 'a' characters". Similarly 
+They apply to the previous token. `a*` means "zero or more 'a' characters". Similarly
 `a+` means "one or more", and
 `a?` means "zero or one".
 

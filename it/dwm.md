@@ -1,13 +1,13 @@
 # dwm
 
-<!-- vim-markdown-toc GFM -->
+<!-- toc -->
 
-* [Instalation](#instalation)
-* [Applying patches](#applying-patches)
-* [dwmblocks](#dwmblocks)
-* [References](#references)
+- [Instalation](#instalation)
+- [Applying patches](#applying-patches)
+- [dwmblocks](#dwmblocks)
+- [References](#references)
 
-<!-- vim-markdown-toc -->
+<!-- tocstop -->
 
 ## Instalation
 
@@ -78,7 +78,7 @@ git apply some_patch.diff
 
 ## dwmblocks
 
-Send a signal to run a script: 
+Send a signal to run a script:
 
 ```
 kill -39 $(pidof dwmblocks) #faster
@@ -87,8 +87,6 @@ pkill -RTMIN+5 dwmblocks
 ```
 
 - If signal number ir `5`, add `34` = `39`
-
-
 
 ## References
 

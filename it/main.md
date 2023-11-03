@@ -3,6 +3,10 @@
 
 <!-- toc -->
 
+- [General](#general)
+
+<!-- tocstop -->
+
 ## General
 
 - email default plain text format convention

@@ -4,6 +4,19 @@
 
 <!-- toc -->
 
+- [General](#general)
+- [Packages to install](#packages-to-install)
+  - [pacstrap list](#pacstrap-list)
+  - [pacman list 1](#pacman-list-1)
+  - [pacman dwm](#pacman-dwm)
+  - [aur packages](#aur-packages)
+  - [fonts pacman](#fonts-pacman)
+  - [fonts aur](#fonts-aur)
+  - [optional packages (pacman)](#optional-packages-pacman)
+- [References:](#references)
+
+<!-- tocstop -->
+
 ## General
 
 timezone

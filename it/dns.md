@@ -2,6 +2,16 @@
 
 <!-- toc -->
 
+- [Fully qualified domain name (FQDN)](#fully-qualified-domain-name-fqdn)
+  - [Hostname](#hostname)
+- [Setup a DNS](#setup-a-dns)
+- [Dynamic DNS](#dynamic-dns)
+- [ddclient](#ddclient)
+  - [Debugging](#debugging)
+- [Docs and References:](#docs-and-references)
+
+<!-- tocstop -->
+
 ## Fully qualified domain name (FQDN)
 
 ```

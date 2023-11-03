@@ -4,6 +4,21 @@
 
 <!-- toc -->
 
+- [Users management](#users-management)
+- [Group management](#group-management)
+- [sudo](#sudo)
+  - [Edit config](#edit-config)
+- [Update System](#update-system)
+  - [Ubuntu/Debian](#ubuntudebian)
+  - [Arch linux](#arch-linux)
+  - [Opensuse Tumbleweed](#opensuse-tumbleweed)
+- [Set Timezone](#set-timezone)
+  - [Ubuntu/Debian](#ubuntudebian-1)
+  - [Opensuse Tumbleweed](#opensuse-tumbleweed-1)
+- [Set Hostname](#set-hostname)
+
+<!-- tocstop -->
+
 ## Users management
 
 - Create/Add user

@@ -1,21 +1,20 @@
 # PostgreSQL
+
 > $sql $database $postgresql
 
-<!-- vim-markdown-toc GitLab -->
+<!-- toc -->
 
-* [TODO: To study](#todo-to-study)
-* [General PostgreSQL](#general-postgresql)
-    * [Import/export data to/from postgresql:](#importexport-data-tofrom-postgresql)
-        * [Tools](#tools)
-        * [csvkit](#csvkit)
-* [Users, Roles, Connections, Authentications](#users-roles-connections-authentications)
-* [Install and first config](#install-and-first-config)
-* [Examples](#examples)
-    * [`main.sql` with env variable, users roles, import schema](#mainsql-with-env-variable-users-roles-import-schema)
-* [PostgREST:](#postgrest)
-* [References:](#references)
+- [TODO: To study](#todo-to-study)
+- [General PostgreSQL](#general-postgresql)
+  - [Import/export data to/from postgresql:](#importexport-data-tofrom-postgresql)
+- [Users, Roles, Connections, Authentications](#users-roles-connections-authentications)
+- [Install and first config](#install-and-first-config)
+- [Examples](#examples)
+  - [`main.sql` with env variable, users roles, import schema](#mainsql-with-env-variable-users-roles-import-schema)
+- [PostgREST:](#postgrest)
+- [References:](#references)
 
-<!-- vim-markdown-toc -->
+<!-- tocstop -->
 
 ## TODO: To study
 > `# PostgreSQL`
@@ -172,7 +171,7 @@ PGPASSWORD=<my-pass> psql -U ...
 _password prompt_
 ```
 psql -h uta.biocommons.org -U foo
-Password for user foo: 
+Password for user foo:
 ```
 
 _`pgpass` file_
