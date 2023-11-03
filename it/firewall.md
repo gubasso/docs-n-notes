@@ -2,6 +2,16 @@
 
 > firewall, opsec, it
 
+## Instalation
+
+### On ubuntu/debian
+
+```sh
+sudo apt-get install ufw -y
+```
+
+## General setups
+
 **setup a firewall ufw**[^pn1]
 ```
 sudo ufw default deny
