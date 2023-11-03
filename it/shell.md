@@ -16,6 +16,18 @@
 
 <!-- toc -->
 
+- [General](#general)
+- [read stdin in function in bash script](#read-stdin-in-function-in-bash-script-)
+- [Key-value pair](#key-value-pair)
+- [Files maching list of files](#files-maching-list-of-files)
+- [Case statement](#case-statement)
+- [Loop](#loop)
+- [Parameter Expansion](#parameter-expansion)
+- [Flags](#flags)
+  - [shflags](#shflags)
+
+<!-- tocstop -->
+
 ## General
 
 Functions to work with issues (bug issue tracker) and git:

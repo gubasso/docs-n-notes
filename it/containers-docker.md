@@ -1,7 +1,38 @@
 # Containers
 > docker, kubernetes
 
-[toc]
+<!-- toc -->
+
+- [Utils](#utils)
+- [After Install](#after-install)
+- [Commands](#commands)
+- [Dockerfile](#dockerfile)
+    - [`.dockerignore`](#dockerignore)
+  - [Environment variables](#environment-variables)
+- [Sharing Images](#sharing-images)
+  - [Image to file[^5]](#image-to-file5)
+- [Arguments](#arguments)
+  - [Usefull example:](#usefull-example)
+- [Persistent Data Storages](#persistent-data-storages)
+  - [Volumes](#volumes)
+  - [Bind Mounts](#bind-mounts)
+  - [Database Persistence](#database-persistence)
+- [Networking](#networking)
+  - [Container to Host communication](#container-to-host-communication)
+  - [Container to Container comm](#container-to-container-comm)
+- [Docker-Compose](#docker-compose)
+  - [`docker-compose.yaml`](#docker-composeyaml)
+- [Utility Containers](#utility-containers)
+  - [Using with Docker-Compose](#using-with-docker-compose)
+- [Users / Permissions:[^3]](#users--permissions3)
+- [Deploy in production](#deploy-in-production)
+  - [Kubernetes](#kubernetes)
+- [Resources](#resources)
+- [General](#general)
+  - [Optimization: build image](#optimization-build-image)
+- [References](#references)
+
+<!-- tocstop -->
 
 # Utils
 
@@ -129,8 +160,8 @@ sudo docker network prune -f
     - removes ALL stoped containers
 
 - `image prune`
-    - removes ALL images
-    - `-a`: ??
+  - removes ALL images
+  - `-a`: ??
 
 ---
 
@@ -581,7 +612,7 @@ https://github.com/nodejs/docker-node/blob/master/Dockerfile-slim.template
 ```Dockerfile
 FROM debian:name-slim
 RUN groupadd --gid 1000 node \
-         && useradd --uid 1000 --gid node --shell /bin/bash --create-home node
+    && useradd --uid 1000 --gid node --shell /bin/bash --create-home node
 ```
 
 Luckily enough for me on my local Linux system, my "scott" uid:gid is also 1000:1000 so, this happens to map nicely to the "node" user defined within the Official Node Docker Image.

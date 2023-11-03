@@ -2,13 +2,34 @@
 
 <!-- toc -->
 
+- [Basic access](#basic-access)
+- [Resources:](#resources)
+- [Copying the public key to the remote server](#copying-the-public-key-to-the-remote-server)
+- [Config Server](#config-server)
+- [Config Client](#config-client)
+  - [Managing multiple keys/identities[^2]](#managing-multiple-keysidentities2)
+  - [Unorganized](#unorganized)
+- [Generate new ssh key](#generate-new-ssh-key)
+- [Generate public SSH key from private SSH key[^1]](#generate-public-ssh-key-from-private-ssh-key1)
+- [ssh-agent](#ssh-agent)
+  - [Agent forwarding](#agent-forwarding)
+  - [Tools for ssh-agent](#tools-for-ssh-agent)
+
+<!-- tocstop -->
+
 ## Basic access
 
 Examples:
 
-```
+```sh
 ssh root@<fqdn>
 ssh -p 202 root@<ip-address>
+```
+
+- access without loading config from `.ssh/config`
+
+```sh
+ssh -v -F /dev/null -o PreferredAuthentications=password <user>@<server>
 ```
 
 ## Resources:

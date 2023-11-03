@@ -12,6 +12,17 @@
 
 <!-- toc -->
 
+- [Trees and Graphs](#trees-and-graphs)
+  - [DFS:](#dfs)
+- [Recursive Functions](#recursive-functions)
+- [Binary Search](#binary-search)
+- [GCD (great common denominator) and LCM (least common multiplier)](#gcd-great-common-denominator-and-lcm-least-common-multiplier)
+- [KMP Knuth-Morris-Pratt](#kmp-knuth-morris-pratt)
+- [Breadth First Search (BFS) Algorithm](#breadth-first-search-bfs-algorithm)
+- [References:](#references)
+
+<!-- tocstop -->
+
 # Trees and Graphs
 
 - DFS: easier with recursive functions

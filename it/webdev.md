@@ -2,6 +2,17 @@
 
 <!-- toc -->
 
+  - [General](#general)
+  - [Examples / Templates / Inspirations](#examples--templates--inspirations)
+  - [Test: Jest](#test-jest)
+- [Domain DNS](#domain-dns)
+- [Accessibility](#accessibility)
+- [CSS](#css)
+  - [General CSS](#general-css)
+  - [Learning CSS](#learning-css)
+
+<!-- tocstop -->
+
 ## General
 
 - chart graph library

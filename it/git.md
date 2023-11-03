@@ -3,6 +3,25 @@
 
 <!-- toc -->
 
+- [hooks](#hooks)
+  - [Commands](#commands)
+    - [Checkout vs Switch](#checkout-vs-switch)
+  - [Branches](#branches)
+    - [Clone and switch to a branch](#clone-and-switch-to-a-branch)
+    - [Rename a branch](#rename-a-branch)
+    - [Delete branches](#delete-branches)
+  - [Merge / Diff conflicts](#merge--diff-conflicts)
+    - [Merge just a file/path from another branch](#merge-just-a-filepath-from-another-branch)
+    - [merge from stash](#merge-from-stash)
+  - [Git Workflow / gitflow](#git-workflow--gitflow)
+    - [Git Feature Branch Workflow](#git-feature-branch-workflow)
+  - [Related](#related)
+  - [Resources](#resources)
+  - [General](#general)
+  - [References:](#references)
+
+<!-- tocstop -->
+
 # hooks
 
 - https://www.viget.com/articles/two-ways-to-share-git-hooks-with-your-team/

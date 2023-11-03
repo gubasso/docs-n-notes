@@ -14,6 +14,17 @@
 
 <!-- toc -->
 
+- [lazy.nvim](#lazynvim)
+  - [Load for filetype](#load-for-filetype)
+    - [1. ftplugin dir: `after/ftplugin/.lua`](#1-ftplugin-dir-afterftpluginlua)
+    - [2. lazy.nvim pure](#2-lazynvim-pure)
+- [Plugins](#plugins)
+  - [which-key](#which-key)
+- [nvim lua commands](#nvim-lua-commands)
+  - [table/list manipulation](#tablelist-manipulation)
+
+<!-- tocstop -->
+
 # lazy.nvim
 
 

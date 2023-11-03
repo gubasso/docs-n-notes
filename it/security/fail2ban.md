@@ -2,6 +2,15 @@
 
 <!-- toc -->
 
+- [Instalation](#instalation)
+  - [On Ubuntu/Debian:](#on-ubuntudebian)
+  - [Check status](#check-status)
+- [Basic configuration](#basic-configuration)
+- [(optional) Config to send email alerts](#optional-config-to-send-email-alerts)
+- [References / Guides](#references--guides)
+
+<!-- tocstop -->
+
 Use Fail2Ban for SSH Login Protection
 
 ## Instalation

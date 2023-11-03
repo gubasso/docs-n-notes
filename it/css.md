@@ -2,6 +2,12 @@
 
 <!-- toc -->
 
+- [General](#general)
+- [Frameworks](#frameworks)
+- [Icons / SVG](#icons--svg)
+
+<!-- tocstop -->
+
 ## General
 
 [Utopia fluid responsive design](https://utopia.fyi/)

@@ -96,7 +96,6 @@ app.on_insert_item += check_update_access
         - call api from js in the page
             - simulate a button
             - if has CORS issue: `X_DOMAINS = '*'` or `X_DOMAINS = ['exemple.com', 'mysite.org']`
-            
 
 - [^why_mongo]
     - Why MongoDB? [ch6/11]: Why Mongo is a good match for REST [v1/1]

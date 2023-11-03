@@ -4,6 +4,10 @@
 
 <!-- toc -->
 
+- [Opensuse Server](#opensuse-server)
+
+<!-- tocstop -->
+
 ## Opensuse Server
 
 **GENERAL NOTES:**

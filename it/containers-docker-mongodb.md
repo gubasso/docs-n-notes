@@ -132,7 +132,7 @@ RUN apt-get update -y && apt-get upgrade -y \
       apt-transport-https ca-certificates wget \
     && rm -rf /var/lib/apt/lists/* \
 	  && localedef -i en_US -c -f UTF-8 \
-      -A /usr/share/locale/locale.alias en_US.UTF-8 \
+        -A /usr/share/locale/locale.alias en_US.UTF-8 \
     && wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add - \
     && echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list \
     && apt-get update -y && apt-get install -y mongodb-org

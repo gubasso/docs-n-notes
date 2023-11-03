@@ -4,6 +4,13 @@
 
 <!-- toc -->
 
+- [Releases](#releases)
+  - [Create a prerelease version](#create-a-prerelease-version)
+  - [Bump the prerelease version](#bump-the-prerelease-version)
+  - [Promote the prerelease to a release](#promote-the-prerelease-to-a-release)
+
+<!-- tocstop -->
+
 # Releases
 
 version package.json and git tag

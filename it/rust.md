@@ -3,6 +3,18 @@
 
 <!-- toc -->
 
+- [cargo release](#cargo-release)
+- [`git2` crate (`libgit2`)](#git2-crate-libgit2)
+- [Tests](#tests)
+- [Modules / File / Dir structure](#modules--file--dir-structure)
+- [Arrays / Vectors](#arrays--vectors)
+- [Iterators](#iterators)
+- [General](#general)
+  - [Study](#study)
+  - [Resoures](#resoures)
+
+<!-- tocstop -->
+
 # cargo release
 
 - release workflow: https://github.com/nextest-rs/nextest/blob/main/internal-docs/releasing.md
