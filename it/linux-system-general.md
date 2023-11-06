@@ -23,7 +23,7 @@
 
 - Create/Add user
 
-```
+```sh
 useradd -m user_name -s /bin/bash
 ```
 - `-m/--create-home`
@@ -31,9 +31,17 @@ useradd -m user_name -s /bin/bash
 
 - Set a user password
 
-```
+```sh
 passwd user_name
 ```
+
+- Delete user (remove user)
+
+```sh
+userdel -r <user>
+```
+- `-r`: delete user's directories
+
 
 ## Group management
 
