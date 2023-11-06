@@ -32,6 +32,12 @@ ssh -p 202 root@<ip-address>
 ssh -v -F /dev/null -o PreferredAuthentications=password <user>@<server>
 ```
 
+- force to use one specific key[^4]:
+
+```sh
+ssh -v -p 22 -F /dev/null -o IdentitiesOnly=yes -i ~/.ssh/<private_key>
+```
+
 ## Resources:
 
 - [Secure Secure Shell](https://stribika.github.io/2015/01/04/secure-secure-shell.html)
@@ -229,6 +235,7 @@ This dramatically reduces the number of times you need to enter your passphrase.
 [^1]: [Generate public SSH key from private SSH key](https://blog.tinned-software.net/generate-public-ssh-key-from-private-ssh-key/)
 [^2]: [SSH keys (ArchWiki)](https://wiki.archlinux.org/title/SSH_keys)
 [^3]: `local`: your local machine, notebook, computer...
+[^4]: https://superuser.com/questions/772660/howto-force-ssh-to-use-a-specific-private-key "How to force ssh to use a specific private key?"
 
 
 

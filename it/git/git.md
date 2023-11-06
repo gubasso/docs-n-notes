@@ -251,6 +251,16 @@ Or, to cleanup branches from project, see[^clear-branches].
 
 ## General
 
+Personalize a ssh command used by git clone (example):
+
+- [Git on custom SSH port](https://stackoverflow.com/questions/5767850/git-on-custom-ssh-port)
+
+```sh
+GIT_SSH_COMMAND="ssh -v -p 202 -o IdentitiesOnly=yes -i ~/.ssh/<private_key>" \
+git clone <user>@<server>:gitolite-admin
+```
+
+
 - [A Beginner’s Guide to Git — What is a Changelog and How to Generate it](https://www.freecodecamp.org/news/a-beginners-guide-to-git-what-is-a-changelog-and-how-to-generate-it/)
 
 squash commits

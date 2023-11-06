@@ -121,16 +121,21 @@ PubkeyAuthentication yes
 PasswordAuthentication no
 ChallengeResponseAuthentication no
 KbdInteractiveAuthentication no
+# if using gitolite at this server, must have `usepam yes`
 UsePAM no
 AllowAgentForwarding yes
 Port 202
 AllowGroups ssh-user
 ```
-
+- if will be a [[gitolite]] server (see [[gitolite#Setup]]):
+  - `usepam yes`
 - check applied configs ([[ssh-openssh#Config Server]]), run command:
 
-```
+```sh
+# as root
 systemctl restart sshd && sshd -T
+# as super_user
+sudo systemctl restart sshd && sudo sshd -T
 ```
 
 ### Fail2Ban
