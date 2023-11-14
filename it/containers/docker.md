@@ -141,11 +141,10 @@ sudo docker kill $(sudo docker ps -q)
 
 - How To Remove Docker Images, Containers, and Volumes: https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
 
-```
+```sh
 sudo docker kill $(sudo docker ps -q)
 sudo docker system prune -a -f && sudo docker volume prune -f
 sudo docker network prune -f
-
 ```
 
 - `docker rm [<container_name> <> ...]`
@@ -235,6 +234,13 @@ Dockerfile
 ```
 
 ## Environment variables
+
+- docker compose env
+  - https://docs.docker.com/compose/environment-variables/set-environment-variables/
+  - https://stackoverflow.com/questions/29377853/how-can-i-use-environment-variables-in-docker-compose
+  - using secrets for sensitive env variables
+    - https://docs.docker.com/compose/use-secrets/
+    - https://docs.docker.com/compose/compose-file/09-secrets/
 
 - env can be used inside `Dockerfile`
 
@@ -431,8 +437,6 @@ docker run -d --name mongodb \
 - for a container to connect to another, running at the same network:
     - `mongodb://<container_name>:27017/mydb`
     - `mongodb://mongodb:27017/mydb`
-
-
 
 # Docker-Compose
 
