@@ -3,6 +3,7 @@
 
 <!-- toc -->
 
+  - [Libraries](#libraries)
 - [cargo release](#cargo-release)
 - [`git2` crate (`libgit2`)](#git2-crate-libgit2)
 - [Tests](#tests)
@@ -12,8 +13,22 @@
 - [General](#general)
   - [Study](#study)
   - [Resoures](#resoures)
+    - [Axum Web Framework](#axum-web-framework)
 
 <!-- tocstop -->
+
+## Libraries
+
+- [Awesome Rust](https://awesome-rust.com/)
+    - A curated list of awesome Rust frameworks, libraries and software.
+
+- Error handling:
+  - https://github.com/zkat/miette (substitute for anyhow, used by watchexec/cargo-watch)
+
+- logger/debuger:
+  - tracing subscriber
+
+[[sqlx]]
 
 # cargo release
 
@@ -236,8 +251,6 @@ https://cfsamson.gitbook.io/green-threads-explained-in-200-lines-of-rust/
 https://cfsamson.github.io/book-exploring-async-basics/
 https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/
 
-- [Awesome Rust](https://awesome-rust.com/)
-    - A curated list of awesome Rust frameworks, libraries and software.
 
 - [Awesome Rust Streaming](https://github.com/jamesmunns/awesome-rust-streaming/blob/master/README.md)
     - This is a community curated list of livestreams about the programming language Rust.
@@ -258,10 +271,14 @@ The Book
 Reading: Programming Rust
 examples: github.com/programmingrust
 
-
 review and redo my `notes` project at gitlab
 new_temp_notes, Download
 
-
 practice: Code examples and exercises
 github.com/programmingrust
+
+### Axum Web Framework
+
+- [Introduction to Axum - Brooks Builds - Playlist](https://www.youtube.com/playlist?list=PLrmY5pVcnuE-_CP7XZ_44HN-mDrLQV4nS)
+- Follow examples at: https://github.com/tokio-rs/axum/tree/main/examples
+

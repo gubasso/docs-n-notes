@@ -202,18 +202,25 @@ git merge new-feature
 b) squashes your `new-feature` branch down to one commit
 
 ```sh
-git checkout develop
-git merge --squash new-feature
 # https://randyfay.com/comment/1093#comment-1093
+git switch develop
+git merge --squash new-feature
+# above is equal to the following:
+git switch feature
+git diff main > feature.patch
+git switch main
+patch -p1 < feature.patch
+git add .
 ```
 or
 ```sh
+# merge "dry-run"
+# [Is there a git-merge --dry-run option?](https://stackoverflow.com/questions/501407/is-there-a-git-merge-dry-run-option)
 git merge --no-commit --no-ff $BRANCH
 # to examine the staged changes:
 git diff --cached
 # And you can undo the merge, even if it is a fast-forward merge:
 git merge --abort
-# [Is there a git-merge --dry-run option?](https://stackoverflow.com/questions/501407/is-there-a-git-merge-dry-run-option)
 ```
 
 3) delete that brach from local and remote (if needed)

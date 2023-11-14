@@ -4,6 +4,8 @@
 
 <!-- toc -->
 
+- [psql](#psql)
+  - [Connect](#connect)
 - [TODO: To study](#todo-to-study)
 - [General PostgreSQL](#general-postgresql)
   - [Import/export data to/from postgresql:](#importexport-data-tofrom-postgresql)
@@ -16,15 +18,36 @@
 
 <!-- tocstop -->
 
+## psql
+
+### Connect
+
+Connect to db with psql.
+
+
+#### String: TCP/IP
+
+```sh
+# postgresql://<username>:<password>@<hostname>:<port>/<database>
+psql postgresql://username:password@dbmaster:5433/mydb?sslmode=require
+```
+
+#### String: Unix socket
+
+Unix socket and the Peer Authentication method
+
+```
+psql postgres://username@/dbname
+```
+- `username`: has to be a system username
+
 ## TODO: To study
-> `# PostgreSQL`
 
 - create a database:
     - https://www.tutorialspoint.com/postgresql/postgresql_create_database.htm
     - https://www.postgresql.org/docs/12/sql-createdatabase.html
 
 ## General PostgreSQL
-> `# PostgreSQL`
 
 
 - Grant select on every table inside schema
@@ -189,17 +212,6 @@ psql ...
 PGPASSWORD=yourpass psql ...
 ```
 
-_connection string_
-
-- TCP/IP
-```
-psql postgresql://username:password@dbmaster:5433/mydb?sslmode=require
-```
-- Unix socket and the Peer Authentication method
-```
-psql postgres://username@/dbname
-```
-    - `username`: has to be a system username
 
 
 - `psql -c "CREATE USER admin WITH PASSWORD 'test101';"` : run this command in database to create a user with password
