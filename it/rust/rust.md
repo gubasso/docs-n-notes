@@ -4,9 +4,11 @@
 <!-- toc -->
 
   - [Libraries](#libraries)
-- [cargo release](#cargo-release)
+  - [Cargo / Cargo Tools](#cargo--cargo-tools)
+    - [cargo watch[^1]](#cargo-watch1)
+    - [cargo test](#cargo-test)
+    - [cargo release](#cargo-release)
 - [`git2` crate (`libgit2`)](#git2-crate-libgit2)
-- [Tests](#tests)
 - [Modules / File / Dir structure](#modules--file--dir-structure)
 - [Arrays / Vectors](#arrays--vectors)
 - [Iterators](#iterators)
@@ -23,14 +25,30 @@
     - A curated list of awesome Rust frameworks, libraries and software.
 
 - Error handling:
-  - https://github.com/zkat/miette (substitute for anyhow, used by watchexec/cargo-watch)
+  - https://github.com/zkat/miette (substitute for anyhow, used by watchexec/cargo-watch project)
 
 - logger/debuger:
   - tracing subscriber
 
 [[sqlx]]
 
-# cargo release
+## Cargo / Cargo Tools
+
+### cargo watch[^1]
+
+```sh
+cargo watch -q -c -x run
+```
+- `-q`: quiet mode
+- `-c`: clear terminal when re-execute
+- `-x [cmd]` : cargo command that will be executed
+
+### cargo test
+
+- cargo-nextest: substitute / alternative for native cargo test:
+  - https://nexte.st/book/installation.html
+
+### cargo release
 
 - release workflow: https://github.com/nextest-rs/nextest/blob/main/internal-docs/releasing.md
 
@@ -63,11 +81,6 @@ pub fn git_commit(files_to_add: Option<&[String]>, msg: &str) -> Result<()> {
 }
 ```
 
-# Tests
-
-substitute / alternative for native cargo test:
-
-https://nexte.st/book/installation.html
 
 # Modules / File / Dir structure
 
@@ -282,3 +295,4 @@ github.com/programmingrust
 - [Introduction to Axum - Brooks Builds - Playlist](https://www.youtube.com/playlist?list=PLrmY5pVcnuE-_CP7XZ_44HN-mDrLQV4nS)
 - Follow examples at: https://github.com/tokio-rs/axum/tree/main/examples
 
+[^1]: https://www.youtube.com/watch?v=VuVOyUbFSI0 "Rust to Postgres Database with SQLX - Rust Lang Tutorial 2021 - Jeremy Chone"
