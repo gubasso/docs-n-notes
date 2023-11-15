@@ -1,27 +1,35 @@
-# SQLx
+# SQLx (Rust)
 
 > library, crate
 
 ## Basic example[^1]
 
+### Simple connection
+
 ```rust
-# simples connection
 let mut conn = sqlx::postgres::PgConnection::connect(url).await?;
 let res = sqlx::query("SELECT 1 + 1 as sum")
   .fetch_one(&mut conn)
   .await?;
+let sum: i32 = res.get("sum");
+println!("1 + 1 = {}", sum);
+```
 
-# better create a connection pool
+### Connection pool
+
+Better create a connection pool.
+
+```rust
 let pool = sqlx::postgres::PgPoolOptions::new()
   .max_connections(5)
   .connect(url).await?;
 let res = sqlx::query("SELECT 1 + 1 as sum")
   .fetch_one(&pool)
   .await?;
-
 let sum: i32 = res.get("sum");
 println!("1 + 1 = {}", sum);
 ```
+
 
 ## Migrations[^1]
 
@@ -59,6 +67,8 @@ sqlx migrate build-script
 > query
 
 ### Writting Data: `INSERT` and `UPDATE`
+
+#### Example 1[^1]
 
 ```rs
 struct Book {
@@ -106,7 +116,19 @@ async fn main() -> ... {
 }
 ```
 
-### Reading Data
+#### Example 2[^2]
+
+```rs
+let row: (i64,) = sqlx::query_as("INSERT INTO ticket (name) VALUES ($1) RETURNING id")
+  .bind("a new ticket")
+  .fetch_one(&pool)
+  .await?;
+```
+
+### Reading Data `SELECT`
+
+
+#### Example 1[^1]
 
 Methods to read data with a query:
 
@@ -170,9 +192,45 @@ async fn read(pool: &sqlx::PgPool) -> Result<Vec<Book>, Box<dyn Error>> {
 }
 ```
 
-### `query_as()` From Row to Type Automatically
+#### Example 2[^2]
 
-Convert automatically to the type
+```rs
+let rows: Vec<PgRow> = sqlx::query("SELECT * FROM ticket")
+  .fetch_all(&pool)
+  .await?;
+let str_result: String = rows.iter()
+  .map(|r| format!("{} - {}", r.get::<i64, _>("id"), r.get::<String, _>("name")))
+  .collect::<Vec<String>>()
+  .join(", ");
+```
+
+#### Example 3[^2]
+
+Select query with `map()`, build type manually.
+
+```rs
+#[derive(Debug, FromRow)]
+struct Ticket {
+  id: i64,
+  name: String,
+}
+
+async fn main() {
+  let select_query = sqlx::query("SELECT id, name FROM ticket");
+  let tickets: Vec<Ticket> = select_query
+    .map(|row| Ticket {
+      id: row.get("id"),
+      name: row.get("name"),
+    })
+    .fetch_all(&pool)
+    .await?;
+
+}
+```
+
+#### Example 4: `query_as()`[^1]
+
+`query_as()` From Row to Type Automatically. Convert automatically to the type.
 
 ```rust
 # fetch_all example with query_as
@@ -191,6 +249,13 @@ async fn read(pool: &sqlx::PgPool) -> Result<Vec<Book>, Box<dyn Error>> {
   let books = query.fetch_all(pool).await?;
   Ok(books)
 }
+```
+
+#### Example 5: `query_as()`[^2]
+
+```rs
+let select_query = sqlx::query_as::<_, Ticket>("SELECT id, name FROM ticket");
+let tickets: Vec<Ticket> = select_query.fetch_all(&pool).await?;
 ```
 
 ## Transactions
@@ -443,7 +508,6 @@ let book = sqlx::query_as!(Book,
   ",
   isbn,
 )
-  .bind(isbn)
   .fetch_optional(pool).await?;
 
 ```
@@ -459,5 +523,6 @@ At video [SQLx is my favorite PostgreSQL driver to use with Rust.](https://www.y
 
 
 [^1]: https://www.youtube.com/watch?v=TCERYbgvbq0 "SQLx is my favorite PostgreSQL driver to use with Rust."
+[^2]: https://www.youtube.com/watch?v=VuVOyUbFSI0 "Rust to Postgres Database with SQLX - Rust Lang Tutorial 2021 - Jeremy Chone"
 
 
