@@ -30,38 +30,6 @@ let sum: i32 = res.get("sum");
 println!("1 + 1 = {}", sum);
 ```
 
-
-## Migrations[^1]
-
-**`./migrations/<version>_<description>.sql`**
-
-Example:
-
-```sql
--- 0001_books_table.sql
-create table book (
-  isbn varchar not null primary key,
-  title varchar not null,
-  author varchar not null
-);
-```
-
-```rs
-# main.rs
-
-sqlx::migrate!("./migrations").run(&pool).await?;
-```
-
-To handle changes in the sql files without code changes, use the `sqlx-cli`:
-
-```sh
-cargo install sqlx-cli
-# after install
-# run the migration
-sqlx migrate build-script
-# build.sh will be generated
-```
-
 ## Queries Examples
 
 > query
@@ -126,7 +94,6 @@ let row: (i64,) = sqlx::query_as("INSERT INTO ticket (name) VALUES ($1) RETURNIN
 ```
 
 ### Reading Data `SELECT`
-
 
 #### Example 1[^1]
 
