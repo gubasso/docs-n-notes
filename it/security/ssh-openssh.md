@@ -227,15 +227,8 @@ ForwardAgent yes
 
 ssh-agent and gpg-agent: https://github.com/funtoo/keychain
 
-"Keychain helps you to manage ssh and GPG keys in a convenient and secure manner. It acts as a frontend to ssh-agent and ssh-add, but allows you to easily have one long running ssh-agent process per system, rather than the norm of one ssh-agent per login session.
-
-This dramatically reduces the number of times you need to enter your passphrase. With keychain, you only need to enter a passphrase once every time your local machine is rebooted. Keychain also makes it easy for remote cron jobs to securely "hook in" to a long running ssh-agent process, allowing your scripts to take advantage of key-based logins."
-
 
 [^1]: [Generate public SSH key from private SSH key](https://blog.tinned-software.net/generate-public-ssh-key-from-private-ssh-key/)
 [^2]: [SSH keys (ArchWiki)](https://wiki.archlinux.org/title/SSH_keys)
 [^3]: `local`: your local machine, notebook, computer...
 [^4]: https://superuser.com/questions/772660/howto-force-ssh-to-use-a-specific-private-key "How to force ssh to use a specific private key?"
-
-
-

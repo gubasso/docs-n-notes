@@ -2,6 +2,23 @@
 
 > library, crate
 
+<!-- toc -->
+
+- [Basic example[^1]](#basic-example1)
+  - [Simple connection](#simple-connection)
+  - [Connection pool](#connection-pool)
+- [Queries Examples](#queries-examples)
+  - [Writting Data: `INSERT` and `UPDATE`](#writting-data-insert-and-update)
+  - [Reading Data `SELECT`](#reading-data-select)
+- [Transactions](#transactions)
+- [Json (Serde)](#json-serde)
+- [UUID](#uuid)
+- [Chrono (Date / Time)](#chrono-date--time)
+- [Macros feature](#macros-feature)
+- [Others](#others)
+
+<!-- tocstop -->
+
 ## Basic example[^1]
 
 ### Simple connection
