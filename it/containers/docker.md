@@ -3,12 +3,13 @@
 
 <!-- toc -->
 
+- [Environment variables](#environment-variables)
+  - [Using `secrets` to manage sensitive data](#using-secrets-to-manage-sensitive-data)
+  - [General Env config](#general-env-config)
 - [Utils](#utils)
 - [After Install](#after-install)
 - [Commands](#commands)
 - [Dockerfile](#dockerfile)
-    - [`.dockerignore`](#dockerignore)
-  - [Environment variables](#environment-variables)
 - [Sharing Images](#sharing-images)
   - [Image to file[^5]](#image-to-file5)
 - [Arguments](#arguments)
@@ -34,13 +35,142 @@
 
 <!-- tocstop -->
 
-# Utils
+## Environment variables
+
+### Using `secrets` to manage sensitive data
+
+#### Approach 1) General
+
+- `compose.yaml` sets an `entrypoint.sh` file that will be execute at image startup.
+- `entrypoint.sh` will run inside image:
+  - loads and exports the env variable from the `secret` file
+  - runs the container execution
+
+**`compose.yaml`**
+```yaml
+services:
+  db:
+    image: "postgres:${POSTGRES_VERSION}"
+    restart: always
+    volumes:
+      - ${DATA_PATH}:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./entrypoint.sh:/usr/local/bin/entrypoint.sh
+    entrypoint: ["/usr/local/bin/entrypoint.sh"]
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_DB
+    healthcheck:
+      test: psql -U ${POSTGRES_USER} -q -d ${POSTGRES_DB} -c "SELECT 'ready';"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    secrets:
+      - postgres_password
+secrets:
+  postgres_password:
+    environment: "POSTGRES_PASSWORD"
+```
+
+**`entrypoint.sh`**
+```sh
+#!/bin/bash
+# Read password from secret file
+POSTGRES_PASSWORD="$(cat /run/secrets/postgres_password)"
+export POSTGRES_PASSWORD
+# Call the original entrypoint script
+exec docker-entrypoint.sh postgres
+```
+
+#### Approach 2) Container Specific: Postgresql Example
+
+No need for `entrypoint.sh`.
+
+At [postgres - Docker Secrets](https://hub.docker.com/_/postgres):
+
+```sh
+docker run --name some-postgres -e POSTGRES_PASSWORD_FILE=/run/secrets/postgres-passwd -d postgres
+```
+
+Or with `compose`:
+
+**`compose.yaml`**
+```yaml
+services:
+  db:
+    image: "postgres:${POSTGRES_VERSION}"
+    restart: always
+    volumes:
+      - ${DATA_PATH}:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_DB
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+    healthcheck:
+      test: psql -U ${POSTGRES_USER} -q -d ${POSTGRES_DB} -c "SELECT 'ready';"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    secrets:
+      - postgres_password
+secrets:
+  postgres_password:
+    environment: "POSTGRES_PASSWORD"
+```
+
+### General Env config
+
+- docker compose env
+  - https://docs.docker.com/compose/environment-variables/set-environment-variables/
+  - https://stackoverflow.com/questions/29377853/how-can-i-use-environment-variables-in-docker-compose
+  - using secrets for sensitive env variables
+    - https://docs.docker.com/compose/use-secrets/
+    - https://docs.docker.com/compose/compose-file/09-secrets/
+
+- env can be used inside `Dockerfile`
+
+```Dockerfile
+ENV PORT 80
+ENV DB_USERNAME=guga
+EXPOSE $PORT
+```
+
+- When assigned with `=` is a default value
+
+or
+
+```bash
+docker run -d -p 3000:8000 --rm \
+    --env PORT=8000 \
+    --name feedback-app \
+    -v feedback:/app/feedback \
+    feedback-node:volumes
+```
+
+- `--env` / `-e`
+
+or
+
+```.env
+PORT=8000
+```
+
+- `--env-file ./.env`
+
+## Utils
 
 - [Yacht - an Open Source, Self Hosted, Modern, Web GUI for Docker Management similar to Portainer. :awesome_open_source:](https://www.youtube.com/watch?v=eTQ2iB-hjkk)
 
 - [Portainer](./containers-docker-portainer.md)
 
-# After Install
+## After Install
 
 Check if instalation is correct:
 
@@ -50,7 +180,7 @@ sudo docker run hello-world
 sudo docker compose version
 ```
 
-# Commands
+## Commands
 
 
 **execute commands inside container**
@@ -177,7 +307,7 @@ naming tagging
 
 
 
-# Dockerfile
+## Dockerfile
 
 To create my own image.
 
@@ -222,7 +352,7 @@ docker run -p 3000:3000 <image_id>
     - `<host_port>:<docker_internal_exposed_port>`
 - `<image_id>`: hash with id of the image
 
-### `.dockerignore`
+#### `.dockerignore`
 
 Ignored by `COPY` command.
 
@@ -233,46 +363,8 @@ Dockerfile
 .env
 ```
 
-## Environment variables
 
-- docker compose env
-  - https://docs.docker.com/compose/environment-variables/set-environment-variables/
-  - https://stackoverflow.com/questions/29377853/how-can-i-use-environment-variables-in-docker-compose
-  - using secrets for sensitive env variables
-    - https://docs.docker.com/compose/use-secrets/
-    - https://docs.docker.com/compose/compose-file/09-secrets/
-
-- env can be used inside `Dockerfile`
-
-```Dockerfile
-ENV PORT 80
-ENV DB_USERNAME=guga
-EXPOSE $PORT
-```
-
-- When assigned with `=` is a default value
-
-or
-
-```bash
-docker run -d -p 3000:8000 --rm \
-    --env PORT=8000 \
-    --name feedback-app \
-    -v feedback:/app/feedback \
-    feedback-node:volumes
-```
-
-- `--env` / `-e`
-
-or
-
-```.env
-PORT=8000
-```
-
-- `--env-file ./.env`
-
-# Sharing Images
+## Sharing Images
 
 Login to a private registry:
 
@@ -291,7 +383,7 @@ If wants to use a private registry:
 
 `docker share <host>:<image_name>` / `docker pull <host>:<image_name>`
 
-## Image to file[^5]
+### Image to file[^5]
 
 Save a docker image to file:
 
@@ -305,12 +397,12 @@ Load a docker image from file:
 sudo docker load -i <path to image tar file>
 ```
 
-# Arguments
+## Arguments
 
 (todo)
 - when to use this instead of env variables?
 
-## Usefull example:
+### Usefull example:
 
 ```
 FROM node:14-slim
@@ -336,9 +428,9 @@ And then build the Docker image using the following (which also gives you a nice
 $ docker build -t node-util:cliuser --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) .
 ```
 
-# Persistent Data Storages
+## Persistent Data Storages
 
-## Volumes
+### Volumes
 
 - Dir in host machine
 - Mapped inside a container (mounted)
@@ -365,7 +457,7 @@ $ docker build -t node-util:cliuser --build-arg USER_ID=$(id -u) --build-arg GRO
         - `feedback-node:volumes`: name of the image used to create this volume
         - `-v feedback:/app/feedback`: named volume `<volume_name>:<dir_path_inside_container>`
 
-## Bind Mounts
+### Bind Mounts
 
 - user define a path to host machine
 - a map from host dir path to container dir path
@@ -393,7 +485,7 @@ docker run -d -p 3000:80 --rm \
     - after `Dockerfile` is ran, container is created, than volumes are synced
     - this sets this subdir `node_modules` to remain the same
 
-## Database Persistence
+### Database Persistence
 
 - read specific database docker doc (at docker hub, for example)
 
@@ -403,9 +495,9 @@ Example for mongodb[^1]:
 - bind moung: `docker run --name some-mongo -v /my/own/datadir:/data/db -d mongo`
 
 
-# Networking
+## Networking
 
-## Container to Host communication
+### Container to Host communication
 
 connect from container to database at host
 
@@ -413,7 +505,7 @@ connect from container to database at host
 - access from container to host: `mongodb://host.docker.internal:27017/mydb`
     - `host.docker.internal` will be transformed to host IP address
 
-## Container to Container comm
+### Container to Container comm
 
 If want to hard code the container ip address:
 
@@ -438,7 +530,7 @@ docker run -d --name mongodb \
     - `mongodb://<container_name>:27017/mydb`
     - `mongodb://mongodb:27017/mydb`
 
-# Docker-Compose
+## Docker-Compose
 
 - defaults with `--rm`
 - creates a `network` by default
@@ -465,7 +557,7 @@ docker run -d --name mongodb \
     - just builds all images
 
 
-## `docker-compose.yaml`
+### `docker-compose.yaml`
 
 - `services:`: each child is a container
     - key: is the service name (that can be used as a container name)
@@ -514,7 +606,7 @@ volumes:
 
 - `stdin_open:` / `tty:`: same as `-i` / `-t`
 
-# Utility Containers
+## Utility Containers
 
 Use as a isolated environment.
 
@@ -548,7 +640,7 @@ ENTRYPOINT [ "npm" ]
     - the appended commands will be appended to this entrypoint
     - usefull to allow only one kind of command
 
-## Using with Docker-Compose
+### Using with Docker-Compose
 
 ```docker-compose.yaml
 version: "3.8"
@@ -573,7 +665,7 @@ docker-compose run guganpm init
     - `--rm`: removes container after it stops
 
 
-# Users / Permissions:[^3]
+## Users / Permissions:[^3]
 
 I wanted to point out that on a Linux system, the Utility Container idea doesn't quite work as you describe it.  In Linux, by default Docker runs as the "Root" user, so when we do a lot of the things that you are advocating for with Utility Containers the files that get written to the Bind Mount have ownership and permissions of the Linux Root user.  (On MacOS and Windows10, since Docker is being used from within a VM, the user mappings all happen automatically due to NFS mounts.)
 
@@ -693,13 +785,13 @@ drwxr-xr-x 13 scott scott 4096 Oct 31 16:23 ../
 
 Keep in mind that this image will not be portable, but for the purpose of the Utility Containers like this, I don't think this is an issue at all for these "Utility Containers"
 
-# Deploy in production
+## Deploy in production
 
 - do NOT use bind mounts
 
-## [Kubernetes](./it/containers-kubernetes.md)
+### [Kubernetes](./it/containers-kubernetes.md)
 
-# Resources
+## Resources
 
 - [Docker Playground](https://labs.play-with-docker.com/)
 - [Docker hub](https://hub.docker.com/)
@@ -708,7 +800,7 @@ Keep in mind that this image will not be portable, but for the purpose of the Ut
     - web ui for managing containers, available at linode
 - Udemy Course Academind: [Docker & Kubernetes: The Practical Guide [2022 Edition]](https://www.udemy.com/share/103Ia03@_LG5LvM93j_prIuRNO6TDsc6YuhwqudbXhJirjmPbdAU7lSzxDsoTeCwzbGUXkS6/)
 
-# General
+## General
 
 Python images to choose:
 
@@ -718,7 +810,7 @@ Python images to choose:
 
 Mongodb images
 
-## Optimization: build image
+### Optimization: build image
 
 **[Reduce Build Context for Docker Build Command](https://www.baeldung.com/ops/docker-reduce-build-context)**
 
@@ -739,7 +831,7 @@ echo "FROM mongo:5.0.9" | sudo docker build -t {img_name} -
 
 
 
-# References
+## References
 
 [^1]: [official image mongo](https://hub.docker.com/_/mongo)
 [^2]: [Reference / Compose file reference / Compose Specification / Volume](https://docs.docker.com/compose/compose-file/#volumes)
