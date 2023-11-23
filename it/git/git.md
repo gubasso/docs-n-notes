@@ -4,25 +4,25 @@
 <!-- toc -->
 
 - [hooks](#hooks)
-  - [Commands](#commands)
-    - [Checkout vs Switch](#checkout-vs-switch)
-  - [Branches](#branches)
-    - [Clone and switch to a branch](#clone-and-switch-to-a-branch)
-    - [Rename a branch](#rename-a-branch)
-    - [Delete branches](#delete-branches)
-  - [Merge / Diff conflicts](#merge--diff-conflicts)
-    - [Merge just a file/path from another branch](#merge-just-a-filepath-from-another-branch)
-    - [merge from stash](#merge-from-stash)
-  - [Git Workflow / gitflow](#git-workflow--gitflow)
-    - [Git Feature Branch Workflow](#git-feature-branch-workflow)
-  - [Related](#related)
-  - [Resources](#resources)
-  - [General](#general)
-  - [References:](#references)
+- [Commands](#commands)
+  - [Checkout vs Switch](#checkout-vs-switch)
+- [Branches](#branches)
+  - [Clone and switch to a branch](#clone-and-switch-to-a-branch)
+  - [Rename a branch](#rename-a-branch)
+  - [Delete branches](#delete-branches)
+- [Merge / Diff conflicts](#merge--diff-conflicts)
+  - [Merge just a file/path from another branch](#merge-just-a-filepath-from-another-branch)
+  - [merge from stash](#merge-from-stash)
+- [Git Workflow / gitflow](#git-workflow--gitflow)
+  - [Git Feature Branch Workflow](#git-feature-branch-workflow)
+- [Related](#related)
+- [Resources](#resources)
+- [General](#general)
+- [References:](#references)
 
 <!-- tocstop -->
 
-# hooks
+## hooks
 
 - https://www.viget.com/articles/two-ways-to-share-git-hooks-with-your-team/
 
@@ -257,6 +257,18 @@ Or, to cleanup branches from project, see[^clear-branches].
 [Vim universe. Vim as a merge tool](https://www.youtube.com/watch?v=VxpCgQyUXlI)
 
 ## General
+
+---
+
+**git log to json**[^1]
+
+- [mergestat-lite](https://github.com/mergestat/mergestat-lite)
+  - cli to query git log as a SQL
+  - outputs as json too
+
+[^1]: [Git log in JSON format - Full discussion gist](https://gist.github.com/varemenos/e95c2e098e657c7688fd)
+
+---
 
 Personalize a ssh command used by git clone (example):
 
