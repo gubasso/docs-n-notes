@@ -1,5 +1,16 @@
 # GPG
 
+<!-- toc -->
+
+- [gpg-agent](#gpg-agent)
+- [Unorganized](#unorganized)
+- [GPG Create Identity, Keys, Encrypt/Decrypt](#gpg-create-identity-keys-encryptdecrypt)
+  - [**How to encrypt large files secure way (the best method I've found)**](#how-to-encrypt-large-files-secure-way-the-best-method-ive-found)
+  - [**Generating a Revocation Certificate**](#generating-a-revocation-certificate)
+  - [**Backup and restore GPG Keys**](#backup-and-restore-gpg-keys)
+
+<!-- tocstop -->
+
 ## gpg-agent
 
 Config:
