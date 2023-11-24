@@ -9,6 +9,7 @@
 - [Basic commands](#basic-commands)
 - [gpg-agent](#gpg-agent)
 - [Use `keychain` inside a script](#use-keychain-inside-a-script)
+- [Clear / Remove](#clear--remove)
 
 <!-- tocstop -->
 
@@ -20,6 +21,17 @@ Simple command for `ssh-agent`:
 keychain --eval --agents gpg gubasso@eambar.net
 eval $(keychain --eval --agents ssh id_rsa)
 eval `keychain --eval --agents ssh,gpg gubasso-android-ed25519 gubasso@cwnt.io`
+eval $(keychain --nogui --quiet --noask --eval --agents ssh,gpg \
+  cwntroot-ed25519 \
+  gubasso-android-ed25519 \
+  gubasso-ed25519 \
+  id_rsa \
+  sysking-eambar-ed25519 \
+  gubasso@eambar.net \
+  gubasso@cwnt.io)
+eval $(keychain --clear --nogui --quiet --eval --agents ssh,gpg \
+        cwntroot-ed25519 \
+        root@cwnt.io)
 ```
 
 The `--clear` option:
@@ -52,3 +64,19 @@ eval `keychain --noask --eval id_rsa`
 ```
 
 - `--noask`: should not prompt for a passphrase if one is needed
+
+## Clear / Remove
+
+Clearing Keys:
+
+```sh
+keychain --clear
+```
+
+Stopping Agents
+
+```sh
+keychain -k all
+# or just for a user
+keychain -k mine
+```
