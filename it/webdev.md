@@ -244,6 +244,7 @@ Beautiful hand-crafted SVG icons, open sourcen and free to use in 2 different st
 10. https://tabler-icons.io
 A collection of over 1400 pixel-perfect icons designed to make your website or app attractive, visually consistent, and simply beautiful.
 
+
 - layout example:
     - `****` [How to make stunning website design using html and css 3 - How is it ?](https://www.youtube.com/watch?v=MZosBhTb8Pk&feature=em-uploademail)
     - [How To Make Complete Responsive Website Design using HTML , CSS 3,JS , Bootstrap & JQuery](https://www.youtube.com/watch?v=0Eg34xjIhzY)
