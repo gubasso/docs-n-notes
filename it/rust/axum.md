@@ -11,6 +11,8 @@
 
 ### Tutorials
 
+- https://rust10x.com/web-app
+  - https://github.com/rust10x/rust-web-app
 - [Introduction to Axum - Brooks Builds](https://www.youtube.com/playlist?list=PLrmY5pVcnuE-_CP7XZ_44HN-mDrLQV4nS) (playlist)
 - Rust Axum Full Course - Jeremy Chone
   1. [Rust Axum Full Course - Web Development](https://www.youtube.com/watch?v=XZtlD_m59sM)

@@ -11,8 +11,10 @@
 - [`git2` crate (`libgit2`)](#git2-crate-libgit2)
 - [Modules / File / Dir structure](#modules--file--dir-structure)
 - [Arrays / Vectors](#arrays--vectors)
-- [Iterators](#iterators)
-- [General](#general)
+  - [Iterators](#iterators)
+  - [Options](#options)
+  - [General](#general)
+    - [unorganized](#unorganized)
   - [Study](#study)
   - [Resoures](#resoures)
     - [Axum Web Framework](#axum-web-framework)
@@ -25,6 +27,8 @@
     - A curated list of awesome Rust frameworks, libraries and software.
 
 - Error handling:
+  - thiserror
+  - anyhow
   - https://github.com/zkat/miette (substitute for anyhow, used by watchexec/cargo-watch project)
 
 - logger/debuger:
@@ -115,7 +119,7 @@ let differences: Vec<_> = points
   .collect;
 ```
 
-# Iterators
+## Iterators
 
 Save a range iterator and/or reversed range to the same variable (e.g. when you want to apply some conditional)
 
@@ -182,7 +186,30 @@ for j in 0..2 {
 
 working with enums: [A Gentle Introduction To Rust: 2. Structs, Enums and Matching](https://stevedonovan.github.io/rust-gentle-intro/2-structs-enums-lifetimes.html#simple-enums)
 
-# General
+## Options
+
+**Unpacking options with `?` (? operator)**[^2]
+
+```rs
+fn next_birthday(current_age: Option<u8>) -> Option<String> {
+	// If `current_age` is `None`, this returns `None`.
+	// If `current_age` is `Some`, the inner `u8` gets assigned to `next_age`
+    let next_age: u8 = current_age? + 1;
+    Some(format!("Next year I will be {}", next_age))
+}
+// Gets the area code of the phone number of the person's job, if it exists.
+fn work_phone_area_code(&self) -> Option<u8> {
+    // This would need many nested `match` statements without the `?` operator.
+    // It would take a lot more code - try writing it yourself and see which
+    // is easier.
+    self.job?.phone_number?.area_code
+}
+```
+
+## General
+
+
+### unorganized
 
 Return the type of a variable as a string.
 
@@ -196,9 +223,6 @@ fn type_of<T>(_: T) -> &'static str {
 
 - list of usefull crates: blessed.rs
 
-- error handling crates:
-    - thiserror
-    - anyhow
 
 - continuous integration / delivery with rust:
     - 5 Better ways to code in Rust https://www.youtube.com/watch?v=BU1LYFkpJuk
@@ -296,3 +320,4 @@ github.com/programmingrust
 - Follow examples at: https://github.com/tokio-rs/axum/tree/main/examples
 
 [^1]: https://www.youtube.com/watch?v=VuVOyUbFSI0 "Rust to Postgres Database with SQLX - Rust Lang Tutorial 2021 - Jeremy Chone"
+[^2]: https://doc.rust-lang.org/rust-by-example/error/option_unwrap/question_mark.html "Unpacking options with ?"
