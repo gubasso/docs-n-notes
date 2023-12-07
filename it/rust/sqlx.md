@@ -16,6 +16,7 @@
 - [Chrono (Date / Time)](#chrono-date--time)
 - [Macros feature](#macros-feature)
 - [Others](#others)
+  - [Migrations](#migrations)
 
 <!-- tocstop -->
 
@@ -503,6 +504,11 @@ At video [SQLx is my favorite PostgreSQL driver to use with Rust.](https://www.y
 - ipnetwork type
 - listen / notify
   - use postgres as an asynchonous notification system
+
+### Migrations
+
+- sqlx migration details: https://docs.rs/sqlx/latest/sqlx/macro.migrate.html
+- [[migrations#sqlx (rust)]]
 
 
 
