@@ -56,7 +56,7 @@ gopass sync --store my-company
   - https://github.com/browserpass/browserpass-extension#organizing-password-store
   - dir is caps letter / pass lower case
 
-**fields**
+**fields / layout / template**
 
 - password: first, no key, or:
   - `password:`

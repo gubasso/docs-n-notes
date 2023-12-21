@@ -12,7 +12,7 @@
 * [Loop](#loop)
 * [Parameter Expansion](#parameter-expansion)
 * [Flags](#flags)
-    - [shflags](#shflags)
+  - [shflags](#shflags)
 
 <!-- toc -->
 
