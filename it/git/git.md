@@ -279,6 +279,11 @@ GIT_SSH_COMMAND="ssh -v -p 202 -o IdentitiesOnly=yes -i ~/.ssh/<private_key>" \
 git clone <user>@<server>:gitolite-admin
 ```
 
+```sh
+# [Force git to use specific key.pub](https://stackoverflow.com/questions/41385199/force-git-to-use-specific-key-pub)
+git config --local core.sshCommand 'ssh -i <path-to-key>'
+```
+
 
 - [A Beginner’s Guide to Git — What is a Changelog and How to Generate it](https://www.freecodecamp.org/news/a-beginners-guide-to-git-what-is-a-changelog-and-how-to-generate-it/)
 

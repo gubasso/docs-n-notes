@@ -36,6 +36,7 @@ example-hostname.example.com
   - setup `A` and/or `AAAA` record [^2]
 - (wait to dns propagate)
 - check with: https://dnschecker.org
+  - dns test dns check dns
 
 ## Dynamic DNS
 > ddns, dyndns

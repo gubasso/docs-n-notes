@@ -86,6 +86,8 @@ EDITOR=vim visudo
 apt-get update -y && apt-get upgrade -y
 # or
 sudo apt-get update -y && sudo apt-get upgrade -y
+# or
+sudo DEBIAN_FRONTEND=noninteractive apt-get update -y && sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 ```
 
 ### Arch linux

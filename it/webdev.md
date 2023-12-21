@@ -254,6 +254,10 @@ A collection of over 1400 pixel-perfect icons designed to make your website or a
     - [Fullscreen Landing Page Design using HTML & CSS 3 - Website Design](https://www.youtube.com/watch?v=VbjbrRX183w)
     - hero component: [Fun Tip: Use calc() to Change the Height of a Hero Componen](https://css-tricks.com/fun-tip-use-calc-to-change-the-height-of-a-hero-component/)
 
+- landing pages point-and-click:
+  - greatpages (integracoes?)
+  - carrd.co
+
 - sections and triggers:
     - Introduction to the Intersection Observer JavaScript API: https://www.youtube.com/watch?v=T8EYosX4NOo&feature=em-uploademail
 
