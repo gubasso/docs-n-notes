@@ -6,6 +6,8 @@
 
 <!-- tocstop -->
 
+`host.docker.internal` -> localhost
+
 ## Resources
 
 https://www.linode.com/docs/guides/using-nginx-proxy-manager/
