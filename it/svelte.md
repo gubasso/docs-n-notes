@@ -127,6 +127,17 @@ After that, to serve these files, map the webserver for the root directory, with
 
 ## Sveltekit
 
+External link in svelte/sveltekit:
+
+```svelte
+<a
+  target="_blank"
+  rel="external noopener noreferrer"
+  href="https://resume.gubasso.xyz"
+  on:click={closeMenu}>Resume / CV</a
+>
+```
+
 ### Typing / Jsdoc / Typescript
 
 - [How to add JSDoc Typechecking to SvelteKit](https://www.swyx.io/jsdoc-swyxkit)
