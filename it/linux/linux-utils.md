@@ -1,8 +1,98 @@
 # Linux General Utilities
 
-[toc]
+<!-- toc -->
 
-# stow
+  - [tar](#tar)
+  - [stow](#stow)
+- [awk](#awk)
+- [jq](#jq)
+- [curl](#curl)
+- [NetworkManager](#networkmanager)
+- [time](#time)
+- [xsv](#xsv)
+- [mlr Miller](#mlr-miller)
+- [split](#split)
+- [shred / secure-delete](#shred--secure-delete)
+- [xargs](#xargs)
+- [rsync](#rsync)
+  - [general](#general)
+  - [examples](#examples)
+- [sxhkd](#sxhkd)
+- [ffmpeg](#ffmpeg)
+- [tmux](#tmux)
+- [General](#general)
+  - [sum numbers from a file](#sum-numbers-from-a-file)
+  - [bulk rename](#bulk-rename)
+- [References:](#references)
+
+<!-- tocstop -->
+
+## tar
+
+Person:
+- compact all files in dir with tar gz
+
+ChatGPT:
+- To compact all files in a directory into a `.tar.gz` archive using the command line, you can use the `tar` command. The `tar` command is a standard on Unix-like systems and is used for creating and manipulating archive files.
+
+Here's a basic command structure to create a `.tar.gz` archive:
+
+```bash
+tar -czvf name-of-archive.tar.gz /path/to/directory
+```
+
+Breaking down the command:
+- `tar`: This is the command name for creating archives.
+- `-c`: This option stands for "create", indicating that you want to create an archive.
+- `-z`: This option tells `tar` to compress the archive using gzip.
+- `-v`: This stands for "verbose". It's optional and when used, `tar` will list all files it's adding to the archive.
+- `-f`: This option allows you to specify the filename of the archive.
+
+For example, if you have a directory named `myfiles` in your current directory and you want to create an archive called `myfiles.tar.gz`, you would use:
+
+```bash
+tar -czvf myfiles.tar.gz myfiles
+```
+
+Person:
+- and how to get all files
+
+ChatGPT:
+- To extract all files from a `.tar.gz` archive, you use the `tar` command with different options. Here's how you can do it:
+
+```bash
+tar -xzvf name-of-archive.tar.gz -C /path/to/destination
+```
+
+
+
+Breaking down this command:
+- `tar`: This is the command name for working with archives.
+- `-x`: This option stands for "extract", indicating that you want to extract files from an archive.
+- `-z`: This option tells `tar` to uncompress the archive using gzip.
+- `-v`: This stands for "verbose". It's optional and when used, `tar` will list all files it's extracting.
+- `-f`: This option allows you to specify the filename of the archive.
+- `-C /path/to/destination`: This is also optional. It specifies the directory where you want to extract the files. If omitted, files will be extracted to the current directory.
+
+For example, if you have an archive named `myfiles.tar.gz` and you want to extract its contents to a directory named `myfiles`, you would use:
+
+```bash
+tar -xzvf myfiles.tar.gz -C myfiles
+```
+
+- If you want to create a `.tar.gz` archive of all files within a directory, without preserving the directory structure (i.e., just the files, not the folders), you can do this by navigating to the directory and using the `tar` command with a glob pattern. Here's how to do it:
+1. First, navigate to the directory containing the files you want to archive:
+
+```bash
+cd /path/to/directory
+```
+2. Then, use the `tar` command with a glob pattern to match all files in the current directory:
+
+```bash
+tar -czvf ../name-of-archive.tar.gz *
+```
+
+## stow
 
 Manage dotfiles with stow.
 
