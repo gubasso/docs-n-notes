@@ -1,12 +1,5 @@
 # Rust leetcode
 
-<!-- toc GitLab -->
-
-+ [Related](#related)
-+ [General](#general)
-+ [Todo](#todo)
-  * [Important and Useful links from all over the LeetCode](#important-and-useful-links-from-all-over-the-leetcode)
-
 <!-- toc -->
 
 - [Related](#related)
