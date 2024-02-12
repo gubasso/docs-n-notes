@@ -4,6 +4,7 @@
 
 <!-- toc -->
 
+- [Install](#install)
 - [General](#general)
 - [Packages to install](#packages-to-install)
   - [pacstrap list](#pacstrap-list)
@@ -16,6 +17,10 @@
 - [References:](#references)
 
 <!-- tocstop -->
+
+## Install
+
+- Easy install: [How To Install Arch Linux in 5 Minutes || BRAND NEW EASY Arch Linux Installation Guide 2023 - Ksk Royal](https://www.youtube.com/watch?v=e-4YOymosJo)
 
 ## General
 
