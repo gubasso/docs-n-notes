@@ -8,6 +8,9 @@
 - [Generator](#generator)
 - [Organization / Naming convention](#organization--naming-convention)
 - [Import](#import)
+- [Basic usage](#basic-usage)
+  - [Adding Secrets](#adding-secrets)
+  - [Edit a secret](#edit-a-secret)
 - [Resources](#resources)
 
 <!-- tocstop -->
@@ -62,10 +65,12 @@ gopass sync --store my-company
   - `password:`
   - `pass:`
   - `secret:`
-- user:
-  - `login:`
+- login:
+  - ** `login:`
   - `username:`
   - `user:`
+- url:
+  - `url`
 - notes/comments: free text:
   - `comments:`
 - credit cards:
@@ -80,6 +85,21 @@ valid:
 Import from another password manager (e.g. KeepassXC):
 
 - https://github.com/roddhjav/pass-import#readme
+
+## Basic usage
+
+### Adding Secrets
+
+```sh
+gopass insert golang.org/gopher
+gopass generate golang.org/gopher
+```
+
+### Edit a secret
+
+```sh
+gopass edit golang.org/gopher
+```
 
 ## Resources
 
