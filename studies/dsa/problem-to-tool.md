@@ -31,6 +31,9 @@
 - subsequences -> dynamic programming
                -> two pointers
 
-- subsets -> backtracking
 
 - counting / frequency -> hashmap
+
+- subsets -> backtracking
+- combinations
+  - backtracking

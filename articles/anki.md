@@ -1,16 +1,18 @@
 # Anki
 
-<!-- toc GFM -->
-
-* [Hints for optimize study](#hints-for-optimize-study)
-* [References](#references)
-
 <!-- toc -->
 
+- [Steps](#steps)
 - [Hints for optimize study](#hints-for-optimize-study)
 - [References](#references)
 
 <!-- tocstop -->
+
+## Steps
+
+- Profile -> Add (everything for specific study... only code challenges... only bible... etc...)
+- preferences:
+  - night mode
 
 ## Hints for optimize study
 
