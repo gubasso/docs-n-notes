@@ -178,6 +178,12 @@ function list_csvs() {
 }
 ```
 
+- For each yaml file
+- echo its content, separated by its filename
+```sh
+find . -name "*.yaml" -print0 | xargs -0 -I {} sh -c 'echo "# ==> {} <=="; cat {}; echo' | toxclip
+```
+
 ## Loop
 
 How can I loop over the output of a shell command?
