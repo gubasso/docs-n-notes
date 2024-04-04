@@ -184,6 +184,18 @@ function list_csvs() {
 find . -name "*.yaml" -print0 | xargs -0 -I {} sh -c 'echo "# ==> {} <=="; cat {}; echo' | toxclip
 ```
 
+```bash
+find . -name "*.md" -type f -print0 | xargs -0 cat
+find . -name "*.md" -print0 | xargs -0 -I {} sh -c 'echo "# ==> {} <=="; cat {}; echo' | toxclip
+```
+
+- `find .` starts the search in the current directory (`.`).
+- `-name "*.md"` looks for files ending with the `.md` extension.
+- `-type f` ensures that only files (not directories) are considered.
+- `-print0` outputs the file names followed by a null character instead of a newline. This is useful to handle filenames with spaces or newlines correctly.
+- `xargs -0 cat` takes the null-terminated file names from `find` and uses `cat` to output their contents. The `-0` option tells `xargs` to expect input items terminated by a null character, matching `-print0` from `find`.
+
+
 ## Loop
 
 How can I loop over the output of a shell command?
