@@ -9,6 +9,11 @@
 
 ## General
 
+- online converter multiple:
+  - https://tableconvert.com/html-to-markdown
+  - pdf tables pdf to ...
+    - https://pdftables.com/
+
 - email default plain text format convention
   - https://mailformat.dan.info/quoting/
 

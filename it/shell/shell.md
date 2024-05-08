@@ -187,6 +187,7 @@ find . -name "*.yaml" -print0 | xargs -0 -I {} sh -c 'echo "# ==> {} <=="; cat {
 ```bash
 find . -name "*.md" -type f -print0 | xargs -0 cat
 find . -name "*.md" -print0 | xargs -0 -I {} sh -c 'echo "# ==> {} <=="; cat {}; echo' | toxclip
+find . -type f -exec sh -c 'file "{}" | grep -q "text"' \; -print0 | xargs -0 -I {} sh -c 'echo "# ==> {} <=="; cat {}; echo' | toxclip
 ```
 
 - `find .` starts the search in the current directory (`.`).
