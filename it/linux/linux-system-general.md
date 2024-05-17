@@ -4,6 +4,7 @@
 
 <!-- toc -->
 
+- [Disk usage](#disk-usage)
 - [Users management](#users-management)
 - [Group management](#group-management)
 - [sudo](#sudo)
@@ -18,6 +19,20 @@
 - [Set Hostname](#set-hostname)
 
 <!-- tocstop -->
+
+## Disk usage
+
+- https://wiki.archlinux.org/title/List_of_applications/Utilities#Disk_usage_display
+  - https://github.com/Dundee/gdu
+- [7 Great Apps to View Disk Usage in Linux](https://www.makeuseof.com/tag/how-to-analyze-your-disk-usage-pattern-in-linux/)
+  - 2. Ncurses Disk Usage (ncdu)
+    - https://dev.yorhel.nl/ncdu
+  - 4. Disk Usage Analyzer (aka Baobab)
+    - https://linuxpoison.blogspot.com/2010/01/baobab-linux-graphical-disk-usage.html
+  - KDirStat
+    - https://kdirstat.sourceforge.net/
+
+
 
 ## Users management
 
