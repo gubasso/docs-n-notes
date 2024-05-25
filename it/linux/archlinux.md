@@ -5,6 +5,7 @@
 <!-- toc -->
 
 - [Install](#install)
+- [Packages / AUR](#packages--aur)
 - [General](#general)
 - [Packages to install](#packages-to-install)
   - [pacstrap list](#pacstrap-list)
@@ -22,7 +23,14 @@
 
 - Easy install: [How To Install Arch Linux in 5 Minutes || BRAND NEW EASY Arch Linux Installation Guide 2023 - Ksk Royal](https://www.youtube.com/watch?v=e-4YOymosJo)
 
+## Packages / AUR
+
+```sh
+paru -Sccd
+```
+
 ## General
+
 
 timezone
 - [List of tz database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)

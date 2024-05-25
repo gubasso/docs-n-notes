@@ -1,5 +1,11 @@
 # Debian
 
+<!-- toc -->
+
+- [Install Guide](#install-guide)
+
+<!-- tocstop -->
+
 ## Install Guide
 
 https://wiki.debian.org/NetworkConfiguration
@@ -23,13 +29,11 @@ https://www.debian.org/releases/stable/amd64/
 - https://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/current/multi-arch/iso-cd/
     - firmware-11.3.0-amd64-i386-netinst.iso
 
-
 - https://www.debian.org/releases/stable/installmanual
 - https://www.linuxtechi.com/how-to-install-debian-11-bullseye/
 
 home network domain name
 https://www.ctrl.blog/entry/homenet-domain-name.html
-
 
 cwnt network domain name: cwnt.arpa
 

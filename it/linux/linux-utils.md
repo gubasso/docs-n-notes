@@ -52,6 +52,8 @@ For example, if you have a directory named `myfiles` in your current directory a
 
 ```bash
 tar -czvf myfiles.tar.gz myfiles
+tar --exclude='.git' --exclude='target' -czf repo_files.tar.gz -C /path/to/your/repo_dir .
+tar --exclude='.git' --exclude='target' -czvf repo_files.tar.gz repo_dir
 ```
 
 Person:
@@ -61,7 +63,7 @@ ChatGPT:
 - To extract all files from a `.tar.gz` archive, you use the `tar` command with different options. Here's how you can do it:
 
 ```bash
-tar -xzvf name-of-archive.tar.gz -C /path/to/destination
+tar -xzvf name_of_archive.tar.gz -C /path/to/destination
 ```
 
 
