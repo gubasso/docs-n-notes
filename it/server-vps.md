@@ -75,6 +75,7 @@ Defaults timestamp_timeout=10
 ~/.bashrc
 ---
 set -o vi
+alias n='nvim'
 alias sudo='sudo -v; sudo '
 alias s='systemctl'
 alias ss='sudo systemctl'
