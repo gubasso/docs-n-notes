@@ -3,6 +3,7 @@
 <!-- toc -->
 
 - [Install Guide](#install-guide)
+- [Packaging](#packaging)
 
 <!-- tocstop -->
 
@@ -37,5 +38,6 @@ https://www.ctrl.blog/entry/homenet-domain-name.html
 
 cwnt network domain name: cwnt.arpa
 
+## Packaging
 
-
+- [[debian-packaging]]
