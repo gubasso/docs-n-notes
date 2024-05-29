@@ -52,7 +52,7 @@ Follow the steps to setup hostname and hosts [[server-vps]].
 Boot into the container / login in the machine:
 
 ```sh
-sudo systemd-nspawn -b -D /var/lib/machines/debian-sid
+sudo systemd-nspawn --bind=/home/gubasso/Projects:/home/sid/Projects -b -D /var/lib/machines/debian-sid
 ```
 
 - -b option will boot the container (i.e. run systemd as PID=1), instead of just running a shell
@@ -61,7 +61,8 @@ sudo systemd-nspawn -b -D /var/lib/machines/debian-sid
 The container can be powered off by running `poweroff`.
 
 At [Packaging Pre-Requisites]: Configuring locales
-and continue...
+- but follows this [Setup locale]
+
 
 ## General
 
@@ -176,3 +177,6 @@ my_program.desktop
 [Building Tutorial]: https://wiki.debian.org/BuildingTutorial "Debian wiki: Building Tutorial"
 [Packaging Pre-Requisites: nspawn]: https://wiki.debian.org/Packaging/Pre-Requisites/nspawn "Debian wiki: Packaging Pre-Requisites nspawn"
 [Arch wiki: nspawn Debian or Ubuntu]: https://wiki.archlinux.org/title/Systemd-nspawn#Create_a_Debian_or_Ubuntu_environment "Arch wiki: systemd-nspawn: Create a Debian or Ubuntu environment"
+[Setting up Sid Development Environment for Debian Packaging]: https://wiki.abrahamraji.in/creating-a-sid-env.html "Abraham's Braindump: Setting up Sid Development Environment for Debian Packaging"
+[Simple Packaging Tutorial: The Long Version]: https://wiki.abrahamraji.in/simple-packaging-tutorial.html "Abraham's Braindump: Simple Packaging Tutorial: The Long Version"
+[Setup locale]: https://wiki.archlinux.org/title/installation_guide#Localization "Arch wiki: Installation guide: 3.4 Localization"
