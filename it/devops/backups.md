@@ -11,4 +11,3 @@
 - https://github.com/restic/restic
 - https://wiki.archlinux.org/title/Restic
 - https://restic.readthedocs.io/en/latest/010_introduction.html
-
