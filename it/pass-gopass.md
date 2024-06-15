@@ -61,23 +61,25 @@ gopass sync --store my-company
 
 **fields / layout / template**
 
-- password: first, no key, or:
+- password: first, no key, or: (alias `k`)
   - `password:`
   - `pass:`
   - `secret:`
-- login:
-  - ** `login:`
+  - `key:`
+- username: (alias `n`)
   - `username:`
+  - `login:`
   - `user:`
-- url:
+- url: (alias `l`)
   - `url`
-- notes/comments: free text:
+  - `link`
+- notes/comments: free text: (alias `c`)
   - `comments:`
 - credit cards:
 ```
 #:
+exp:
 cvc:
-valid:
 ```
 
 ## Import
