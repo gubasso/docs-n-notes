@@ -17,6 +17,7 @@
   - [Ubuntu/Debian](#ubuntudebian-1)
   - [Opensuse Tumbleweed](#opensuse-tumbleweed-1)
 - [Set Hostname](#set-hostname)
+- [Resources](#resources)
 
 <!-- tocstop -->
 
@@ -145,3 +146,7 @@ See [[dns#Fully qualified domain name (FQDN)]].
   - `<ipv6> example-hostname.example.com example-hostname`
 - check if `etc/nsswitch.conf` has:
   - `hosts:          files dns`
+
+## Resources
+
+- [CompTIA Linux+ Exam Prep (XK0-005 revision) (IN PROGRESS) - Shawn Powers](https://www.youtube.com/playlist?list=PL78ppT-_wOmuwT9idLvuoKOn6UYurFKCp)

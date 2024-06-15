@@ -284,7 +284,6 @@ git clone <user>@<server>:gitolite-admin
 git config --local core.sshCommand 'ssh -i <path-to-key>'
 ```
 
-
 - [A Beginner’s Guide to Git — What is a Changelog and How to Generate it](https://www.freecodecamp.org/news/a-beginners-guide-to-git-what-is-a-changelog-and-how-to-generate-it/)
 
 squash commits
