@@ -1,21 +1,32 @@
 # Infrastructure / DevOps
 > dev ops operations servers
 
-[toc]
+<!-- toc -->
 
-# Related
+- [Related](#related)
+- [Proxy / Reverse Proxy](#proxy--reverse-proxy)
+- [Network / DNS](#network--dns)
+- [Organization](#organization)
+  - [Naming servers fqdn scheme conventions](#naming-servers-fqdn-scheme-conventions)
+  - [Naming subdomains apps](#naming-subdomains-apps)
+  - [Containers (Docker)](#containers-docker)
 
-- [](./server-vps.md)
-- [](./server-vps-home_server.md)
-- [Dynamic DNS](./server-vps-home_server-ddns.md)
+<!-- tocstop -->
 
-# Proxy / Reverse Proxy
+## Related
+
+- [[server-vps]]
+- [[home-server]]
+- [[dns]]
+- [[backups]]
+
+## Proxy / Reverse Proxy
 
 - *[Traefik](./traefik.md)
 - caddy
 - nginx proxy manager
 
-# Network / DNS
+## Network / DNS
 
 - [Netmaker](./netmaker.md)
 
@@ -29,9 +40,9 @@
 
 [^net1]: [What is a VPC? | AWS Training](https://www.youtube.com/watch?v=7XnpdZF_COA)
 
-# Organization
+## Organization
 
-## Naming servers fqdn scheme conventions
+### Naming servers fqdn scheme conventions
 
 - server name = subdomain
 - Computer network naming scheme: https://en.wikipedia.org//wiki/Computer_network_naming_scheme
@@ -39,11 +50,11 @@
 -  Naming Convention Design (Servers, Computers, IT Assets)  https://www.process.st/checklist/naming-convention-design-servers-computers-it-assets/
 
 
-## Naming subdomains apps
+### Naming subdomains apps
 
 `<app_name>.app.example.com`
 
-## Containers (Docker)
+### Containers (Docker)
 
 Server home dir: [^1]
 

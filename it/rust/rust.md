@@ -274,6 +274,8 @@ https://stackoverflow.com/questions/37296351/is-there-any-trait-that-specifies-n
 
 ## Resoures
 
+- [The Rust Lang Book (playlist) - Let's Get Rusty](https://www.youtube.com/playlist?list=PLai5B987bZ9CoVR-QEIN9foz4QCJ0H2Y8)
+
 **https://github.com/mre/idiomatic-rust**
 
 https://cfsamson.github.io/books-futures-explained/

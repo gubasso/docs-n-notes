@@ -4,6 +4,7 @@
 
 <!-- toc -->
 
+- [General](#general)
 - [Releases](#releases)
   - [Create a prerelease version](#create-a-prerelease-version)
   - [Bump the prerelease version](#bump-the-prerelease-version)
@@ -11,13 +12,20 @@
 
 <!-- tocstop -->
 
-# Releases
+## General
+
+[How to Update NPM Dependencies](https://www.freecodecamp.org/news/how-to-update-npm-dependencies/)
+- How to Keep Dependencies Up-To-Date
+- How to Use the npm outdated Command
+- How to Use npm-check-updates (ncu)
+
+## Releases
 
 version package.json and git tag
 
 - [How to use `npm version` to create prerelease tags](https://jasonraimondi.com/posts/use-the-npm-version-command-to-semantically-version-your-node-project/)
 
-## Create a prerelease version
+### Create a prerelease version
 
 ```sh
 # this will take you to 2.0.0-rc.0
@@ -30,7 +38,7 @@ npm version preminor --preid=beta
 npm version prepatch --preid=alpha
 ```
 
-## Bump the prerelease version
+### Bump the prerelease version
 
 ```sh
 # this will take you to 1.1.0-beta.1
@@ -43,7 +51,7 @@ npm version prerelease
 npm version prerelease
 ```
 
-## Promote the prerelease to a release
+### Promote the prerelease to a release
 
 ```sh
 # from 2.0.0-rc.1 to 2.0.0
