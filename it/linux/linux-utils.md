@@ -2,6 +2,7 @@
 
 <!-- toc -->
 
+  - [xprop](#xprop)
   - [tar](#tar)
   - [stow](#stow)
 - [awk](#awk)
@@ -26,6 +27,10 @@
 - [References:](#references)
 
 <!-- tocstop -->
+
+## xprop
+
+get the window name / properties (help to setup picom, window compositor)
 
 ## tar
 
