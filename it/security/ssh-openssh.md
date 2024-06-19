@@ -8,6 +8,7 @@
 - [Config Server](#config-server)
 - [Config Client](#config-client)
   - [Managing multiple keys/identities[^2]](#managing-multiple-keysidentities2)
+  - [Naming Conventions](#naming-conventions)
   - [Unorganized](#unorganized)
 - [Generate new ssh key](#generate-new-ssh-key)
 - [Generate public SSH key from private SSH key[^1]](#generate-public-ssh-key-from-private-ssh-key1)
@@ -91,6 +92,17 @@ Match host=SERVER2,SERVER3
    IdentitiesOnly yes
    IdentityFile ~/.ssh/id_ed25519_IDENTITY2
 ```
+
+### Naming Conventions
+
+`[project/service]-[role/purpose]-[tier]-[location]-[user]`
+
+1. **Project/Service**: The name of the project or service the server is associated with.
+2. **Role/Purpose**: The role or primary function of the server (e.g., web, db, git).
+3. **Tier**: The environment or stage (e.g., prod, staging, dev).
+4. **Location**: If applicable, the geographical location or data center.
+5. **User**: The primary user or role accessing the server.
+6. **Uniqueness**
 
 ### Unorganized
 
