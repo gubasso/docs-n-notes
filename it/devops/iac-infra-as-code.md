@@ -1,5 +1,9 @@
 # DevOps: IaC - Infra as Code
 
+- Terraform + Ansible
+
+- [ANSIBLE PROVIDER FOR TERRAFORM | IT HAS ARRIVED! | HOW TO USE](https://www.youtube.com/watch?v=MHJ_0JecM2Y)
+
 ```
 infra/
 ├── terraform/
