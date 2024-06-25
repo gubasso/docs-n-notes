@@ -134,17 +134,22 @@ roles/
         lookup_plugins/   # or other types of plugins, like lookup in this case
 ```
 
+- The `hostname1`, `hostname2`, etc can be aliases
+  - at the `inventory` file (`production`, `staging`, etc...)
+  - and as a dir name in `host_vars`
+  - if it has set the variable `ansible_host` for this host, with the fqdn or IP
+
 - `hostname1`
   - vars: public
   - vault: private [^2]
 
 Variable naming pattern:
 
-```ini
-ansible_user = {{ vaul_ansible_user }}
-ansible_ssh_private_key_file = {{ vaul_ansible_ssh_private_key_file }}
-ansible_port = {{ vault_ansible_port }}
-ansible_become_password = {{ vault_ansible_become_password }}
+```yaml
+ansible_user: "{{ vaul_ansible_user }}"
+ansible_ssh_private_key_file: "{{ vaul_ansible_ssh_private_key_file }}"
+ansible_port: "{{ vault_ansible_port }}"
+ansible_become_password: "{{ vault_ansible_become_password }}"
 ```
 
 ## Organization / Best Practices [^1]
