@@ -434,22 +434,15 @@ paste -s -d+ lines_to_sum | \bc
 
 ---
 
-Zellij (rust) - A terminal multiplexer workspace with batteries included https://www.reddit.com/r/rust/comments/mwukhz/zellij_a_terminal_multiplexer_workspace_with/?utm_medium=android_app&utm_source=share (like tmux)
-rust replacement
+(rust alternatives)
 
-REFERENCED:
-► https://starship.rs/ - Starship Prompt
-► https://the.exa.website/ - exa
-► https://github.com/sharkdp/bat - bat
-► https://github.com/BurntSushi/ripgrep - ripgrep (rg)
-► https://github.com/sharkdp/fd - fd
-► https://github.com/XAMPPRocky/tokei - tokei
-► https://github.com/dalance/procs - procs
-
-- bleach bit: clear system and browser files
-- dupeguru: find and clear duplicate files
-- qdirstat: stats for files and directories, find big files and directories
-
+- https://github.com/eza-community/eza (ls / tree alternative)
+► https://github.com/sharkdp/bat - bat (cat alternative)
+► https://github.com/BurntSushi/ripgrep - ripgrep (rg) (grep alternative)
+► https://github.com/sharkdp/fd - fd (find alternative)
+► https://github.com/XAMPPRocky/tokei - tokei (LoC, lines of code, code count, statistics about your code)
+► https://github.com/dalance/procs - procs (ps alternative)
+- Zellij (rust) - A terminal multiplexer workspace with batteries included https://www.reddit.com/r/rust/comments/mwukhz/zellij_a_terminal_multiplexer_workspace_with/?utm_medium=android_app&utm_source=share (like tmux alternative)
 
 # References:
 

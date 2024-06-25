@@ -51,10 +51,6 @@ https://devdojo.com/alexg/bash-random-password-generator
 **note taking apps (privacy, open source)**
 - standard notes https://standardnotes.com/?s=09
 
-**systemd**
-
-´systemctl edit myservice´
-best practice to edit a service
 
 **OBS Studio** record gravar video
 

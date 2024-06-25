@@ -3,6 +3,7 @@
 > ssh-agent, gpg-agent
 >
 > https://www.funtoo.org/Funtoo:Keychain
+> https://github.com/funtoo/keychain
 
 <!-- toc -->
 

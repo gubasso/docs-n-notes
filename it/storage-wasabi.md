@@ -1,6 +1,16 @@
 # Wasabi Storage
+
 > object storage, buckets, aws s3
 
+
+```sh
+# Wasabi US West 1 (Oregon)
+wasabi_service_url=s3.us-west-1.wasabisys.com
+wasabi_bucket_name=<my_bucket_name>
+echo "s3:https://$wasabi_service_url/$wasabi_bucket_name"
+```
+
+---
 
 - list bucket files with aws cli:
 
