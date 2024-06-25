@@ -4,7 +4,6 @@
 
 - [Related](#related)
 - [General](#general)
-- [Todo](#todo)
   - [Important and Useful links from all over the LeetCode](#important-and-useful-links-from-all-over-the-leetcode)
 
 <!-- tocstop -->
@@ -23,9 +22,6 @@ bucket sort: why is time complexity to O(1)?
 
 - https://leetcode.com/discuss/study-guide?currentPage=1&orderBy=hot&query=
 
-# Todo
-
-- [Explore > Learn](https://leetcode.com/explore/learn)
 
 ## [Important and Useful links from all over the LeetCode](https://leetcode.com/discuss/general-discussion/665604/Important-and-Useful-links-from-all-over-the-LeetCode)
 

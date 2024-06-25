@@ -6,7 +6,6 @@
 
 - [psql](#psql)
   - [Connect](#connect)
-- [TODO: To study](#todo-to-study)
 - [General PostgreSQL](#general-postgresql)
   - [Import/export data to/from postgresql:](#importexport-data-tofrom-postgresql)
 - [Users, Roles, Connections, Authentications](#users-roles-connections-authentications)
@@ -40,12 +39,6 @@ Unix socket and the Peer Authentication method
 psql postgres://username@/dbname
 ```
 - `username`: has to be a system username
-
-## TODO: To study
-
-- create a database:
-    - https://www.tutorialspoint.com/postgresql/postgresql_create_database.htm
-    - https://www.postgresql.org/docs/12/sql-createdatabase.html
 
 ## General PostgreSQL
 

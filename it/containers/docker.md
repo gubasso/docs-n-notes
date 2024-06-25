@@ -12,7 +12,6 @@
 - [Dockerfile](#dockerfile)
 - [Sharing Images](#sharing-images)
   - [Image to file[^5]](#image-to-file5)
-- [Arguments](#arguments)
   - [Usefull example:](#usefull-example)
 - [Persistent Data Storages](#persistent-data-storages)
   - [Volumes](#volumes)
@@ -396,11 +395,6 @@ Load a docker image from file:
 ```
 sudo docker load -i <path to image tar file>
 ```
-
-## Arguments
-
-(todo)
-- when to use this instead of env variables?
 
 ### Usefull example:
 
