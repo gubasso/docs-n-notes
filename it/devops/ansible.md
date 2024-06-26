@@ -536,9 +536,21 @@ Tips[^3.services]:
 
 `pre_task` runs before any other tasks.
 
+Conditional arm clause that can be put as a first task to run and test before executing the rest of the tasks.
+
+```yml
+- name: Ensure this playbook runs only on Debian systems
+  fail:
+    msg: "This playbook is intended to run on Debian-based systems only."
+  when: ansible_os_family != "Debian"
+  tags: always
+  become: false
+```
+
 ## References
 
 - [ArchWiki: Ansible](https://wiki.archlinux.org/title/Ansible)
+- Full Ansible Tutorial [^3]
 
 [^1]:https://docs.ansible.com/ansible/2.9/user_guide/playbooks_best_practices.html "Best Practices"
 [^2]: https://docs.ansible.com/ansible/2.9/user_guide/vault.html#file-level-encryption "File-level encryption: Creating Encrypted Files"
