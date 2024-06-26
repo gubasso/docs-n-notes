@@ -18,6 +18,8 @@
   - [Study](#study)
   - [Resoures](#resoures)
     - [Axum Web Framework](#axum-web-framework)
+  - [Crates Types / Compilation](#crates-types--compilation)
+    - [Summary:](#summary)
 
 <!-- tocstop -->
 
@@ -320,6 +322,40 @@ github.com/programmingrust
 
 - [Introduction to Axum - Brooks Builds - Playlist](https://www.youtube.com/playlist?list=PLrmY5pVcnuE-_CP7XZ_44HN-mDrLQV4nS)
 - Follow examples at: https://github.com/tokio-rs/axum/tree/main/examples
+
+
+## Crates Types / Compilation
+
+1. **bin** :
+- **Description** : This crate type is used to create an executable binary. When you set your crate type to `bin`, it means you're building a stand-alone executable that can be run directly from the command line.
+- **Generated Files** : The output is a binary executable file, typically without an extension (e.g., `my_executable`).
+2. **lib** :
+- **Description** : This creates a Rust library. The `lib` crate type can be used to generate a static or dynamic library, depending on the target settings.
+- **Generated Files** : The primary output will be a `lib<name>.rlib` file, which is an intermediate Rust library format used for further compilation steps.
+3. **dylib** :
+- **Description** : This creates a dynamic library that other Rust code can link against. The `dylib` type generates a shared library that contains Rust code and metadata.
+- **Generated Files** : The output is a `lib<name>.so` file on Linux. This file can be dynamically linked by other Rust applications or libraries.
+4. **staticlib** :
+- **Description** : This creates a static library containing all of the local crate's code along with all upstream dependencies. It’s typically used to link Rust code into a non-Rust application statically.
+- **Generated Files** : The output is a `lib<name>.a` file on Linux. This archive file can be statically linked into other applications, providing all necessary code and dependencies.
+5. **cdylib** :
+- **Description** : This creates a dynamic system library, which can be loaded by other programming languages (e.g., C, Python). It’s useful for creating libraries that will be used in a mixed-language environment.
+- **Generated Files** : The output is a `lib<name>.so` file on Linux. This shared library can be dynamically loaded by non-Rust applications.
+6. **rlib** :
+- **Description** : This crate type is used to create a Rust library file that acts as an intermediate artifact. It contains Rust-specific metadata and is used by the Rust compiler for further compilation. Unlike `staticlib`, `rlib` files are not meant to be directly linked into non-Rust applications.
+- **Generated Files** : The output is a `lib<name>.rlib` file. This file includes both compiled code and Rust-specific metadata needed for subsequent compilation steps.
+
+### Summary:
+
+- **bin** : Generates an executable binary (e.g., `my_executable`).
+- **lib** : Generates a Rust library, typically resulting in a `lib<name>.rlib` file.
+- **dylib** : Generates a dynamic library for Rust, resulting in a `lib<name>.so` file.
+- **staticlib** : Generates a static library for use in non-Rust applications, resulting in a `lib<name>.a` file.
+- **cdylib** : Generates a dynamic system library for use in other languages, resulting in a `lib<name>.so` file.
+- **rlib** : Generates an intermediate Rust library file, resulting in a `lib<name>.rlib` file.
+
+Each crate type serves a specific purpose in Rust's ecosystem, providing flexibility in how Rust code is compiled, linked, and integrated with other systems and languages. If you have any specific questions about these types or their uses, feel free to ask!
+
 
 [^1]: https://www.youtube.com/watch?v=VuVOyUbFSI0 "Rust to Postgres Database with SQLX - Rust Lang Tutorial 2021 - Jeremy Chone"
 [^2]: https://doc.rust-lang.org/rust-by-example/error/option_unwrap/question_mark.html "Unpacking options with ?"
