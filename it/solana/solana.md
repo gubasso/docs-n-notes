@@ -19,8 +19,15 @@
 
 - https://solana.com/developers
 - https://solanacookbook.com/
-- https://www.soldev.app/
 - https://www.anchor-lang.com/
+- https://book.anchor-lang.com/
+- https://openquest.xyz/tracks/build-on-solana
+- https://dev.to/edge-and-node/the-complete-guide-to-full-stack-solana-development-with-react-anchor-rust-and-phantom-3291
+- https://www.brianfriel.xyz/learning-how-to-build-on-solana/
+- https://github.com/ironaddicteddog/anchor-escrow
+- https://lorisleiva.com/create-a-solana-dapp-from-scratch
+- https://www.soldev.app/
+
 - https://docs.solanalabs.com/cli/usage#deploy-program
 - https://docs.rs/solana-program/latest/solana_program/
 - https://github.com/solana-labs/rbpf
@@ -36,7 +43,10 @@
 
 ## General
 
-wallet: https://backpack.app/
+- https://backpack.app/ (solana wallet)
+  - open source
+- https://phantom.app/
+  - closed source
 
 - schedule transactions:
   - https://www.clockwork.xyz/

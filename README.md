@@ -2,11 +2,7 @@
 
 Personal notes and documentations for tech and a bunch of unrelated topics.
 
-<!-- vim-markdown-toc GitLab -->
-
-* [Unorganized](#unorganized)
-
-<!-- vim-markdown-toc -->
+<!--toc-->
 
 ## Unorganized
 
@@ -81,4 +77,14 @@ cloud management options:
 - https://www.keyhelp.de/en/
 - https://selfhosted.libhunt.com/compare-sandstorm-vs-cloudron
 - https://selfhosted.libhunt.com/compare-sandstorm-vs-sovereign
+
+## Web Resources (Utils)
+
+- [Emoji Cheat Sheet](https://www.webfx.com/tools/emoji-cheat-sheet/)
+
+## Markdown notes
+
+### Github diagrams
+
+Mermaid, geoJSON and topoJSON, and ASCII STL.
 

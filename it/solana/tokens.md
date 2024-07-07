@@ -4,7 +4,6 @@
 cargo install spl-token-cli
 spl-token --version
 solana config set --url devnet
-
 ```
 
 Creates a mint account
