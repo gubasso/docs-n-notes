@@ -5,6 +5,7 @@
 
 - [hooks](#hooks)
 - [Commands](#commands)
+  - [Merge branches (one-liner)](#merge-branches-one-liner)
   - [Checkout vs Switch](#checkout-vs-switch)
 - [Branches](#branches)
   - [Clone and switch to a branch](#clone-and-switch-to-a-branch)
@@ -27,6 +28,21 @@
 - https://www.viget.com/articles/two-ways-to-share-git-hooks-with-your-team/
 
 ## Commands
+
+### Merge branches (one-liner)
+
+The easiest option is to merge the main branch into the feature branch using something like the following:
+
+```sh
+git checkout feature
+git merge main
+```
+
+Or, you can condense this to a one-liner:
+
+```sh
+git merge feature main
+```
 
 ### Checkout vs Switch
 
