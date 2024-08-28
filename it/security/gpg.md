@@ -20,6 +20,8 @@ Config:
 # cache password really long time
 max-cache-ttl 60480000
 default-cache-ttl 60480000
+# Increase the Number of Rounds for Passphrase Hashing
+s2k-count 65011712
 ```
 
 Reload the agent:
@@ -30,6 +32,25 @@ gpg-connect-agent reloadagent /bye
 
 
 ## Unorganized
+
+
+Generate a new key:
+
+```sh
+gpg --expert --full-generate-key
+```
+
+Get gpg fingerprint
+
+```sh
+gpg --fingerprint [key-id or email]
+```
+
+Retrieve a gpg key from a gpg keyserver
+
+```sh
+gpg --keyserver keyserver.ubuntu.com --recv-keys [Key-ID]
+```
 
 - GPG: [Armored ASCII vs. Binary GPG Files - Linux Journal](https://www.linuxjournal.com/files/linuxjournal.com/linuxjournal/articles/048/4892/4892s2.html)
 "Armored ASCII (whose filename suffix is .asc) is the most portable data format gpg uses, in contrast to gpg's default binary format (which uses the filename suffix .gpg). Unlike this binary format, Armored ASCII can be copied and pasted, into e-mail for example. If saved to disk, an Armored ASCII file is identical to a normal text file. For this reason you'll probably wish to use Armored ASCII most of the time when exporting, backing up and transmitting keys."

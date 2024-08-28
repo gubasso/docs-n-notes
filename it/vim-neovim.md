@@ -3,7 +3,16 @@
 
 ## General
 
-https://mason-registry.dev/registry/list
+- https://mason-registry.dev/registry/list
+- mason -> mason-lspconfig: https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
+
+python environment: https://www.reddit.com/r/neovim/comments/14316t9/help_me_to_get_the_best_python_neovim_environment/
+
+- https://github.com/stevearc/conform.nvim
+  - Lightweight yet powerful formatter plugin for Neovim
+
+- https://github.com/mfussenegger/nvim-lint
+  - An asynchronous linter plugin for Neovim complementary to the built-in Language Server Protocol support.
 
 fold / unfold
 https://neovim.io/doc/user/fold.html

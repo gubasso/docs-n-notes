@@ -234,6 +234,7 @@ https://stackoverflow.com/questions/25106554/why-doesnt-println-work-in-rust-uni
 
 ```
 cargo test -- --nocapture
+cargo nextest run --show-output
 
 cargo test -p p997_find_the_town_judge -- --nocapture --test-threads 1
 
