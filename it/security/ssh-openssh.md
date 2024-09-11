@@ -18,6 +18,21 @@
 
 <!-- tocstop -->
 
+## General
+
+Test ssh access (in this example, at a gitolite server):
+
+```
+❯ ssh -T gitcwnt-gubasso
+hello gubasso, this is git@srv435827 running gitolite3 3.6.12-1 (Debian) on git 2.34.1
+
+ R W	cwnt/docker-apps
+ R W	cwnt/infra
+ R W	cwnt/password-store
+ R W	gubasso/password-store
+ R W	gubasso/personal-notes
+```
+
 ## Basic access
 
 Examples:
