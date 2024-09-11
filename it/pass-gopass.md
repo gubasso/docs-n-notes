@@ -61,12 +61,17 @@ gopass sync --store my-company
 
 **fields / layout / template**
 
-- password: first, no key, or: (alias `k`)
+- default:
+  - password: first, no key, or: (alias `p`)
+  - username: (alias `u`)
+  - url: (alias `l`)
+
+- password: first, no key, or: (alias `p`)
   - `password:`
   - `pass:`
   - `secret:`
   - `key:`
-- username: (alias `n`)
+- username: (alias `u`)
   - `username:`
   - `login:`
   - `user:`
@@ -75,6 +80,8 @@ gopass sync --store my-company
   - `link`
 - notes/comments: free text: (alias `c`)
   - `comments:`
+- totp: (alias `t`)
+  - `totp`
 - credit cards:
 ```
 #:
