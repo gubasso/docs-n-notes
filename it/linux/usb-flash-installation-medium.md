@@ -1,6 +1,4 @@
-# Disk Formatting Partitioning
-
-## USB flash installation medium
+# USB flash installation medium
 
 > https://wiki.archlinux.org/title/USB_flash_installation_medium
 

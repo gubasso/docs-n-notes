@@ -349,8 +349,6 @@ augroup rust_work
 augroup END
 ```
 
-- [Check if Directory is Mounted in Bash](https://www.baeldung.com/linux/bash-is-directory-mounted)
-    - to use with gocryptfs, script to check if vault is already mounted
 
 # ffmpeg
 
