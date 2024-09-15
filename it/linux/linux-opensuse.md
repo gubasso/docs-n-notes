@@ -15,7 +15,6 @@
 ## General
 
 [Main:Dell Precision 5530 Setup](https://en.opensuse.org/Main:Dell_Precision_5530_Setup)
-[SDB:Encrypted root file system](https://en.opensuse.org/SDB:Encrypted_root_file_system)
 
 ## Install Guide
 
@@ -36,8 +35,19 @@ gpg --fingerprint "openSUSE Project Signing Key <opensuse@opensuse.org>"
 gpg --verify openSUSE-Tumbleweed-NET-x86_64-Snapshot20240815-Media.iso.sha256.asc openSUSE-Tumbleweed-NET-x86_64-Snapshot20240815-Media.iso
 ```
 
+- [usb-flash-installation-medium](./usb-flash-installation-medium.md)
+
+- [opensuse-tumbleweed-partition-table](./opensuse-tumbleweed-partition-table.md)
+  - [SDB:Encrypted root file system](https://en.opensuse.org/SDB:Encrypted_root_file_system)
+    - If swap partition: LUKS + LVM
+      - or will have to type password twice
+      - one for `/` and other for the swap partition
+
+- [opensuse-tumbleweed-installation-settings](./opensuse-tumbleweed-installation-settings.md)
 
 ## Tumbleweed
+
+- [swap-file-on-btrfs](/it/linux/btrfs-swapfile.md)
 
 > https://en.opensuse.org/Portal:Tumbleweed
 
