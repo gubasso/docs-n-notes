@@ -22,6 +22,13 @@ vim/neovim config:
 au BufNewFile,BufRead /dev/shm/gopass.* setlocal noswapfile nobackup noundofile
 ```
 
+## Clone Existing
+
+```sh
+gopass clone git@example.com/pass.git
+gopass clone git@example.com/pass-work.git work # a work store
+```
+
 ## Start
 
 - new password store
@@ -31,13 +38,6 @@ au BufNewFile,BufRead /dev/shm/gopass.* setlocal noswapfile nobackup noundofile
 gopass init
 # another store
 gopass init --store my-company
-```
-
-- add git remote
-
-```sh
-gopass git remote add origin git@gh.com/Woile/keys.git
-gopass git remote add --store my-company origin git@gh.com/Woile/keys.git
 ```
 
 - sync with remotes
