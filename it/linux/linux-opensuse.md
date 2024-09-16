@@ -66,6 +66,26 @@ sudo zypper dup
 
 Add entire Packman repository:
 
+http://packman.links2linux.org/mirrors
+
+```txt
+http://mirror.karneval.cz/pub/linux/packman/
+rsync://mirror.karneval.cz/packman
+http://ftp.fau.de/packman/
+http://ftp.halifax.rwth-aachen.de/packman/
+http://ftp.gwdg.de/pub/linux/misc/packman/
+ftp://ftp.fau.de/packman/
+ftp://ftp.halifax.rwth-aachen.de/packman/
+ftp://ftp.gwdg.de/pub/linux/misc/packman/
+rsync://ftp.halifax.rwth-aachen.de/packman
+```
+
+test speed
+
+```sh
+while read -r url; do echo -n "$url: "; curl -s -w '%{speed_download}\n' -o /dev/null "${url}suse/openSUSE_Tumbleweed/repodata/repomd.xml"; done < packman_mirrors.txt
+```
+
 ```sh
 zypper ar -cfp 90 http://ftp.gwdg.de/pub/linux/misc/packman/suse/\
 openSUSE_Tumbleweed/ packman

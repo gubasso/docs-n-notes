@@ -22,6 +22,17 @@ vim/neovim config:
 au BufNewFile,BufRead /dev/shm/gopass.* setlocal noswapfile nobackup noundofile
 ```
 
+## !! ATENTION
+
+After setup a new or existing store, run inside the git repo:
+
+```sh
+# at $HOME/.local/share/gopass/stores/my-store
+git config --local --unset core.sshcommand
+```
+
+This will fix multiple ssh ids issues when syncing stores.
+
 ## Clone Existing
 
 ```sh
