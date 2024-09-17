@@ -15,6 +15,8 @@
 
 <!-- tocstop -->
 
+[GOPASS CHEAT SHEET](https://woile.github.io/gopass-cheat-sheet/)
+
 vim/neovim config:
 
 ```
