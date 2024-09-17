@@ -117,7 +117,7 @@ https://www.rosipov.com/blog/use-vimdiff-as-git-mergetool/
 
 ### Merge just a file/path from another branch
 
-merge file
+merge file / merge path / merge dir
 
 [How can I selectively merge or pick changes from another branch in Git?](https://stackoverflow.com/questions/449541/how-can-i-selectively-merge-or-pick-changes-from-another-branch-in-git)
 
