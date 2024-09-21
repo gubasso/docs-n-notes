@@ -62,6 +62,12 @@ gopass sync
 gopass sync --store my-company
 ```
 
+- delete / remove a store/mount
+
+```sh
+gopass mounts remove <store-name>
+```
+
 ## Generator
 
 - [Restricting the characters in generated passwords](https://github.com/gopasspw/gopass/blob/master/docs/features.md#restricting-the-characters-in-generated-passwords)
