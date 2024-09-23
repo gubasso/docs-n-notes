@@ -127,6 +127,8 @@ stow never overrides anything
 
 # jq
 
+- `jq` alternative written in rust: https://github.com/01mf02/jaq
+
 https://jqplay.org/
 https://programminghistorian.org/en/lessons/json-and-jq
 
