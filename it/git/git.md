@@ -399,6 +399,58 @@ merge tools:
     - [Github samoshkin/vim-mergetool: Efficient way of using Vim as a Git mergetool](https://www.reddit.com/r/vim/comments/b0jjgw/github_samoshkinvimmergetool_efficient_way_of/)
         - difference between vim-mergetool and fugitive
 
+
+## Download changes to another branch
+
+You:
+
+I am at master branch and run:
+git fetch origin develop:develop
+
+ChatGPT:
+
+The command you ran (`git fetch origin develop:develop`) fetches the `develop` branch from the remote repository (in this case, `origin`) and updates (or creates) a local branch called `develop` to match the remote one.
+Here’s a breakdown of the command:
+
+- `git fetch`: Fetches changes from the remote repository without modifying your working directory or active branch.
+- `origin`: Refers to the remote repository, which by default is often named `origin`.
+- `develop:develop`: The syntax `remote_branch:local_branch`. This means you are fetching the `develop` branch from `origin` and updating or creating a local branch called `develop`.
+Since you're currently on the `master` branch, this will not affect your current branch. The fetched branch (`develop`) will be available in your local repository but won't be checked out or merged into `master` unless you explicitly switch to `develop` or merge it.If you want to merge the `develop` branch into `master` after fetching, you could do:
+
+```bash
+git merge develop
+```
+Or, if you want to check out `develop`, you would do:
+
+```bash
+git checkout develop
+```
+
+## Get the diff from the start of a branch
+
+To get the diff from the start of a branch in Git, you can use the following command:
+
+```bash
+git diff $(git merge-base --fork-point <branch_name>)..<branch_name>
+```
+
+Here's how it works:
+ 
+1. `git merge-base --fork-point <branch_name>`: This finds the point where the branch diverged from its upstream (i.e., where the branch started).
+ 
+2. `git diff <starting_point>..<branch_name>`: This command then shows the difference between the starting point (where the branch started) and the current state of the branch.
+
+If you're already on the branch, you can simplify it to:
+
+
+```bash
+git diff $(git merge-base --fork-point HEAD)
+```
+
+This will show you all the changes from the start of the branch to your current working state.
+
+Let me know if you need further clarification or assistance!
+
 ## References:
 
 [^1]: [Git : How to recursively add all files or folders to a repository?](https://thispointer.com/git-how-to-recursively-add-all-files-or-folders-to-a-repository/)
