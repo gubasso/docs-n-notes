@@ -136,63 +136,6 @@ From outside module, call:
 from yourpackage import *
 ```
 
-# Poetry
-
-```pyproject.toml
-[tool.poetry.scripts]
-my-script = "my_module:main"
-```
-
-`poetry run my-script`
-
-`poetry export --output requirements.txt`
-
-- `PIP_DISABLE_PIP_VERSION_CHECK=1`: pip install -r /tmp/requirements.txt
-
-To deploy in production with Docker (example):[^6]
-
-```entrypoint.sh
-python main.py
-or
-python myapp
-```
-
-About `__main__.py` as entrypoint: https://docs.python.org/3/library/__main__.html
-
-## Deploy Example 1: `requirements.txt`
-
-- Generate `requirements.txt` with a shell script, and build image[^7][^9]:
-
-```build.sh
-poetry export -o requirements.txt
-docker build .
-```
-
-```Dockerfile
-FROM python:3.8-slim-buster
-PIP_DISABLE_PIP_VERSION_CHECK=1
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-RUN pip install /tmp/myapp
-ENTRYPOINT ["entrypoint.sh"]
-```
-
-## Deploy Example 2: Poetry inside container[^7]
-
-```Dockerfile
-FROM python:3.8-slim-buster
-PIP_DISABLE_PIP_VERSION_CHECK=1
-WORKDIR /app
-RUN pip install poetry
-COPY pyproject.toml poetry.lock ./
-RUN poetry install --no-root --no-dev
-COPY . .
-RUN poetry install --no-dev
-ENTRYPOINT ["entrypoint.sh"]
-```
-
 ## References
 
 [^1]: [What is the best project structure for a Python application?](https://stackoverflow.com/a/3419951)
