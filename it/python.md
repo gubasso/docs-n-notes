@@ -4,6 +4,12 @@
 
 # General
 
+python pretty print (standard library)
+
+```python
+from pprint import pprint as pp
+```
+
 - pre-commit examle in a python project
   - https://github.com/GitGuardian/ggshield/blob/main/.pre-commit-config.yaml
 
