@@ -1,5 +1,14 @@
 # AWS: EC2 VPS App Servers
 
+## Practical
+
+ssh to an ec2 instance
+
+```sh
+ssh -i ~/.ssh/<my-private-aws-key>.pem ec2-user@<public-ip-address>
+```
+
+## General
 
 App Servers:
 Application servers are the compute instances that run your application code
