@@ -57,8 +57,8 @@ EDITOR=vim visudo
 or
 **`/etc/sudoers.d/99-local-sudoers`**
 ```
-user_name   ALL=(ALL) ALL
-%wheel      ALL=(ALL) ALL
+user_name   ALL=(ALL:ALL) ALL
+%wheel      ALL=(ALL:ALL) ALL
 Defaults passwd_timeout=0
 Defaults timestamp_timeout=10
 # Comment or delete following:
