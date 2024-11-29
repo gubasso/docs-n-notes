@@ -1,19 +1,6 @@
 # Shell
 > $shell $zsh $bash $terminal
 
-
-<!-- toc GFM -->
-
-* [General](#general)
-* [read stdin in function in bash script ](#read-stdin-in-function-in-bash-script-)
-* [Key-value pair](#key-value-pair)
-* [Files maching list of files](#files-maching-list-of-files)
-* [Case statement](#case-statement)
-* [Loop](#loop)
-* [Parameter Expansion](#parameter-expansion)
-* [Flags](#flags)
-  - [shflags](#shflags)
-
 <!-- toc -->
 
 - [General](#general)
@@ -29,6 +16,16 @@
 <!-- tocstop -->
 
 ## General
+
+Edit files as root but keeping the editor configuration:
+
+> https://wiki.archlinux.org/title/Sudo#Editing_files
+
+```sh
+SUDO_EDITOR=vim sudoedit /etc/file
+```
+
+---
 
 Functions to work with issues (bug issue tracker) and git:
 
