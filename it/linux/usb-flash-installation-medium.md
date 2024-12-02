@@ -40,11 +40,7 @@ The parted command you used creates the partition but does not actually format i
 sudo mkfs.vfat /dev/sdX1
 ```
 
-Replace `/dev/sdX1` with the appropriate partition name. If you created an ext4 partition, you would use:
-
-```sh
-sudo mkfs.ext4 /dev/sdX1
-```
+Replace `/dev/sdX1` with the appropriate partition name.
 
 This will format the partition you created with `parted` into the specified filesystem. After this step, your USB drive should be ready to use.
 
