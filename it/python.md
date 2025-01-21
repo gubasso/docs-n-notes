@@ -1,23 +1,22 @@
 # Python
 
-[toc]
+## Install module locally virtual environment
 
-# General
+"If you install it in a virtual env you can do it like `pip install -e .`  and that should add the command line to path"
 
-python pretty print (standard library)
+- Within venv
+- Work as it is a installed command
 
-```python
-from pprint import pprint as pp
-```
+Example:
 
-- pre-commit examle in a python project
-  - https://github.com/GitGuardian/ggshield/blob/main/.pre-commit-config.yaml
+- Clone [SUSE-Enceladus / img-proof](https://github.com/SUSE-Enceladus/img-proof/tree/main)
+- cd to project root
+- create/activate venv
+- run `pip install -e .`
+- execute `img-proof ...` in the terminal
 
-**[Python – List Files in a Directory](https://www.geeksforgeeks.org/python-list-files-in-a-directory/)**
 
----
-
-**Run shell command with python**
+## Run shell command with python
 
 [How to Execute Shell Commands with Python](https://janakiev.com/blog/python-shell-commands/)
 
@@ -42,6 +41,34 @@ p1 = Popen(input, stdout=PIPE)
 p2 = Popen(cmd, stdin=p1.stdout, stdout=PIPE)
 print("Output from last process : " + (p2.communicate()[0]).decode())
 ```
+
+## General
+
+- python types
+  - [mypy: Type hints cheat sheet](https://mypy.readthedocs.io/en/latest/cheat_sheet_py3.html)
+  - [fastapi: Python Types Intro](https://fastapi.tiangolo.com/python-types/)
+
+- library for CLI library
+  - http://docopt.org/ Command-line interface description language
+  - https://github.com/docopt/docopt
+
+python pretty print (standard library)
+
+```python
+from pprint import pprint as pp
+```
+
+- pretty print rich library color
+  - https://rich.readthedocs.io/en/stable/introduction.html
+
+
+- pre-commit examle in a python project
+  - https://github.com/GitGuardian/ggshield/blob/main/.pre-commit-config.yaml
+
+**[Python – List Files in a Directory](https://www.geeksforgeeks.org/python-list-files-in-a-directory/)**
+
+---
+
 
 ---
 
@@ -71,7 +98,7 @@ Data validation with Cerberus:
 - https://docs.python-cerberus.org/en/stable/usage.html
 
 
-# Project Structure (files / directories)
+## Project Structure (files / directories)
 
 - Models for apps layouts/structures (excelent resource)[^5]
 
@@ -121,7 +148,7 @@ helloworld/
 
 - `__init__.py`: is not required anymore (3.3+), but needed for compatibilty issues (as for correct use of `pytest`)[^3][^4]
 
-# Modules / Imports
+## Modules / Imports
 
 - About python modules/import[^2][^1]
     - Absolute / Relative paths to imports: https://realpython.com/absolute-vs-relative-python-imports/

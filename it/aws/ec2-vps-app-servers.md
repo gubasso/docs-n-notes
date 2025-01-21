@@ -8,6 +8,22 @@ ssh to an ec2 instance
 ssh -i ~/.ssh/<my-private-aws-key>.pem ec2-user@<public-ip-address>
 ```
 
+## Cli
+
+### Command examples:
+
+Get images information with filters
+
+```sh
+aws ec2 describe-images \
+  --filters "Name=name,Values=*suse*" "Name=name,Values=*sles*" "Name=name,Values=*-sap-*" "Name=name,Values=*byos*" \
+  --query "Images[*].Name"
+
+aws ec2 describe-images \
+  --filters "Name=name,Values=suse-sles-sap-15-sp6-byos-v20241113-hvm-ssd-x86_64*" \
+  --query "Images[*].Name"
+```
+
 ## General
 
 App Servers:
