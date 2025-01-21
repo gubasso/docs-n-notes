@@ -17,6 +17,16 @@
 
 ## General
 
+Edit files as root but keeping the editor configuration:
+
+> https://wiki.archlinux.org/title/Sudo#Editing_files
+
+```sh
+SUDO_EDITOR=vim sudoedit /etc/file
+```
+
+---
+
 Functions to work with issues (bug issue tracker) and git:
 
 ```sh
