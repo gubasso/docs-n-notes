@@ -24,6 +24,8 @@ my-script = "my_module:main"
 
 `poetry export --output requirements.txt`
 
+`poetry export --output requirements.txt --without-hashes`
+
 - `PIP_DISABLE_PIP_VERSION_CHECK=1`: pip install -r /tmp/requirements.txt
 
 To deploy in production with Docker (example):[^6]
@@ -80,8 +82,8 @@ ENTRYPOINT ["entrypoint.sh"]
 
 To reset a Poetry virtual environment, you can follow these steps to effectively remove the current virtual environment and recreate it. This can be useful if your environment becomes corrupted or you want to start fresh.
 
-#### Steps to Reset a Poetry Virtual Environment: 
- 
+#### Steps to Reset a Poetry Virtual Environment:
+
 1. **Remove the Existing Virtual Environment** :
 Use the following command to remove the current virtual environment:
 
@@ -107,7 +109,7 @@ If you want to remove all virtual environments for the project, you can use:
 ```bash
 poetry env remove --all
 ```
- 
+
 2. **Recreate the Virtual Environment** :
 After removing the old virtual environment, you can recreate a new environment with:
 
@@ -115,7 +117,7 @@ After removing the old virtual environment, you can recreate a new environment w
 poetry install
 ```
 This will install all the dependencies listed in your `pyproject.toml` file into a new virtual environment.
- 
+
 3. **Check the Status** :
 You can verify the status of your new virtual environment by running:
 

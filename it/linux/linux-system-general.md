@@ -23,7 +23,10 @@
 
 ## Disk usage
 
-- (selected, cli) https://github.com/Dundee/gdu
+> https://wiki.archlinux.org/title/Core_utilities#du_alternatives
+
+- selected, cli (rust): https://github.com/bootandy/dust
+- go: https://github.com/Dundee/gdu
 
 - https://wiki.archlinux.org/title/List_of_applications/Utilities#Disk_usage_display
   - https://github.com/Dundee/gdu

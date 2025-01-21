@@ -14,9 +14,15 @@ Duplicating a Brave browser profile on Linux involves copying specific profile d
 
 ---
 
-**Step-by-Step Guide** **1. Close Brave Browser Completely**
+**Step-by-Step Guide**
+
+**1. Close Brave Browser Completely**
 Ensure that all instances of Brave Browser are closed to prevent any file conflicts.
-**2. Open Terminal** Press `Ctrl + Alt + T` to open the terminal.**3. Navigate to Brave's User Data Directory** Brave stores user data in `~/.config/BraveSoftware/Brave-Browser/`. Navigate to this directory by running:
+
+**2. Open Terminal**
+
+**3. Navigate to Brave's User Data Directory**
+Brave stores user data in `~/.config/BraveSoftware/Brave-Browser/`. Navigate to this directory by running:
 
 ```Copy code
 cd ~/.config/BraveSoftware/Brave-Browser/
@@ -30,10 +36,6 @@ cp -r Brave-Browser Brave-Browser-backup
 **5. Identify Your Current Profile Directory**
 List the contents to see existing profiles:
 
-
-```Copy code
-ls
-```
 
 You should see directories like:
 
@@ -98,6 +100,14 @@ nano 'Profile 1'/Preferences
 - Look for the `"profile"` section.
 - Change the `"name"` field to match your new profile name (e.g., `"Duplicated Profile"`).
 - Save and exit (`Ctrl + O`, `Enter`, `Ctrl + X`).
+
+Or with `jq`:
+
+```sh
+jq '.profile.name = "Duplicated Profile"' \
+  "Profile 1/Preferences" > "Profile 1/Preferences.tmp" \
+  && mv "Profile 1/Preferences.tmp" "Profile 1/Preferences"
+```
 
 **12. Start Brave Browser**
 

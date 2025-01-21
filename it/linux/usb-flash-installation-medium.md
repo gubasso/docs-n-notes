@@ -40,11 +40,7 @@ The parted command you used creates the partition but does not actually format i
 sudo mkfs.vfat /dev/sdX1
 ```
 
-Replace `/dev/sdX1` with the appropriate partition name. If you created an ext4 partition, you would use:
-
-```sh
-sudo mkfs.ext4 /dev/sdX1
-```
+Replace `/dev/sdX1` with the appropriate partition name.
 
 This will format the partition you created with `parted` into the specified filesystem. After this step, your USB drive should be ready to use.
 
@@ -65,31 +61,31 @@ ls -l /dev/disk/by-id/usb-*
 - using [cat(1)](https://man.archlinux.org/man/cat.1):
 
 ```
-cat path/to/archlinux-version-x86_64.iso > /dev/disk/by-id/usb-My_flash_drive
+sudo cat path/to/archlinux-version-x86_64.iso > /dev/disk/by-id/usb-My_flash_drive
 ```
 
 - using [cp(1)](https://man.archlinux.org/man/cp.1):
 
 ```
-cp path/to/archlinux-version-x86_64.iso /dev/disk/by-id/usb-My_flash_drive
+sudo cp path/to/archlinux-version-x86_64.iso /dev/disk/by-id/usb-My_flash_drive
 ```
 
 - using [dd](https://wiki.archlinux.org/title/Dd "Dd"):
 
 ```
-dd bs=4M if=path/to/archlinux-version-x86_64.iso of=/dev/disk/by-id/usb-My_flash_drive conv=fsync oflag=direct status=progress
+sudo dd bs=4M if=path/to/archlinux-version-x86_64.iso of=/dev/disk/by-id/usb-My_flash_drive conv=fsync oflag=direct status=progress
 ```
 
 - using [tee](https://wiki.archlinux.org/title/Tee "Tee"):
 
 ```
-tee < path/to/archlinux-version-x86_64.iso > /dev/disk/by-id/usb-My_flash_drive
+sudo tee < path/to/archlinux-version-x86_64.iso > /dev/disk/by-id/usb-My_flash_drive
 ```
 
 - using [pv](https://archlinux.org/packages/?name=pv):
 
 ```
-pv path/to/archlinux-version-x86_64.iso -Yo /dev/disk/by-id/usb-My_flash_drive
+sudo pv path/to/archlinux-version-x86_64.iso -Yo /dev/disk/by-id/usb-My_flash_drive
 ```
 
 Executing:
