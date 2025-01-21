@@ -1,19 +1,6 @@
 # Shell
 > $shell $zsh $bash $terminal
 
-
-<!-- toc GFM -->
-
-* [General](#general)
-* [read stdin in function in bash script ](#read-stdin-in-function-in-bash-script-)
-* [Key-value pair](#key-value-pair)
-* [Files maching list of files](#files-maching-list-of-files)
-* [Case statement](#case-statement)
-* [Loop](#loop)
-* [Parameter Expansion](#parameter-expansion)
-* [Flags](#flags)
-  - [shflags](#shflags)
-
 <!-- toc -->
 
 - [General](#general)
