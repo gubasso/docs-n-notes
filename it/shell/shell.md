@@ -15,6 +15,36 @@
 
 <!-- tocstop -->
 
+## Processes
+
+running process
+ctrl+z
+process running and paused in background
+bg (check background process)
+disown (disown process from shell and it keeps running in background)
+
+**find process running in background**
+
+```sh
+# If you ran the script with & in your current shell, use:
+jobs -l
+
+# You can check if your script is running using pgrep:
+pgrep -fl my_script.py
+ps aux | grep my_script.py
+# find by user
+ps -u $USER | grep python
+ps -u $USER | grep my_script.py
+# by pid
+ps -p <PID>
+# or: (If kill -0 succeeds, the process is running; otherwise, it's not.)
+kill -0 <PID> 2>/dev/null && echo "Running" || echo "Not running"
+# look up the process details from a pid in a text file
+ps -p $(cat some_file.pid)
+# kill from a pid saved in a text file
+kill $(cat some_file.pid)
+```
+
 ## General
 
 Edit files as root but keeping the editor configuration:
@@ -79,12 +109,6 @@ runuser -u www-data -- php7 /app/maintenance/update.php
 ```
 
 ---
-
-running process
-ctrl+z
-process running and paused in background
-bg (check background process)
-disown (disown process from shell and it keeps running in background)
 
 ---
 
