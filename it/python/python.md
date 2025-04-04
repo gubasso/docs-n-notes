@@ -60,6 +60,9 @@ from pprint import pprint as pp
 
 - pretty print rich library color
   - https://rich.readthedocs.io/en/stable/introduction.html
+```python
+from rich.pretty import pprint
+```
 
 
 - pre-commit examle in a python project
