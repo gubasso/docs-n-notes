@@ -32,14 +32,6 @@ Formatter / prettier for neovim in lua:
 - [Neovim - Null-ls: a quick explanation](https://www.youtube.com/watch?v=e3xxkEbhG0o)
 
 
-Spellcheck / spell:
-
-```vimscript
-:spellr
-```
-
-- repeats the last spelling correction for all matches that was corrected
-
 vimwiki:
 
 Find what filetype is loaded in vim / how to know which filetype
