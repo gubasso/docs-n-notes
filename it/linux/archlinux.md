@@ -23,7 +23,12 @@
 
 - Easy install: [How To Install Arch Linux in 5 Minutes || BRAND NEW EASY Arch Linux Installation Guide 2023 - Ksk Royal](https://www.youtube.com/watch?v=e-4YOymosJo)
 
-## Packages / AUR
+## Packages / Pacman / AUR
+
+- system update: https://github.com/Antiz96/arch-update
+  - An update notifier & applier for Arch Linux that assists you with important pre / post update tasks.
+Includes a dynamic & clickeable systray applet for an easy integration with any Desktop Environment / Window Manager.
+
 
 ```sh
 paru -Sccd
