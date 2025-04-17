@@ -15,6 +15,7 @@ sudo fdisk -l
 ```sh
 sudo wipefs --all /dev/disk/by-id/usb-_My_flash_drive_
 ```
+- Has to pop of a message with sucess
 
 ...as root, before [repartitioning](https://wiki.archlinux.org/title/Repartition "Repartition") and [reformatting](https://wiki.archlinux.org/title/Reformat "Reformat") the USB drive.
 
