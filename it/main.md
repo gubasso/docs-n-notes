@@ -42,15 +42,8 @@ https://devdojo.com/alexg/bash-random-password-generator
     - https://thegreata.pe/articles/2018/02/11/clojure-vim-and-tmux-using-your-editor-as-a-repl-scratchpad/
     - https://github.com/preservim/vimux
 
-**wipe / erase / “format” disk or partition**
-
-- pv --timer --rate --stop-at-size -s "$(blockdev --getsize64 /dev/sd"XY" )" /dev/zero > /dev/sd"XY"
-- cp /dev/zero /dev/sd"XY"
-- dd if=/dev/zero of=/dev/sdX bs=4096 status=progress
-
 **note taking apps (privacy, open source)**
 - standard notes https://standardnotes.com/?s=09
-
 
 **OBS Studio** record gravar video
 
