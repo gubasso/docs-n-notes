@@ -1,7 +1,7 @@
 repos:
   # https://docs.franco.net.eu.org/md-toc/pre_commit_hook.html
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: 'v4.4.0'
+    rev: 'v5.0.0'
     hooks:
       - id: check-added-large-files
         args: ['--maxkb=16384']
@@ -13,7 +13,7 @@ repos:
       - id: destroyed-symlinks
       - id: detect-private-key
   - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
-    rev: '2.7.2'
+    rev: '3.2.1'
     hooks:
       - id: editorconfig-checker
         alias: ec
@@ -26,6 +26,6 @@ repos:
       - id: markdown-toc
         args: [--maxdepth, '3', --bullets, '-', -i]
   - repo: https://github.com/sirwart/ripsecrets
-    rev: 'v0.1.7' # Use latest tag on GitHub
+    rev: 'v0.1.9' # Use latest tag on GitHub
     hooks:
       - id: ripsecrets
