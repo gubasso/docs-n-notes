@@ -5,7 +5,7 @@
 <!-- toc -->
 
 - [Install](#install)
-- [Packages / AUR](#packages--aur)
+- [Packages / Pacman / AUR](#packages--pacman--aur)
 - [General](#general)
 - [Packages to install](#packages-to-install)
   - [pacstrap list](#pacstrap-list)
@@ -25,7 +25,8 @@
 
 ## Packages / Pacman / AUR
 
-- system update: https://github.com/Antiz96/arch-update
+- system update / arch update:
+  - https://github.com/Antiz96/arch-update
   - An update notifier & applier for Arch Linux that assists you with important pre / post update tasks.
 Includes a dynamic & clickeable systray applet for an easy integration with any Desktop Environment / Window Manager.
 
