@@ -4,20 +4,39 @@
 
 <!-- toc -->
 
-- [Start](#start)
-- [Generator](#generator)
-- [Organization / Naming convention](#organization--naming-convention)
-- [Import](#import)
-- [Basic usage](#basic-usage)
+- [Editor gopass uses](#editor-gopass-uses)
+- [!! ATENTION](#-atention)
+- [Create a new store](#create-a-new-store)
+- [Clone Existing Store](#clone-existing-store)
+- [Basic Usage](#basic-usage)
   - [Adding Secrets](#adding-secrets)
   - [Edit a secret](#edit-a-secret)
+  - [sync with remotes](#sync-with-remotes)
+  - [delete / remove a store/mount](#delete--remove-a-storemount)
+- [Password Generator](#password-generator)
+- [Organization / Naming convention](#organization--naming-convention)
+- [Import](#import)
 - [Resources](#resources)
 
 <!-- tocstop -->
 
-[GOPASS CHEAT SHEET](https://woile.github.io/gopass-cheat-sheet/)
+## Editor gopass uses
 
-vim/neovim config:
+By default, gopass invokes whatever editor is set in $EDITOR (or, if unset, falls back to $VISUAL) when you run gopass edit
+
+```sh
+export EDITOR="nano"
+export VISUAL="some_other"
+```
+
+Or via `gopass config`
+
+```sh
+gopass config edit.editor "nano --rcfile ~/.config/gopass/nanorc"
+```
+
+- If using `nano`, check this: [[nano-setup-for-gopass]]
+- If using `vim`/`neovim`:
 
 ```
 " gopass security: https://github.com/gopasspw/gopass/blob/master/docs/setup.md#securing-your-editor
@@ -35,14 +54,7 @@ git config --local --unset core.sshcommand
 
 This will fix multiple ssh ids issues when syncing stores.
 
-## Clone Existing
-
-```sh
-gopass clone git@example.com/pass.git
-gopass clone git@example.com/pass-work.git work # a work store
-```
-
-## Start
+## Create a new store
 
 - new password store
 
@@ -53,7 +65,29 @@ gopass init
 gopass init --store my-company
 ```
 
-- sync with remotes
+## Clone Existing Store
+
+```sh
+gopass clone git@example.com/pass.git
+gopass clone git@example.com/pass-work.git work # a work store
+```
+
+## Basic Usage
+
+### Adding Secrets
+
+```sh
+gopass insert golang.org/gopher
+gopass generate golang.org/gopher
+```
+
+### Edit a secret
+
+```sh
+gopass edit golang.org/gopher
+```
+
+### sync with remotes
 
 ```sh
 # all
@@ -62,13 +96,13 @@ gopass sync
 gopass sync --store my-company
 ```
 
-- delete / remove a store/mount
+### delete / remove a store/mount
 
 ```sh
 gopass mounts remove <store-name>
 ```
 
-## Generator
+## Password Generator
 
 - [Restricting the characters in generated passwords](https://github.com/gopasspw/gopass/blob/master/docs/features.md#restricting-the-characters-in-generated-passwords)
 
@@ -114,20 +148,6 @@ Import from another password manager (e.g. KeepassXC):
 
 - https://github.com/roddhjav/pass-import#readme
 
-## Basic usage
-
-### Adding Secrets
-
-```sh
-gopass insert golang.org/gopher
-gopass generate golang.org/gopher
-```
-
-### Edit a secret
-
-```sh
-gopass edit golang.org/gopher
-```
 
 ## Resources
 
@@ -136,5 +156,4 @@ gopass edit golang.org/gopher
   - [Batch bootstrapping](https://github.com/gopasspw/gopass/blob/master/docs/setup.md#batch-bootstrapping)
   - [Team sharing](https://woile.github.io/gopass-cheat-sheet/)
 - [GOPASS CHEAT SHEET](https://woile.github.io/gopass-cheat-sheet/)
-
 
