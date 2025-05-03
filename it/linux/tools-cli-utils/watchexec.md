@@ -2,6 +2,17 @@
 
 ## Examples
 
+With `miniserve` to work as a dev serve with live reload (hot reload):
+
+```sh
+watchexec \
+  --watch html \
+  --restart \
+  --debounce 100 \
+  -- \
+  miniserve html -i ism_content.html -p 8080
+```
+
 With `rsync`
 
 ```sh
