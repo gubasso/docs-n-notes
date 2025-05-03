@@ -103,11 +103,13 @@ Edit `/etc/tlp.d/95-performance.conf` (new file):
 
 ```ini
 # Full steam on the charger
+CPU_ENERGY_PERF_POLICY_ON_AC=performance
 PLATFORM_PROFILE_ON_AC=performance      # modern Lenovo firmware
 CPU_SCALING_GOVERNOR_ON_AC=performance
 CPU_BOOST_ON_AC=1                       # allow turbo
 
 # Sips when unplugged
+CPU_ENERGY_PERF_POLICY_ON_AC=balance_power
 PLATFORM_PROFILE_ON_BAT=low-power
 CPU_SCALING_GOVERNOR_ON_BAT=powersave
 CPU_BOOST_ON_BAT=0
