@@ -11,6 +11,7 @@
 
 Before you begin, make sure you have:
 
+* **BACKUP YOUR LOCAL THUNDERBIRD** before do anything.
 * **Gmail account**: Incoming mail will be forwarded here.
 * **Custom domain**: You must own and control a domain that you can add to Cloudflare.
 * **Enable 2-Step Verification** on your Google account to secure access and allow App Passwords.
