@@ -2,6 +2,16 @@
 
 <!-- toc -->
 
+- [Issue description](#issue-description)
+  - [Basic issue explanation and possible solutions](#basic-issue-explanation-and-possible-solutions)
+  - [Tried to solve deleting tmp cache](#tried-to-solve-deleting-tmp-cache)
+  - [Understanding the Problem](#understanding-the-problem)
+- [Solutions](#solutions)
+  - [0) Disable SSH multiplexing by unsetting core.sshcommand](#0-disable-ssh-multiplexing-by-unsetting-coresshcommand)
+  - [1) Disable SSH Multiplexing Temporarily (for each repo locally)](#1-disable-ssh-multiplexing-temporarily-for-each-repo-locally)
+
+<!-- tocstop -->
+
 ## Issue description
 
 Trying to do git operations on multiple remote gitolite repositories...
