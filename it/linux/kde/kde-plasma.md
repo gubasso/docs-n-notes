@@ -15,5 +15,3 @@ git clone https://github.com/anametologin/krohnkite.git
 make install
 make uninstall # to uninstall the script
 ```
-
-
