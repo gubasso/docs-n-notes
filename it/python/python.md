@@ -1,21 +1,5 @@
 # Python
 
-## Install module locally virtual environment
-
-"If you install it in a virtual env you can do it like `pip install -e .`  and that should add the command line to path"
-
-- Within venv
-- Work as it is a installed command
-
-Example:
-
-- Clone [SUSE-Enceladus / img-proof](https://github.com/SUSE-Enceladus/img-proof/tree/main)
-- cd to project root
-- create/activate venv
-- run `pip install -e .`
-- execute `img-proof ...` in the terminal
-
-
 ## Run shell command with python
 
 [How to Execute Shell Commands with Python](https://janakiev.com/blog/python-shell-commands/)
