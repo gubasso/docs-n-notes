@@ -29,8 +29,17 @@ jq 'keys' input.json
 # print data from a set of keys
 jq '{key1, key2}' input.json
 
+# If input.json is an array
 # from each first level keys, print unique second level keys
 jq 'map(keys) | add | unique' input.json
+
+# If input.json is an object
+# Option 1: take the object’s values, then work on them
+# map_values behaves like map, but on objects; it preserves the object’s keys unless you drop them explicitly.
+jq 'map_values(keys) | add | unique' input.json
+# Option 2: iterate over the values first, then collect keys
+jq '.[ ] | keys | add | unique' input.json
+
 
 jq '[.[]?.my_key[]?]    # gather every non-null my_key list into one big array
    | sort                # sort the whole array
