@@ -178,23 +178,6 @@ When in command line mode, copy the word under the cursor and insert into the co
 
 ### Tools / mergetool / diff tool
 
-#### 1) Fugitive + Trouble
-
-**[Resolve Git Merge Conflicts with Neovim and Fugitive!](https://www.youtube.com/watch?v=vpwJ7fqD1CE)**
-
-vim-fugitive
-- `Gvdiff`: normal diff from last version (last commit)
-- `Gvdiffsplit!`: 3 way split
-    - `buffers` to identify which
-    - select diff from local or remote to be applied
-        - Pointer on top of conflict text area:
-            - `diffget [press-tab]`: show to select one of 3 buffers
-        - (or) at buffer you want to select, press: `dp` (diff push)
-    - `Gwrite` to stage conflict changes
-- `Gitsign` stage a hunk of file
-
-- lsp/troubble, jump between diagnostics (add shortcut)
-    - e.g. `]d` next, `[d` prev
 
 #### 2) git-conflict.nvim
 
