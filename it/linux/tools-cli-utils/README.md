@@ -1,5 +1,14 @@
 # CLI Tools
 
+
+- nice md to html (md2html, markdown2html, markdown to html)
+
+```sh
+sudo zypper install python3-pip
+pip3 install ghmd
+ghmd README.md
+```
+
 - axel
   - https://github.com/axel-download-accelerator/axel
   - wget alternative, curl alternative, download in parallel
