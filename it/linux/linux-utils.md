@@ -125,27 +125,6 @@ stow never overrides anything
 
 # [awk](./linux-utils-awk.md)
 
-# jq
-
-- `jq` alternative written in rust: https://github.com/01mf02/jaq
-
-https://jqplay.org/
-https://programminghistorian.org/en/lessons/json-and-jq
-
-Filter/select a subset of fields from an object: https://stackoverflow.com/a/68664471
-
-```
-curl "https://api.airtable.com/v0/${airtable_base_id}/${airtable_table_variaveis}?maxRecords=3&view=Grid%20view" \
--H "Authorization: Bearer ${AIRTABLE_API_KEY}" \
-| jq -c "[.records[] | {id, fields}]"
-```
-
-```
-$ cat file.json | jq -c '.users[] | {first}'
-{"first":"Stevie"}
-{"first":"Michael"}
-```
-
 # curl
 
 Multiple parameters:
