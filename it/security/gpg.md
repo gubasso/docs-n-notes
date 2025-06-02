@@ -92,6 +92,7 @@ gpg --output secret_file_decrypted --decrypt secret_file.gpg
 ```
 
 Other topics:
+
 - Deleting public keys from keyring
 
 
@@ -101,22 +102,12 @@ If your private key becomes known to others, you will need to disassociate the o
 
 ### **Backup and restore GPG Keys**
 
-- https://serverfault.com/questions/86048/how-to-backup-gpg
+- [How to Backup GPG](https://serverfault.com/questions/86048/how-to-backup-gpg)
 
 **export / backup**
 
-```sh
-gpg --export --armor your@id.here > your@id.here.pub.asc
-gpg --export-secret-keys --armor your@id.here > your@id.here.priv.asc
-gpg --export-secret-subkeys --armor your@id.here > your@id.here.sub_priv.asc
-gpg --export-ownertrust > ownertrust.txt
-```
+- See: [gubasso/dotfiles: backup-gpg script](https://github.com/gubasso/dotfiles/blob/master/bin/.local/bin/backup-gpg)
 
 **import / restore**
 
-```sh
-gpg --import your@id.here.pub.asc
-gpg --import your@id.here.priv.asc
-gpg --import your@id.here.sub_priv.asc
-gpg --import-ownertrust ownertrust.txt
-```
+- See: [gubasso/dotfiles: import-gpg script](https://github.com/gubasso/dotfiles/blob/master/bin/.local/bin/import-gpg)
