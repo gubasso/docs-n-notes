@@ -325,6 +325,37 @@ other opts
 vim.opt.hidden = true -- " allow [^13] 'E37: No write since last change (add ! to override)'. switch to a different buffer for referencing some code and switch back
 ```
 
+## diff
+
+Built-in Neovim diff-mode
+
+If you just need a quick side-by-side comparison of any two files (tracked or untracked), Neovim’s native diff mode is the simplest:
+
+1. Open the first file:
+
+   ```vim
+   :edit file1.txt
+   ```
+2. Run:
+
+   ```vim
+   :vert diffsplit file2.txt
+   ```
+
+   This opens `file2.txt` in a vertical split in diff mode .
+
+### From the terminal
+
+* Launch Neovim in diff mode for two files:
+
+  ```bash
+  nvim -d file1.txt file2.txt
+  ```
+
+  to get a synchronized, side-by-side view .
+
+[1]: https://github.com/sindrets/diffview.nvim/issues/420 "How can I just compare 2 buffers ? (non-git files) #420 - GitHub"
+
 
 ## References
 
