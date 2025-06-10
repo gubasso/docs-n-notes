@@ -135,6 +135,13 @@ gopass mounts remove <store-name>
 
 ## 4. Password Generator
 
+Setup nice defaults
+
+```sh
+gopass config generate.length 50
+gopass config generate.symbols true
+```
+
 Customize generated passwords with flags:
 
 ```bash
