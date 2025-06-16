@@ -128,7 +128,11 @@ gopass sync --store my-company
 ### 3.4 Removing a Store/Mount
 
 ```bash
+gopass mounts unmount <store>
 gopass mounts remove <store-name>
+rm -rf ~/.local/share/gopass/stores/<store>
+rm ~/.config/gopass/config
+rm -rf ~/.cache/gopass
 ```
 
 ---
