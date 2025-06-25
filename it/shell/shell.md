@@ -15,6 +15,14 @@
 
 <!-- tocstop -->
 
+## Parallel
+
+Run commands in parallel (rust cli programs)
+
+- https://github.com/aaronriekenberg/rust-parallel
+- https://github.com/pvolok/mprocs
+- https://github.com/Nukesor/pueue
+
 ## Processes
 
 running process
