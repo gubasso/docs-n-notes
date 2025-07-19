@@ -78,6 +78,14 @@ cp Default/Preferences 'Profile 1'/
 cp Default/Bookmarks 'Profile 1'/
 cp Default/Favicons 'Profile 1'/
 cp Default/Top\ Sites 'Profile 1'/
+
+set -l pn 1
+set -l dest "Profile $pn"
+cp -r Default/Extensions "$dest"/
+cp Default/Preferences "$dest"/
+cp Default/Bookmarks "$dest"/
+cp Default/Favicons "$dest"/
+cp Default/Top\ Sites "$dest"/
 ```
 
 **Note:**  Avoid copying files like `Cookies`, `History`, `Login Data`, and `Cache` to prevent conflicts and potential corruption.
@@ -103,10 +111,12 @@ nano 'Profile 1'/Preferences
 
 Or with `jq`:
 
-```sh
-jq '.profile.name = "Duplicated Profile"' \
-  "Profile 1/Preferences" > "Profile 1/Preferences.tmp" \
-  && mv "Profile 1/Preferences.tmp" "Profile 1/Preferences"
+```fish
+set -l pn 1
+set -l dest "Profile $pn"
+jq '.profile.name = "duplicated-profile"' \
+  "$dest/Preferences" > "$dest/Preferences.tmp" \
+  && mv "$dest/Preferences.tmp" "$dest/Preferences"
 ```
 
 **12. Start Brave Browser**
