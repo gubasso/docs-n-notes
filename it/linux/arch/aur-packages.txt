@@ -1,0 +1,9 @@
+apulse
+brave-bin
+librewolf-bin
+asdf-vm
+mons
+hunspell-pt-br
+hyphen-pt-br
+mythes-pt-br
+libreoffice-extension-languagetool

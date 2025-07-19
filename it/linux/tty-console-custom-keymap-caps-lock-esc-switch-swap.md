@@ -4,8 +4,6 @@ Here's how you can swap Caps Lock and Esc on a Void Linux virtual console and ha
 
 ## Summary
 
-You’ll create a small custom keymap that tells the console to treat Scancode 1 as Caps Lock and Scancode 58 as Escape, load it immediately with `loadkeys`, and then persist it by either invoking `loadkeys` in `/etc/rc.local` (sourced by runit) or installing the map under `/usr/share/kbd/keymaps` and pointing `/etc/rc.conf`’s `KEYMAP` variable at it.
-
 ## 1. Create and test your custom keymap
 
 ### 1.1. Identify your keycodes
@@ -20,7 +18,15 @@ Press **Esc** and **Caps Lock** to see their scancodes (typically **1** and **58
 
 ### 1.2. Write the swap mapping
 
-Create `/etc/console-caps-esc.map` with these two lines:
+```sh
+sudo mkdir -p /usr/local/share/kbd/keymaps
+
+sudo tee /usr/local/share/kbd/keymaps/us-caps-esc-swap.map << 'EOF'
+include "us.map"
+keycode 1  = Caps_Lock
+keycode 58 = Escape
+EOF
+```
 
 ```text
 include "/usr/share/kbd/keymaps/i386/qwerty/us.map.gz"
@@ -35,14 +41,22 @@ This tells the kernel console to swap the two keys. ([unix.stackexchange.com][1]
 Apply it now with:
 
 ```bash
-sudo loadkeys /etc/console-caps-esc.map
+sudo loadkeys /usr/local/share/kbd/keymaps/us-caps-esc-swap.map
 ```
 
 This updates the translation table for all virtual consoles until reboot. ([unix.stackexchange.com][1])
 
 According to the `loadkeys` manual, once loaded it affects every TTY and persists until the next reboot. ([man.voidlinux.org][2])
 
-## 2. Make the swap persistent
+## Make the swap persistent (Arch)
+
+At `/etc/vconsole.conf`:
+
+```ini
+KEYMAP=/usr/local/share/kbd/keymaps/us-caps-esc-swap.map
+```
+
+## Make the swap persistent (VOID)
 
 Void Linux (runit-based) doesn’t use systemd’s `/etc/vconsole.conf` by default, but instead:
 
@@ -59,7 +73,7 @@ Void sources `/etc/rc.local` in runit stage 2, making it perfect for boot-time c
 
    ```sh
    #!/bin/sh
-   loadkeys /etc/console-caps-esc.map
+   loadkeys /usr/local/share/kbd/keymaps/us-caps-esc-swap.map
    ```
 3. Make it executable:
 
@@ -77,7 +91,7 @@ Void’s `/etc/rc.conf` supports a `KEYMAP` variable pointing to a keymap under 
 
    ```bash
    sudo mkdir -p /usr/share/kbd/keymaps/personal
-   sudo cp /etc/console-caps-esc.map /usr/share/kbd/keymaps/personal/swapCapsEsc.map
+   sudo cp /usr/local/share/kbd/keymaps/us-caps-esc-swap.map /usr/share/kbd/keymaps/personal/swapCapsEsc.map
    ```
 
    ([linuxquestions.org][4])
