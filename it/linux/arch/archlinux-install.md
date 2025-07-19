@@ -30,6 +30,10 @@ Include = /etc/pacman.d/mirrorlist
 
 - [Essential Packages](./essential-packages.txt)
 
+## 3.4 Localization
+
+- [Custom keymap Caps Lock ESC switch (TTY/Console)](../tty-console-custom-keymap-caps-lock-esc-switch-swap.md)
+
 ## 3.6 Initramfs
 
 - Continue at [LVM on LUKS: 4.4 Configuring mkinitcpio](https://wiki.archlinux.org/title/Dm-crypt/Encrypting_an_entire_system#Configuring_mkinitcpio_3)

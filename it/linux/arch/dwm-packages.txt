@@ -1,0 +1,13 @@
+xorg
+xorg-xinit
+xorg-xrandr
+xorg-xsetroot
+xorg-xlsfonts
+xorg-xev
+pamixer
+nitrogen
+libinput
+picom
+sxhkd
+brightnessctl
+acpi
