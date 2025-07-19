@@ -1,6 +1,7 @@
 # USB flash installation medium
 
 > https://wiki.archlinux.org/title/USB_flash_installation_medium
+> https://docs.voidlinux.org/installation/live-images/prep.html
 
 Identify the USB Drive
 
