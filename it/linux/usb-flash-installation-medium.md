@@ -40,6 +40,8 @@ The parted command you used creates the partition but does not actually format i
 
 ```sh
 sudo mkfs.vfat /dev/sdX1
+# updated
+sudo mkfs.fat -F 32 /dev/disk/by-id/usb-My_flash_drive-partn
 ```
 
 Replace `/dev/sdX1` with the appropriate partition name.
@@ -57,6 +59,23 @@ List the usb drive:
 ```sh
 ls -l /dev/disk/by-id/usb-*
 ```
+
+## Option 1)
+
+Mount
+
+```sh
+sudo mount /dev/disk/by-id/usb-My_flash_drive-partn /mnt
+```
+
+Extract the ISO image to the mounted file system:
+```sh
+sudo bsdtar -x -f archlinux-version-x86_64.iso -C /mnt
+sudo sync
+sudo umount /mnt
+```
+
+## Option 2)
 
 (Do **not** append a partition number, so do **not** use something like `/dev/disk/by-id/usb-Kingston_DataTraveler_2.0_408D5C1654FDB471E98BED5C-0:0**-part1**` or `/dev/sdb**1**`):
 

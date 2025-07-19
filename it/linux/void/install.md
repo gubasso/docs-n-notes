@@ -11,61 +11,9 @@ setfont solar24x32
 
 ## Partition
 
-[Tip: Check that your NVMe drives and Advanced Format hard disk drives are using the optimal logical sector size before partitioning.][^2]
+See: [Partition Disk](../partition-disk.md)
 
-## General skeleton
-
-*UEFI/GPT*
-
-`/dev/sda1    2048    264191    262144  128M EFI System`
-
-- `/boot/efi`
-  - type: `EFI System`
-  - filesystem: `vfat`
-  - Size: 1 GB[^3]
-  - Partition type GUID: `C12A7328-F81F-11D2-BA4B-00A0C93EC93B`
-  - Code: `EF00`
-
-`/dev/sda2  264192 100663262 100399071 47.9G Linux filesystem`
-
-- (swap)
-  - Size: 1,5x RAM[^1]
-  - For 64GB RAM -> 96GB swap
-- `/` (root)
-  - type: `Linux Filesystem`
-  - code: `8300`
-
-
-### Full Disk Encryption[^4]
-
-#### Create a single physical partition on the disk using cfdisk, marking it as bootable.
-
-UEFI systems will need the disk to have a GPT disklabel and an EFI system partition. The required size for this may vary depending on needs, but 100M should be enough for most cases. For an EFI system, the partition layout should look like the following.
-
-```
-# fdisk -l /dev/sda
-Disk /dev/sda: 48 GiB, 51539607552 bytes, 100663296 sectors
-Units: sectors of 1 * 512 = 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 512 bytes
-Disklabel type: gpt
-Disk identifier: EE4F2A1A-8E7F-48CA-B3D0-BD7A01F6D8A0
-
-Device      Start       End   Sectors  Size Type
-/dev/sda1    2048    264191    262144  128M EFI System
-/dev/sda2  264192 100663262 100399071 47.9G Linux filesystem
-```
-
-In this example:
-
-- `/dev/sda1`: taken up by the EFI Partition
-- `/dev/sda2`: encrypted volume
-
-#### [Encrypted volume configuration](https://docs.voidlinux.org/installation/guides/fde.html#encrypted-volume-configuration)
-
-(...) follow page instructions (...)
-
-#### [System installation](https://docs.voidlinux.org/installation/guides/fde.html#system-installation)
+## [System installation](https://docs.voidlinux.org/installation/guides/fde.html#system-installation)
 
 UEFI systems will have a slightly different package selection...
 
@@ -73,7 +21,7 @@ UEFI systems will have a slightly different package selection...
 xbps-install -Sy -R https://repo-default.voidlinux.org/current -r /mnt base-system cryptsetup grub-x86_64-efi lvm2 \
   NetworkManager neovim
 ```
-### Post Install
+## Post Install
 
 - [Install and configure NetworkManager](./networkmanager-install-and-configure-on-void.md)
 - [Setup NetworkManager DNS resolv](./networkmanager-choosing-the-right-dns-strategy-for-void-linux-symlink-openresolv-or-systemd-resolved.md)
