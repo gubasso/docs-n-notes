@@ -1,5 +1,9 @@
 
+On Arch linux:
 
+Brave (community “brave” package) ships a `brave-launcher` that reads `$XDG_CONFIG_HOME/brave-flags.conf` (i.e. `~/.config/brave-flags.conf`). If you use the brave-bin AUR package, you’ll need to adopt a similar wrapper or adjust the .desktop entry yourself.
+
+On Void Linux:
 
 ```
 ~/.config> cat brave-flags.conf
