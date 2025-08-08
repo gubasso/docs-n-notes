@@ -17,6 +17,7 @@ setfont solar24x32
 ## 2.1 Select the mirrors
 
 ```sh
+cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bkp
 reflector -c Brazil -c "United States" --verbose --latest 50 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
 ```
 

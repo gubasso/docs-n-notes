@@ -1,5 +1,39 @@
 # Systemd: Wants/WantedBy dependency
 
+Once your unit file includes:
+
+```ini
+[Install]
+WantedBy=graphical-session.target
+```
+
+you only need to run:
+
+```bash
+systemctl --user enable --now keepassxc.service
+```
+
+* `enable` installs the symlink into `graphical-session.target.wants/` as specified by your `WantedBy=` line
+* `WantedBy=graphical-session.target` – install-time “reverse” dependency
+* `graphical-session.target` is a special user target that is active for any Wayland or X11 session; services that are only useful in a GUI are typically attached here .
+* The `--now` flag tells systemd to **also start** the service immediately, combining what would otherwise be separate `enable` + `start` commands
+* After that, KeePassXC will be pulled in and started automatically whenever your graphical session (i.e. `graphical-session.target`) is activated.
+
+`After=waybar.service` – runtime ordering only
+
+* `After=` (and its twin `Before=`) tell systemd **when** to start one unit *relative to* another, but they do **not** create any dependency by themselves – if no one asks for *both* units, nothing happens
+* In your KeePassXC unit this makes the service wait until Waybar has reached the “started” state before it launches, preventing the classic tray-icon race
+
+---
+
+*Need automatic start at login?*
+→ Keep `WantedBy=graphical-session.target` **or** `add-wants niri.service …`.
+  → Use **one** of the two wiring methods (WantedBy *or* add-wants) and avoid duplicating links.
+*Need to guarantee the tray is present first?*
+→ Keep `After=waybar.service`.
+
+With this mental model—**ordering (`After=`) vs pulling (`Wants=`/symlinks)**—you can reason about any other user-unit relationship in your Arch + Niri setup.
+
 ## Summary
 
 Both `systemctl --user add-wants niri.service keepassxc.service` and declaring
