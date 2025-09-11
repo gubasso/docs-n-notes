@@ -373,8 +373,6 @@ https://play.google.com/store/apps/details?id=io.spck
 https://play.google.com/store/apps/details?id=com.foxdebug.acodefree
 https://play.google.com/store/apps/details?id=com.rhmsoft.edit
 
-- graphical and simple git log terminal:
-    - `git log --online --graph master feature -m 15`
 - merge branch logic:
     - checkout the branch where you want to bring the commit
     - just as a remote (github): I'm working in my local, checked out, and run git remote to bring the changes from outside repos
