@@ -63,6 +63,42 @@ git for-each-ref --format="%(refname:short) %(upstream:track) %(upstream:remoten
 git checkout -b new-branch-name origin/new-branch-name
 ```
 
+You can do it in one shot with `git`—create the local branch **with the same name** and set it to track the remote branch.
+
+Assuming the remote is `origin` and the branch is `my-feature`:
+
+```bash
+git fetch origin
+git checkout -b my-feature origin/my-feature
+```
+
+That:
+
+* creates local branch `my-feature`
+* sets its upstream to `origin/my-feature` (so `git pull`/`git push` work without extra args)
+
+---
+
+On newer Git, there’s also this shorter form:
+
+```bash
+git fetch origin
+git switch --track origin/my-feature
+```
+
+If the local branch doesn’t exist yet, this will:
+
+* create a local `my-feature`
+* automatically track `origin/my-feature`
+
+You can confirm they’re associated with:
+
+```bash
+git status
+# or
+git branch -vv
+```
+
 ### Rename a branch
 
 - [Git Rename Branch – Learn How to Rename a Local and Remote Git Branch](https://www.hostinger.com/tutorials/how-to-rename-a-git-branch/#How_to_Rename_a_Local_Git_Branch)
