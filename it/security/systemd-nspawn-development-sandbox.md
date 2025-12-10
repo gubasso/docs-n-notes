@@ -1,512 +1,455 @@
 # Isolated AI Dev Environment with `systemd-nspawn` (`dev-sandbox`)
 
-> Note: all examples here assume the **host terminal is kitty** (so `TERM=xterm-kitty`).
-> If you use a different terminal emulator, you may need to adjust `TERM`/terminfo and color-related steps.
+> Assumptions:
+> - Host OS: **openSUSE Tumbleweed**
+> - Host terminal: **kitty** (`TERM=xterm-kitty`)
+> - Host interactive shell: **fish**
+> - AI CLIs are installed **globally inside the container**
+> - API keys are **per-project** in `.env.ai` files
 
 ---
 
-## TL;DR (Very Short, Practical Steps)
+## TL;DR (High-Level Summary)
 
-- Create rootfs for `dev-sandbox` at `/var/lib/machines/dev-sandbox`:
-  - Arch:
-    - `sudo mkdir -p /var/lib/machines/dev-sandbox`
-    - `sudo pacstrap -c /var/lib/machines/dev-sandbox base base-devel git neovim kitty-terminfo`
-  - openSUSE Tumbleweed:
-    - `ROOT=/var/lib/machines/dev-sandbox`
-    - `sudo mkdir -p "$ROOT"`
-    - Add repos into `$ROOT`:
-      - `sudo zypper --root "$ROOT" addrepo -f https://download.opensuse.org/tumbleweed/repo/oss/      repo-oss`
-      - `sudo zypper --root "$ROOT" addrepo -f https://download.opensuse.org/tumbleweed/repo/non-oss/  repo-non-oss`
-      - `sudo zypper --root "$ROOT" addrepo -f https://download.opensuse.org/update/tumbleweed/        repo-update`
-    - `sudo zypper --root "$ROOT" refresh`
-    - Install base patterns:
-      - `sudo zypper --root "$ROOT" --non-interactive install --type pattern base enhanced_base devel_basis`
-    - Optionally:
-      - `sudo zypper --root "$ROOT" install git neovim kitty-terminfo`
-- Ensure `/var/lib/machines/dev-sandbox/usr/lib/os-release` exists (copy from host if needed).
-- Enter container as root:
-  `sudo systemd-nspawn -D /var/lib/machines/dev-sandbox /bin/bash`
-- Inside container (as root):
-  - `useradd -m -s /bin/bash dev && passwd dev`
-  - `mkdir -p /workspace && chown dev:dev /workspace`
-  - Install tooling:
-    - Arch: `pacman -Syu --noconfirm && pacman -S --noconfirm nodejs npm git curl`
-    - openSUSE: `zypper refresh && zypper install -y nodejs npm git curl`
-  - Install and set **fish** as the interactive shell for `dev` (optional but recommended if you use fish on host):
-    - Arch: `pacman -S --noconfirm fish`
-    - openSUSE: `zypper install -y fish`
-    - `chsh -s /usr/bin/fish dev`
-- On host, put projects under `~/Projects/<project>`.
-- Create wrapper script `~/bin/dev-sandbox` that:
-  - Takes a project path (or uses `$PWD`)
-  - Bind-mounts it to `/workspace/<project>`
-  - Runs `systemd-nspawn -M dev-sandbox -D /var/lib/machines/dev-sandbox --user=dev ...`
-- In a project:
-  - Create `.env.ai` (add to `.gitignore`) with API keys.
-  - Inside container:
-    - `npm init -y`
-    - `npm install --save-dev <ai-cli-packages>`
-    - Define `ai-env` helper to load `.env.ai` and run commands: `ai-env npx <cli>`
-- Daily:
-  - Host: edit with Neovim in `~/Projects/<project>`.
-  - Host: `dev-sandbox` in that directory.
-  - Container: `cd /workspace/<project>` and run `ai-env npx ...` for AI CLIs.
+- Create a `systemd-nspawn` container rootfs at `/var/lib/machines/dev-sandbox` using openSUSE Tumbleweed repositories.
+- Inside the container, create user `dev`, `/workspace`, and install:
+  - `nodejs`, `npm`, `git`, `curl`, `neovim`, `kitty-terminfo`, `python3-poetry`, `fish`, `rsync`, and tools needed by your AI workflows.
+- Set `fish` as the default shell for `dev` user in the container.
+- From the host, copy your **host fish configuration** into the container’s `dev` account, then add a **container-specific** fish config file for AI tooling.
+- Install **mise** (tool version manager) and your Node-based AI CLIs **globally** as `dev`.
+- Keep all projects under `~/Projects/<project>` on the host; each project has a `.env.ai` file (ignored by git) with API keys.
+- Use a **host-side `dev-sandbox` wrapper (bash script)** to:
+  - Bind-mount a single project into `/workspace/<project>` inside the container.
+  - Start an interactive shell as `dev` in that directory (you will typically run `fish` interactively from there).
+- Inside the container, run AI commands via a fish helper function `ai-env` (stored in `~/.config/fish/functions/ai-env.fish`) that loads `.env.ai` into the environment, then executes the CLI.
 
 ---
 
 ## Table of Contents
 
 - [Overview](#overview)
-- [Preparing the Base Root Filesystem](#preparing-the-base-root-filesystem)
-  - [Arch Linux: Rootfs via pacstrap](#arch-linux-rootfs-via-pacstrap)
-  - [openSUSE Tumbleweed: Rootfs via zypper --root](#opensuse-tumbleweed-rootfs-via-zypper---root)
-  - [Sanity Check with a Temporary Shell](#sanity-check-with-a-temporary-shell)
-- [Creating and Configuring the Container](#creating-and-configuring-the-container)
-  - [Creating the dev User and Workspace](#creating-the-dev-user-and-workspace)
-  - [Basic systemd-nspawn Command with Bind Mounts](#basic-systemd-nspawn-command-with-bind-mounts)
-  - [Optional .nspawn File for Defaults](#optional-nspawn-file-for-defaults)
-- [Installing AI Tooling Inside the Container](#installing-ai-tooling-inside-the-container)
-  - [Installing Base Tooling (Node, npm, etc.)](#installing-base-tooling-node-npm-etc)
-  - [Installing AI CLIs (Shared vs Per-Project)](#installing-ai-clis-shared-vs-per-project)
-- [Managing API Keys and Secrets](#managing-api-keys-and-secrets)
-  - [Per-Project .env.ai Files](#per-project-envai-files)
-  - [Helper Function to Load Env in the Container](#helper-function-to-load-env-in-the-container)
-  - [Keeping Secrets out of Host-Global Configs](#keeping-secrets-out-of-host-global-configs)
-- [Daily Workflow with dev-sandbox](#daily-workflow-with-dev-sandbox)
-  - [Typical Workflow for a Single Project](#typical-workflow-for-a-single-project)
-  - [Wrapper Script dev-sandbox](#wrapper-script-dev-sandbox)
+- [Preparing the Base Root Filesystem (openSUSE Tumbleweed)](#preparing-the-base-root-filesystem-opensuse-tumbleweed)
+  - [Configuring Repositories and Installing the Base System](#configuring-repositories-and-installing-the-base-system)
+  - [Ensuring os-release and Running a Sanity Check](#ensuring-os-release-and-running-a-sanity-check)
+- [Creating the Container User and Workspace](#creating-the-container-user-and-workspace)
+- [Synchronizing Host Fish Config into the Container](#synchronizing-host-fish-config-into-the-container)
+- [Container-Specific Fish Configuration for AI Tooling](#container-specific-fish-configuration-for-ai-tooling)
+  - [PATH and Tooling Integration](#path-and-tooling-integration)
+  - [`ai-env` Helper Function (fish)](#ai-env-helper-function-fish)
+- [Installing Global AI CLIs and mise](#installing-global-ai-clis-and-mise)
+- [Managing API Keys per Project with `.env.ai`](#managing-api-keys-per-project-with-envai)
+- [Wrapper Script `dev-sandbox` (Host)](#wrapper-script-dev-sandbox-host)
+- [Daily Workflow](#daily-workflow)
 - [Security Considerations and Best Practices](#security-considerations-and-best-practices)
-  - [Why SSH Keys and Host Secrets Are Protected](#why-ssh-keys-and-host-secrets-are-protected)
-  - [Things to Avoid](#things-to-avoid)
-  - [Optional Hardening Ideas](#optional-hardening-ideas)
+  - [Isolation Model](#isolation-model)
+  - [Practices to Avoid](#practices-to-avoid)
+  - [Optional Extra Hardening](#optional-extra-hardening)
 - [Recap](#recap)
 
 ---
 
 ## Overview
 
-Goal: provide an isolated development environment for AI coding CLIs using `systemd-nspawn`, where:
+Objective: have a **single, isolated container** (`dev-sandbox`) dedicated to running AI coding CLIs, while you continue to develop on the host using **Neovim + fish + kitty**.
 
-- Projects live under `~/Projects/<project>`.
-- The container root filesystem lives at `/var/lib/machines/dev-sandbox`.
-- The container (machine name) is `dev-sandbox`.
-- AI tools and dependencies are installed inside this container.
-- AI CLIs only see:
-  - Their minimal container filesystem.
-  - The project directories you explicitly bind-mount under `/workspace/<project>`.
-- They never see:
-  - Your host `$HOME`.
-  - `~/.ssh`.
-  - Browser profiles.
-  - Other host projects, unless explicitly mounted.
+Key properties:
 
-You will:
-
-- Use Neovim and fish on the host.
-- Enter `dev-sandbox` to run CLIs against `/workspace/<project>`.
-- Manage secrets with per-project `.env.ai` files.
-- Have examples tailored to **kitty** (`TERM=xterm-kitty`); other terminals may need analogous terminfo/TERM adjustments.
+- Host projects live under: `~/Projects/<project>`.
+- Container rootfs: `/var/lib/machines/dev-sandbox`.
+- Container machine name: `dev-sandbox`.
+- Inside container:
+  - Non-root user: `dev`
+  - Workspace root: `/workspace`
+  - Shell for `dev`: `fish` (default login shell)
+  - Global tooling: Node/`npm`, Poetry, mise, AI CLIs
+- AI CLIs see only:
+  - Their container filesystem.
+  - The specific project you bind-mount as `/workspace/<project>`.
+- Secrets:
+  - Stored **per project** in `.env.ai` (ignored by git).
+  - Loaded only when running AI commands via `ai-env`.
+- The host’s `$HOME`, SSH keys, browser profiles, and other secrets are **never mounted** into the container.
 
 ---
 
-## Preparing the Base Root Filesystem
+## Preparing the Base Root Filesystem (openSUSE Tumbleweed)
 
-We set up a minimal system at `/var/lib/machines/dev-sandbox`. Commands differ slightly between Arch Linux and openSUSE Tumbleweed.
+### Configuring Repositories and Installing the Base System
 
-### Arch Linux: Rootfs via pacstrap
-
-On the host (Arch):
-
-```bash
-sudo mkdir -p /var/lib/machines/dev-sandbox
-
-sudo pacstrap -c /var/lib/machines/dev-sandbox base base-devel git neovim kitty-terminfo
-````
-
-Ensure `os-release` exists inside the container:
-
-```bash
-if [ ! -f /var/lib/machines/dev-sandbox/usr/lib/os-release ] && \
-   [ ! -f /var/lib/machines/dev-sandbox/etc/os-release ]; then
-  sudo cp /usr/lib/os-release /var/lib/machines/dev-sandbox/usr/lib/os-release
-fi
-```
-
-### openSUSE Tumbleweed: Rootfs via zypper --root
-
-On the host (openSUSE):
+On the **host** (fish shell):
 
 ```fish
 # Root directory for the dev-sandbox container rootfs
 set ROOT /var/lib/machines/dev-sandbox
 
-# Create the base directory for the rootfs (if it does not exist yet)
-sudo mkdir -p "$ROOT"
+# Create the base directory for the rootfs
+sudo mkdir -p $ROOT
 
-# -------------------------------------------------------------------
-# Configure openSUSE Tumbleweed repositories INSIDE the sandbox
-# -------------------------------------------------------------------
-
-# Add main OSS repository
-sudo zypper --root "$ROOT" addrepo -f \
+# Add openSUSE Tumbleweed repositories inside the sandbox root
+sudo zypper --root $ROOT addrepo -f \
     https://download.opensuse.org/tumbleweed/repo/oss/ \
     repo-oss
 
-# Add Non-OSS repository
-sudo zypper --root "$ROOT" addrepo -f \
+sudo zypper --root $ROOT addrepo -f \
     https://download.opensuse.org/tumbleweed/repo/non-oss/ \
     repo-non-oss
 
-# Add update repository
-sudo zypper --root "$ROOT" addrepo -f \
+sudo zypper --root $ROOT addrepo -f \
     https://download.opensuse.org/update/tumbleweed/ \
     repo-update
 
 # Refresh repo metadata inside the sandbox
-sudo zypper --root "$ROOT" refresh
+sudo zypper --root $ROOT refresh
 
-# -------------------------------------------------------------------
-# Install base system + development tooling
-# -------------------------------------------------------------------
-
-# Install openSUSE patterns that approximate Arch's base + base-devel
-sudo zypper --root "$ROOT" \
-    --non-interactive \
+# Install base patterns approximating a minimal dev-capable system
+sudo zypper --root $ROOT --non-interactive \
     install --type pattern base enhanced_base devel_basis
 
-# Extra tools commonly useful inside the dev environment
-sudo zypper --root "$ROOT" install git neovim kitty-terminfo
+# Extra tools needed inside the dev environment (for all projects)
+sudo zypper --root $ROOT install -y \
+    git neovim kitty-terminfo nodejs npm curl \
+    python3-poetry fish rsync
+```
 
-# -------------------------------------------------------------------
-# Ensure /etc/os-release exists INSIDE the sandbox
-# -------------------------------------------------------------------
+At this point, the container rootfs has:
 
-sudo mkdir -p "$ROOT/etc"
+* A basic openSUSE Tumbleweed system.
+* Development tooling (`devel_basis`).
+* `git`, `neovim`, `kitty-terminfo`, `nodejs`, `npm`, `curl`, `python3-poetry`, `fish`, and `rsync`.
 
-if not sudo chroot "$ROOT" test -f /etc/os-release
+### Ensuring os-release and Running a Sanity Check
+
+On the **host** (fish shell):
+
+```fish
+set ROOT /var/lib/machines/dev-sandbox
+
+# Ensure /etc/os-release exists inside the sandbox
+sudo mkdir -p $ROOT/etc
+
+if not sudo chroot $ROOT test -f /etc/os-release
     echo "Installing os-release into dev-sandbox..."
-    sudo cp /etc/os-release "$ROOT/etc/os-release"
-else
-    echo "os-release already present in dev-sandbox, nothing to do."
+    sudo cp /etc/os-release $ROOT/etc/os-release
 end
 ```
 
-### Sanity Check with a Temporary Shell
+Sanity check that the container boots:
 
-On either distro:
+```fish
+set ROOT /var/lib/machines/dev-sandbox
 
-```bash
-sudo systemd-nspawn -D /var/lib/machines/dev-sandbox /bin/bash
+sudo systemd-nspawn -D $ROOT /bin/bash
 ```
 
-If you get a shell prompt inside the container, the base system is functional. Exit:
+Inside the container (root, bash prompt):
 
 ```bash
 exit
 ```
 
+If you reach a shell and can exit cleanly, the base system is working.
+
 ---
 
-## Creating and Configuring the Container
+## Creating the Container User and Workspace
 
-### Creating the dev User and Workspace
+On the **host** (fish shell):
 
-Enter the container as root:
+```fish
+set ROOT /var/lib/machines/dev-sandbox
 
-```bash
-sudo systemd-nspawn -D /var/lib/machines/dev-sandbox /bin/bash
+sudo systemd-nspawn -D $ROOT /bin/bash
 ```
 
-Inside the container:
+Inside the container (root, bash):
 
 ```bash
-useradd -m -s /bin/bash dev
+# Create a non-root user for development (default shell: fish)
+useradd -m -s /usr/bin/fish dev
 passwd dev
 
+# Create a workspace directory where projects will be mounted
 mkdir -p /workspace
 chown dev:dev /workspace
 
 exit
 ```
 
-The container now has:
+At this point:
 
-* User `dev` with home `/home/dev`.
-* A workspace directory `/workspace` owned by `dev`.
-
-### Basic systemd-nspawn Command with Bind Mounts
-
-On the host, assume you have a project:
-
-```bash
-mkdir -p ~/Projects/my-project
-```
-
-To work on it inside `dev-sandbox`:
-
-```bash
-sudo systemd-nspawn \
-  -D /var/lib/machines/dev-sandbox \
-  -M dev-sandbox \
-  --user=dev \
-  --chdir=/workspace/my-project \
-  --bind="$HOME/Projects/my-project:/workspace/my-project" \
-  /bin/bash
-```
-
-Result:
-
-* Host `~/Projects/my-project` appears at `/workspace/my-project` inside the container.
-* You run as `dev`, starting in `/workspace/my-project`.
-* No other host directories are visible except those explicitly bound.
-
-### Optional .nspawn File for Defaults
-
-To avoid repeating some options, create `/etc/systemd/nspawn/dev-sandbox.nspawn` on the host:
-
-```bash
-sudo mkdir -p /etc/systemd/nspawn
-sudo tee /etc/systemd/nspawn/dev-sandbox.nspawn >/dev/null <<'EOF'
-[Exec]
-User=dev
-WorkingDirectory=/workspace
-
-[Files]
-# Binds are provided dynamically at runtime.
-
-[Network]
-Private=no
-EOF
-```
-
-With this, you can omit `--user=dev` and `--chdir=/workspace` from your `systemd-nspawn` command if you prefer, since they are defaults. You still specify `--bind` when you start the container (or via a wrapper script).
+* User `dev` exists with home directory `/home/dev`.
+* `dev`’s login shell is `fish`.
+* `/workspace` is owned by `dev` and will host bind-mounted projects.
 
 ---
 
-## Installing AI Tooling Inside the Container
+## Synchronizing Host Fish Config into the Container
 
-### Installing Base Tooling (Node, npm, etc.)
+Copy the **host fish configuration** into `dev`’s home inside the container, so the interactive experience is consistent.
 
-Enter the container as root:
+On the **host** (fish shell):
 
-```bash
-sudo systemd-nspawn -D /var/lib/machines/dev-sandbox /bin/bash
+```fish
+set ROOT /var/lib/machines/dev-sandbox
+
+# Ensure dev's fish config directory exists inside the container
+sudo mkdir -p $ROOT/home/dev/.config/fish
+
+# Copy the host's fish config directory into the container's dev account
+# This is a one-way copy; the container's config is independent afterwards.
+sudo rsync -a \
+    ~/.config/fish/ \
+    $ROOT/home/dev/.config/fish/
 ```
 
-Inside the container:
+Fix ownership of the copied fish configuration so `dev` can modify it:
 
-For Arch:
+```fish
+set ROOT /var/lib/machines/dev-sandbox
 
-```bash
-pacman -Syu --noconfirm
-pacman -S --noconfirm nodejs npm git curl
+sudo systemd-nspawn -D $ROOT /bin/bash
 ```
 
-For openSUSE Tumbleweed:
+Inside the container (root, bash):
 
 ```bash
-zypper refresh
-zypper install -y nodejs npm git curl
-```
-
-Optional (inside container): install fish and Neovim if desired, and set fish as interactive shell for `dev`:
-
-```bash
-# Arch:
-pacman -S --noconfirm fish neovim
-
-# openSUSE:
-zypper install -y fish neovim
-
-# Set fish as dev's default shell (inside container as root)
-chsh -s /usr/bin/fish dev
-```
-
-Exit the container:
-
-```bash
+chown -R dev:dev /home/dev/.config/fish
 exit
 ```
 
-### Installing AI CLIs (Shared vs Per-Project)
-
-Two practical patterns:
-
-#### Shared CLIs under dev’s home
-
-Install once, available for all projects.
-
-Enter as `dev`:
-
-```bash
-sudo systemd-nspawn -D /var/lib/machines/dev-sandbox --user=dev /bin/bash
-```
-
-Inside the container as `dev`:
-
-```bash
-mkdir -p "$HOME/.local/npm"
-npm config set prefix "$HOME/.local/npm"
-
-echo 'export PATH="$HOME/.local/npm/bin:$PATH"' >> ~/.bashrc
-
-# Restart the shell or source ~/.bashrc, then:
-# npm install -g <openai-cli-package> <claude-cli-package> <gemini-cli-package>
-npm install -g @openai/codex @google/gemini-cli
-```
-
-Now these CLIs are available anywhere inside the container.
-
-#### Per-project local installs
-
-After bind-mounting a project, inside container as `dev`:
-
-```bash
-cd /workspace/my-project
-
-npm init -y
-npm install --save-dev <openai-cli-package> <claude-cli-package> <gemini-cli-package>
-```
-
-You can then:
-
-```bash
-npx <cli-name> ...
-# Or define scripts in package.json and run:
-npm run ai:codex
-```
-
-For AI workflows tightly coupled to specific projects, per-project installs are often better: versions are tracked in `package.json` and `package-lock.json`, and you get reproducible environments per repo.
+Now `dev` fully owns and can customize `/home/dev/.config/fish`.
 
 ---
 
-## Managing API Keys and Secrets
+## Container-Specific Fish Configuration for AI Tooling
 
-### Per-Project .env.ai Files
+Add **container-local** fish configuration that layers on top of the imported host config, without modifying the host files.
 
-On the host:
+On the **host** (fish shell):
 
-```bash
+```fish
+set ROOT /var/lib/machines/dev-sandbox
+
+# Enter container as dev, with fish as the shell
+sudo systemd-nspawn -D $ROOT --user=dev /usr/bin/fish
+```
+
+You should now be inside the container as `dev`, with a `fish` prompt.
+
+### PATH and Tooling Integration
+
+Inside the container as `dev` (fish):
+
+```fish
+mkdir -p ~/.config/fish/conf.d
+
+# Add dev-sandbox-specific PATH and tooling configuration
+cat > ~/.config/fish/conf.d/dev-sandbox-ai.fish << 'EOF'
+# dev-sandbox AI tooling configuration
+# This file exists only inside the container and does not affect your host.
+
+# Ensure local bin directories are on PATH (for mise, Poetry, and npm globals)
+if not contains $HOME/.local/bin $PATH
+    set -gx PATH $HOME/.local/bin $PATH
+end
+
+if not contains $HOME/.local/npm/bin $PATH
+    set -gx PATH $HOME/.local/npm/bin $PATH
+end
+
+# npm global prefix (mirrors `npm config set prefix $HOME/.local/npm`)
+set -gx npm_config_prefix $HOME/.local/npm
+EOF
+```
+
+This file:
+
+* Runs in addition to the copied host config.
+* Extends `PATH` to include the directories where mise and npm global binaries will live.
+* Does not override or replace host-specific configuration; it only adds container-specific behavior.
+
+### `ai-env` Helper Function (fish)
+
+The `ai-env` helper is a dedicated fish function stored in `~/.config/fish/functions/ai-env.fish`. Fish will auto-load it when you call `ai-env`.
+
+Inside the container as `dev` (fish):
+
+```fish
+mkdir -p ~/.config/fish/functions
+
+cat > ~/.config/fish/functions/ai-env.fish << 'EOF'
+function ai-env --description "Load API keys from .env.ai in the current directory and run a command"
+
+    # ai-env: project-scoped AI environment loader
+    #
+    # Usage:
+    #   ai-env <command> [arguments...]
+    #
+    # Behavior:
+    #   - If a .env.ai file exists in the current working directory, ai-env:
+    #       * Reads lines in KEY=VALUE format
+    #       * Ignores blank lines and lines starting with '#'
+    #       * Exports each KEY=VALUE pair into the current fish environment
+    #   - After loading variables, ai-env executes the provided command with its arguments.
+    #   - The exported variables remain available for subsequent commands in this shell.
+
+    if test -f .env.ai
+        for line in (string split "\n" (cat .env.ai))
+            set line (string trim $line)
+            if test -z "$line"
+                continue
+            end
+            if string match -q '#*' -- $line
+                continue
+            end
+            set kv (string split -m 1 '=' $line)
+            if test (count $kv) -eq 2
+                # Export KEY=VALUE into the environment
+                set -gx $kv[1] $kv[2]
+            end
+        end
+    end
+
+    if test (count $argv) -eq 0
+        echo "ai-env: missing command"
+        echo "Usage: ai-env <command> [arguments...]"
+        return 1
+    end
+
+    $argv
+end
+EOF
+```
+
+Function summary:
+
+* `ai-env` is a project-scoped environment loader for AI tools.
+* It reads `.env.ai` in the **current directory**, exporting `KEY=VALUE` pairs.
+* It then executes the command you pass (e.g. an AI CLI).
+* Exported variables stay in your fish session, which is convenient for a focused AI workflow.
+
+You can now `exit` the container or keep it open for the next steps.
+
+---
+
+## Installing Global AI CLIs and mise
+
+Install **mise** and AI CLIs globally in the container as `dev`.
+
+On the **host** (fish shell):
+
+```fish
+set ROOT /var/lib/machines/dev-sandbox
+
+sudo systemd-nspawn -D $ROOT --user=dev /usr/bin/fish
+```
+
+Inside the container as `dev` (fish):
+
+1. **Install mise** (tool version manager):
+
+```fish
+curl https://mise.jdx.dev/install.sh | sh
+```
+
+This installs `mise` into a directory under `$HOME` (typically `~/.local/bin`), already on `PATH` via the `dev-sandbox-ai.fish` config.
+
+2. **Configure npm global prefix and install AI CLIs globally**:
+
+```fish
+# Ensure npm globals go under ~/.local/npm
+npm config set prefix $HOME/.local/npm
+
+# Install the AI CLI packages you use globally inside the container.
+# Replace the placeholders below with the actual packages you rely on.
+npm install -g \
+    <ai-cli-package-1> \
+    <ai-cli-package-2> \
+    <ai-cli-package-3>
+```
+
+3. **Verify tools**:
+
+```fish
+which mise
+which node
+which npm
+which poetry
+# And for each AI CLI, e.g.:
+which <ai-cli-command>
+```
+
+Once this is done:
+
+* `mise`, `node`, `npm`, `poetry`, `neovim`, and your AI CLIs are available globally for `dev`.
+* Tool versions can be managed per-project using `mise` if desired (e.g., `mise use node@LTS`).
+
+---
+
+## Managing API Keys per Project with `.env.ai`
+
+API keys are stored **per project** in `.env.ai` files on the host. These are mounted into the container alongside the project itself.
+
+On the **host** (fish shell):
+
+```fish
 mkdir -p ~/Projects/my-project
 cd ~/Projects/my-project
 
+# Initialize or clone your project here
+# git clone <repo-url> .   # if applicable
+
+# Create a per-project AI env file and ensure it is ignored by git
 touch .env.ai
-echo ".env.ai" >> .gitignore
+
+if not grep -q ".env.ai" .gitignore ^/dev/null
+    echo ".env.ai" >> .gitignore
+end
 ```
 
-Edit `.env.ai`:
+Edit `.env.ai` with your API keys (on host):
 
 ```ini
 OPENAI_API_KEY=sk-...
 ANTHROPIC_API_KEY=...
 GOOGLE_API_KEY=...
+# Any other per-project API variables
 ```
 
-This file:
+Inside the container, when you are in `/workspace/my-project` **and using fish**:
 
-* Lives in `~/Projects/my-project` on the host.
-* Becomes `/workspace/my-project/.env.ai` inside the container.
-* Is ignored by git.
-
-You can keep one `.env.ai` per project, with only the keys that project needs.
-
-### Helper Function to Load Env in the Container
-
-Inside the container, as `dev`, add a helper to your shell config.
-
-For bash:
-
-```bash
-# in ~/.bashrc (inside container)
-
-ai-env() {
-  # Usage: ai-env <command> [arguments...]
-  if [ -f .env.ai ]; then
-    set -a
-    . ./.env.ai
-    set +a
-  fi
-  "$@"
-}
+```fish
+ai-env <ai-cli-command> ...
 ```
 
-Then, from `/workspace/my-project`:
+Examples (inside container, fish shell):
 
-```bash
-ai-env npx openai-codex --help
-ai-env npx claude ...
-ai-env npm run ai:codex
+```fish
+cd /workspace/my-project
+
+# Run an AI CLI with environment loaded from .env.ai
+ai-env <ai-cli-command> --help
+ai-env <ai-cli-command> some-subcommand --option value
+
+# Or use mise and Poetry in combination
+ai-env mise x <ai-cli-command> ...
+ai-env poetry run <ai-cli-command> ...
 ```
 
-Only commands run via `ai-env` see the variables from `.env.ai`.
-
-You can implement an equivalent function in fish inside the container if you prefer that shell there.
-
-### Keeping Secrets out of Host-Global Configs
-
-Avoid:
-
-* Exporting API keys in host-level shell configs (`~/.config/fish/config.fish`, `~/.bashrc`, etc.).
-* Using `systemd-nspawn --setenv=OPENAI_API_KEY=...` from the host.
-
-Keep secrets exclusively in per-project `.env.ai` (or similar) files.
+Only `ai-env` reads `.env.ai`; other commands do not see those keys unless you deliberately export them.
 
 ---
 
-## Daily Workflow with dev-sandbox
+## Wrapper Script `dev-sandbox` (Host)
 
-### Typical Workflow for a Single Project
+Create a **single host-side wrapper** (bash script) to start the container with a project bind-mount and an interactive shell as `dev`.
 
-On the host:
-
-```bash
-mkdir -p ~/Projects/my-project
-cd ~/Projects/my-project
-git init         # or git clone <repo-url>
-
-touch .env.ai
-echo ".env.ai" >> .gitignore
-# Fill .env.ai with project-specific API keys.
-```
-
-Open Neovim on the host:
+On the **host**:
 
 ```bash
-nvim .
-```
+mkdir -p "$HOME/bin"
 
-In another terminal on the host, start the sandbox for that project using the wrapper script:
-
-```bash
-dev-sandbox          # if run inside ~/Projects/my-project
-# or
-dev-sandbox ~/Projects/my-project
-```
-
-Inside the container:
-
-```bash
-cd /workspace/my-project
-
-# First-time setup:
-npm init -y
-npm install --save-dev <ai-cli-packages>
-
-# Daily usage:
-ai-env npx openai-codex ...
-ai-env npx claude ...
-ai-env npx gemini ...
-```
-
-You keep your editing environment (fish + Neovim) on the host, and only the AI CLI execution happens in the container.
-
-### Wrapper Script dev-sandbox
-
-On the host, create the script:
-
-```bash
-mkdir -p ~/bin
-cat > ~/bin/dev-sandbox <<'EOF'
+cat > "$HOME/bin/dev-sandbox" << 'EOF'
 #!/usr/bin/env bash
 set -euo pipefail
 
@@ -519,7 +462,7 @@ if ! sudo test -d "$ROOT"; then
   exit 1
 fi
 
-if [ $# -ge 1 ]; then
+if [ "$#" -ge 1 ]; then
   PROJECT_PATH="$1"
 else
   PROJECT_PATH="$PWD"
@@ -538,114 +481,172 @@ sudo systemd-nspawn \
   -D "$ROOT" \
   --user=dev \
   --bind="${PROJECT_PATH}:/workspace/${PROJECT_NAME}" \
-  /bin/bash -lc "mkdir -p /workspace/${PROJECT_NAME} && cd /workspace/${PROJECT_NAME} && exec bash"
+  /usr/bin/fish -lc "mkdir -p /workspace/${PROJECT_NAME} && cd /workspace/${PROJECT_NAME} && exec fish"
 EOF
 
-chmod +x ~/bin/dev-sandbox
+chmod +x "$HOME/bin/dev-sandbox"
 ```
 
-Ensure `~/bin` is in your host PATH (for example, in fish):
+Ensure `~/bin` is on your PATH in **host fish**:
 
 ```fish
-set -Ux PATH $HOME/bin $PATH
+if not contains $HOME/bin $PATH
+    set -Ua fish_user_paths $HOME/bin
+end
 ```
 
-Now you can run:
+Usage on the host:
 
-```bash
+```fish
 cd ~/Projects/my-project
 dev-sandbox
+# or explicitly:
+dev-sandbox ~/Projects/my-project
 ```
 
-This opens a `dev-sandbox` shell automatically bound to `/workspace/my-project`.
+This will:
+
+* Bind-mount `~/Projects/my-project` to `/workspace/my-project` inside `dev-sandbox`.
+* Start `fish` as `dev`, with `PWD=/workspace/my-project`.
+* Load the combined fish configuration (copied host config + `dev-sandbox-ai.fish` + `ai-env` function).
+
+---
+
+## Daily Workflow
+
+1. **On the host: work on code**
+
+   ```fish
+   cd ~/Projects/my-project
+   nvim .
+   ```
+
+2. **On the host: enter `dev-sandbox` for this project**
+
+   In another terminal:
+
+   ```fish
+   cd ~/Projects/my-project
+   dev-sandbox
+   ```
+
+3. **Inside the container as `dev` (fish)**
+
+   You are now in `/workspace/my-project` with a fish shell.
+
+   * First-time per project (optional tooling setup):
+
+     ```fish
+     # Example: configure per-project tool versions with mise
+     mise use node@lts
+     mise use python@3.12
+
+     # Example: set up Poetry environment
+     poetry init  # or `poetry install` if pyproject.toml already exists
+     ```
+
+   * Run AI CLIs with `.env.ai` loaded:
+
+     ```fish
+     # With environment from .env.ai
+     ai-env <ai-cli-command> describe-file ./src/file.py
+     ai-env <ai-cli-command> refactor --target src/
+     ```
+
+4. **Repeat per project**
+
+   * Each project under `~/Projects/<project>`:
+
+     * Has its own `.env.ai` with keys.
+     * Is mounted as `/workspace/<project>`.
+     * Uses the same `dev-sandbox` wrapper and `ai-env` helper.
+
+5. **Exit**
+
+   * Exit the container shell with `exit`.
+   * Continue editing on host as usual.
 
 ---
 
 ## Security Considerations and Best Practices
 
-### Why SSH Keys and Host Secrets Are Protected
+### Isolation Model
 
-Because:
+* The container’s root filesystem lives under `/var/lib/machines/dev-sandbox`.
+* Inside `dev-sandbox`, `dev` sees:
 
-* The container’s rootfs is separate: `/var/lib/machines/dev-sandbox`.
-* Inside the container, you only see host paths explicitly bound via `--bind`.
-* The workflow never binds:
+  * `/workspace/<project>` for the single bound project.
+  * `/home/dev` and standard system paths.
+* AI CLIs only see:
 
-  * `~` or `/home/<user>`.
-  * `~/.ssh`.
-  * Browser configs (`~/.mozilla`, `~/.config/chromium`, etc.).
-  * Other secret-bearing directories (`~/.aws`, `~/.gnupg`, etc.).
+  * The mounted project directory.
+  * Container-local home and configuration.
 
-AI CLIs see:
+They **do not see**, unless you explicitly mount:
 
-* `/workspace/<project>` (code + project-local `.env.ai`).
-* The container’s own `/home/dev`, `/usr`, etc.
+* Host `$HOME`.
+* `~/.ssh`.
+* Browser profiles (`~/.mozilla`, `~/.config/chromium`, etc.).
+* Other secret directories (`~/.aws`, `~/.gnupg`, etc.).
+* Other projects under `~/Projects`.
 
-They do not see your host SSH keys or browser profiles at all.
+### Practices to Avoid
 
-### Things to Avoid
+Do not:
 
-* Do not bind-mount your entire home directory:
+* Bind-mount your entire home directory:
 
-  ```bash
+  ```fish
   # Do NOT do this:
-  --bind="$HOME:/home/dev"
+  sudo systemd-nspawn ... --bind "$HOME:/home/dev"
   ```
 
-* Do not copy host secret directories into the container.
+* Copy host secret directories into the container (`~/.ssh`, `~/.gnupg`, etc.).
 
-* Do not store API keys in host-global configs.
+* Export AI API keys in host-global shell configs (`~/.config/fish/config.fish` on host).
 
-* Avoid running CLIs as root inside the container unless absolutely necessary (stay as `dev`).
+* Use `systemd-nspawn --setenv=OPENAI_API_KEY=...` from the host.
 
-### Optional Hardening Ideas
+Keep secrets **only** in per-project `.env.ai` files and load them via `ai-env` inside the container.
 
-If you want more isolation:
+### Optional Extra Hardening
 
-* Use `--bind-ro` for binds that do not need to be writable.
-* Use `--private-dev` to hide unnecessary device nodes from the container.
-* Drop capabilities with `--drop-capability=all` and re-add only what is required.
-* Use `--private-network` if you want the container networking to be separate and explicitly controlled.
+Once the basic setup works, you can add extra hardening (all configured on the host when invoking `systemd-nspawn`):
 
-These are optional; the main isolation comes from:
+* Use `--bind-ro` for mounts that do not need to be writable.
+* Add `--private-dev` to restrict device nodes.
+* Drop capabilities with `--drop-capability=all` and then selectively re-add only what is needed (via `--capability=`).
+* Use `--private-network` if you want isolated networking and explicitly managed access.
+* Consider `--private-users=yes` to leverage user namespaces, depending on your workflows.
 
-* Separate rootfs.
-* Limited bind mounts.
-* Per-project secrets.
+These options are additive; they do not change the main workflow.
 
 ---
 
 ## Recap
 
-* Projects live under `~/Projects/<project>`.
-* A single shared container `dev-sandbox` lives at `/var/lib/machines/dev-sandbox`.
-* On Arch:
+* Host: openSUSE Tumbleweed, kitty, fish.
 
-  * Rootfs via `pacstrap` with `base base-devel git neovim kitty-terminfo`.
-* On openSUSE Tumbleweed:
+* Container: `dev-sandbox` under `/var/lib/machines/dev-sandbox`, built using openSUSE Tumbleweed via `zypper --root`.
 
-  * Rootfs via `zypper --root` with:
-
-    * Repos `repo-oss`, `repo-non-oss`, `repo-update`.
-    * Patterns `base`, `enhanced_base`, `devel_basis`.
-    * Extra packages: `git`, `neovim`, `kitty-terminfo`.
 * Inside the container:
 
-  * Non-root user `dev`.
-  * `/workspace` for mounted projects.
-  * Node, npm, and AI CLIs are installed there.
-  * fish can be installed and set as `dev`’s default shell to match host shell behavior if desired.
-* Host wrapper script `dev-sandbox`:
+  * User `dev`, default shell `fish`, workspace at `/workspace`.
+  * Base tooling: `git`, `neovim`, `kitty-terminfo`, `nodejs`, `npm`, `curl`, `python3-poetry`, `fish`, `rsync`.
+  * Global tools: `mise`, AI CLIs installed via `npm install -g`.
+  * Host fish config is copied, and container-specific config is added in `dev-sandbox-ai.fish`.
+  * `ai-env` function is defined in `~/.config/fish/functions/ai-env.fish`, loads `.env.ai`, and runs AI CLIs with the correct environment.
 
-  * Bind-mounts a project directory into `/workspace/<project>`.
-  * Starts a shell as `dev` in that directory.
-* API keys:
+* Host projects:
 
-  * Stored per-project in `.env.ai` under `~/Projects/<project>`.
-  * Loaded via `ai-env` helper inside the container when running AI CLIs.
+  * Live under `~/Projects/<project>`.
+  * Each contains `.env.ai` (in `.gitignore`) for per-project API keys.
+
+* Wrapper:
+
+  * Host `~/bin/dev-sandbox` is a **bash** script that bind-mounts `~/Projects/<project>` to `/workspace/<project>` and starts `fish` as `dev` in the container, in that directory.
+
 * Result:
 
-  * Neovim + fish stay on the host.
-  * AI CLIs run in an isolated container that only sees the project you explicitly mount.
-  * `~/.ssh`, browser profiles, and other host secrets remain invisible to the AI tools.
-  * Colors and terminal behavior are consistent with kitty by installing `kitty-terminfo` and, if desired, aligning the interactive shell (fish or bash) between host and container.
+  * Editing remains on the host (Neovim + fish).
+  * AI CLIs execute in an isolated container, see only the bound project and the per-project `.env.ai`, and never see host-level sensitive directories.
