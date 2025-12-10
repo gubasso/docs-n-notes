@@ -9,7 +9,7 @@
 
 ---
 
-## TL;DR (High-Level Summary)
+## TL;DR
 
 - Create a `systemd-nspawn` container rootfs at `/var/lib/machines/dev-sandbox` using openSUSE Tumbleweed repositories.
 - Inside the container, create user `dev`, `/workspace`, and install:
@@ -109,6 +109,10 @@ sudo zypper --root $ROOT --non-interactive \
 sudo zypper --root $ROOT install -y \
     git neovim kitty-terminfo nodejs npm curl \
     python3-poetry fish rsync
+
+# Optional (specific dependencies)
+sudo zypper --root $ROOT install -y \
+    fzf starship zoxide eza bat
 ```
 
 At this point, the container rootfs has:
@@ -200,6 +204,11 @@ sudo mkdir -p $ROOT/home/dev/.config/fish
 sudo rsync -a \
     ~/.config/fish/ \
     $ROOT/home/dev/.config/fish/
+
+# Optional: copy other dependencies config
+sudo rsync -a \
+    ~/.config/starship.toml \
+    $ROOT/home/dev/.config/
 ```
 
 Fix ownership of the copied fish configuration so `dev` can modify it:
@@ -213,7 +222,7 @@ sudo systemd-nspawn -D $ROOT /bin/bash
 Inside the container (root, bash):
 
 ```bash
-chown -R dev:dev /home/dev/.config/fish
+chown -R dev:dev /home/dev/.config
 exit
 ```
 
@@ -238,9 +247,9 @@ You should now be inside the container as `dev`, with a `fish` prompt.
 
 ### PATH and Tooling Integration
 
-Inside the container as `dev` (fish):
+Inside the container as `dev` (bash script):
 
-```fish
+```bash
 mkdir -p ~/.config/fish/conf.d
 
 # Add dev-sandbox-specific PATH and tooling configuration
@@ -272,9 +281,9 @@ This file:
 
 The `ai-env` helper is a dedicated fish function stored in `~/.config/fish/functions/ai-env.fish`. Fish will auto-load it when you call `ai-env`.
 
-Inside the container as `dev` (fish):
+Inside the container as `dev` (bash script):
 
-```fish
+```bash
 mkdir -p ~/.config/fish/functions
 
 cat > ~/.config/fish/functions/ai-env.fish << 'EOF'
