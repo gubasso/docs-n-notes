@@ -1,12 +1,30 @@
 # Isolated AI Dev Environment with `systemd-nspawn` (`dev-sandbox`)
 
+> Note: all examples here assume the **host terminal is kitty** (so `TERM=xterm-kitty`).
+> If you use a different terminal emulator, you may need to adjust `TERM`/terminfo and color-related steps.
+
+---
+
 ## TL;DR (Very Short, Practical Steps)
 
 - Create rootfs for `dev-sandbox` at `/var/lib/machines/dev-sandbox`:
-  - Arch: `sudo pacstrap -c /var/lib/machines/dev-sandbox base base-devel git neovim`
-  - openSUSE: `sudo zypper --root /var/lib/machines/dev-sandbox install --no-recommends --type pattern minimal_base git neovim`
+  - Arch:
+    - `sudo mkdir -p /var/lib/machines/dev-sandbox`
+    - `sudo pacstrap -c /var/lib/machines/dev-sandbox base base-devel git neovim kitty-terminfo`
+  - openSUSE Tumbleweed:
+    - `ROOT=/var/lib/machines/dev-sandbox`
+    - `sudo mkdir -p "$ROOT"`
+    - Add repos into `$ROOT`:
+      - `sudo zypper --root "$ROOT" addrepo -f https://download.opensuse.org/tumbleweed/repo/oss/      repo-oss`
+      - `sudo zypper --root "$ROOT" addrepo -f https://download.opensuse.org/tumbleweed/repo/non-oss/  repo-non-oss`
+      - `sudo zypper --root "$ROOT" addrepo -f https://download.opensuse.org/update/tumbleweed/        repo-update`
+    - `sudo zypper --root "$ROOT" refresh`
+    - Install base patterns:
+      - `sudo zypper --root "$ROOT" --non-interactive install --type pattern base enhanced_base devel_basis`
+    - Optionally:
+      - `sudo zypper --root "$ROOT" install git neovim kitty-terminfo`
 - Ensure `/var/lib/machines/dev-sandbox/usr/lib/os-release` exists (copy from host if needed).
-- Enter container as root:  
+- Enter container as root:
   `sudo systemd-nspawn -D /var/lib/machines/dev-sandbox /bin/bash`
 - Inside container (as root):
   - `useradd -m -s /bin/bash dev && passwd dev`
@@ -14,11 +32,15 @@
   - Install tooling:
     - Arch: `pacman -Syu --noconfirm && pacman -S --noconfirm nodejs npm git curl`
     - openSUSE: `zypper refresh && zypper install -y nodejs npm git curl`
+  - Install and set **fish** as the interactive shell for `dev` (optional but recommended if you use fish on host):
+    - Arch: `pacman -S --noconfirm fish`
+    - openSUSE: `zypper install -y fish`
+    - `chsh -s /usr/bin/fish dev`
 - On host, put projects under `~/Projects/<project>`.
 - Create wrapper script `~/bin/dev-sandbox` that:
   - Takes a project path (or uses `$PWD`)
   - Bind-mounts it to `/workspace/<project>`
-  - Runs `systemd-nspawn -M dev-sandbox -D /var/lib/machines/dev-sandbox --user=dev --chdir=/workspace/<project> /bin/bash`
+  - Runs `systemd-nspawn -M dev-sandbox -D /var/lib/machines/dev-sandbox --user=dev ...`
 - In a project:
   - Create `.env.ai` (add to `.gitignore`) with API keys.
   - Inside container:
@@ -37,7 +59,7 @@
 - [Overview](#overview)
 - [Preparing the Base Root Filesystem](#preparing-the-base-root-filesystem)
   - [Arch Linux: Rootfs via pacstrap](#arch-linux-rootfs-via-pacstrap)
-  - [openSUSE Tumbleweed: Rootfs via-zypper---root](#opensuse-tumbleweed-rootfs-via-zypper---root)
+  - [openSUSE Tumbleweed: Rootfs via zypper --root](#opensuse-tumbleweed-rootfs-via-zypper---root)
   - [Sanity Check with a Temporary Shell](#sanity-check-with-a-temporary-shell)
 - [Creating and Configuring the Container](#creating-and-configuring-the-container)
   - [Creating the dev User and Workspace](#creating-the-dev-user-and-workspace)
@@ -83,6 +105,7 @@ You will:
 - Use Neovim and fish on the host.
 - Enter `dev-sandbox` to run CLIs against `/workspace/<project>`.
 - Manage secrets with per-project `.env.ai` files.
+- Have examples tailored to **kitty** (`TERM=xterm-kitty`); other terminals may need analogous terminfo/TERM adjustments.
 
 ---
 
@@ -97,8 +120,8 @@ On the host (Arch):
 ```bash
 sudo mkdir -p /var/lib/machines/dev-sandbox
 
-sudo pacstrap -c /var/lib/machines/dev-sandbox base base-devel git neovim
-```
+sudo pacstrap -c /var/lib/machines/dev-sandbox base base-devel git neovim kitty-terminfo
+````
 
 Ensure `os-release` exists inside the container:
 
@@ -109,25 +132,63 @@ if [ ! -f /var/lib/machines/dev-sandbox/usr/lib/os-release ] && \
 fi
 ```
 
-### openSUSE Tumbleweed: Rootfs via `zypper --root`
+### openSUSE Tumbleweed: Rootfs via zypper --root
 
 On the host (openSUSE):
 
-```bash
-sudo mkdir -p /var/lib/machines/dev-sandbox
+```fish
+# Root directory for the dev-sandbox container rootfs
+set ROOT /var/lib/machines/dev-sandbox
 
-sudo zypper --root /var/lib/machines/dev-sandbox \
-  --non-interactive \
-  install --no-recommends --type pattern minimal_base
+# Create the base directory for the rootfs (if it does not exist yet)
+sudo mkdir -p "$ROOT"
 
-sudo zypper --root /var/lib/machines/dev-sandbox install git neovim
+# -------------------------------------------------------------------
+# Configure openSUSE Tumbleweed repositories INSIDE the sandbox
+# -------------------------------------------------------------------
 
-sudo cp -L /etc/resolv.conf /var/lib/machines/dev-sandbox/etc/resolv.conf
+# Add main OSS repository
+sudo zypper --root "$ROOT" addrepo -f \
+    https://download.opensuse.org/tumbleweed/repo/oss/ \
+    repo-oss
 
-if [ ! -f /var/lib/machines/dev-sandbox/usr/lib/os-release ] && \
-   [ ! -f /var/lib/machines/dev-sandbox/etc/os-release ]; then
-  sudo cp /usr/lib/os-release /var/lib/machines/dev-sandbox/usr/lib/os-release
-fi
+# Add Non-OSS repository
+sudo zypper --root "$ROOT" addrepo -f \
+    https://download.opensuse.org/tumbleweed/repo/non-oss/ \
+    repo-non-oss
+
+# Add update repository
+sudo zypper --root "$ROOT" addrepo -f \
+    https://download.opensuse.org/update/tumbleweed/ \
+    repo-update
+
+# Refresh repo metadata inside the sandbox
+sudo zypper --root "$ROOT" refresh
+
+# -------------------------------------------------------------------
+# Install base system + development tooling
+# -------------------------------------------------------------------
+
+# Install openSUSE patterns that approximate Arch's base + base-devel
+sudo zypper --root "$ROOT" \
+    --non-interactive \
+    install --type pattern base enhanced_base devel_basis
+
+# Extra tools commonly useful inside the dev environment
+sudo zypper --root "$ROOT" install git neovim kitty-terminfo
+
+# -------------------------------------------------------------------
+# Ensure /etc/os-release exists INSIDE the sandbox
+# -------------------------------------------------------------------
+
+sudo mkdir -p "$ROOT/etc"
+
+if not sudo chroot "$ROOT" test -f /etc/os-release
+    echo "Installing os-release into dev-sandbox..."
+    sudo cp /etc/os-release "$ROOT/etc/os-release"
+else
+    echo "os-release already present in dev-sandbox, nothing to do."
+end
 ```
 
 ### Sanity Check with a Temporary Shell
@@ -248,7 +309,7 @@ zypper refresh
 zypper install -y nodejs npm git curl
 ```
 
-Optional (inside container): install fish and Neovim if desired:
+Optional (inside container): install fish and Neovim if desired, and set fish as interactive shell for `dev`:
 
 ```bash
 # Arch:
@@ -256,11 +317,8 @@ pacman -S --noconfirm fish neovim
 
 # openSUSE:
 zypper install -y fish neovim
-```
 
-Optionally change `dev`’s shell:
-
-```bash
+# Set fish as dev's default shell (inside container as root)
 chsh -s /usr/bin/fish dev
 ```
 
@@ -291,10 +349,10 @@ mkdir -p "$HOME/.local/npm"
 npm config set prefix "$HOME/.local/npm"
 
 echo 'export PATH="$HOME/.local/npm/bin:$PATH"' >> ~/.bashrc
-# If you use fish inside the container, you can configure PATH there similarly.
 
 # Restart the shell or source ~/.bashrc, then:
-npm install -g <openai-cli-package> <claude-cli-package> <gemini-cli-package>
+# npm install -g <openai-cli-package> <claude-cli-package> <gemini-cli-package>
+npm install -g @openai/codex @google/gemini-cli
 ```
 
 Now these CLIs are available anywhere inside the container.
@@ -455,7 +513,8 @@ set -euo pipefail
 MACHINE="dev-sandbox"
 ROOT="/var/lib/machines/${MACHINE}"
 
-if [ ! -d "$ROOT" ]; then
+# Check rootfs existence using sudo so permissions do not cause a false negative
+if ! sudo test -d "$ROOT"; then
   echo "Error: container rootfs not found at $ROOT" >&2
   exit 1
 fi
@@ -478,9 +537,8 @@ sudo systemd-nspawn \
   -M "$MACHINE" \
   -D "$ROOT" \
   --user=dev \
-  --chdir="/workspace/${PROJECT_NAME}" \
   --bind="${PROJECT_PATH}:/workspace/${PROJECT_NAME}" \
-  /bin/bash
+  /bin/bash -lc "mkdir -p /workspace/${PROJECT_NAME} && cd /workspace/${PROJECT_NAME} && exec bash"
 EOF
 
 chmod +x ~/bin/dev-sandbox
@@ -527,7 +585,7 @@ They do not see your host SSH keys or browser profiles at all.
 
 ### Things to Avoid
 
-* Do not bind your entire home directory:
+* Do not bind-mount your entire home directory:
 
   ```bash
   # Do NOT do this:
@@ -561,12 +619,22 @@ These are optional; the main isolation comes from:
 
 * Projects live under `~/Projects/<project>`.
 * A single shared container `dev-sandbox` lives at `/var/lib/machines/dev-sandbox`.
+* On Arch:
+
+  * Rootfs via `pacstrap` with `base base-devel git neovim kitty-terminfo`.
+* On openSUSE Tumbleweed:
+
+  * Rootfs via `zypper --root` with:
+
+    * Repos `repo-oss`, `repo-non-oss`, `repo-update`.
+    * Patterns `base`, `enhanced_base`, `devel_basis`.
+    * Extra packages: `git`, `neovim`, `kitty-terminfo`.
 * Inside the container:
 
   * Non-root user `dev`.
-  * `~dev` is independent from your host `$HOME`.
-  * `/workspace` is the mount point for project directories.
-  * Node, npm, and AI CLIs are installed and used there.
+  * `/workspace` for mounted projects.
+  * Node, npm, and AI CLIs are installed there.
+  * fish can be installed and set as `dev`’s default shell to match host shell behavior if desired.
 * Host wrapper script `dev-sandbox`:
 
   * Bind-mounts a project directory into `/workspace/<project>`.
@@ -580,3 +648,4 @@ These are optional; the main isolation comes from:
   * Neovim + fish stay on the host.
   * AI CLIs run in an isolated container that only sees the project you explicitly mount.
   * `~/.ssh`, browser profiles, and other host secrets remain invisible to the AI tools.
+  * Colors and terminal behavior are consistent with kitty by installing `kitty-terminfo` and, if desired, aligning the interactive shell (fish or bash) between host and container.
