@@ -15,11 +15,12 @@
 - Inside the container, create user `dev`, `/workspace`, and install:
   - `nodejs`, `npm`, `git`, `curl`, `neovim`, `kitty-terminfo`, `python3-poetry`, `fish`, `rsync`, and tools needed by your AI workflows.
 - Set `fish` as the default shell for `dev` user in the container.
-- From the host, copy your **host fish configuration** into the container’s `dev` account, then add a **container-specific** fish config file for AI tooling.
+- On the host, expose `~/.config` into the container **read-only** at `/opt/host-config`, then symlink only the config paths you want into `/home/dev/.config`.
 - Install **mise** (tool version manager) and your Node-based AI CLIs **globally** as `dev`.
 - Keep all projects under `~/Projects/<project>` on the host; each project has a `.env.ai` file (ignored by git) with API keys.
 - Use a **host-side `dev-sandbox` wrapper (bash script)** to:
   - Bind-mount a single project into `/workspace/<project>` inside the container.
+  - Bind-mount host `~/.config` into `/opt/host-config` as **read-only**.
   - Start an interactive shell as `dev` in that directory (you will typically run `fish` interactively from there).
 - Inside the container, run AI commands via a fish helper function `ai-env` (stored in `~/.config/fish/functions/ai-env.fish`) that loads `.env.ai` into the environment, then executes the CLI.
 
@@ -32,7 +33,7 @@
   - [Configuring Repositories and Installing the Base System](#configuring-repositories-and-installing-the-base-system)
   - [Ensuring os-release and Running a Sanity Check](#ensuring-os-release-and-running-a-sanity-check)
 - [Creating the Container User and Workspace](#creating-the-container-user-and-workspace)
-- [Synchronizing Host Fish Config into the Container](#synchronizing-host-fish-config-into-the-container)
+- [Linking Host Config into the Container](#linking-host-config-into-the-container)
 - [Container-Specific Fish Configuration for AI Tooling](#container-specific-fish-configuration-for-ai-tooling)
   - [PATH and Tooling Integration](#path-and-tooling-integration)
   - [`ai-env` Helper Function (fish)](#ai-env-helper-function-fish)
@@ -187,52 +188,33 @@ At this point:
 
 ---
 
-## Synchronizing Host Fish Config into the Container
+## Linking Host Config into the Container
 
-Copy the **host fish configuration** into `dev`’s home inside the container, so the interactive experience is consistent.
+### Bind-mount host config (read-only)
 
-On the **host** (fish shell):
+Host config is mounted into the container at `/opt/host-config` and is not modified by the container.
 
-```fish
-set ROOT /var/lib/machines/dev-sandbox
+### Symlink selected configs (one-time)
 
-# Ensure dev's fish config directory exists inside the container
-sudo mkdir -p $ROOT/home/dev/.config/fish
-
-# Copy the host's fish config directory into the container's dev account
-# This is a one-way copy; the container's config is independent afterwards.
-sudo rsync -a \
-    ~/.config/fish/ \
-    $ROOT/home/dev/.config/fish/
-
-# Optional: copy other dependencies config
-sudo rsync -a \
-    ~/.config/starship.toml \
-    $ROOT/home/dev/.config/
-```
-
-Fix ownership of the copied fish configuration so `dev` can modify it:
+After entering the container as `dev`, link the config directories/files you want:
 
 ```fish
-set ROOT /var/lib/machines/dev-sandbox
+# inside container as dev
+mkdir -p ~/.config
 
-sudo systemd-nspawn -D $ROOT /bin/bash
+# Link what you need (examples)
+ln -snf /opt/host-config/fish ~/.config/fish
+ln -snf /opt/host-config/nvim ~/.config/nvim
+ln -snf /opt/host-config/starship.toml ~/.config/starship.toml
 ```
 
-Inside the container (root, bash):
-
-```bash
-chown -R dev:dev /home/dev/.config
-exit
-```
-
-Now `dev` fully owns and can customize `/home/dev/.config/fish`.
+You can add more symlinks using the same pattern.
 
 ---
 
 ## Container-Specific Fish Configuration for AI Tooling
 
-Add **container-local** fish configuration that layers on top of the imported host config, without modifying the host files.
+Add **container-local** fish configuration that layers on top of the host fish config, without modifying the host files.
 
 On the **host** (fish shell):
 
@@ -273,9 +255,8 @@ EOF
 
 This file:
 
-* Runs in addition to the copied host config.
+* Runs in addition to the host fish config.
 * Extends `PATH` to include the directories where mise and npm global binaries will live.
-* Does not override or replace host-specific configuration; it only adds container-specific behavior.
 
 ### `ai-env` Helper Function (fish)
 
@@ -335,7 +316,7 @@ Function summary:
 * `ai-env` is a project-scoped environment loader for AI tools.
 * It reads `.env.ai` in the **current directory**, exporting `KEY=VALUE` pairs.
 * It then executes the command you pass (e.g. an AI CLI).
-* Exported variables stay in your fish session, which is convenient for a focused AI workflow.
+* Exported variables stay in your fish session.
 
 You can now `exit` the container or keep it open for the next steps.
 
@@ -451,7 +432,7 @@ Only `ai-env` reads `.env.ai`; other commands do not see those keys unless you d
 
 ## Wrapper Script `dev-sandbox` (Host)
 
-Create a **single host-side wrapper** (bash script) to start the container with a project bind-mount and an interactive shell as `dev`.
+Create a **single host-side wrapper** (bash script) to start the container with a project bind-mount, a read-only host-config mount, and an interactive shell as `dev`.
 
 On the **host**:
 
@@ -464,10 +445,16 @@ set -euo pipefail
 
 MACHINE="dev-sandbox"
 ROOT="/var/lib/machines/${MACHINE}"
+HOST_CONFIG="${HOME}/.config"
 
 # Check rootfs existence using sudo so permissions do not cause a false negative
 if ! sudo test -d "$ROOT"; then
   echo "Error: container rootfs not found at $ROOT" >&2
+  exit 1
+fi
+
+if [ ! -d "$HOST_CONFIG" ]; then
+  echo "Error: host config dir '$HOST_CONFIG' does not exist." >&2
   exit 1
 fi
 
@@ -490,7 +477,19 @@ sudo systemd-nspawn \
   -D "$ROOT" \
   --user=dev \
   --bind="${PROJECT_PATH}:/workspace/${PROJECT_NAME}" \
-  /usr/bin/fish -lc "mkdir -p /workspace/${PROJECT_NAME} && cd /workspace/${PROJECT_NAME} && exec fish"
+  --bind-ro="${HOST_CONFIG}:/opt/host-config" \
+  /usr/bin/fish -lc "
+    mkdir -p /workspace/${PROJECT_NAME}
+    cd /workspace/${PROJECT_NAME}
+
+    # Minimal config linking (idempotent): add what you need
+    mkdir -p \$HOME/.config
+    [ -d /opt/host-config/fish ] && ln -snf /opt/host-config/fish \$HOME/.config/fish
+    [ -d /opt/host-config/nvim ] && ln -snf /opt/host-config/nvim \$HOME/.config/nvim
+    [ -f /opt/host-config/starship.toml ] && ln -snf /opt/host-config/starship.toml \$HOME/.config/starship.toml
+
+    exec fish
+  "
 EOF
 
 chmod +x "$HOME/bin/dev-sandbox"
@@ -516,8 +515,9 @@ dev-sandbox ~/Projects/my-project
 This will:
 
 * Bind-mount `~/Projects/my-project` to `/workspace/my-project` inside `dev-sandbox`.
+* Bind-mount host `~/.config` (read-only) to `/opt/host-config` inside `dev-sandbox`.
+* Create/update symlinks under `/home/dev/.config` to selected paths in `/opt/host-config`.
 * Start `fish` as `dev`, with `PWD=/workspace/my-project`.
-* Load the combined fish configuration (copied host config + `dev-sandbox-ai.fish` + `ai-env` function).
 
 ---
 
@@ -586,6 +586,7 @@ This will:
 
   * `/workspace/<project>` for the single bound project.
   * `/home/dev` and standard system paths.
+  * `/opt/host-config` (read-only), plus whatever is symlinked into `/home/dev/.config`.
 * AI CLIs only see:
 
   * The mounted project directory.
@@ -643,7 +644,8 @@ These options are additive; they do not change the main workflow.
   * User `dev`, default shell `fish`, workspace at `/workspace`.
   * Base tooling: `git`, `neovim`, `kitty-terminfo`, `nodejs`, `npm`, `curl`, `python3-poetry`, `fish`, `rsync`.
   * Global tools: `mise`, AI CLIs installed via `npm install -g`.
-  * Host fish config is copied, and container-specific config is added in `dev-sandbox-ai.fish`.
+  * Host configs are mounted read-only at `/opt/host-config` and linked into `/home/dev/.config` as needed.
+  * Container-specific fish config lives in `~/.config/fish/conf.d/dev-sandbox-ai.fish`.
   * `ai-env` function is defined in `~/.config/fish/functions/ai-env.fish`, loads `.env.ai`, and runs AI CLIs with the correct environment.
 
 * Host projects:
@@ -653,7 +655,7 @@ These options are additive; they do not change the main workflow.
 
 * Wrapper:
 
-  * Host `~/bin/dev-sandbox` is a **bash** script that bind-mounts `~/Projects/<project>` to `/workspace/<project>` and starts `fish` as `dev` in the container, in that directory.
+  * Host `~/bin/dev-sandbox` is a **bash** script that bind-mounts `~/Projects/<project>` to `/workspace/<project>`, mounts host `~/.config` read-only at `/opt/host-config`, links selected configs into `/home/dev/.config`, and starts `fish` as `dev`.
 
 * Result:
 
