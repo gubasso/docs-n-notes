@@ -113,7 +113,7 @@ sudo zypper --root $ROOT install -y \
 
 # Optional (specific dependencies)
 sudo zypper --root $ROOT install -y \
-    fzf starship zoxide eza bat
+    fzf starship zoxide eza bat kitty stow
 ```
 
 At this point, the container rootfs has:
