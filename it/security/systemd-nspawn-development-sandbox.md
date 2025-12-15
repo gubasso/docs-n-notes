@@ -99,6 +99,10 @@ sudo zypper --root $ROOT addrepo -f \
     https://download.opensuse.org/update/tumbleweed/ \
     repo-update
 
+# For julia support
+sudo zypper --root $ROOT addrepo -f \
+    https://download.opensuse.org/repositories/science/openSUSE_Tumbleweed/science.repo
+
 # Refresh repo metadata inside the sandbox
 sudo zypper --root $ROOT refresh
 
@@ -113,7 +117,9 @@ sudo zypper --root $ROOT install -y \
 
 # Optional (specific dependencies)
 sudo zypper --root $ROOT install -y \
-    fzf starship zoxide eza bat kitty stow trash-cli
+    fzf starship zoxide eza bat kitty stow trash-cli mercurial python3-neovim \
+    go go-doc rust php php-composer java-25-openjdk-devel julia ruby-devel \
+    lua51 ruby3.4-rubygem-neovim perl-base perl-App-cpanminus devel_perl make gcc
 ```
 
 At this point, the container rootfs has:
