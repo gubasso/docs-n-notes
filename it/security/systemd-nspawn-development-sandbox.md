@@ -2,7 +2,7 @@
 
 > Assumptions:
 > - Host OS: **openSUSE Tumbleweed**
-> - Host terminal: **kitty** (`TERM=xterm-kitty`)
+> - Host terminal: **kitty**
 > - Host interactive shell: **fish**
 > - AI CLIs are installed **globally inside the container**
 > - API keys are **per-project** in `.env.ai` files
@@ -13,7 +13,7 @@
 
 - Create a `systemd-nspawn` container rootfs at `/var/lib/machines/dev-sandbox` using openSUSE Tumbleweed repositories.
 - Inside the container, create user `dev`, `/workspace`, and install:
-  - `nodejs`, `npm`, `git`, `curl`, `neovim`, `kitty-terminfo`, `python3-poetry`, `fish`, `rsync`, and tools needed by your AI workflows.
+  - `nodejs`, `npm`, `git`, `curl`, `neovim`, `python3-poetry`, `fish`, `rsync`, and tools needed by your AI workflows.
 - Set `fish` as the default shell for `dev` user in the container.
 - On the host, expose `~/.config` into the container **read-only** at `/opt/host-config`, then symlink only the config paths you want into `/home/dev/.config`.
 - Install **mise** (tool version manager) and your Node-based AI CLIs **globally** as `dev`.
@@ -112,12 +112,12 @@ sudo zypper --root $ROOT --non-interactive \
 
 # Extra tools needed inside the dev environment (for all projects)
 sudo zypper --root $ROOT install -y \
-    git neovim kitty-terminfo nodejs npm curl \
+    git neovim nodejs npm curl \
     python3-poetry fish rsync
 
 # Optional (specific dependencies)
 sudo zypper --root $ROOT install -y \
-    fzf starship zoxide eza bat kitty stow trash-cli mercurial python3-neovim \
+    fzf starship zoxide eza bat stow trash-cli mercurial python3-neovim \
     go go-doc rust php php-composer java-25-openjdk-devel julia ruby-devel \
     lua51 ruby3.4-rubygem-neovim perl-base perl-App-cpanminus devel_perl make gcc
 ```
@@ -126,7 +126,7 @@ At this point, the container rootfs has:
 
 * A basic openSUSE Tumbleweed system.
 * Development tooling (`devel_basis`).
-* `git`, `neovim`, `kitty-terminfo`, `nodejs`, `npm`, `curl`, `python3-poetry`, `fish`, and `rsync`.
+* `git`, `neovim`, `nodejs`, `npm`, `curl`, `python3-poetry`, `fish`, and `rsync`.
 
 ### Ensuring os-release and Running a Sanity Check
 
@@ -648,7 +648,7 @@ These options are additive; they do not change the main workflow.
 * Inside the container:
 
   * User `dev`, default shell `fish`, workspace at `/workspace`.
-  * Base tooling: `git`, `neovim`, `kitty-terminfo`, `nodejs`, `npm`, `curl`, `python3-poetry`, `fish`, `rsync`.
+  * Base tooling: `git`, `neovim`, `nodejs`, `npm`, `curl`, `python3-poetry`, `fish`, `rsync`.
   * Global tools: `mise`, AI CLIs installed via `npm install -g`.
   * Host configs are mounted read-only at `/opt/host-config` and linked into `/home/dev/.config` as needed.
   * Container-specific fish config lives in `~/.config/fish/conf.d/dev-sandbox-ai.fish`.
