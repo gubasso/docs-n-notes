@@ -9,6 +9,12 @@
 
 ---
 
+## Update: Automated wrappers available (recommended)
+
+- Check in: [Isolated AI Dev Environment Automated Wrappers](./isolated-ai-dev-environment-automated-wrappers.md)
+
+---
+
 ## TL;DR
 
 - Create a `systemd-nspawn` container rootfs at `/var/lib/machines/dev-sandbox` using openSUSE Tumbleweed repositories.
