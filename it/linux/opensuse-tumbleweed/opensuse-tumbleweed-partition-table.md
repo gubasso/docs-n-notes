@@ -2,7 +2,7 @@
 
 When setting up a new installation of openSUSE Tumbleweed, it's important to choose a partition scheme that suits your needs, especially given Tumbleweed's rolling release nature which requires frequent updates. Here are some recommended partitioning guidelines:
 
-1. **Partition Table Type**: 
+1. **Partition Table Type**:
    - Use GPT (GUID Partition Table) if your system supports UEFI. GPT allows for more partitions and is generally more robust than MBR[3].
 
 2. **/boot/efi Partition**:
