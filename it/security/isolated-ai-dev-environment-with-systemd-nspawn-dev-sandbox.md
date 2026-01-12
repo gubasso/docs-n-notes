@@ -11,7 +11,7 @@
 
 ## Update: Automated wrappers available (recommended)
 
-- Check in: [Isolated AI Dev Environment Automated Wrappers](./isolated-ai-dev-environment-automated-wrappers.md)
+- See: [Isolated AI Dev Environment Automated Wrappers](./isolated-ai-dev-environment-automated-wrappers.md)
 
 ---
 
