@@ -1,3 +1,0 @@
-ttf-gentium-basic
-ttf-ms-fonts
-ttf-twemoji-color

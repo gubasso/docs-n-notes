@@ -1,0 +1,94 @@
+# ============================================================
+# GNOME Desktop Environment
+# Wayland-first, lean setup
+# ============================================================
+# Requires: base-pacman.txt
+# Usage: sudo pacman -S --needed - < gnome-pacman.txt
+# ============================================================
+
+# ------------------------------------------------------------
+# GNOME Core
+# ------------------------------------------------------------
+gnome-shell
+gdm
+gnome-control-center
+gnome-keyring
+
+# ------------------------------------------------------------
+# GNOME Apps
+# ------------------------------------------------------------
+nautilus
+gnome-console
+gnome-text-editor
+gnome-calculator
+gnome-disk-utility
+gnome-system-monitor
+file-roller
+evince
+loupe
+gnome-characters
+gnome-clocks
+gnome-weather
+gnome-maps
+gnome-contacts
+gnome-calendar
+
+# ------------------------------------------------------------
+# GNOME Tweaks & Extensions
+# ------------------------------------------------------------
+gnome-tweaks
+gnome-shell-extensions
+gnome-browser-connector
+
+# ------------------------------------------------------------
+# Wayland & XWayland
+# ------------------------------------------------------------
+xorg-xwayland
+wl-clipboard
+
+# ------------------------------------------------------------
+# Desktop Portals
+# ------------------------------------------------------------
+xdg-desktop-portal
+xdg-desktop-portal-gnome
+
+# ------------------------------------------------------------
+# Hybrid Graphics Switching (Intel + NVIDIA)
+# ------------------------------------------------------------
+switcheroo-control
+
+# ------------------------------------------------------------
+# Browsers
+# ------------------------------------------------------------
+firefox
+chromium
+
+# ------------------------------------------------------------
+# LibreOffice
+# ------------------------------------------------------------
+libreoffice-fresh
+libreoffice-fresh-pt-br
+libreoffice-extension-texmaths
+libreoffice-extension-writer2latex
+
+# ------------------------------------------------------------
+# Spelling & Dictionaries
+# ------------------------------------------------------------
+hunspell
+hunspell-en_us
+hunspell-en_gb
+hyphen
+hyphen-en
+libmythes
+mythes-en
+
+# ------------------------------------------------------------
+# PDF Viewer
+# ------------------------------------------------------------
+zathura
+zathura-pdf-mupdf
+
+# ------------------------------------------------------------
+# Screenshot (GNOME built-in works, but optional)
+# ------------------------------------------------------------
+gnome-screenshot
