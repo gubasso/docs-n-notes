@@ -3,6 +3,59 @@
 > https://wiki.archlinux.org/title/USB_flash_installation_medium
 > https://docs.voidlinux.org/installation/live-images/prep.html
 
+## Practical rule of thumb
+
+* **Updating an already-working Arch ISO USB** (made via `dd`/`cp`/`cat` to the whole device):
+  ✅ Just re-write the new ISO to the whole device. No `wipefs`, no `parted`, no `mkfs`.
+
+* **Converting the stick back to normal storage**:
+  ✅ `wipefs` + partition + format.
+
+
+### Minimal “update” procedure (Write / `dd`)
+
+1. Identify the device (verify carefully):
+
+   ```sh
+   lsblk -o NAME,SIZE,MODEL,SERIAL,TRAN
+   ls -l /dev/disk/by-id/usb-*
+   ```
+
+2. Unmount anything auto-mounted:
+
+   ```sh
+   sudo umount /dev/disk/by-id/usb-My_flash_drive* 2>/dev/null || true
+   ```
+
+3. Write the new ISO to the whole device (no `-partN`):
+
+   ```sh
+   sudo dd bs=4M if=/path/to/archlinux-x86_64.iso of=/dev/disk/by-id/usb-My_flash_drive \
+     conv=fsync oflag=direct status=progress
+   sudo sync
+   ```
+
+4. Replug the USB (recommended) so the kernel re-reads the new layout.
+
+### When you would use `wipefs`/partitioning again
+
+Only if you are **restoring the stick for normal storage use** (e.g., single FAT32 partition), or if the device has ended up with confusing remnants from other tooling and you want a clean “storage drive” layout. For simply updating the Arch installer, skip it.
+
+### Small verification checks (optional)
+
+After writing:
+
+```sh
+lsblk -f
+sudo fdisk -l /dev/disk/by-id/usb-My_flash_drive
+```
+
+You should see the ISO’s hybrid layout (often multiple partitions / ISO9660-related entries). That is expected.
+
+If you want, paste the output of `ls -l /dev/disk/by-id/usb-*` and `lsblk -f` (with the USB plugged in) and I’ll point to the exact `by-id` path you should use to avoid hitting the wrong disk.
+
+## Steps from scratch
+
 Identify the USB Drive
 
 ```sh
@@ -60,22 +113,7 @@ List the usb drive:
 ls -l /dev/disk/by-id/usb-*
 ```
 
-## Option 1)
-
-Mount
-
-```sh
-sudo mount /dev/disk/by-id/usb-My_flash_drive-partn /mnt
-```
-
-Extract the ISO image to the mounted file system:
-```sh
-sudo bsdtar -x -f archlinux-version-x86_64.iso -C /mnt
-sudo sync
-sudo umount /mnt
-```
-
-## Option 2)
+## Write
 
 (Do **not** append a partition number, so do **not** use something like `/dev/disk/by-id/usb-Kingston_DataTraveler_2.0_408D5C1654FDB471E98BED5C-0:0**-part1**` or `/dev/sdb**1**`):
 
@@ -116,3 +154,20 @@ sudo sync
 ```
 
 ...with root privileges after the respective command ensures buffers are fully written to the device before you remove it.
+
+---
+
+## When you *do* need wipefs/partitioning again
+
+You only need the `wipefs` + `parted` + `mkfs` sequence when your goal is **not** “make it boot Arch”, but **restore the USB to normal storage use** (single FAT32/exFAT/ext4 partition, etc.), or if you intentionally want a custom partition scheme.
+
+Also, do those steps if you previously did something like:
+
+* **reformatted** it as a normal storage drive (FAT32/exFAT/ext4) and now want it bootable again, or
+* built a **custom multiboot / persistence** layout that you want to recreate cleanly.
+
+In those cases:
+
+* `wipefs --all` is useful to remove confusing leftover signatures,
+* then repartition + format as desired.
+
