@@ -88,3 +88,10 @@ cloud management options:
 
 Mermaid, geoJSON and topoJSON, and ASCII STL.
 
+## ASCII Art Headers
+
+Config file headers use toilet for ASCII art:
+
+```bash
+toilet -f future -F border "Fish config"
+```
