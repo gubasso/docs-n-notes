@@ -1,3 +1,0 @@
-# opensuse tumbleweed
-
-

@@ -157,7 +157,7 @@ See the [character restrictions documentation](https://github.com/gopasspw/gopas
 
 ---
 
-## 5. Organization and Naming Conventions
+## 5. Organization and Naming Conventions (layout/pattern)
 
 Use clear, consistent hierarchies:
 
