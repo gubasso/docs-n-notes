@@ -29,18 +29,6 @@ git push origin new-feature                    # first time
 git push --force-with-lease origin new-feature # subsequent pushes (history was rewritten)
 ```
 
-### One-liner (A + B + C)
-
-```bash
-git fetch --all \
-  && git switch master \
-  && git merge --ff-only upstream/master \
-  && git push origin master \
-  && git switch new-feature \
-  && git rebase master \
-  && git push --force-with-lease origin new-feature
-```
-
 ### Recommended global config
 
 ```bash
