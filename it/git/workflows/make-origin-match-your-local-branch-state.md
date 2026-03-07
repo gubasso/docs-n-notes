@@ -1,5 +1,26 @@
 # Make `origin` Match Your Local Branch State
 
+## Mirror local branches to remote (delete locals whose remote is gone)
+
+```bash
+# Dry run: show which local branches would be deleted
+git fetch --prune origin
+git branch -vv | grep ': gone]' | awk '{print $1}'
+
+# Real deal: delete them
+git fetch --prune origin
+git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -d
+
+# Force-delete if the branch wasn't fully merged
+git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D
+```
+
+## See what would change on push (dry run)
+
+```bash
+git push --dry-run
+```
+
 ## Update your view of `origin` first
 
 ```bash
@@ -65,10 +86,4 @@ git log --oneline --left-right HEAD...origin/BRANCH
 ```bash
 git status -sb
 git log --oneline --decorate --graph --left-right @{u}...HEAD
-```
-
-## See what would change on push (dry run)
-
-```bash
-git push --dry-run
 ```
