@@ -7,7 +7,7 @@ glab issue create \
   -t "feat: short title" \
   -d "description" \
   -a @me \
-  -l "p: in-progress"
+  -l "b: in-progress"
 ```
 
 > Board column movement requires the UI. Use labels (`in-progress`, `review`) as CLI proxies.
@@ -63,6 +63,7 @@ glab issue update <issue-id> -l "review"
 
 ```bash
 glab mr merge <mr-id> --rebase --remove-source-branch
+glab mr merge 4 --rebase --remove-source-branch
 
 # Close issue if not auto-closed
 glab issue close <issue-id>
