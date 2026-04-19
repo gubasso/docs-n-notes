@@ -4,7 +4,7 @@
 
 - Entry VPS
   - Netmaker
-  - Traefik (it/traefik.md)
+  - Traefik (../traefik.md)
 - Portainer
 - CrowdSec + Traefik [^sec1]
 - Authelia [^auth1]
@@ -15,8 +15,8 @@
 
 # Basic Apps: Structure and Security
 
-- Reverse Proxy: [Traefik](../it/traefik.md)
-- Containers Manager: [Portainer](../it/containers-docker-portainer.md)
+- Reverse Proxy: [Traefik](../traefik.md)
+- Containers Manager: [Portainer](../containers/docker-portainer.md)
 - Security:
   - [CrowdSec]()
   - [Authelia]()
