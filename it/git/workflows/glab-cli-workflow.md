@@ -1,5 +1,11 @@
 # glab cli workflow
 
+## 00 — Check Auth
+
+```bash
+glab auth status
+```
+
 ## 01 — Open an Issue
 
 ```bash
