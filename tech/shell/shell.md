@@ -3,6 +3,8 @@
 
 <!-- toc -->
 
+- [Parallel](#parallel)
+- [Processes](#processes)
 - [General](#general)
 - [read stdin in function in bash script](#read-stdin-in-function-in-bash-script-)
 - [Key-value pair](#key-value-pair)

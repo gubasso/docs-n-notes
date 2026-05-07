@@ -1,4 +1,3 @@
-
 On Arch linux: `~/.config/chromium-flags.conf`
 
 Correct setup on Void Linux (only sources profile.d files):

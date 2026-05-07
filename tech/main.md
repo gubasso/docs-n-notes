@@ -4,6 +4,7 @@
 <!-- toc -->
 
 - [General](#general)
+- [Unsorted Links (from README)](#unsorted-links-from-readme)
 
 <!-- tocstop -->
 
