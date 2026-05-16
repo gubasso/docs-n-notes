@@ -14,7 +14,7 @@ Spellcheck / spell:
 
 A melhor abordagem é baixar os dicionários corretos e garantir que estejam no local esperado pelo Neovim.
 
-### Baixar arquivos compatíveis 
+### Baixar arquivos compatíveis
 
 Use os dicionários do **Hunspell** , que são os mesmos usados pelo LibreOffice:
 
@@ -31,9 +31,9 @@ Agora, gere o arquivo `.spl` para o Neovim reconhecer o dicionário:
 nvim -c 'set spelllang=pt_br | mkspell! pt_br' -c 'q'
 ```
 
-### 2️⃣ Configurar no Neovim 
+### 2️⃣ Configurar no Neovim
 
-Edite seu `init.vim` ou `init.lua`: 
+Edite seu `init.vim` ou `init.lua`:
 
 - **Para `init.vim`** :
 
@@ -41,7 +41,7 @@ Edite seu `init.vim` ou `init.lua`:
 set spell
 set spelllang=pt_br
 ```
- 
+
 - **Para `init.lua`** :
 
 ```lua
@@ -49,7 +49,7 @@ vim.opt.spell = true
 vim.opt.spelllang = { 'pt_br' }
 ```
 
-### 3️⃣ Teste no Neovim 
+### 3️⃣ Teste no Neovim
 
 Abra qualquer arquivo de texto e veja se a verificação ortográfica está funcionando:
 

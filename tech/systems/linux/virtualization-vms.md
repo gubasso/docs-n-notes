@@ -377,7 +377,7 @@ A non-zero output indicates that your CPU supports virtualization.
 
 ## How do I access this VM with ssh? Find VM IP
 
-**Step 1: Ensure the VM Is Running** 
+**Step 1: Ensure the VM Is Running**
 First, verify that your VM is currently running.
 
 
@@ -393,41 +393,41 @@ virsh start opensuse-tumbleweed
 
 ---
 
-**Step 2: Find the VM's IP Address** Since the VM is connected to the default virtual network (`default`), you can find its IP address using one of the following methods.Option A: Using `virsh domifaddr`** 
+**Step 2: Find the VM's IP Address** Since the VM is connected to the default virtual network (`default`), you can find its IP address using one of the following methods.Option A: Using `virsh domifaddr`**
 
 ```bash
 virsh domifaddr opensuse-tumbleweed
 ```
-This command displays the IP addresses assigned to the VM. Look for an entry with the `ipv4` type.**Example Output:** 
+This command displays the IP addresses assigned to the VM. Look for an entry with the `ipv4` type.**Example Output:**
 
 ```markdown
 Name       MAC address          Protocol     Address
 -------------------------------------------------------------------------------
 vnet0      52:54:00:12:34:56    ipv4         192.168.122.100/24
 ```
-Option B: Using `virsh net-dhcp-leases`** 
+Option B: Using `virsh net-dhcp-leases`**
 
 ```bash
 virsh net-dhcp-leases default
 ```
-This command lists the DHCP leases for the `default` network. Find the lease associated with your VM's MAC address.**Example Output:** 
+This command lists the DHCP leases for the `default` network. Find the lease associated with your VM's MAC address.**Example Output:**
 
 ```css
 Expiry Time          MAC address        Protocol  IP address        Hostname
 --------------------------------------------------------------------------------
 2023-10-05 12:34:56  52:54:00:12:34:56  ipv4      192.168.122.100/24  opensuse-tumbleweed
 ```
-**Option C: Check Inside the VM via VNC** Since you installed the VM with VNC graphics (`--graphics vnc`), you can connect to the VM's console to find the IP address. 
-1. **Find the VNC Display Port:** 
+**Option C: Check Inside the VM via VNC** Since you installed the VM with VNC graphics (`--graphics vnc`), you can connect to the VM's console to find the IP address.
+1. **Find the VNC Display Port:**
 
 ```bash
 virsh vncdisplay opensuse-tumbleweed
 ```
 This will output something like `:0`, `:1`, etc.
- 
-2. **Connect to the VM Using a VNC Client:**  
+
+2. **Connect to the VM Using a VNC Client:**
   - If the output is `:0`, the VNC port is `5900 + display number`, so port `5900`.
- 
+
   - Use a VNC client to connect:
 
 
@@ -439,27 +439,27 @@ Or for display `:1`:
 ```bash
 vncviewer localhost:5901
 ```
- 
+
   - **Note:**  If you're connecting remotely, you may need to set up SSH tunneling to securely access the VNC session.
- 
-3. **Find the VM's IP Address Inside the VM:**  
+
+3. **Find the VM's IP Address Inside the VM:**
   - Log in to the VM using your credentials.
- 
+
   - Run the following command:
 
 
 ```bash
 ip addr show
 ```
- 
+
   - Look for the IP address under the network interface, typically named `eth0` or `ens3`.
 
 
 ---
 
-**Step 3: Ensure SSH Is Enabled in the VM** 
+**Step 3: Ensure SSH Is Enabled in the VM**
 Inside the VM, make sure that the SSH server is installed and running.
-**1. Check if SSH Server Is Installed** 
+**1. Check if SSH Server Is Installed**
 
 ```bash
 sudo zypper install openssh
@@ -468,33 +468,33 @@ sudo zypper install openssh
 - If it's already installed, zypper will inform you.
 
 - If not, it will proceed to install it.
-**2. Enable and Start the SSH Service** 
+**2. Enable and Start the SSH Service**
 
 ```bash
 sudo systemctl enable sshd
 sudo systemctl start sshd
 ```
-**3. Verify the SSH Service Status** 
+**3. Verify the SSH Service Status**
 
 ```bash
 sudo systemctl status sshd
 ```
- 
+
 - Ensure the service is **active (running)** .
 
 
 ---
 
-**Step 4: Adjust Firewall Settings Inside the VM** 
+**Step 4: Adjust Firewall Settings Inside the VM**
 To allow SSH connections, the firewall inside the VM must permit SSH traffic.
-**1. Check Current Firewall Settings** 
+**1. Check Current Firewall Settings**
 
 ```bash
 sudo firewall-cmd --list-all
 ```
- 
+
 - Look under `services:` to see if `ssh` is listed.
-**2. Add SSH Service to the Firewall** 
+**2. Add SSH Service to the Firewall**
 If SSH is not listed, add it:
 
 
@@ -502,45 +502,45 @@ If SSH is not listed, add it:
 sudo firewall-cmd --permanent --add-service=ssh
 sudo firewall-cmd --reload
 ```
-**3. Verify the Firewall Configuration** 
+**3. Verify the Firewall Configuration**
 
 ```bash
 sudo firewall-cmd --list-all
 ```
- 
+
 - Confirm that `ssh` now appears under `services:`.
 
 
 ---
 
-**Step 5: SSH into the VM from the Host Machine** 
+**Step 5: SSH into the VM from the Host Machine**
 Now that you have the VM's IP address and SSH is configured, you can connect to it from your host machine.
-**1. Test Connectivity** 
+**1. Test Connectivity**
 First, ensure that your host can reach the VM.
 
 
 ```bash
 ping -c 4 <vm_ip_address>
 ```
- 
+
 - Replace `<vm_ip_address>` with the IP address you obtained earlier.
 
 - If the ping is successful, proceed to SSH.
-**2. Connect via SSH** 
+**2. Connect via SSH**
 
 ```bash
 ssh username@<vm_ip_address>
 ```
- 
+
 - Replace `username` with your user account in the VM.
- 
+
 - Replace `<vm_ip_address>` with the VM's IP address.
-**Example:** 
+**Example:**
 
 ```bash
 ssh john@192.168.122.100
 ```
-**3. Accept the SSH Host Key** 
+**3. Accept the SSH Host Key**
 On first connection, you'll be prompted to accept the SSH host key:
 
 
@@ -549,9 +549,9 @@ The authenticity of host '192.168.122.100 (192.168.122.100)' can't be establishe
 ECDSA key fingerprint is SHA256:...
 Are you sure you want to continue connecting (yes/no/[fingerprint])?
 ```
- 
+
 - Type `yes` and press **Enter** .
-**4. Enter Your Password** 
+**4. Enter Your Password**
 
 ```css
 john@192.168.122.100's password:
@@ -562,27 +562,27 @@ john@192.168.122.100's password:
 
 ---
 
-**Step 6: Optional - Set Up SSH Key Authentication** 
+**Step 6: Optional - Set Up SSH Key Authentication**
 For convenience and enhanced security, you can set up SSH key-based authentication.
-**1. Generate an SSH Key Pair on the Host** 
+**1. Generate an SSH Key Pair on the Host**
 If you don't already have an SSH key pair:
 
 
 ```bash
 ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 ```
- 
+
 - Press **Enter**  to accept the default file location.
 
 - Set a passphrase if desired.
-**2. Copy Your Public Key to the VM** 
+**2. Copy Your Public Key to the VM**
 
 ```bash
 ssh-copy-id username@<vm_ip_address>
 ```
 
 - Enter your password when prompted.
-**3. Test SSH Key Authentication** 
+**3. Test SSH Key Authentication**
 
 ```bash
 ssh username@<vm_ip_address>
@@ -593,67 +593,67 @@ ssh username@<vm_ip_address>
 
 ---
 
-**Additional Information** **Understanding the Default Network**  
+**Additional Information** **Understanding the Default Network**
 - The `--network default` option connects the VM to the default libvirt network.
- 
+
 - The default network is typically a NAT network with the subnet `192.168.122.0/24`.
 
 - The host machine can communicate with the VM using this network.
-Using `virt-manager` (Optional GUI Tool)** 
+Using `virt-manager` (Optional GUI Tool)**
 If you prefer a graphical interface to manage your VMs:
- 
-1. **Install virt-manager:** 
+
+1. **Install virt-manager:**
 
 ```bash
 sudo zypper install virt-manager
 ```
- 
-2. **Launch virt-manager:** 
+
+2. **Launch virt-manager:**
 
 ```bash
 virt-manager
 ```
- 
-3. **Use virt-manager to View VM Details:** 
+
+3. **Use virt-manager to View VM Details:**
   - You can view the VM's IP address, console, and other settings.
-**Connecting to the VM Console via VNC**  
-- **Find the VNC Port:** 
+**Connecting to the VM Console via VNC**
+- **Find the VNC Port:**
 
 ```bash
 virsh vncdisplay opensuse-tumbleweed
 ```
- 
-- **Connect Using a VNC Client:** 
+
+- **Connect Using a VNC Client:**
 
 ```bash
 vncviewer localhost:5900  # Replace 5900 with the correct port
 ```
-**Troubleshooting SSH Connection Issues**  
-- **Cannot Ping VM:** 
+**Troubleshooting SSH Connection Issues**
+- **Cannot Ping VM:**
   - Check if the VM's firewall is blocking ICMP (ping) requests.
 
   - Ensure that the network is correctly configured.
- 
-- **SSH Connection Refused:** 
+
+- **SSH Connection Refused:**
   - Verify that the SSH service is running inside the VM.
 
   - Ensure that SSH is allowed through the VM's firewall.
- 
-- **Host Cannot Reach VM's IP Address:**  
+
+- **Host Cannot Reach VM's IP Address:**
   - Confirm that the default network is active:
 
 
 ```bash
 virsh net-list --all
 ```
- 
+
   - If the `default` network is inactive, start it:
 
 ```bash
 virsh net-start default
 ```
- 
-- **SSH Times Out or Hangs:** 
+
+- **SSH Times Out or Hangs:**
   - Check for network issues between the host and VM.
 
   - Verify that the VM's IP address hasn't changed.
@@ -661,17 +661,17 @@ virsh net-start default
 
 ---
 
-**Alternative: Using Port Forwarding** 
+**Alternative: Using Port Forwarding**
 If you prefer to use port forwarding instead of connecting via the VM's IP address:
-**1. Modify the VM's Network Configuration** 
+**1. Modify the VM's Network Configuration**
 You can add port forwarding rules to the default network by editing its XML configuration. However, this method is more complex and not generally recommended for beginners.
-**2. Use User-Mode Networking with Port Forwarding** 
+**2. Use User-Mode Networking with Port Forwarding**
 Alternatively, you can create a new network configuration or modify your VM to use user-mode networking with port forwarding. This would involve more advanced steps and is not necessary if you can connect via the default network.
 
 
 ---
 
-**Conclusion** 
+**Conclusion**
 By following these steps, you should be able to access your openSUSE Tumbleweed VM via SSH from your host machine. Remember to ensure that the SSH service is running and that the firewall settings inside the VM allow SSH connections.
 
 

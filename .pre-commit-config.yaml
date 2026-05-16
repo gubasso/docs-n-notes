@@ -8,10 +8,14 @@ repos:
       - id: check-case-conflict
       - id: check-merge-conflict
         args: ['--assume-in-merge']
+        # This file documents merge-conflict markers as educational reference.
+        exclude: '^tech/workflows/git-rebase-workflow-complete-reference\.md$'
       - id: check-symlinks
       - id: check-yaml
       - id: destroyed-symlinks
       - id: detect-private-key
+      - id: trailing-whitespace
+        args: ['--markdown-linebreak-ext=md']
   - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
     rev: '3.2.1'
     hooks:

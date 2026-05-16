@@ -1,6 +1,8 @@
-# Programming Patterns Paradigms
+# Config precedence: CLI > env > default
 
-Prioritize loadings a variable cli > env > default:
+Prioritize loading a variable: CLI flag > environment variable > built-in default.
+
+Example (Python):
 
 ```python
 @lru_cache(maxsize=1)
