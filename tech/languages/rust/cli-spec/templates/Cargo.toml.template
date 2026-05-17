@@ -1,0 +1,51 @@
+# Cargo.toml template for a new CLI per the Rust CLI spec.
+# Copy to your crate root, rename `app-template` -> your name, drop unused deps.
+
+[package]
+name        = "app-template"
+version     = "0.1.0"
+edition     = "2024"
+rust-version = "1.85"
+license     = "MIT OR Apache-2.0"
+description = "One-line description of the CLI."
+repository  = "https://github.com/you/app-template"
+readme      = "README.md"
+
+# Binary name can differ from crate name (e.g. crate `riptask`, binary `tsk`).
+[[bin]]
+name = "app"
+path = "src/main.rs"
+
+[dependencies]
+clap                = { version = "4", features = ["derive", "env", "wrap_help"] }
+clap_complete       = "4"
+anyhow              = "1"
+thiserror           = "1"
+tracing             = "0.1"
+tracing-subscriber  = { version = "0.3", features = ["env-filter", "fmt"] }
+serde               = { version = "1", features = ["derive"] }
+serde_json          = "1"
+toml                = "0.8"
+figment             = { version = "0.10", features = ["env", "toml"] }
+directories         = "5"
+camino              = { version = "1", features = ["serde1"] }
+tokio               = { version = "1", features = ["rt", "macros"] }
+
+[dev-dependencies]
+assert_cmd  = "2"
+predicates  = "3"
+insta       = { version = "1", features = ["yaml"] }
+tempfile    = "3"
+
+[profile.release]
+lto           = "thin"
+codegen-units = 1
+strip         = "symbols"
+
+[lints.rust]
+unused_must_use = "deny"
+unsafe_code     = "forbid"
+
+[lints.clippy]
+unwrap_used = "warn"
+expect_used = "warn"
