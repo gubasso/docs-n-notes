@@ -1,6 +1,12 @@
-# Python Typer CLI (click)
+# Typer / Click Patterns (Python)
 
-path cli option example
+> Prerequisite: [General CLI principles](../../../programming/cli-design/) for architecture, logging, errors, config, coding style. This file is the Python-with-Typer implementation guide.
+
+Practical Typer/Click patterns: typed CLI option declarations, Pydantic validators, multi-value parsing.
+
+## Path option
+
+Validate path existence and type at parse time:
 
 ```python
     config_path: Annotated[

@@ -1,4 +1,6 @@
-# 02 — Subcommand Pattern
+# 02 — Subcommand Pattern (Rust)
+
+> Prerequisite: [General principles — Architecture](../../../programming/cli-design/00-architecture.md) (the four-edit rule, parse-shape vs runtime-shape, when to extract a service). This chapter is the Rust implementation using `clap`.
 
 The four-edit rule: adding a new subcommand `widget` touches exactly four files. No more, no less. This keeps the surface predictable, makes code review cheap, and prevents the giant-`cli.rs` antipattern (`riptask/src/cli.rs:1-1558`).
 

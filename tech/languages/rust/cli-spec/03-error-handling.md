@@ -1,4 +1,6 @@
-# 03 — Error Handling
+# 03 — Error Handling (Rust)
+
+> Prerequisite: [General principles — Error Messages](../../../programming/cli-design/02-error-messages.md) for the four-part anatomy (what/where/why/hint), stable `err.kind`, BSD sysexits, and audience matrix. This chapter is the Rust implementation using `thiserror` + `anyhow`.
 
 `thiserror` per layer for typed errors, `anyhow` only at the binary boundary, one top-level `AppError` enum with `exit_code()` mapped to BSD sysexits.
 

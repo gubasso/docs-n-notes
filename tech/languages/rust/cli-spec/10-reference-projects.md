@@ -1,4 +1,6 @@
-# 08 — Reference Projects
+# 10 — Reference Projects (Rust)
+
+> Prerequisite: [General principles — Reference Projects](../../../programming/cli-design/09-reference-projects.md) for the language-agnostic organizational patterns these projects exemplify. This chapter zooms in on the Rust specifics.
 
 Real-world Rust CLIs worth studying. For each: shape, what they do well, what to copy.
 

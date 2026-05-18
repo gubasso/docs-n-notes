@@ -1,4 +1,6 @@
-# 07 — Coding Style
+# 09 — Coding Style (Rust)
+
+> Prerequisite: [General principles — Coding Style (Rust/Zig Flavor)](../../../programming/cli-design/04-coding-style-rust-zig.md) for the universal rules (parse-don't-validate, newtypes, composition over inheritance, comment why not what). This chapter is the Rust implementation with idiomatic Rust syntax.
 
 Rust/Zig flavor: explicit errors, no hidden control flow, parse don't validate, newtypes everywhere, composition over inheritance, small focused modules. The point of these rules is to make the cost of any line of code visible at the call site.
 

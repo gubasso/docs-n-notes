@@ -1,4 +1,6 @@
-# 00 — Directory Tree
+# 00 — Directory Tree (Rust)
+
+> Prerequisite: [General principles — Architecture](../../../programming/cli-design/00-architecture.md) for the directory roles, parse-shape vs runtime-shape, and the `AppContext` pattern. This chapter is the Rust implementation.
 
 The canonical layout. Every directory has a single responsibility and an explicit "does NOT belong here" line. If a file violates its directory's rule, move the file or fix the rule via an ADR — never let the rule rot silently.
 

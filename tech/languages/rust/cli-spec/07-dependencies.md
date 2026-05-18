@@ -1,4 +1,6 @@
-# 05 — Dependencies
+# 07 — Dependencies (Rust)
+
+> Prerequisite: the cli-design chapters reference the crates listed here. See [`tech/programming/cli-design/`](../../../programming/cli-design/) for the language-agnostic principles. This chapter is the curated crate list for Rust CLIs.
 
 Opinionated default dependency list. Each entry has a one-line justification and a "skip if" condition. Pick deliberately; resist the urge to add "useful-looking" crates without a concrete need.
 

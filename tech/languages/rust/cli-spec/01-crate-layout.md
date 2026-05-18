@@ -1,4 +1,6 @@
-# 01 — Crate Layout
+# 01 — Crate Layout (Rust)
+
+> Prerequisite: [General principles — Architecture](../../../programming/cli-design/00-architecture.md) (Crate organization section) for the "stay single-crate until..." rule and the workspace migration triggers. This chapter is the Rust implementation.
 
 When to ship one crate, when to ship a workspace, and when (if ever) to split `lib.rs` from `main.rs`.
 
