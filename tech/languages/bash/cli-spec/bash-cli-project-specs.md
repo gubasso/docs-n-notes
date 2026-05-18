@@ -230,6 +230,8 @@ the bash side just has to implement them consistently.
 
 ## Testing (bats-core)
 
+> Prerequisite: [General principles — Testing Strategy](../../../programming/cli-design/08-testing-strategy.md) for the pyramid, tier table, isolation rules, and what to mock. This section is the bats-core implementation.
+
 Layout:
 
 ```text

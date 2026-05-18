@@ -99,6 +99,10 @@ One-page sanity check before declaring a CLI shippable. If a box is unchecked, f
 - [ ] `--help` is snapshot-tested.
 - [ ] No tests share state, no tests share temp dirs, no tests modify global env or cwd.
 - [ ] Test runner is the parallel-default option for the language (`nextest` / `pytest -n auto` / `go test -parallel`).
+- [ ] Unit tests run in pre-commit (parallel, fast).
+- [ ] Integration tests run in pre-push (parallel, single-digit seconds total).
+- [ ] E2E tests run in CI only — never in local hooks.
+- [ ] Coverage is judged by risk and impact, not by chasing a line-count number.
 
 → Detail: [08 — Testing Strategy](08-testing-strategy.md)
 

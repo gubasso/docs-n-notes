@@ -2,6 +2,18 @@
 
 The CLI testing pyramid. Where each kind of test lives, what it covers, how to keep tests isolated, and why every subcommand earns one integration test from day one.
 
+## Non-negotiable principles
+
+1. **Best practices first.** Clean, maintainable tests, written in the idioms the language community considers standard.
+2. **Test major public APIs and core interfaces** — the behavior that defines the product, not incidental helpers.
+3. **Test behavior and contracts, not implementation details.** Don't overfit to private internals; if you can refactor without changing the public contract, the test should still pass.
+4. **Don't test third-party libraries.** Assume they're correct. Mock or fake them at their boundary (see [What to mock, what not to mock](#what-to-mock-what-not-to-mock)).
+5. **Deterministic and fast.** Isolate side effects with fixtures; no shared state, no real clock, no network, no order dependence.
+6. **Meaningful coverage driven by risk and impact**, not line-count. 100% coverage of trivial getters is wasteful; cover what breaks production.
+7. **Clear names, minimal mocking, readable assertions.** A test reads as documentation of the contract it locks down.
+
+Every rule below is an application of one of these.
+
 ## The pyramid
 
 ```
@@ -21,7 +33,21 @@ The CLI testing pyramid. Where each kind of test lives, what it covers, how to k
 - **Snapshot** — assertions on long structured output (JSON, YAML, tables, full error messages). Lives inside the unit and integration suites.
 - **Compile-fail / typestate** — only when you have a typestate API (builder where the type changes per `.with_x()` call) and want to lock down invalid call sequences. Skip otherwise.
 
-End-to-end black-box tests in a separate CI pipeline are useful for distribution-shape (does the binary build, install, and launch on every supported OS) but are not a substitute for the per-subcommand integration tests.
+End-to-end black-box tests sit above this pyramid and run in a separate CI pipeline; they're useful for distribution-shape and live-dependency contracts but are not a substitute for the per-subcommand integration tests. See [E2E tests](#e2e-tests).
+
+## Tiers at a glance
+
+| Tier         | What it tests                                                              | External deps                                                       | Speed          | Runs in     |
+|--------------|----------------------------------------------------------------------------|---------------------------------------------------------------------|----------------|-------------|
+| Unit         | One function/module in isolation                                           | None (or fully faked)                                               | ms             | pre-commit  |
+| Integration  | Two-or-more components together, OR your code's seam to one external dep   | Stubs/fakes of the boundary, or a real contained dep                | tens of ms – s | pre-push    |
+| E2E (system) | The whole product through its user-facing entry point, against real state  | The actual real things (live binary, real network, real container)  | s – min        | CI only     |
+
+**The framing that trips people up: integration ≠ "touches real things." Integration = "tests the interaction between things."**
+
+A test that asserts your CLI wrapper passes the right argv to `podman` — with `podman` replaced by a recording stub — is *integration*, not unit. It tests the seam between two components (your argv builder and the subprocess executor), even though no live `podman` runs. See [Argv-contract tests](#argv-contract-tests-for-clis-that-wrap-other-binaries).
+
+A test that runs the real binary, which spawns real `podman`, which launches a real container — that's *E2E*. See [E2E tests](#e2e-tests).
 
 ## Test isolation — the single most important rule
 
@@ -148,6 +174,22 @@ def test_widget_dry_run_does_not_modify_state():
 - Use string-contains predicates for stdout matching; reserve exact-equality for tiny stable strings.
 - Cover at least: golden path, the most common error path, the most common edge case (empty input, --help).
 
+## Argv-contract tests (for CLIs that wrap other binaries)
+
+When your CLI invokes a subprocess (`podman`, `git`, `ssh`, `kubectl`), the argv you construct *is* a public contract. Lock it down with an integration test that replaces the child with a recording stub and asserts on the argv:
+
+```bash
+# Replace `podman` on PATH with a stub that records argv as JSON.
+fixture::with_recording_stub podman
+run mycli ws up --name foo --mem 4G
+[ "$status" -eq 0 ]
+assert_argv_equals podman '["run","--name","foo","--memory","4G",...]'
+```
+
+This is **integration**, not unit: it tests the seam between the argv builder and the subprocess executor. The fact that no live `podman` ran doesn't change its tier — what matters is that two components were composed.
+
+Cross-reference: the Rust/Zig wrapper testing patterns (`Spawner` trait, golden argv snapshots) live in [06 — CLI Wrapper Design § 9 Testability](06-cli-wrapper-design/process-and-posix.md#9-testability).
+
 ## Snapshot tests
 
 For any structured output you'd otherwise verify with a hand-maintained 20-line assertion:
@@ -190,6 +232,50 @@ fn ui() {
 
 If your codebase has no typestate, omit this rung entirely. It exists to lock down a deliberate compile-time invariant — not as general-purpose API regression catching.
 
+## E2E tests
+
+End-to-end tests run the whole product through its user-facing entry point against real external systems: real subprocess execution, real network, real container runtime, real filesystem mounts.
+
+**When to write them:**
+
+- Distribution-shape: the binary builds, installs, and launches on every supported OS.
+- Contract with a live external dependency that can't be faithfully faked (real container runtime, real cloud API).
+- Catastrophic regressions you can't catch otherwise (e.g., the binary crashes immediately on macOS due to a dynamic-linker bug).
+
+**When not to write them:**
+
+- Anywhere an integration test with a fake would catch the same regression. E2E is the slowest, flakiest tier — reach for it only when fakes can't model the behavior.
+
+**Where they run:**
+
+- CI only. Never in pre-commit or pre-push: too slow, too dependent on host state, too flaky to gate local commits.
+- A separate CI job from unit + integration, ideally per-OS.
+
+**Worked example — a CLI that launches a container:**
+
+```bash
+# tests/e2e/cmd_ws_up.bats
+@test "ws up launches a real krun container and exec works" {
+  skip_if_no_podman
+  run dctl ws up --name e2e-smoke
+  [ "$status" -eq 0 ]
+
+  run podman ps --filter name=e2e-smoke --format '{{.Status}}'
+  [ "$status" -eq 0 ]
+  [[ "$output" == Up* ]]
+
+  run dctl ws exec e2e-smoke -- echo hello
+  [ "$status" -eq 0 ]
+  [ "$output" = "hello" ]
+}
+
+teardown() {
+  podman rm -f e2e-smoke 2>/dev/null || true
+}
+```
+
+The same shape applies in any language: invoke the installed binary, assert on real external state (`podman ps`), clean up. If the test can pass without ever touching the live dependency, it isn't E2E — relabel it integration.
+
 ## What to mock, what not to mock
 
 | Subject | Default |
@@ -201,6 +287,7 @@ If your codebase has no typestate, omit this rung entirely. It exists to lock do
 | Database | Use a sqlite tempfile in-process; don't run a real server in tests. |
 | Random | Inject a seeded RNG into `AppContext`. |
 | Environment variables | Use `env_clear` + curated env in fixtures (never modify global env in a test). |
+| CLI subprocess argv contract | Replace the child with a recording stub; assert on argv. This is an integration test, not a unit test. |
 
 Test pollution from a live process modifying global state is the #1 source of flaky CI. Treat `os.environ`, `chdir`, and global singletons as radioactive in tests.
 
@@ -224,6 +311,20 @@ Wire it through a one-liner (`just test`, `make test`, `task test`). New contrib
 - Run on at least one Linux + one macOS runner if the CLI is end-user-facing.
 - Lock the toolchain version (`rust-toolchain.toml`, `.python-version`, `go.mod` toolchain directive).
 - Fail loudly on warnings (`-Dwarnings` / `--strict`); don't paper over with global allows.
+- **Tier-to-hook mapping**:
+  - **pre-commit**: unit tests only (parallel, sub-second budget).
+  - **pre-push**: unit + integration (still parallel, single-digit-seconds budget).
+  - **CI**: everything — unit, integration, E2E, lint, format-check, coverage gate.
+
+## Coverage philosophy
+
+Coverage is a tool, not a goal. Aim for **behavior coverage of high-risk paths** — parse errors, state-machine transitions, error-handling branches, public API contracts — driven by risk and impact, not by chasing a line-count percentage.
+
+- 100% line coverage of trivial getters or generated code is waste.
+- 60% line coverage that hits every error branch and every documented exit code is excellent.
+- A coverage gate in CI is fine as a *floor* against accidental regressions; it should never be the metric you optimize.
+
+If a coverage report shows an uncovered branch in a critical path (error handling, security-sensitive code, the exit-code matrix), add a test. If it shows uncovered branches in trivial helpers, ignore.
 
 ## Anti-patterns
 
