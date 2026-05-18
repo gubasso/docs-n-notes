@@ -191,15 +191,84 @@ Sources:
 
 ## 5. Subcommand / plugin namespacing
 
-Four well-tested models — pick one (and combine with a reserved-verb
-namespace):
+Four well-tested models — pick one. The reserved-verb namespace
+(`self`) is **not** a generic "all my verbs" prefix and should be used
+only under the narrow rule in §5.1.
 
 | Model | Examples | How it works | When to use |
 |---|---|---|---|
 | **PATH dispatch by prefix** | `git foo` → `git-foo` | Wrapper looks up `$PROG-$verb` on PATH and execs | Open, decentralized plugin ecosystems. Simplest. |
 | **PATH dispatch + longest match** | `kubectl foo bar baz` → tries `kubectl-foo-bar-baz` then `-foo-bar` then `-foo` | Same as git, but greedy on segments; underscores in filename become dashes in command | Hierarchical verb trees |
 | **Managed extension registry** | `gh extension install owner/gh-foo` | Wrapper has its own install/list/upgrade for extensions in a private dir | Discoverability + lifecycle management |
-| **Reserved-verb namespace** | `mytool self update`, `cargo metadata` | Wrapper-owned verbs grouped under a reserved noun so user/plugin verbs can't collide | Always — combine with one of the above |
+| **Reserved-verb namespace (narrow)** | `rustup self update`, `rustup self uninstall`, `uv self update` | A reserved noun (`self`) groups wrapper-owned verbs that genuinely *target the binary itself* | **Only** when (a) the verb mutates the wrapper binary (update / uninstall) **and** (b) the same name plausibly collides with a child verb. Never as a generic "all my own commands" prefix. See §5.1. |
+
+### 5.1 The `self` rule — narrow, not generic
+
+A common mistake is to treat `self` as a namespace for *every*
+wrapper-owned verb. Real-world precedent does not support that. `self`
+is justified only when **both** of the following hold:
+
+1. The verb's *object* is the running binary itself — it updates,
+   uninstalls, or otherwise mutates the wrapper, **and**
+2. The same verb name plausibly exists on the wrapped child (e.g.,
+   `rustup update` already means "update toolchains" — a different
+   operation — so `rustup self update` disambiguates).
+
+If either condition fails, **expose the verb at the top level**.
+
+**Rule of thumb:** strip the `self` prefix mentally. If the verb's
+meaning is still unambiguous, the prefix is noise.
+`mywrap self version` is noise (`version` already means "version of
+mywrap"); `mywrap self update` is signal *only* if `mywrap update`
+would otherwise be a meaningful child operation. Same reasoning for
+`self help`, `self completion`, `self config`, `self doctor` — all
+intrinsically wrapper-owned by semantic uniqueness, none needing a
+namespace.
+
+### 5.2 Verbs that stay at the top level
+
+These are intrinsically wrapper-owned by name; do **not** put them
+under `self`:
+
+- **`version`** — your version *and* the resolved child path +
+  version (see §7).
+- **`help`** — your help; delegate to the child via `--` or a
+  `child-help` verb.
+- **`completion`** / `completions` — emit shell completion for *your*
+  flags.
+- **`config`** — manage *your* config. If you can plausibly collide
+  with a child `config` verb (e.g., wrapping `git`, which has
+  `git config`), rename — `mywrap config-show`, `mywrap describe`,
+  or move it behind a flag — rather than reaching for `self`.
+- **`doctor`** / `diagnose` — wrapper self-diagnostics.
+- **`init`** — only if it sets up *your* state; leave child init to
+  the child.
+
+`self` is the wrong tool for collision avoidance with introspection
+verbs. If a top-level verb name would actually collide with the
+child's verb, **rename your verb** rather than burying it under a
+reserved noun.
+
+### 5.3 Survey of established wrappers
+
+What real tools do (verified against current official docs):
+
+| Tool | `version` | `help` | `completion` | `config` | self-mutate | Uses `self`? |
+|------|-----------|--------|--------------|----------|-------------|--------------|
+| **rustup** | `rustup --version` | `rustup --help` | — | — | `rustup self update`, `rustup self uninstall` | **only self-mutating** |
+| **uv** | `uv version` | `uv help` | — | — | `uv self update` | **only self-mutating** |
+| **cargo** | `cargo --version` | `cargo --help` | — | — | — | **never** (no `cargo self` exists) |
+| **gh** | `gh version` | `gh help` | `gh completion` | `gh config` | — | never |
+| **kubectl** | `kubectl version` | `kubectl help` | `kubectl completion` | `kubectl config` | — | never |
+| **git** | `git --version` | `git help` | — | `git config` | — | never |
+| **gcloud** | `gcloud version` | `gcloud help` | `gcloud completion` | `gcloud config` | — | never |
+| **op** (1Password CLI) | `op --version` | `op help` | `op completion` | — | `op update` | never |
+| **flyctl** | `fly version` | `fly help` | `flyctl completion` | `flyctl config` | — | never |
+
+The pattern is consistent: only the two wrappers that can actually
+update themselves as standalone binaries (`rustup`, `uv`) use `self`,
+and both restrict it to self-mutating operations. No major tool uses
+`self` for `version`/`help`/`completion`/`config`.
 
 **Universal rules these share:**
 
@@ -215,10 +284,16 @@ namespace):
 
 Sources:
 - [Cargo external tools / custom subcommands](https://doc.rust-lang.org/cargo/reference/external-tools.html)
+- [Cargo book — CLI reference](https://doc.rust-lang.org/cargo/commands/index.html)
+- [Rustup book — Basics (`rustup self update`)](https://rust-lang.github.io/rustup/basics.html)
+- [uv — self-update](https://docs.astral.sh/uv/reference/cli/#uv-self-update)
 - [Git: How to integrate new subcommands](https://git.github.io/htmldocs/howto/new-command.html)
 - [Kubernetes: Extend kubectl with plugins](https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/)
 - [GitHub Docs: Creating GitHub CLI extensions](https://docs.github.com/en/github-cli/github-cli/creating-github-cli-extensions)
 - [gh extension manual](https://cli.github.com/manual/gh_extension)
+- [gh CLI manual (top-level verbs: `gh version`, `gh help`, `gh completion`, `gh config`)](https://cli.github.com/manual/)
+- [kubectl reference (`kubectl version`, `kubectl completion`, `kubectl config`)](https://kubernetes.io/docs/reference/kubectl/)
+- [gcloud reference (top-level `version`, `help`, `config`)](https://cloud.google.com/sdk/gcloud/reference)
 
 ---
 
@@ -247,21 +322,34 @@ of flags you claim**, not an allowlist of flags you understand.
 
 ## 7. UX — help, version, completions, man pages
 
-- **`--help` / `-h`**: print your own help and explain the split with
-  examples that include `--`. Offer explicit delegation: `mywrap
-  child-help` or `mywrap -- --help`. clig.dev: *"Ignore other flags
-  when help is requested."*
-- **`--version`**: print *both* — wrapper version *and* resolved child
-  path + version. One line that saves hours of bug-report triage.
-- **Completions**: ship static `bash`/`zsh`/`fish` for *your* flags;
-  defer to the child's completion for child args. Dynamic only when
-  you need to enumerate runtime state.
+All four below are **top-level**, not under `self` (see §5.1–§5.2).
+They are wrapper-owned by name; nesting them under a reserved noun
+adds nothing and diverges from every established CLI.
+
+- **`--help` / `-h` and `help`**: print your own help and explain the
+  split with examples that include `--`. Offer explicit delegation:
+  `mywrap child-help` or `mywrap -- --help`. clig.dev: *"Ignore other
+  flags when help is requested."*
+- **`--version` and `version`**: print *both* — wrapper version *and*
+  resolved child path + version. One line that saves hours of
+  bug-report triage. Match `gh version`, `kubectl version`,
+  `gcloud version`.
+- **`completion`** (top-level verb): ship static `bash`/`zsh`/`fish`
+  for *your* flags; defer to the child's completion for child args.
+  Dynamic only when you need to enumerate runtime state.
 - **Man pages**: `mywrap(1)`, plus `mywrap-VERB(1)` if you have many
   verbs (git's convention).
+
+If your wrapper genuinely supports self-update or self-uninstall, put
+*those* under `self` — `mywrap self update`, `mywrap self uninstall`
+— and only those (see §5.1).
 
 Sources:
 - [Cargo external tools / `cargo help`](https://doc.rust-lang.org/cargo/reference/external-tools.html)
 - [git-help docs](https://git-scm.com/docs/git-help)
+- [gh `version` / `help` / `completion` / `config` (top-level)](https://cli.github.com/manual/)
+- [kubectl `version` / `completion` / `config` (top-level)](https://kubernetes.io/docs/reference/kubectl/)
+- [rustup self-update (only `self` use case)](https://rust-lang.github.io/rustup/basics.html)
 
 ---
 
@@ -378,6 +466,8 @@ SUBCOMMANDS
 [ ] Pick ONE plugin model (PATH-dispatch / longest-match / managed / reserved-verb)
 [ ] Plugins cannot override built-ins
 [ ] Pass verb as argv[1] to helper; export $MYWRAP for callbacks if useful
+[ ] `self` is reserved ONLY for verbs that mutate the wrapper binary (update/uninstall) AND collide with a child verb
+[ ] version / help / completion / config / doctor live at the TOP LEVEL — never `self version`, `self help`, etc.
 
 UX
 [ ] --help shows wrapper opts + how to reach child help
@@ -465,22 +555,39 @@ plugin/subcommand namespace.
 
 - Cargo external tools / custom subcommands —
   <https://doc.rust-lang.org/cargo/reference/external-tools.html>
+- Cargo book — CLI command reference —
+  <https://doc.rust-lang.org/cargo/commands/index.html>
 - Git: How to integrate new subcommands —
   <https://git.github.io/htmldocs/howto/new-command.html>
 - git-help docs —
   <https://git-scm.com/docs/git-help>
 - Kubernetes: Extend kubectl with plugins —
   <https://kubernetes.io/docs/tasks/extend-kubectl/kubectl-plugins/>
+- kubectl reference (top-level verbs) —
+  <https://kubernetes.io/docs/reference/kubectl/>
 - GitHub Docs: Creating GitHub CLI extensions —
   <https://docs.github.com/en/github-cli/github-cli/creating-github-cli-extensions>
 - gh extension manual —
   <https://cli.github.com/manual/gh_extension>
+- gh CLI manual (top-level verbs) —
+  <https://cli.github.com/manual/>
+- gcloud reference (top-level `version`/`help`/`config`/`completion`) —
+  <https://cloud.google.com/sdk/gcloud/reference>
 - mise getting started —
   <https://mise.jdx.dev/getting-started.html>
 - GNU env invocation —
   <https://www.gnu.org/software/coreutils/manual/html_node/env-invocation.html>
 - GNU time invocation —
   <https://www.gnu.org/software/time/manual/html_node/Invoking-time.html>
+
+### Reserved-noun (`self`) precedent
+
+- Rustup book — Basics (`rustup self update`, `rustup self uninstall`) —
+  <https://rust-lang.github.io/rustup/basics.html>
+- uv (Python package manager) — `uv self update` —
+  <https://docs.astral.sh/uv/reference/cli/#uv-self-update>
+- 1Password CLI top-level reference (no `self`; `op update` is top-level) —
+  <https://developer.1password.com/docs/cli/reference/>
 
 ### Shim pattern
 

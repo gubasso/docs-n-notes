@@ -21,6 +21,7 @@ If a box is unchecked, fix it or explicitly waive it in an ADR.
 - [ ] No silent argv rewriting. If you transform child args, document it.
 - [ ] Subcommand namespace is small and stable; new subcommands are deliberate.
 - [ ] Conflicting flags (wrapper vs child) are documented; the wrapper's grammar wins for *its* own flags only.
+- [ ] `self` (or any reserved-noun namespace) is used **only** for verbs that mutate the wrapper binary itself (e.g., `wrapper self update`, `wrapper self uninstall`). Introspection verbs (`version`, `help`, `completion`, `config`, `doctor`) live at the top level — never `self version`, `self help`. See [process-and-posix.md §5.1](process-and-posix.md#51-the-self-rule--narrow-not-generic).
 
 ## RESOLUTION — finding the wrapped binary
 
