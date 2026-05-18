@@ -44,6 +44,15 @@ tests/
 
 Every directory has a **single responsibility** and an explicit **"does NOT belong here"** rule. If a file violates that rule, move the file or fix the rule — don't let it rot. The language-specific specs (`tech/languages/<lang>/cli-spec/00-directory-tree.md`) translate this skeleton to concrete file names and module syntax.
 
+This tree maps onto **clean-architecture / hexagonal** layers — useful when discussing the design with people who think in those terms:
+
+- **Domain** → `domain/`
+- **Application** → `commands/` + `services/`
+- **Infrastructure** → `adapters/` + `config/` + `context.rs`
+- **Presentation** → `cli/` + `ui/`
+
+The directory names stay as above; the layer names are just vocabulary.
+
 ### `main`
 
 **Owns**: parse args, init logging, build `AppContext`, dispatch to a command, map errors to exit codes.
@@ -86,6 +95,8 @@ Every directory has a **single responsibility** and an explicit **"does NOT belo
 
 **Does NOT own**: domain logic, command orchestration, terminal output.
 
+**Errors**: each adapter defines its own error type (e.g. `GitError`, `HttpError`). The top-level `AppError` aggregates them at the boundary. Mechanism is language-specific (Rust: `#[from]`; Python: exception hierarchy; Bash: namespaced exit codes) — see [02 — Error Messages](02-error-messages.md).
+
 ### `config/`
 
 **Owns**: layered config loading. Defines the resolved `Config` struct and the merge chain. See [03 — Config Precedence](03-config-precedence.md).
@@ -97,6 +108,14 @@ Every directory has a **single responsibility** and an explicit **"does NOT belo
 **Owns**: the `AppContext` struct, built once in `main` and passed by reference everywhere. Holds `Config`, paths, the UI handle, the async-runtime handle (if any), the tracing root span, and an interface to clocks/randomness.
 
 **Does NOT own**: methods that do real work. `AppContext` is a value object, not a god-class. Behavior goes to `commands/`, `services/`, or `adapters/`.
+
+**`Paths`**: resolves the three XDG directories once, kept distinct so the wrong byte never lands in the wrong place:
+
+- `config_home` (`$XDG_CONFIG_HOME`) — user-editable settings, loaded by `config/`.
+- `state_home` (`$XDG_STATE_HOME`) — app-written persistent state (logs, sessions, history). Accessed via `adapters/`.
+- `cache_home` (`$XDG_CACHE_HOME`) — ephemeral, safe to delete. Accessed via `adapters/`.
+
+Resolve once here, never recompute. Language-specific defaults live in each `cli-spec/`.
 
 ### `error.rs`
 
@@ -182,6 +201,18 @@ Otherwise, inline. Premature service extraction creates passthrough wrappers tha
 
 ---
 
+## Cross-cutting concerns (middleware, telemetry, hooks)
+
+Pre/post-command interception, telemetry wrappers, retry/recovery decorators — these cut across multiple commands. Place them by volume:
+
+- **One or two hooks**: wrap the dispatch arm in `main.rs`. No new directory.
+- **A reusable family** (telemetry, audit, rate limiting): define a `Middleware` trait in `adapters/`, with one impl per concern. Compose the chain in `context.rs` or at dispatch.
+- **A dedicated `middleware/` directory**: only when the chain exceeds ~300 LOC or three independent concerns. Until then, `adapters/` is the right home — middleware is an infrastructure concern.
+
+Do **not** decorate handlers inside `commands/`. That scatters cross-cutting policy across every subcommand and breaks the four-edit rule.
+
+---
+
 ## One `AppContext`, built once
 
 ```
@@ -224,6 +255,15 @@ Migrate to a workspace only when **one** of these triggers fires (do not migrate
 - **Domain crates + glue** (the `ripgrep` pattern): `app-domain/`, `app-adapter-<system>/`, `app-service/`, `app-cli/`. Use when subsystems are publishable.
 
 See [09 — Reference Projects](09-reference-projects.md) for organizational patterns from well-studied codebases.
+
+### Directory rules across a workspace
+
+The single-crate rules above still hold per-crate. Specifically:
+
+- **Four-edit rule** stays scoped to whichever crate owns the binary; you still touch four files, just within that one crate.
+- **`domain/` and `adapters/`** extract into `app-core` (or per-subsystem crates). `cli/` and `commands/` stay in the binary crate.
+- **No cross-crate `cli/` imports.** Each binary owns its own parse-shape. Crates communicate via runtime-shape request types defined in `domain/`.
+- **One `AppContext` per binary.** Don't share the struct across binaries — each may need different fields. If construction logic is shared, factor it as a builder in `app-core`.
 
 ---
 

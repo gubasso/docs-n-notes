@@ -12,13 +12,13 @@
 | XDG path resolution | `directories` |
 | UTF-8 paths | `camino` |
 
-## Rules
+## Rust-specific rules
+
+(The 5-layer precedence chain, provenance contract, and XDG path semantics are canonical in the [general chapter](../../../programming/cli-design/03-config-precedence.md). This file is the Rust implementation.)
 
 - One `Config` struct represents the resolved, merged config. **Immutable after construction.**
-- Construction merges five sources in precedence order (low → high): defaults → user file → project file → env → CLI.
-- Use `figment` for the merge. It tracks per-key source provenance, so errors say *which file* set the bad value.
+- Use `figment` for the merge — its per-key provenance satisfies the general contract.
 - Use `directories` for XDG paths. Never hand-roll `$XDG_CONFIG_HOME` logic.
-- Config holds user-facing knobs only. Domain invariants live in `domain/`.
 
 ## `src/config/mod.rs`
 
@@ -88,17 +88,15 @@ fn user_config_path() -> Option<PathBuf> {
 
 `deny_unknown_fields` makes typos in TOML fail loudly — a developer who writes `timeut_secs` gets an error instead of a silently-ignored value.
 
-## Layering — sources by precedence
+## Canonical-layer → Rust mapping
 
-| Source | Path | Example |
-|--------|------|---------|
-| Defaults | `Config::default()` | hard-coded fallbacks |
-| User file | `$XDG_CONFIG_HOME/<app>/config.toml` | personal preferences |
-| Project file | `./.<app>/config.toml` (or your convention) | per-repo overrides |
-| Env vars | `<APP>_*` (double-underscore = nested) | `APP_TIMEOUT_SECS=60`, `APP_LOG__FORMAT=json` |
-| CLI flags | `clap` parsed values | `--timeout-secs 60` |
-
-CLI always wins. Env wins over files. Project wins over user. Defaults lose to everything.
+| Canonical layer (general chapter) | Rust source |
+|-----------------------------------|-------------|
+| Defaults | `Config::default()` |
+| User file | `directories::ProjectDirs::config_dir().join("config.toml")` |
+| Project file | `./.<app>/config.toml` (or your convention) |
+| Env vars | `Env::prefixed("APP_").split("__")` (double-underscore = nested) |
+| CLI flags | `clap` `GlobalArgs` serialized into `figment` |
 
 ## XDG path resolution
 

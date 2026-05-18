@@ -1,8 +1,6 @@
 # 00 — Directory Tree (Rust)
 
-> Prerequisite: [General principles — Architecture](../../../programming/cli-design/00-architecture.md) for the directory roles, parse-shape vs runtime-shape, and the `AppContext` pattern. This chapter is the Rust implementation.
-
-The canonical layout. Every directory has a single responsibility and an explicit "does NOT belong here" line. If a file violates its directory's rule, move the file or fix the rule via an ADR — never let the rule rot silently.
+> Prerequisite: [General principles — Architecture](../../../programming/cli-design/00-architecture.md). That chapter is canonical for directory roles, "does NOT belong here" rules, parse-shape vs runtime-shape, the four-edit rule, and the `AppContext` pattern. This file translates the skeleton to Rust file names, module conventions, and crate-stack choices.
 
 ## Canonical tree
 
@@ -14,7 +12,7 @@ crate/
 ├─ deny.toml                   # cargo-deny policy
 ├─ src/
 │  ├─ main.rs                  # ≤120 LOC. parse → init logging → AppContext → dispatch → exit-code map.
-│  ├─ lib.rs                   # OPTIONAL. Only when truly reusable. See chapter 01.
+│  ├─ lib.rs                   # OPTIONAL. Only when truly reusable.
 │  ├─ cli/                     # clap derive structs ONLY.
 │  │  ├─ mod.rs                # root Cli + Commands enum + GlobalArgs
 │  │  └─ <subcommand>.rs       # `#[derive(Args)] pub struct <Verb>Args`
@@ -24,7 +22,7 @@ crate/
 │  ├─ domain/                  # pure types + invariants + newtypes.
 │  │  └─ <concept>.rs
 │  ├─ services/                # OPTIONAL. Add only when orchestration is reused.
-│  ├─ adapters/                # I/O at the edges.
+│  ├─ adapters/                # I/O at the edges. Each defines a trait + default impl.
 │  │  └─ <external_system>.rs
 │  ├─ config/                  # figment loader + layered merge.
 │  ├─ context.rs               # AppContext struct.
@@ -41,110 +39,66 @@ crate/
 └─ benches/                    # criterion benches; only when needed
 ```
 
-## Rules per directory
+## Rust-specific concretizations
+
+For each directory's *role* and "does NOT belong here" rule, defer to the [general principles directory roles](../../../programming/cli-design/00-architecture.md#directory-roles). The notes below are Rust-only deltas.
 
 ### `src/main.rs`
-
-**Purpose**: the binary entry. Parses args, initializes logging, builds `AppContext`, dispatches to a `commands::*::run`, maps `AppError` to `ExitCode`.
-
-**Does NOT belong here**: business logic, I/O calls, clap derive structs (they live in `cli/`), tokio runtime usage outside the one constructor that goes onto `AppContext`.
-
-**Size budget**: ≤120 LOC. If it grows past that, lift code into `cli/`, `commands/`, or `logging.rs`.
+- Size budget: ≤120 LOC.
+- The one tokio runtime constructor lives here; the resulting `Handle` goes onto `AppContext`.
 
 ### `src/lib.rs`
-
-**Purpose** (optional): the public crate API when the logic is genuinely reusable by another crate or by integration tests that need internals.
-
-**Does NOT belong here**: a no-op file that just declares private modules. If you're not exporting a real surface, delete `lib.rs` and keep modules `mod` inside `main.rs`.
+- Only create when a second crate (or integration tests that need internals) needs the surface. A no-op `lib.rs` declaring private modules is dead weight; keep modules `mod` inside `main.rs`.
 
 ### `src/cli/`
-
-**Purpose**: clap derive structs only — the parse-shape of every flag, arg, and subcommand. `mod.rs` exposes the root `Cli`, the `Commands` enum, and any shared `GlobalArgs`.
-
-**Does NOT belong here**: business logic, I/O, `tokio::main`, calls to `std::fs` / `reqwest` / `std::process`, error mapping beyond what clap demands.
-
-**Rule**: each subcommand `<name>` has exactly one file `cli/<name>.rs` containing a single `pub struct <Verb>Args` deriving `clap::Args`.
+- Each subcommand `<name>` has exactly one file `cli/<name>.rs` with a single `pub struct <Verb>Args` deriving `clap::Args`.
+- `mod.rs` exposes the root `Cli` (derives `clap::Parser`), the `Commands` enum (derives `clap::Subcommand`), and any shared `GlobalArgs`.
 
 ### `src/commands/`
-
-**Purpose**: subcommand handlers. Each `commands/<name>.rs` exposes a free function `pub fn run(ctx: &AppContext, args: <Verb>Args) -> Result<(), AppError>` that projects the CLI args into a service-layer call (or inlines simple orchestration), renders output via `ctx.ui`, and returns a typed error.
-
-**Does NOT belong here**: clap derive structs, direct I/O (delegate to `adapters/`), shared orchestration reused across multiple commands (lift into `services/`).
+- Signature: `pub fn run(ctx: &AppContext, args: <Verb>Args) -> Result<(), AppError>`. Free function, not a method on the args struct. See [`02-subcommand-pattern.md`](02-subcommand-pattern.md).
 
 ### `src/domain/`
+- A `#[derive(Serialize, Deserialize)]` on a domain struct is fine; calling `serde_json::from_reader` is not — that goes to `adapters/`.
+- Forbidden in this module: `std::io`, `tokio`, `reqwest`, file/network readers.
 
-**Purpose**: pure types and invariants. Newtypes for IDs, paths, names; algebraic types for state machines. Constructors enforce invariants via `TryFrom`. Methods are pure functions of `&self` or `&mut self`.
-
-**Does NOT belong here**: `std::io`, `tokio`, `reqwest`, `serde_*` *file* readers (a `#[derive(Serialize, Deserialize)]` on a domain struct is fine; calling `serde_json::from_reader` is not — that goes to `adapters/`).
-
-### `src/services/` (optional)
-
-**Purpose**: use-case orchestration shared by 2+ commands, or non-trivial pure cores that deserve unit tests in isolation. A service is a free function or a struct with a single public `execute` method; it takes adapter traits as parameters so it can be tested with fakes.
-
-**Does NOT belong here**: anything used by only one command (inline it into `commands/<name>.rs`), direct I/O (call adapters), domain invariants (those live in `domain/`).
-
-**Heuristic**: if you'd duplicate the logic across two `commands/*.rs` files, extract a service. If you wouldn't, don't pre-extract.
+### `src/services/`
+- A service is a free function or a struct with a single public `execute` method, taking adapter traits as parameters so tests can swap fakes.
 
 ### `src/adapters/`
-
-**Purpose**: the only place that talks to the outside world. One file per external system: `fs.rs`, `git.rs`, `http.rs`, `process.rs`, `clock.rs`, etc. Each defines a trait (`GitBackend`, `Clock`) and a default implementation. Services depend on the trait, not the impl.
-
-**Does NOT belong here**: domain logic, command orchestration, terminal output (use `ui/`).
+- Each adapter file defines a trait (`GitBackend`, `Clock`, …) and a default implementation. Services depend on the trait, not the impl.
+- Each adapter defines its own error enum; `AppError` aggregates them via `#[from]`. See [`03-error-handling.md`](03-error-handling.md).
 
 ### `src/config/`
-
-**Purpose**: layered config loading. Defines the `Config` struct and the figment chain that merges defaults → user file → project file → env → CLI.
-
-**Does NOT belong here**: global mutable state, business defaults that belong in `domain/` (config holds *user-facing knobs*, not invariants).
+- Uses `figment` for the merge chain. See [`05-config.md`](05-config.md).
 
 ### `src/context.rs`
-
-**Purpose**: the `AppContext` struct, built once in `main` and passed by `&AppContext` everywhere. Holds resolved `Config`, computed paths, the shared `tokio::Runtime` handle, the `Ui` instance, and the tracing root span.
-
-**Does NOT belong here**: methods that do real work — `AppContext` is a value object, not a god-class. Behavior goes to `commands/`, `services/`, or adapters.
+- Holds resolved `Config`, computed `Paths`, the shared `tokio::Runtime` handle, the `Ui` instance, and the tracing root span.
 
 ### `src/error.rs`
-
-**Purpose**: the crate-level `AppError` enum (thiserror) plus `impl AppError { pub fn exit_code(&self) -> u8 }` mapped to BSD sysexits. Aggregates errors via `#[from]` from each layer.
-
-**Does NOT belong here**: `anyhow::Result` type aliases for downstream layers (let them import `anyhow` directly when they need it).
+- `AppError` is a `thiserror` enum aggregating per-layer errors via `#[from]`. Includes `impl AppError { pub fn exit_code(&self) -> u8 }`. See [`03-error-handling.md`](03-error-handling.md).
 
 ### `src/logging.rs`
-
-**Purpose**: the `pub fn init(verbosity: u8) -> anyhow::Result<()>` helper that installs `tracing-subscriber` with `EnvFilter`.
-
-**Does NOT belong here**: emission. Only the install.
+- `pub fn init(verbosity: u8) -> anyhow::Result<()>` helper that installs `tracing-subscriber` with `EnvFilter`. See [`04-logging.md`](04-logging.md).
 
 ### `src/ui/`
-
-**Purpose**: every byte of human-facing output. Renderers, progress bars, color, prompts. A single `Ui` struct exposes methods like `render_widget`, `confirm`, `progress`.
-
-**Does NOT belong here**: structured diagnostics (those go through `tracing`). No `println!` allowed anywhere else in the crate.
+- A single `Ui` struct exposes methods like `render_widget`, `confirm`, `progress`.
+- **No `println!` / `eprintln!` outside this module or `main.rs`** — enforce as a CI lint (see [`09-coding-style.md`](09-coding-style.md)).
 
 ### `src/util/`
-
-**Purpose**: truly generic helpers (≤ 200 LOC per file). Things that could live in any project: `os_str` conversion shims, formatting utilities, etc.
-
-**Does NOT belong here**: anything that mentions a domain noun. If it does, it belongs in `domain/` or `services/`.
+- ≤ 200 LOC per file.
 
 ### `tests/`
-
-**Purpose**: process-level integration tests. One `tests/cmd_<name>.rs` per subcommand using `assert_cmd::Command::cargo_bin("<bin>")`. Shared helpers under `tests/support/`. Snapshots under `tests/snapshots/`.
-
-**Does NOT belong here**: pure unit tests (those go inline under `#[cfg(test)] mod tests` in their owning module).
+- One `tests/cmd_<name>.rs` per subcommand using `assert_cmd::Command::cargo_bin("<bin>")`. Pure unit tests stay inline under `#[cfg(test)] mod tests` in their owning module.
 
 ### `benches/`
+- Criterion only. Throwaway timing scripts go to `examples/`.
 
-**Purpose**: criterion benchmarks. Only add files you'll actually maintain.
-
-**Does NOT belong here**: throwaway timing scripts (use `examples/` if you need them).
-
-## Optional extras
+## Optional extras (Rust)
 
 Add when you actually need them — not preemptively:
 
 - `examples/` — small runnable examples that double as docs.
-- `xtask/` — workspace-internal CLI for build tasks (release prep, docs gen). Only at workspace scale.
+- `xtask/` — workspace-internal CLI for build tasks. Only at workspace scale.
 - `docs/adr/` — Architecture Decision Records for spec deviations.
 
 ## Reading order for new contributors

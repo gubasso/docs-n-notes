@@ -31,7 +31,7 @@ For the language-agnostic principles, see [`tech/programming/cli-design/`](../..
 ## TL;DR
 
 - One file per subcommand under `cli/`; one handler per subcommand under `commands/`.
-- Parse-shape (Typer parameters) and runtime-shape (Pydantic request models) are different.
+- General parse-shape → runtime-shape maps to **Typer parameters → Pydantic request models** in Python.
 - Validation lives in `__post_init__` / Pydantic validators, not in handler bodies.
 - Logging via `structlog` writes structured records to `${XDG_STATE_HOME:-~/.local/state}/<app>/<app>.log` by default.
 - `pytest` with `-n auto`. Every subcommand has `tests/test_cmd_<name>.py`.

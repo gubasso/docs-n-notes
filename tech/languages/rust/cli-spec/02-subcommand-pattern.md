@@ -2,16 +2,16 @@
 
 > Prerequisite: [General principles — Architecture](../../../programming/cli-design/00-architecture.md) (the four-edit rule, parse-shape vs runtime-shape, when to extract a service). This chapter is the Rust implementation using `clap`.
 
-The four-edit rule: adding a new subcommand `widget` touches exactly four files. No more, no less. This keeps the surface predictable, makes code review cheap, and prevents the giant-`cli.rs` antipattern (`riptask/src/cli.rs:1-1558`).
+## The four files (Rust + clap)
 
-## The four files
+For the four-edit rule's rationale and anti-patterns, see the general chapter. In Rust with `clap`, the four files are:
 
 1. **`src/cli/widget.rs`** — parse-shape (clap struct).
 2. **`src/cli/mod.rs`** — register the variant in the `Commands` enum.
 3. **`src/commands/widget.rs`** — handler (free `run` function).
 4. **`src/main.rs`** — dispatch arm.
 
-That's it. No registry macro, no auto-discovery, no plugin trait. Explicit dispatch over magic.
+Real-world reminder of what this prevents: a 1500-line `cli.rs` (`riptask/src/cli.rs:1-1558`).
 
 ## File-by-file skeleton
 
@@ -148,31 +148,24 @@ match cli.command {
 
 Explicit `match`, one arm per subcommand. No macros. The `match` is exhaustive — clippy will yell if you forget an arm.
 
-## Why split parse-shape from runtime-shape
+## Parse-shape → runtime-shape, in Rust
 
-The clap struct (`WidgetArgs`) and the domain request (`Request`) **must not be the same type**. They evolve independently:
+See [General — parse-shape vs runtime-shape](../../../programming/cli-design/00-architecture.md#parse-shape-vs-runtime-shape). The Rust-specific mapping:
 
-- `WidgetArgs` is constrained by clap's derive limitations and what's ergonomic on the command line (strings, `Option<String>`, `bool` flags).
-- `Request` is constrained by the domain (newtypes, parsed glob patterns, validated enums).
+- `WidgetArgs` is constrained by clap derive limitations (`String`, `Option<String>`, `bool`).
+- `Request` is constrained by the domain (newtypes, compiled `glob::Pattern`, validated enums).
+- The projection lives in `Request::from_cli` and calls things like `WidgetId::from_str` and `glob::Pattern::new`.
 
-Projecting `WidgetArgs` → `Request` is where you parse strings into newtypes (`WidgetId::from_str`), compile glob patterns, and reject illegal combinations. Once you have a `Request`, downstream code cannot represent an invalid state. This is the "parse, don't validate" principle made concrete.
+## When to extract a service
 
-## When to extract into `services/`
+See [General — When to extract a service](../../../programming/cli-design/00-architecture.md#when-to-extract-a-service). The triggers are language-agnostic; no Rust-specific overrides.
 
-The default is: keep `execute` inside `commands/widget.rs`. Extract a `services::widget` module only when **at least one** of these is true:
+## Rust-specific anti-patterns
 
-1. Another command needs the same orchestration.
-2. The pure core of the logic is non-trivial and you want to unit-test it without clap.
-3. The handler exceeds ~200 LOC.
+Add these to the general anti-patterns:
 
-Otherwise, inline. Premature service extraction creates trivial passthroughs that obscure the call graph.
-
-## Anti-patterns to avoid
-
-- **Giant single `cli.rs`** holding every clap struct. Makes diffs unreadable, makes `cargo check` slow, makes ownership of a subcommand ambiguous. See `riptask/src/cli.rs:1-1558`.
-- **Handler as a method on the args struct** (`impl WidgetArgs { fn run(&self, ctx: &AppContext) }`). Couples parse-shape to runtime, prevents pure projection.
 - **Runtime per command** — every `run` builds its own tokio runtime. See `riptask/src/main.rs:95-159`. Build one runtime in `main`, share via `AppContext`.
-- **`Cmd`/`run` traits with dynamic dispatch.** A `Box<dyn Command>` registry feels clever but loses the exhaustive-match safety net and adds nothing over a plain enum.
+- **`Box<dyn Command>` registry** — feels clever, loses exhaustive-match safety on `Commands`, breaks clap-derived help. Use the plain enum.
 
 ## Variant: async handlers
 

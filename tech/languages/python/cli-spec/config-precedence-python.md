@@ -89,14 +89,10 @@ def load_config(
     cli_overrides: Mapping[str, Any] | None = None,
     cli_config_file: Path | None = None,
 ) -> Config:
-    """Resolve the full 5-layer ladder. Cache once per process.
+    """Resolve the full 5-layer ladder (see general chapter for the contract). Cache once per process.
 
-    Precedence (lowest -> highest):
-      1. defaults              (the dataclass field defaults)
-      2. user file             ($XDG_CONFIG_HOME/myapp/config.toml)
-      3. project file          (./.myapp/config.toml, walked upward)
-      4. env vars              (MYAPP_*) + explicit MYAPP_CONFIG_FILE replaces (2) or (3)
-      5. CLI flags             (cli_overrides)
+    Python-specific note: `MYAPP_CONFIG_FILE` is an env-layer escape hatch that replaces
+    the project-file source (layer 3) instead of setting a field's value.
     """
     sources: dict[str, str] = {}
 
