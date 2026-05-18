@@ -29,6 +29,13 @@ Use this spec as a template at project bootstrap and as a tie-breaker during cod
 | 9 | [Coding style](09-coding-style.md) | Rust idioms: newtypes, FromStr, lints, LazyLock. | [04-coding-style-rust-zig](../../../programming/cli-design/04-coding-style-rust-zig.md) |
 | 10 | [Reference projects](10-reference-projects.md) | Layouts to study (ripgrep, fd, bat, jj, cargo, helix). | [09-reference-projects](../../../programming/cli-design/09-reference-projects.md) |
 
+## Supporting material
+
+| Path | Hook |
+|------|------|
+| [`templates/`](templates/) | Bootstrap skeleton for a new Rust CLI: starter files, module layout, and template comments. |
+| [`adr/`](adr/) | Architecture decision records for changes to this Rust spec and its defaults. |
+
 ## Templates
 
 `templates/` holds the bootstrap skeleton:

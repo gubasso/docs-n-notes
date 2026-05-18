@@ -218,7 +218,7 @@ Copy: a separate `<app>-tile` (or `<app>-plugin-api`) crate when you support plu
 
 ## What to copy from your own repos
 
-From [`riptask`](file:///home/gu/Projects/_gubasso/riptask):
+From `riptask`:
 
 - The exit-code matrix in `src/error.rs:52-118` — one variant per code, unit-tested.
 - The `domain/` + `adapters/` + `services/` vocabulary.
@@ -232,7 +232,7 @@ From [`riptask`](file:///home/gu/Projects/_gubasso/riptask):
 - Custom env var `RIPTASK_LOG`. Use `RUST_LOG`.
 - The ambiguous `models/` vs `domain/` split. Pick `domain/` only.
 
-From [`ripwork`](file:///home/gu/Projects/_gubasso/ripwork):
+From `ripwork`:
 
 - The parse-shape / runtime-shape split: `cli/<name>.rs` + `workflows/<name>.rs` (this spec calls it `commands/<name>.rs`).
 - `pub(crate)` everywhere (`src/runtime/mod.rs:1-7`).

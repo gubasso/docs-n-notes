@@ -35,7 +35,7 @@
 
 ## 1. Strategic Choice: CLI + Skill, MCP as Exception
 
-The consensus across Claude Code and Codex CLI practitioners in the last ~6 months has converged: **build a good CLI first, wrap it with a Skill, and only reach for MCP when you have a specific reason**.
+**Build a good CLI first, wrap it with a Skill, and only reach for MCP when you have a specific reason.** Three structural properties favor CLI-first for agents; MCP is a fit for a narrow set of needs covered below.
 
 ### Why CLI wins for developer agents
 
@@ -44,17 +44,15 @@ The consensus across Claude Code and Codex CLI practitioners in the last ~6 mont
 - Pipes and composition are native. The agent can chain `your-cli list --json | jq ...` without you shipping any glue.
 - Shell is a transport the agent already has (`bash` tool). No extra protocol, no auth dance, no server process to manage.
 
-### The numbers
+### Token + reliability shape (the structural argument)
 
-ScaleKit benchmarked the same GitHub task on Claude Sonnet 4, same prompt, 75 runs:
+Compared to MCP, CLI tools tend to have:
 
-| Approach     | Tokens   | Reliability |
-|--------------|----------|-------------|
-| CLI only     | ~1,365   | 100%        |
-| CLI + Skills | ~4,724   | 100%        |
-| MCP          | ~44,026  | 72%         |
+- **Far smaller per-call token footprint** — `--help` is loaded on demand, not preloaded into context.
+- **Higher reliability under non-determinism** — the call is `bash`; failures are recoverable via stderr instead of protocol errors.
+- **Cheaper composition** — pipes substitute for adapter code an MCP server would otherwise need to provide.
 
-Roughly a **32× token spread** between raw CLI and MCP, with MCP also worse on reliability. See [Abin's Quill summary](https://blog.trashwbin.top/en/posts/cli-vs-mcp-vs-skills/) and [Smithery's benchmark](https://mariozechner.at/posts/2025-08-15-mcp-vs-cli/).
+For published numbers on a specific task/model pairing see, e.g., [Abin's Quill summary of the ScaleKit benchmark](https://blog.trashwbin.top/en/posts/cli-vs-mcp-vs-skills/) and [Smithery's benchmark](https://mariozechner.at/posts/2025-08-15-mcp-vs-cli/). Treat exact ratios as time-bound; the qualitative pattern is what matters.
 
 ### The three-layer mental model
 
@@ -153,15 +151,15 @@ LLMs have deep priors on the world's most popular CLIs. Mirror them.
 
 - `pigeon dispatch` / `pigeon flock list` / `pigeon message show` — verb-noun structure mirrors `kubectl`, `docker`, `gh`.
 - Flag names: prefer `--dry-run`, `--force`, `--yes`, `--output`, `--format`, `--limit`, `--since`, `--verbose`. Don't invent `--simulate-only` when `--dry-run` exists.
-- Exit codes: 0 = success, 1 = generic error, 2 = usage error, 3+ = domain errors. Matches convention.
+- Exit codes: use BSD `sysexits(3)` — see [`02-error-messages.md`](02-error-messages.md#exit-codes--bsd-sysexits) for the canonical matrix. Stable codes give agents a reliable signal to branch on.
 
 The closer you hew to familiar patterns, the less your Skill has to explain and the less the agent has to re-learn.
 
 ### 2.5 Minimize tool surface; prefer one CLI with rich subcommands
 
-Old Claude guidance, now internalized across practitioners: too many top-level tools confuse the model. A single `pigeon` with a well-organized subcommand tree outperforms `pigeon-dispatch`, `pigeon-flock`, `pigeon-message` as separate binaries.
+Too many top-level tools confuse the model. A single `pigeon` with a well-organized subcommand tree outperforms `pigeon-dispatch`, `pigeon-flock`, `pigeon-message` as separate binaries. One canonical binary makes the agent's first `--help` call self-sufficient and concentrates discovery in one place.
 
-Terminalcp's author saw this empirically — one MCP tool with a command-dispatch arg beat per-command tools. See [mariozechner.at](https://mariozechner.at/posts/2025-08-15-mcp-vs-cli/).
+For one empirical data point — one MCP tool with a command-dispatch arg beating per-command tools — see [mariozechner.at](https://mariozechner.at/posts/2025-08-15-mcp-vs-cli/).
 
 ### 2.6 Terse, parseable output by default
 
@@ -198,7 +196,7 @@ Agents run this first when things go sideways. It sidesteps a large class of "wh
 
 ### 2.9 Config via env + file, never interactive prompts
 
-Agents can't fill TTY prompts. Precedence: `flags > env > ~/.config/pigeon/config.toml`.
+Agents can't fill TTY prompts. Precedence still follows the general rule: `flags > env > project file > user file > defaults`.
 
 - Missing config errors with the **exact env var or file path** to fix.
 - Support `PIGEON_CONFIG_PATH` for overriding location in sandbox/devcontainer setups.
@@ -300,7 +298,7 @@ This pattern is directly from [Anthropic's skill best practices](https://platfor
 
 ## 4. Cross-Agent Portability
 
-The good news: **SKILL.md became a cross-agent standard in late 2025**. Adopted by Claude Code, Codex CLI, Cursor, Gemini CLI, Antigravity, and others.
+The good news: **SKILL.md is a cross-agent standard**, adopted by Claude Code, Codex CLI, Cursor, Gemini CLI, Antigravity, and others. A single SKILL.md file can be discovered by all of them with one symlink-friendly layout.
 
 ### 4.1 Discovery paths
 
@@ -710,7 +708,7 @@ Use this when shipping a CLI you want agents to consume reliably.
 - [ ] No ANSI colors unless `stdout.isatty()`.
 - [ ] `--dry-run` on destructive ops; `--yes`/`--force` for non-interactive.
 - [ ] `doctor` command exists and surfaces config, auth, reachability, schema version.
-- [ ] Config via flags > env > file. No interactive prompts when `!isatty(stdin)`.
+- [ ] Config precedence follows [`03 — Config Precedence`](03-config-precedence.md): `flags > env > project file > user file > defaults`. No interactive prompts when `!isatty(stdin)`.
 - [ ] Verify/validate subcommand returns structured pass/fail (for agent loops).
 
 ### Skill

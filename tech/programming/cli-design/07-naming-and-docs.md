@@ -132,7 +132,7 @@ The library root (or `main`'s entry file) starts with:
 ```rust
 //! `my-cli`: synchronizes widgets between local and remote stores.
 //!
-//! Architecture follows the CLI design spec ([general principles](../docs/cli-design/)).
+//! Architecture follows the CLI design spec (see `tech/programming/cli-design/`).
 //!
 //! - `cli`        — clap parse-shape, one file per subcommand.
 //! - `commands`   — handlers, one `run()` per subcommand.

@@ -44,9 +44,9 @@ my-cli/
 └── uninstall.sh
 ```
 
-Mirrors the interactive-shell pattern in [`bash/.config/bash/`](../../../../bash/.config/bash/)
-(see [[bash/.config/bash/CLAUDE]]): one public function per file,
-filename encodes the function name, `lib/` holds shared machinery.
+One public function per file; filename encodes the function name; `lib/`
+holds shared machinery. Same shape as a well-organised interactive-shell
+package, applied to a standalone CLI.
 
 ---
 
@@ -114,10 +114,8 @@ over trusting `set -e` implicitly.
 
 ## Module Layout: One Function per File
 
-This is the core organisational pattern — lifted from the user's
-`bash/` package and adapted for a standalone CLI. Makes the code easy
-for humans and LLMs to reason about, and keeps startup O(1) via lazy
-sourcing.
+This is the core organisational pattern. Makes the code easy for humans
+and LLMs to reason about, and keeps startup O(1) via lazy sourcing.
 
 ### Naming
 
@@ -149,8 +147,8 @@ mycli::cmd::dispatch() {
 }
 ```
 
-Mirrors the `desc:` pattern in
-[`bash/.config/bash/rc.d/15-functions-lazy.bash`](../../../../bash/.config/bash/rc.d/15-functions-lazy.bash).
+The `desc:` line is lazy-loaded — costs nothing at startup, parseable by a
+trivial `grep`-driven help generator on demand.
 
 ### Loader (source on dispatch)
 
@@ -171,14 +169,15 @@ mycli::loader::dispatch() {
 ```
 
 Startup stays O(1) regardless of command count — commands load only
-when invoked. The interactive-shell analogue is the autoloader at
-[`bash/.config/bash/lib/autoload.bash`](../../../../bash/.config/bash/lib/autoload.bash).
+when invoked. This is the same shape as a Bash autoloader: source on
+first use, cache nothing.
 
 ### Host / env overlays
 
 `${XDG_CONFIG_HOME:-$HOME/.config}/my-cli/conf.d/*.sh` sourced last so
-users override defaults without forking. Parallels the `hosts/*.bash`
-pattern in `bash/.config/bash/hosts/`.
+users override defaults without forking. Same idea as per-host overlays
+in interactive Bash startup files: drop-in files in a known directory,
+sourced in lexical order after the built-in defaults.
 
 ---
 
@@ -305,8 +304,7 @@ All checks run through **pre-commit** (see root
 
 `Makefile` wraps `install` / `uninstall` / `test` / `lint` / `man`.
 
-Config precedence (`flags > env > file`), secret handling, and
-missing-config error shape: see agent-design doc §2.9.
+Config precedence: see [`cli-design/03-config-precedence.md`](../../../programming/cli-design/03-config-precedence.md) for the canonical 5-layer ladder. Secret handling and missing-config error shape: see [`cli-design/05-designing-for-llm-agents.md §2.9`](../../../programming/cli-design/05-designing-for-llm-agents.md#29-config-via-env--file-never-interactive-prompts).
 
 ---
 

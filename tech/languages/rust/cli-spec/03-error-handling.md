@@ -96,25 +96,9 @@ The matrix test isn't optional. Treat exit codes as part of the user-facing API 
 
 ## BSD sysexits cheat sheet
 
-From `sysexits(3)` on FreeBSD/macOS; widely supported on Linux too:
+The full code/constant/when matrix lives in [`cli-design/02-error-messages.md#exit-codes--bsd-sysexits`](../../../programming/cli-design/02-error-messages.md#exit-codes--bsd-sysexits). Map every `AppError` variant onto a constant from that table.
 
-| Code | Constant | When |
-|------|----------|------|
-| 0  | success         | Normal exit. |
-| 1  | (catch-all)     | Avoid; pick something specific. |
-| 2  | (shell builtin) | Avoid; conflicts with shell error conventions. |
-| 64 | `EX_USAGE`      | Wrong CLI usage (bad flag, missing arg). |
-| 65 | `EX_DATAERR`    | Input data was malformed. |
-| 66 | `EX_NOINPUT`    | Input file did not exist or was unreadable. |
-| 69 | `EX_UNAVAILABLE`| Service required but not available. |
-| 70 | `EX_SOFTWARE`   | Internal bug. |
-| 73 | `EX_CANTCREAT`  | Could not create output file. |
-| 74 | `EX_IOERR`      | I/O error during execution. |
-| 75 | `EX_TEMPFAIL`   | Transient failure; retry may help. |
-| 77 | `EX_NOPERM`     | Permission denied. |
-| 78 | `EX_CONFIG`     | Config file invalid. |
-
-Don't use codes outside this set without writing them down. Shell scripts read your exit code.
+Don't use codes outside that set without writing them down. Shell scripts read your exit code.
 
 ## Per-layer error type examples
 

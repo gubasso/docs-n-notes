@@ -12,6 +12,7 @@ This is a different problem from designing a fresh CLI from scratch. If you are 
 |---------|---------------------|---------|
 | **Typing & validation** | "How do I structure my code so I can't accidentally generate malformed args?" | [typing-and-validation.md](typing-and-validation.md) |
 | **Process & POSIX** | "How do I reliably invoke a subprocess while respecting argv layout, signals, exit codes, and TTYs?" | [process-and-posix.md](process-and-posix.md) |
+| **Checklist** | "What must be true before I declare this wrapper shippable?" | [checklist.md](checklist.md) |
 
 Read both, in this order. The first tells you *what* to build; the second tells you *how* to run it.
 

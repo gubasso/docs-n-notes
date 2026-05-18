@@ -131,7 +131,7 @@ The non-purpose sentence is load-bearing: it lets a future reader see at a glanc
 //! `app-template` CLI.
 //!
 //! Architecture follows the Rust CLI spec
-//! ([docs-n-notes/tech/languages/rust/cli-spec](../../docs-n-notes/tech/languages/rust/cli-spec)):
+//! (see `tech/languages/rust/cli-spec/`):
 //!
 //! - `cli`        — clap parse-shape, one file per subcommand.
 //! - `commands`   — handlers, one `run()` per subcommand.
