@@ -167,6 +167,7 @@ For one empirical data point — one MCP tool with a command-dispatch arg beatin
 - **Paginate list commands by default** (`--limit`, `--page`, `--cursor`). Agents blow context on unbounded lists.
 - **Only colorize if `stdout.isatty()`**. ANSI escape codes in agent output are pure noise.
 - **stderr vs stdout discipline**: data on stdout, logs/progress/warnings on stderr. Agents pipe stdout and shouldn't get log chatter mixed into parseable data.
+- **The same posture applies to *test* output that an agent will later read** — pass-only lines, progress bars, and full stdout dumps for passing tests are pure noise in a captured CI log. The four output axes (per-test status, end-of-run summary, captured stdout of passing/failing tests) plus the "explicit-profile" foot-gun are written up in [08a § Tuning test-runner output for CI + AI agents](08a-testing-tools.md#tuning-test-runner-output-for-ci--ai-agents).
 
 ### 2.7 Deterministic and idempotent operations
 

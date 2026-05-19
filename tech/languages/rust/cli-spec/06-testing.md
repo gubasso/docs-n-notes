@@ -113,8 +113,67 @@ Use `cargo nextest` via `just test`. It parallelizes correctly, fails fast, and 
 
 ```sh
 cargo install cargo-nextest --locked
-cargo nextest run
+cargo nextest run                          # ad-hoc local run; uses [profile.default]
+cargo nextest run --profile pre-commit     # unit tests, fail-fast (pre-commit hook)
+cargo nextest run --profile pre-push       # integration tests (pre-push hook)
+cargo nextest run --profile ci             # CI workflow — retries, quiet output
 ```
+
+**Foot-gun:** non-default profiles in `.config/nextest.toml` are silently inert unless invoked with `--profile <name>`. A CI workflow that just runs `cargo nextest run` ignores its own `[profile.ci]` retry/timeout/output tuning and falls back to `[profile.default]`. This is the Rust instance of the general "explicit-profile" pattern in [cli-design § Tuning test-runner output for CI + AI agents](../../../programming/cli-design/08a-testing-tools.md#tuning-test-runner-output-for-ci--ai-agents).
+
+### nextest profile reference
+
+The four general output axes in the cli-design doc map to these nextest keys (refs: [config reference](https://nexte.st/docs/configuration/reference/), [running tests](https://nexte.st/docs/running/)):
+
+| General axis | nextest key | Token-efficient value |
+|---|---|---|
+| Per-test status during execution | `status-level` | `"fail"` in CI / hooks; `"pass"` only for ad-hoc interactive runs |
+| End-of-run summary | `final-status-level` | `"fail"` |
+| Captured stdout/stderr of passing tests | `success-output` | `"never"` |
+| Captured stdout/stderr of failing tests | `failure-output` | `"immediate-final"` (inline AND in final summary) |
+
+Reference shape for a layered `.config/nextest.toml`:
+
+```toml
+[profile.default]
+status-level = "pass"             # verbose OK for interactive runs
+final-status-level = "fail"
+success-output = "never"
+failure-output = "immediate-final"
+
+[profile.pre-commit]
+default-filter = "kind(lib) + kind(bin)"   # unit tests only
+fail-fast = true                  # tight feedback for the commit gate
+status-level = "fail"             # silent on pass
+final-status-level = "fail"
+success-output = "never"
+failure-output = "immediate-final"
+
+[profile.pre-push]
+default-filter = "kind(test)"     # integration tests (tests/*.rs)
+fail-fast = false                 # surface ALL regressions
+status-level = "fail"
+final-status-level = "fail"
+success-output = "never"
+failure-output = "immediate-final"
+
+[profile.ci]
+fail-fast = false
+retries = { backoff = "exponential", count = 2, delay = "1s", max-delay = "10s", jitter = true }
+status-level = "fail"             # NOT "pass" — per-test pass lines are pure log noise
+final-status-level = "fail"
+success-output = "never"
+failure-output = "immediate-final"
+```
+
+**Progress bars:** auto-suppress on non-TTY runners (GitHub Actions); set `NEXTEST_HIDE_PROGRESS_BAR=1` in workflow env if a runner emulates a TTY.
+
+**Machine-readable output, if a downstream parser needs it:**
+
+- `--message-format=libtest-json` / `libtest-json-plus` — CLI flag (not a profile key); compact JSON event stream; the `-plus` variant adds nextest-specific metadata (retries, slowness).
+- `[profile.X.junit] path = "target/nextest-results.xml"` plus `store-failure-output = true` / `store-success-output = false` — JUnit XML, widely parseable.
+
+Don't add either prophylactically — adopt them only when something downstream actually consumes the format.
 
 ## `tests/support/mod.rs`
 

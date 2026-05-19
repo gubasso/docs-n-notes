@@ -131,6 +131,36 @@ The principle from [08 § CI essentials](08-testing-strategy.md#ci-essentials): 
 | CI (PR) | minutes | Everything above + E2E + coverage gate |
 | CI nightly | hours acceptable | Mutation testing + slower property tests |
 
+### Tuning test-runner output for CI + AI agents
+
+CI logs and agent-read transcripts both pay a token cost for noise that a human-in-the-terminal would skim past. Most test runners can be tuned along the same axes; the concrete keys differ per tool, but the pattern is uniform. See your runner's reference for the exact configuration mechanism (e.g. `[profile.X]` in nextest's `.config/nextest.toml`, `[tool.pytest.ini_options]` plus `-c` in pytest, `vitest.config.*` plus `--config`, jest's `--config`, `go test -tags`).
+
+**Foot-gun — profiles/presets are dead config unless invoked explicitly.** Most runners load a *default* profile/config and ignore the per-stage one until the invocation passes the right flag. Pattern: pre-commit, pre-push, and CI each invoke the runner with the matching `--profile`/`--config`/preset name. A workflow that runs the bare command silently falls back to defaults and ignores every retry, timeout, and output tweak you encoded for that stage. This is the single most common reason CI behaves nothing like the config that "should" be active.
+
+**Four output axes that govern token efficiency.** Every reasonable test runner exposes these, even if the keys are named differently:
+
+| Axis | Token-efficient value | Why |
+|---|---|---|
+| Per-test status during execution | Show **failures only**, suppress pass lines | A 5k-test suite that prints one line per pass is 5k lines of noise; agents and reviewers triage from the failure list. |
+| End-of-run summary | **Failures only**, not the full pass roll-up | The summary's job is "what broke", not "what worked". |
+| Captured stdout/stderr of passing tests | **Never display** | Passing tests' chatter is noise by definition. |
+| Captured stdout/stderr of failing tests | **Always display**, ideally both inline AND in final summary | Agents triaging a failure find the output wherever they're looking. |
+
+**Progress bars in captured logs.** Most runners auto-suppress progress redraws when stdout is not a TTY (GitHub Actions et al. detect this correctly). Some CI systems emulate a TTY — when they do, the redraw stream bloats captured logs. Look for a `--no-progress` / `--reporter=dot` / `HIDE_PROGRESS=1`-style escape hatch and set it in CI env as belt-and-suspenders.
+
+**Layered presets by hook stage.** Pair the four output axes with the tier table above:
+
+- *pre-commit* — fail-fast on, run unit only, quietest output (failure on a single test should kill the run immediately).
+- *pre-push* — fail-fast off, run unit + integration, still quiet (surface every regression, not just the first).
+- *CI* — fail-fast off, run everything, retries for known-flaky network tests, quietest output (logs are read by humans and agents long after the run).
+- *interactive/ad-hoc* — verbosity OK; this is the one tier where pass lines and progress bars carry signal.
+
+**Machine-readable output for downstream parsers.** When an agent or dashboard consumes test results, prefer the runner's structured-output format (JUnit XML, TAP, JSON event streams like libtest-json) over scraping human text. Don't enable it prophylactically — adopt it the moment something downstream actually parses it.
+
+**No first-class "AI mode" exists in any major runner** as of late 2025. The composition above is hand-rolled across tools. If a runner ever ships a `--quiet-for-agents` preset, prefer that to a hand-tuned profile.
+
+For the concrete keys, profile names, and reference TOML in each language, see the per-language testing spec — Rust: [cli-spec § Test runner](../../languages/rust/cli-spec/06-testing.md#test-runner).
+
 ### `.pre-commit-config.yaml` — fast unit tests on every commit
 
 Copy into the target project's `.pre-commit-config.yaml`:
@@ -153,10 +183,13 @@ repos:
   - repo: local
     hooks:
       - id: cargo-nextest-unit
-        name: cargo nextest (lib only)
+        name: cargo nextest (unit, pre-commit profile)
         entry: cargo
         language: system
-        args: [nextest, run, --lib, --no-fail-fast]
+        # Profiles live in .config/nextest.toml. Without `--profile pre-commit`
+        # nextest silently uses `[profile.default]` and ignores the unit-only
+        # filterset, fail-fast, and quieter status-level configured for this tier.
+        args: [nextest, run, --profile, pre-commit]
         types_or: [rust, toml]
         pass_filenames: false
         stages: [pre-commit]
