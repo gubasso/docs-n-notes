@@ -62,7 +62,7 @@ If a box is unchecked, fix it or explicitly waive it in an ADR.
 
 ## UX — what the user sees
 
-- [ ] `--help` documents both the wrapper's flags *and* (or links to) the wrapped tool's help.
+- [ ] `--help` documents both the wrapper's flags *and* (or links to) the wrapped tool's help. The flag/subcommand table is **parser-generated** from the typed command model; passthrough rules, env vars, and "see the child's own `--help`" pointers live in an `after_help` / `epilog` addendum. No hand-maintained parallel flag list. See [07 — Naming & Docs · `--help` is generated, not authored](../07-naming-and-docs.md#--help-is-generated-not-authored).
 - [ ] `--version` shows both the wrapper's version and the wrapped tool's version when available.
 - [ ] Shell completions are generated (for the wrapper; the child's completions are the child's problem).
 - [ ] `--dry-run` (or equivalent) prints the resolved command without running it. Indispensable for debugging.

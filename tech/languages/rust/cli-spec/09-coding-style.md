@@ -87,6 +87,8 @@ The general no-`print`-outside-`ui/` rule is enforced in Rust by:
 
 (`main.rs` is allowed to print the final error.)
 
+**Scope.** The rule governs *your* writes to stdout/stderr. It does not ban clap's auto-generated `--help` / `--version` output — that goes through `clap_builder` and is structured by the derive macros, not by hand-written `println!`. The Tier 1 help pattern (`#[command(after_long_help = include_str!("../ui/help_extras.txt"))]`) is fully compliant with this rule. See [02 — Subcommand Pattern · Help rendering with clap](02-subcommand-pattern.md#help-rendering-with-clap) for the recipe and escalation tiers.
+
 ## See also
 
 - [General — Coding Style](../../../programming/cli-design/04-coding-style-rust-zig.md) — canonical rules.

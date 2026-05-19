@@ -63,7 +63,8 @@ Copy the tree, drop the `.template` suffixes, rename `app_template` → your cra
 - `figment` for layered config: defaults → user file → project file → env → CLI.
 - Tests: `assert_cmd` + `predicates` + `insta` + `tempfile`. Run with `cargo nextest`.
 - One `AppContext` built once in `main`, passed by `&AppContext`. Single shared tokio runtime.
-- No `println!` outside `ui/`. No `panic!` outside `main`.
+- No `println!` outside `ui/`. No `panic!` outside `main`. (clap's auto-generated `--help` / `--version` output doesn't count — it's the parser's output, not yours.)
+- `--help` is parser-generated. Authored prose lives in `src/ui/help_extras.txt`, wired via `#[command(after_long_help = include_str!(...))]`. Never hand-maintain a parallel flag table. See [02 — Subcommand Pattern · Help rendering](02-subcommand-pattern.md#help-rendering-with-clap).
 
 ## Sources
 

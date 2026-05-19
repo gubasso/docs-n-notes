@@ -99,8 +99,59 @@ See [Rust API Guidelines: Naming](https://rust-lang.github.io/api-guidelines/nam
 ### Doc comments
 
 - **Every public and crate-public item has a doc comment.** Even if it just restates the name — that's the seed for future docs.
-- **Doc comments on CLI flag fields double as `--help` text.** Write them for the user, not for the developer.
+- **Doc comments on CLI flag fields double as `--help` text.** Write them for the user, not for the developer. See [`--help` is generated, not authored](#--help-is-generated-not-authored) below for the rule against hand-authoring a parallel flag table.
 - **Use a stable cross-link syntax** (`[OtherType]` in rustdoc, `:py:class:` in Sphinx) — link rot is real, but link discipline is doable.
+
+### `--help` is generated, not authored
+
+The argument parser's derivation of `--help` from your command definitions is the **single source of truth** for the flag table, usage line, and subcommand list. The moment you hand-author a parallel copy in a static file, the two start drifting — every new flag or subcommand has to be added in two places, and the static copy silently rots.
+
+**Rule:** doc comments on parser fields and `#[command(about = ...)]`-style attributes are the only authored shape data. Hand-written prose lives **around** the generated body via the parser's intro/epilog hooks (`before_help`, `after_help`, `long_about` in clap; `epilog=` in argparse; equivalents in every modern parser).
+
+**What belongs in the authored prose (the addendum):**
+
+- Wrapper-specific narrative: passthrough semantics (`--` sentinel), forwarding rules, "any unrecognized subcommand is passed to `<child>`".
+- Environment variables the parser doesn't see (`<APP>_CONFIG_PATH`, `<APP>_<TOOL>_BIN`).
+- Worked examples and `SEE ALSO` lists.
+- Cross-references to ADRs, online docs, or related commands.
+
+**What does NOT belong in the addendum:**
+
+- The flag table, usage line, or subcommand list. The parser owns those.
+- Re-statements of per-flag descriptions. Those live on the field's doc comment.
+
+**Default recipe (any language with a derive-style parser):**
+
+```text
+[parser-generated about / usage / flags / subcommands]
+[+ before_help: short orientation, optional]
+[+ after_help / after_long_help: passthrough narrative, env vars, examples, see also]
+```
+
+Reach for a fully-overridden help (`override_help` / equivalent) only when the parser genuinely cannot express the layout you need — almost never in practice. If you're tempted, it's usually a sign the *commands* are mis-organized, not that the help renderer is too rigid.
+
+**Wrapper-CLI corollary** (see [06 — CLI Wrapper Design](06-cli-wrapper-design/)): when migrating a wrapper from bash to a typed language, preserve **functional fidelity** (env vars, passthrough rules, examples) in the addendum, not **implementation-detail fidelity** (the manually-formatted flag table from the old script). The new project's flag table is whatever the new project's commands are.
+
+**Prior art and rationale**
+
+The same three-tier shape recurs across ecosystems. Read the table as "what they picked, and the reason that picked tier was justified":
+
+| Project | Language / parser | Pattern | Why |
+|---|---|---|---|
+| [`cargo`](https://github.com/rust-lang/cargo) | Rust / clap | Derive + `after_help` pointer to `cargo help <cmd>` | Subcommands have man-page-scale docs; the short `--help` stays terse and points at a long-form reader. The flag table is never hand-maintained. |
+| [`jj`](https://github.com/jj-vcs/jj) | Rust / clap | Derive + `long_about` literals per subcommand | Scales fine to 40+ subcommands. Prose lives next to the parser definition — no separate `help.txt` to drift. |
+| [`rustup`](https://github.com/rust-lang/rustup) | Rust / clap | Derive + `after_help = include_str!(...)` per command | Wrapper CLI: hand-authored prose covers proxy/toolchain semantics (the wrapper-narrative analog of passthrough rules and env vars). Closest reference model for any wrapper. |
+| [`astral-sh/uv`](https://github.com/astral-sh/uv) | Rust / clap | `disable_help_flag` + custom `uv help` subcommand ([PR #4906](https://github.com/astral-sh/uv/pull/4906)) | Escalated only when the *renderer* (theming, pagination, cross-refs) outgrew what clap can produce. The command tree is still derive-based. |
+| [`bacon`](https://github.com/Canop/bacon) | Rust / clap + [`clap-help`](https://github.com/Canop/clap-help) | Drop-in third-party renderer | Same motivation as `uv` solved with a reusable crate. If you're escalating for *presentation*, evaluate this before owning a custom renderer. |
+| [`ripgrep`](https://github.com/BurntSushi/ripgrep) | Rust / hand-rolled | No clap; help text authored alongside flag definitions in `crates/core/flags/` | Driven by startup-time, binary-size, and man-page-generation constraints. The upper bound of "fully custom". Don't copy unless you have ripgrep-scale distribution pressure. |
+| [`kubectl`](https://github.com/kubernetes/kubectl) | Go / cobra | `Long:` + `Example:` blocks on each command | The cobra equivalent of clap's `long_about` + `after_help`. Cobra renders the flag table; teams author only the narrative. |
+| [`gh`](https://github.com/cli/cli) | Go / cobra | Same — `Long` + `Example`, plus `HelpFunc` override on the root for the "topics" landing screen | The root override is *only* for the topic-grouping landing page; per-command help is still cobra-generated. Tier-2 escalation done at the right level. |
+| [`pip`](https://github.com/pypa/pip) | Python / argparse | `description=` + `epilog=` per subcommand | The argparse equivalent of `long_about` + `after_help`. Same shape, different syntax. |
+| [`oclif` apps (e.g. `heroku` CLI)](https://oclif.io/) | TypeScript / oclif | `description`, `examples`, `flags` decorators | Framework derives `--help` from class fields; `examples` is the narrative addendum. |
+
+**Reading the table.** The default (Tier 1 — parser-generated structure + narrative addendum) wins across every ecosystem and at every project scale. Tier-3 escalations cluster into two distinct reasons: **presentation** (`uv`, `bacon` — colors, pagination, theming) and **parser-level constraints** (`ripgrep` — startup time, binary size). Most CLIs, including wrappers, sit at Tier 1. If your reason to escalate doesn't match one of those two buckets, treat the urge as a smell — it usually means the *commands* need reorganizing, not the help renderer.
+
+**Reference docs.** [clap `Command` attrs](https://docs.rs/clap/latest/clap/struct.Command.html) · [argparse `ArgumentParser`](https://docs.python.org/3/library/argparse.html#argumentparser-objects) · [cobra `Command` fields](https://pkg.go.dev/github.com/spf13/cobra#Command) · [oclif command authoring](https://oclif.io/docs/commands/).
 
 ### Module headers — "what it is, what it isn't"
 

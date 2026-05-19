@@ -1,0 +1,13 @@
+# riptask config (scope: local)
+projects:
+- name: docs-n-notes
+  vc_backend:
+    type: github
+    host: https://github.com
+    repo: gubasso/docs-n-notes
+  tasks_backend:
+    type: github
+    host: https://github.com
+    repo: gubasso/docs-n-notes
+  default_board: personal
+  key: DOCSNNOTES
