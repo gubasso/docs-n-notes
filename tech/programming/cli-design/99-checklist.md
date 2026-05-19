@@ -103,8 +103,13 @@ One-page sanity check before declaring a CLI shippable. If a box is unchecked, f
 - [ ] Integration tests run in pre-push (parallel, single-digit seconds total).
 - [ ] E2E tests run in CI only — never in local hooks.
 - [ ] Coverage is judged by risk and impact, not by chasing a line-count number.
+- [ ] Property-based tests cover parsers, codecs, and state machines (`proptest` / `hypothesis` / `fast-check`).
+- [ ] Mutation score (≥ 60% on critical modules) tracked nightly, even if not gated (`cargo-mutants` / `mutmut` / `stryker`).
+- [ ] LLM-generated tests reviewed against the third-party-API heuristics in [08 § Detecting "testing the third-party library"](08-testing-strategy.md#detecting-testing-the-third-party-library).
+- [ ] Every test survives the "import-removal test": deleting a third-party import would break the test (proving it tests the boundary, not the library).
 
 → Detail: [08 — Testing Strategy](08-testing-strategy.md)
+→ Tooling: [08a — Testing Tools](08a-testing-tools.md)
 
 ## CI / shipping
 

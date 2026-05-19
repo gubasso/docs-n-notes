@@ -20,7 +20,8 @@ Language-agnostic principles for designing command-line programs: architecture, 
 | 5 | [Designing for LLM coding agents](05-designing-for-llm-agents.md) | `--help`, `--json`, doctor commands, evaluation harnesses. |
 | 6 | [CLI wrapper design](06-cli-wrapper-design/) | Wrapping/orchestrating *other* CLI binaries: typed builders + POSIX process model. |
 | 7 | [Naming & documentation](07-naming-and-docs.md) | Visibility defaults, doc-comment strategy, "comment why, not what". |
-| 8 | [Testing strategy](08-testing-strategy.md) | Pyramid: unit → integration → snapshot → compile-fail. Env isolation per test. |
+| 8 | [Testing strategy](08-testing-strategy.md) | Pyramid: unit → integration → snapshot → compile-fail. Env isolation per test. FIRST/AAA, DRY-vs-DAMP, third-party-library detection, mutation + property-based testing. |
+| 8a | [Testing tools](08a-testing-tools.md) | Per-language tooling matrix: runners, snapshot, property-based, mutation, recording, contract. Pre-commit and CI snippets. |
 | 9 | [Reference projects](09-reference-projects.md) | Organizational patterns from well-studied CLIs (language-agnostic takeaways). |
 | 99 | [Checklist](99-checklist.md) | One-page sanity check before shipping a CLI. |
 

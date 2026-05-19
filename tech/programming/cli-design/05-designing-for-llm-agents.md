@@ -381,6 +381,21 @@ are ambiguous. List ambiguities as numbered questions. Do not fix them.
 
 Fastest way to find latent ambiguities.
 
+### 5.4 Test-writing hazards for AI agents
+
+The dominant failure mode of AI-generated test suites is **testing the third-party library instead of the project**. The agent stubs every external collaborator, asserts on the stub's recorded calls, and never touches the project's actual behavior. Line coverage looks great in the PR; mutation score collapses; the regression you were trying to catch slips straight through.
+
+The five concrete heuristics for detecting this — assertion subject is a non-project import, mock-is-the-only-subject, doc-mirroring, mocking your own pure function, the import-removal test — are documented in [08 — Testing Strategy § Detecting "testing the third-party library"](08-testing-strategy.md#detecting-testing-the-third-party-library).
+
+Mitigations to bake into your agent's instructions (AGENTS.md, CLAUDE.md, or the project's test-writing skill):
+
+- **Load the project's testing principles before writing tests.** Point the agent at [08 — Testing Strategy](08-testing-strategy.md) and [08a — Testing Tools](08a-testing-tools.md). The five heuristics are non-negotiable.
+- **Refuse mock-only assertions.** If the only thing a test asserts on is a mock's call shape, the test is rejected at review.
+- **Surface coverage AND mutation score.** Coverage alone is the wrong signal; a `make mutate` (or equivalent) target keeps mutation testing one keystroke away. See [08a § Mutation testing](08a-testing-tools.md#mutation-testing).
+- **Audit existing tests with the `test-review` skill.** The skill ships with the dotfiles (Claude planner + Codex implementer) and lints any project's test suite against the principles file, producing a refactor plan tied to the specific heuristic each finding violates.
+
+For agents writing tests for *this* CLI specifically: snapshot-test `--help`, the JSON schema, and the exit-code matrix (see [99-checklist § Designing for LLM coding agents](99-checklist.md#designing-for-llm-coding-agents)). Those three artifacts are the agent's contract with the tool; lock them down.
+
 ---
 
 ## 6. When to Reach for MCP
