@@ -29,7 +29,8 @@ best practice to edit a service
 
 [Systemd Time Calendar Events](https://www.freedesktop.org/software/systemd/man/latest/systemd.time.html#Calendar%20Events)
 
-- `Persistent=true`: This directive ensures that the missed timer events are run as soon as possible after the system is up. It effectively allows the timer to catch up on missed runs.
+- `Persistent=true`: This directive ensures that the missed timer events are run as soon as possible
+  after the system is up. It effectively allows the timer to catch up on missed runs.
 
 #### Examples
 

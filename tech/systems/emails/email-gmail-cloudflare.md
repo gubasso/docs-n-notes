@@ -1,11 +1,11 @@
 # Free Unlimited Custom Domain Email Addresses with Gmail and Cloudflare
 
-*CodingEntrepreneurs*
+_CodingEntrepreneurs_
 
 - [Free Unlimited Custom Domain Email Addresses with Gmail and Cloudflare. CodingEntrepreneurs](https://youtu.be/NmXWA08ly_s?si=ZiG-CttQx2GdSkAP)
 - [Cloudflare Email Setup (Free Professional Custom Email Setup) IdeaSpot](https://www.youtube.com/watch?v=nNGcvz1Sc_8)
 
-______________________________________________________________________
+---
 
 ## Prerequisites
 
@@ -20,7 +20,7 @@ Before you begin, make sure you have:
 
 - **Use a fresh domain** to avoid DNS conflicts with existing services.
 
-______________________________________________________________________
+---
 
 ## Receiving Emails
 
@@ -30,11 +30,13 @@ Follow these steps to forward incoming mail for your custom address into your Gm
 
 1. Sign in (or sign up) at [Cloudflare](https://dash.cloudflare.com/).
 1. Click **Add site**, enter your domain (e.g., `yourdomain.com`), and select the **Free** plan.
-1. Review existing DNS records. Disable proxying (grey cloud) for any records that should not pass through Cloudflare.
+1. Review existing DNS records. Disable proxying (grey cloud) for any records that should not pass
+   through Cloudflare.
 
 ### Update Name Servers at Your Registrar
 
-1. In Cloudflare's dashboard, note the two nameservers (e.g., `abby.ns.cloudflare.com` and `bob.ns.cloudflare.com`).
+1. In Cloudflare's dashboard, note the two nameservers (e.g., `abby.ns.cloudflare.com` and
+   `bob.ns.cloudflare.com`).
 1. Log in to your domain registrar (e.g., Name.com, GoDaddy).
 1. Replace the current NS records with the Cloudflare nameservers.
 1. Save changes and wait for DNS propagation (usually 5–15 minutes, but it can take up to 24 hours).
@@ -64,7 +66,7 @@ Follow these steps to forward incoming mail for your custom address into your Gm
 1. From another email account, send a message to `hello@yourdomain.com`.
 1. Confirm it arrives in your Gmail inbox (or Spam—mark as **Not spam** if needed).
 
-______________________________________________________________________
+---
 
 ## Sending Emails
 
@@ -88,7 +90,8 @@ To send from your custom domain, we’ll use Brevo (formerly SendinBlue) as the 
 
 1. In Gmail, go to **Settings** → **Accounts and Import**.
 1. Under **Send mail as**, click **Add another email address**.
-1. Enter your full custom address (e.g., `hello@yourdomain.com`) and keep **Treat as an alias** checked.
+1. Enter your full custom address (e.g., `hello@yourdomain.com`) and keep **Treat as an alias**
+   checked.
 1. Click **Next** and enter Brevo’s SMTP settings:
    - **SMTP server**: as provided by Brevo
    - **Port**: as provided by Brevo
@@ -98,10 +101,14 @@ To send from your custom domain, we’ll use Brevo (formerly SendinBlue) as the 
 
 ### Finalize Settings and Test
 
-1. In Gmail **Settings** → **Accounts and Import**, set your custom address as **Default** for sending.
-1. Under **When replying to a message**, choose **Reply from the same address the message was sent to**.
+1. In Gmail **Settings** → **Accounts and Import**, set your custom address as **Default** for
+   sending.
+1. Under **When replying to a message**, choose **Reply from the same address the message was sent
+   to**.
 1. Add your custom address to your Google Account as an **Alternative email**:
-   - Go to **Manage your Google Account** → **Personal info** → **Contact info** → **Email** → **Alternate emails**.
+   - Go to **Manage your Google Account** → **Personal info** → **Contact info** → **Email** →
+     **Alternate emails**.
    - Or search for "Email (personal info)"
    - Add and verify following Google’s prompts.
-1. Test your configuration using [Mail-Tester](https://www.mail-tester.com/) to ensure proper delivery and spam score.
+1. Test your configuration using [Mail-Tester](https://www.mail-tester.com/) to ensure proper
+   delivery and spam score.

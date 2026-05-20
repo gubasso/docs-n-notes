@@ -20,54 +20,72 @@ VaapiIgnoreDriverChecks,VaapiOnNvidiaGPUs
 
 ## Summary
 
-Many Chromium slowdowns on Wayland result from software compositing fallbacks due to missing GBM/DRM support, which forces the GPU process into CPU-bound rendering ([github.com][1]). Others stem from the “Preferred Ozone platform” flag defaulting to Auto or X11, causing compositor conflicts under native Wayland sessions on wlroots-based WMs like Niri ([bbs.archlinux.org][2]). Applying Ozone launch flags, disabling GPU driver workarounds, toggling vsync, ensuring up-to-date Mesa/VA-API packages, or—even temporarily—falling back to X11 can restore hardware acceleration and smooth scrolling ([wiki.archlinux.org][3], [issues.chromium.org][4]).
+Many Chromium slowdowns on Wayland result from software compositing fallbacks due to missing GBM/DRM
+support, which forces the GPU process into CPU-bound rendering ([github.com][1]). Others stem from
+the “Preferred Ozone platform” flag defaulting to Auto or X11, causing compositor conflicts under
+native Wayland sessions on wlroots-based WMs like Niri ([bbs.archlinux.org][2]). Applying Ozone
+launch flags, disabling GPU driver workarounds, toggling vsync, ensuring up-to-date Mesa/VA-API
+packages, or—even temporarily—falling back to X11 can restore hardware acceleration and smooth
+scrolling ([wiki.archlinux.org][3], [issues.chromium.org][4]).
 
-______________________________________________________________________
+---
 
 ## Common Symptoms
 
 ### Laggy Scrolling and Stuttering
 
-Users on wlroots compositors such as Niri WM report Chromium on Wayland feels laggy and choppy, with frame rates around 40–60 fps during scrolling—whereas Firefox remains fluid under identical conditions ([forum.manjaro.org][5]).
+Users on wlroots compositors such as Niri WM report Chromium on Wayland feels laggy and choppy, with
+frame rates around 40–60 fps during scrolling—whereas Firefox remains fluid under identical
+conditions ([forum.manjaro.org][5]).
 
 ### WebGL Frame Drops
 
-Certain WebGL-intensive sites exhibit very low rendering rates and high CPU usage, causing intermittent stuttering when moving windows or switching workspaces ([github.com][6]).
+Certain WebGL-intensive sites exhibit very low rendering rates and high CPU usage, causing
+intermittent stuttering when moving windows or switching workspaces ([github.com][6]).
 
 ### Slow Launch Times
 
-Under some Wayland sessions, opening a new Chromium window can be delayed by several seconds per instance, even when Ozone flags are supposedly enabled ([bbs.archlinux.org][7]).
+Under some Wayland sessions, opening a new Chromium window can be delayed by several seconds per
+instance, even when Ozone flags are supposedly enabled ([bbs.archlinux.org][7]).
 
-______________________________________________________________________
+---
 
 ## Underlying Causes
 
 ### Ozone Platform Fallback
 
-By default, Chromium’s “Preferred Ozone platform” may be set to Auto or X11, forcing it into xWayland under native Wayland sessions and triggering compositor-level conflicts ([bbs.archlinux.org][2]).
+By default, Chromium’s “Preferred Ozone platform” may be set to Auto or X11, forcing it into
+xWayland under native Wayland sessions and triggering compositor-level conflicts
+([bbs.archlinux.org][2]).
 
 ### GPU Driver Fallbacks
 
-Without proper libgbm, DRM render node access, or Wayland DMA-BUF protocols, Chromium’s GPU process can’t initialize hardware acceleration and falls back to software compositing, skyrocketing CPU usage ([github.com][1]).
+Without proper libgbm, DRM render node access, or Wayland DMA-BUF protocols, Chromium’s GPU process
+can’t initialize hardware acceleration and falls back to software compositing, skyrocketing CPU
+usage ([github.com][1]).
 
 ### Compositor-Specific Quirks
 
-Even with native Wayland enabled, driver or compositor bugs in wlroots-based environments can stall the GPU pipeline or introduce rendering glitches ([github.com][6]).
+Even with native Wayland enabled, driver or compositor bugs in wlroots-based environments can stall
+the GPU pipeline or introduce rendering glitches ([github.com][6]).
 
-______________________________________________________________________
+---
 
 ## Diagnostics
 
 1. **Inspect `chrome://gpu`**
 
-   - Check **Ozone platform** in the “Graphics Feature Status” section. If it reports `x11` instead of `wayland`, Chromium is running under xWayland ([forum.manjaro.org][5]).
-   - Look for any “Software only” or “Disabled” entries under GPU rasterization or WebGL; these indicate fallback to CPU rendering ([github.com][6]).
+   - Check **Ozone platform** in the “Graphics Feature Status” section. If it reports `x11` instead
+     of `wayland`, Chromium is running under xWayland ([forum.manjaro.org][5]).
+   - Look for any “Software only” or “Disabled” entries under GPU rasterization or WebGL; these
+     indicate fallback to CPU rendering ([github.com][6]).
 
 1. **Verify Driver Availability**
 
-   - Ensure that `/dev/dri/render*` nodes exist and that `libgbm`, `libdrm`, and Wayland EGL libraries are installed; missing components force software compositing ([github.com][1]).
+   - Ensure that `/dev/dri/render*` nodes exist and that `libgbm`, `libdrm`, and Wayland EGL
+     libraries are installed; missing components force software compositing ([github.com][1]).
 
-______________________________________________________________________
+---
 
 ## Recommended Fixes
 
@@ -81,7 +99,8 @@ chromium \
   --ozone-platform=wayland
 ```
 
-This explicitly sets the Ozone platform, ensuring Chromium talks directly to the Wayland compositor ([blogs.igalia.com][8], [bbs.archlinux.org][2]).
+This explicitly sets the Ozone platform, ensuring Chromium talks directly to the Wayland compositor
+([blogs.igalia.com][8], [bbs.archlinux.org][2]).
 
 ### 2. Toggle Hardware Acceleration
 
@@ -91,11 +110,13 @@ Disable GPU acceleration briefly to isolate driver issues:
 chromium --disable-gpu
 ```
 
-If disabling GPU removes stutters or freezes, re-enable it once you’ve updated drivers or applied other fixes ([groups.google.com][9]).
+If disabling GPU removes stutters or freezes, re-enable it once you’ve updated drivers or applied
+other fixes ([groups.google.com][9]).
 
 ### 3. Ensure Mesa and GBM Packages
 
-Install or update the Mesa stack, `libgbm`, `libdrm`, and `mesa-va-drivers` so Chromium can access the GPU render nodes directly, avoiding software fallbacks ([github.com][1]).
+Install or update the Mesa stack, `libgbm`, `libdrm`, and `mesa-va-drivers` so Chromium can access
+the GPU render nodes directly, avoiding software fallbacks ([github.com][1]).
 
 ### 4. Disable GPU Driver Bug Workarounds
 
@@ -125,7 +146,8 @@ If Wayland issues persist, force xWayland by using:
 --ozone-platform=x11
 ```
 
-or simply log into an X11 session. X11 mode avoids many Wayland-specific compositor bugs ([bbs.archlinux.org][2]).
+or simply log into an X11 session. X11 mode avoids many Wayland-specific compositor bugs
+([bbs.archlinux.org][2]).
 
 ### 7. Enable VA-API for Video Decoding
 
@@ -135,9 +157,10 @@ Offload video playback from the CPU by enabling VA-API:
 --enable-features=VaapiVideoDecoding
 ```
 
-and install the appropriate VA-API driver package. This reduces CPU load during video playback ([wiki.archlinux.org][3]).
+and install the appropriate VA-API driver package. This reduces CPU load during video playback
+([wiki.archlinux.org][3]).
 
-______________________________________________________________________
+---
 
 ## Example: Creating `chromium-flags.conf`
 
@@ -153,13 +176,16 @@ EOF
 
 Then launch Chromium normally (your WM config will pick up these flags automatically).
 
-______________________________________________________________________
+---
 
 ## Further Resources
 
-- **ArchWiki: Chromium** – Up-to-date notes on VA-API, Wayland support, and related packages ([wiki.archlinux.org][3])
-- **Peter Beverloo’s Switch List** – Comprehensive list of Chromium command-line flags ([peter.sh][11])
-- **Chromium Issue Tracker** – Real-world reports of Ozone/Wayland bugs and workarounds ([github.com][1], [github.com][6])
+- **ArchWiki: Chromium** – Up-to-date notes on VA-API, Wayland support, and related packages
+  ([wiki.archlinux.org][3])
+- **Peter Beverloo’s Switch List** – Comprehensive list of Chromium command-line flags
+  ([peter.sh][11])
+- **Chromium Issue Tracker** – Real-world reports of Ozone/Wayland bugs and workarounds
+  ([github.com][1], [github.com][6])
 
 [1]: https://github.com/OSSystems/meta-browser/issues/447?utm_source=chatgpt.com "chromium-ozone-wayland freezes when context menu's are destroyed ..."
 [2]: https://bbs.archlinux.org/viewtopic.php?id=294895&utm_source=chatgpt.com "Chromium odd behavior with Preferred Ozone Platform Flag / Applications ..."

@@ -2,41 +2,44 @@
 
 ## Profiles: create a profile from another
 
-Duplicating a Brave browser profile on Linux involves copying specific profile data from your existing profile to a new one. This allows you to have a new profile that mirrors your current settings and extensions. Below is a step-by-step guide to achieve this safely.
+Duplicating a Brave browser profile on Linux involves copying specific profile data from your
+existing profile to a new one. This allows you to have a new profile that mirrors your current
+settings and extensions. Below is a step-by-step guide to achieve this safely.
 
-______________________________________________________________________
+---
 
 **Important Note:**
 
-- **Backup Your Data:** Before proceeding, it's highly recommended to back up your Brave browser data to prevent any potential loss.
+- **Backup Your Data:** Before proceeding, it's highly recommended to back up your Brave browser
+  data to prevent any potential loss.
 
-- **Proceed with Caution:** Manipulating browser profile files can lead to data corruption if not done carefully.
+- **Proceed with Caution:** Manipulating browser profile files can lead to data corruption if not
+  done carefully.
 
-______________________________________________________________________
+---
 
 **Step-by-Step Guide**
 
-**1. Close Brave Browser Completely**
-Ensure that all instances of Brave Browser are closed to prevent any file conflicts.
+**1. Close Brave Browser Completely** Ensure that all instances of Brave Browser are closed to
+prevent any file conflicts.
 
 **2. Open Terminal**
 
-**3. Navigate to Brave's User Data Directory**
-Brave stores user data in `~/.config/BraveSoftware/Brave-Browser/`. Navigate to this directory by running:
+**3. Navigate to Brave's User Data Directory** Brave stores user data in
+`~/.config/BraveSoftware/Brave-Browser/`. Navigate to this directory by running:
 
 ```Copy code
 cd ~/.config/BraveSoftware/Brave-Browser/
 ```
 
-**4. Backup the Brave-Browser Directory (Highly Recommended)**
-Create a backup of your current profiles:
+**4. Backup the Brave-Browser Directory (Highly Recommended)** Create a backup of your current
+profiles:
 
 ```Copy code
 cp -r Brave-Browser Brave-Browser-backup
 ```
 
-**5. Identify Your Current Profile Directory**
-List the contents to see existing profiles:
+**5. Identify Your Current Profile Directory** List the contents to see existing profiles:
 
 You should see directories like:
 
@@ -91,7 +94,8 @@ cp Default/Top\ Sites "$dest"/
 
 See [brave-create-profile.fish](./brave-create-profile.fish) script.
 
-**Note:** Avoid copying files like `Cookies`, `History`, `Login Data`, and `Cache` to prevent conflicts and potential corruption.
+**Note:** Avoid copying files like `Cookies`, `History`, `Login Data`, and `Cache` to prevent
+conflicts and potential corruption.
 
 **10. Adjust File Permissions (If Necessary)**
 
@@ -149,10 +153,13 @@ If you use Brave Sync:
 - Go to `brave://settings/braveSync/setup`.
 - Set up sync to synchronize bookmarks, passwords, and more.
 
-______________________________________________________________________
+---
 
 **Additional Tips**
 
-- **Avoid Copying Encrypted Data:** Certain data like saved passwords are encrypted and tied to the original profile, so copying them won't work.
-- **Regular Backups:** Keep regular backups of your browser data to prevent loss in case of corruption.
-- **Profile Management:** Use Brave's built-in profile management for easier handling of multiple profiles.
+- **Avoid Copying Encrypted Data:** Certain data like saved passwords are encrypted and tied to the
+  original profile, so copying them won't work.
+- **Regular Backups:** Keep regular backups of your browser data to prevent loss in case of
+  corruption.
+- **Profile Management:** Use Brave's built-in profile management for easier handling of multiple
+  profiles.

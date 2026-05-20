@@ -134,7 +134,7 @@ host gitolite-sh
     identityfile ~/.ssh/id_rsa
 ```
 
-______________________________________________________________________
+---
 
 Example of sending a command through ssh:
 
@@ -151,18 +151,11 @@ OpenSSH Full Guide - Everything you need to get started! [https://youtu.be/YS5Zh
 https://www.thegeekstuff.com/2008/11/3-steps-to-perform-ssh-login-without-password-using-ssh-keygen-ssh-copy-id/
 https://askubuntu.com/questions/4830/easiest-way-to-copy-ssh-keys-to-another-machine
 
-https://www.ssh.com/ssh/protocol/
-https://www.ssh.com/ssh/key/
-https://www.ssh.com/ssh/keygen/
-https://www.ssh.com/iam/ssh-key-management/
-https://www.ssh.com/products/universal-ssh-key-manager/
-https://www.ssh.com/ssh/authorized_keys/
-https://www.ssh.com/ssh/config/
-https://www.ssh.com/ssh/sshd/
-https://www.ssh.com/ssh/sshd_config/
-https://www.ssh.com/ssh/command/
-https://www.ssh.com/ssh/openssh/
-https://www.ssh.com/ssh/copy-id
+https://www.ssh.com/ssh/protocol/ https://www.ssh.com/ssh/key/ https://www.ssh.com/ssh/keygen/
+https://www.ssh.com/iam/ssh-key-management/ https://www.ssh.com/products/universal-ssh-key-manager/
+https://www.ssh.com/ssh/authorized_keys/ https://www.ssh.com/ssh/config/
+https://www.ssh.com/ssh/sshd/ https://www.ssh.com/ssh/sshd_config/ https://www.ssh.com/ssh/command/
+https://www.ssh.com/ssh/openssh/ https://www.ssh.com/ssh/copy-id
 
 https://infosec.mozilla.org/guidelines/openssh
 https://stribika.github.io/2015/01/04/secure-secure-shell.html
@@ -180,7 +173,8 @@ ssh-keygen -t rsa -b 4096 -a 100 -C ''
 
 **Check for pub key:**
 
-With the public key missing, the following command will show you that there is no public key for this SSH key.
+With the public key missing, the following command will show you that there is no public key for
+this SSH key.
 
 ```
 $ ssh-keygen -l -f ~/.ssh/id_rsa
@@ -209,7 +203,8 @@ eval "$(ssh-agent -k)"
 
 ### Agent forwarding
 
-SSH agent forwarding allows you to use your local keys when connected to a server. It is recommended to only enable agent forwarding for selected hosts.
+SSH agent forwarding allows you to use your local keys when connected to a server. It is recommended
+to only enable agent forwarding for selected hosts.
 
 Setup to use `ssh-agent` to remote access a server:
 

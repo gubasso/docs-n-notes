@@ -21,11 +21,23 @@ Both can be used because both runs throw the entire tree.
 
 BFS vs DFS, such as their **drawbacks**
 
-"The main disadvantage of DFS is that you could end up wasting a lot of time looking for a value. Let's say that you had a huge tree, and you were looking for a value that is stored in the root's right child. If you do DFS prioritizing left before right, then you will search the entire left subtree, which could be hundreds of thousands if not millions of operations. Meanwhile, the node is literally one operation away from the root. The main disadvantage of BFS is that if the node you're searching for is near the bottom, then you will waste a lot of time searching through all the levels to reach the bottom."
+"The main disadvantage of DFS is that you could end up wasting a lot of time looking for a value.
+Let's say that you had a huge tree, and you were looking for a value that is stored in the root's
+right child. If you do DFS prioritizing left before right, then you will search the entire left
+subtree, which could be hundreds of thousands if not millions of operations. Meanwhile, the node is
+literally one operation away from the root. The main disadvantage of BFS is that if the node you're
+searching for is near the bottom, then you will waste a lot of time searching through all the levels
+to reach the bottom."
 
-"In terms of space complexity, if you have a complete binary tree, then the amount of space used by the recursive call stack for DFS is linear with the height, which is logarithmic with n (the number of nodes). The amount of space used by the queue is linear with n, so DFS has a much better space complexity. The reason the queue will grow linearly is because the final level in a complete binary tree can have up to n/2 nodes.
+"In terms of space complexity, if you have a complete binary tree, then the amount of space used by
+the recursive call stack for DFS is linear with the height, which is logarithmic with n (the number
+of nodes). The amount of space used by the queue is linear with n, so DFS has a much better space
+complexity. The reason the queue will grow linearly is because the final level in a complete binary
+tree can have up to n/2 nodes.
 
-However, if you have a lopsided tree (like a straight line), then BFS will have an O(1)O(1) space complexity while DFS will have O(n)O(n) (although, a lopsided tree is an edge case whereas a full tree is the expectation)."
+However, if you have a lopsided tree (like a straight line), then BFS will have an O(1)O(1) space
+complexity while DFS will have O(n)O(n) (although, a lopsided tree is an edge case whereas a full
+tree is the expectation)."
 
 - ## DFS
 
@@ -49,8 +61,7 @@ func()
 }
 ```
 
-(1) First write recursive procedure
-(2) Then write the base case
+(1) First write recursive procedure (2) Then write the base case
 
 Step 1) Divide the problem into smaller sub-problems
 
@@ -109,7 +120,8 @@ Fact(int n)
 
 - [Good Binary Search Problems](https://leetcode.com/problems/minimum-time-to-complete-trips/solutions/3266855/all-binary-search-problems/)
 
-"In this type of questions (where question want some minimum/ maximum / at least ) we use concept of Binary search"[^1]
+"In this type of questions (where question want some minimum/ maximum / at least ) we use concept of
+Binary search"[^1]
 
 # GCD (great common denominator) and LCM (least common multiplier)
 
@@ -124,7 +136,8 @@ Fact(int n)
 
 # KMP Knuth-Morris-Pratt
 
-!!! [Knuth-Morris-Pratt (KMP) algorithm | String Matching Algorithm | Substring Search](https://www.youtube.com/watch?v=4jY57Ehc14Y)
+!!!
+[Knuth-Morris-Pratt (KMP) algorithm | String Matching Algorithm | Substring Search](https://www.youtube.com/watch?v=4jY57Ehc14Y)
 [Knuth–Morris–Pratt KMP - Find the Index of the First Occurrence in a String - Leetcode 28 - Python](https://www.youtube.com/watch?v=JoF0Z7nVSrA)
 
 - String matching

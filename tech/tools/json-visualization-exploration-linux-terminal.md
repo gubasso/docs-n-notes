@@ -13,32 +13,27 @@ Keywords: jsoncrack, visualize json, graph, browser, self-host, docker
 1. jless
 
 - Terminal JSON viewer (expand/collapse, search).
-- Use: `jless file.json`
-  Keywords: jless, tui, fold, search
+- Use: `jless file.json` Keywords: jless, tui, fold, search
 
 1. fx
 
 - Interactive terminal JSON viewer/processor (good with pipes).
-- Use: `cat file.json | fx`
-  Keywords: fx, interactive, pipe, streaming
+- Use: `cat file.json | fx` Keywords: fx, interactive, pipe, streaming
 
 1. jnv
 
 - Interactive JSON viewer with live jq filter editing.
-- Use: `cat file.json | jnv`
-  Keywords: jnv, jq, interactive filter
+- Use: `cat file.json | jnv` Keywords: jnv, jq, interactive filter
 
 1. jiq
 
 - Interactive drill-down using jq queries (requires jq).
-- Use: `cat file.json | jiq`
-  Keywords: jiq, jq, drill-down
+- Use: `cat file.json | jiq` Keywords: jiq, jq, drill-down
 
 1. gron
 
 - Flattens JSON into “path = value” lines for grep/searching.
-- Use: `gron file.json | less` (then search in `less`)
-  Keywords: gron, flatten, grep, paths
+- Use: `gron file.json | less` (then search in `less`) Keywords: gron, flatten, grep, paths
 
 ## Quick pick
 

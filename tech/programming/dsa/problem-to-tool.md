@@ -28,8 +28,7 @@
 
 - sums of subarray -> Prefix sum
 
-- subsequences -> dynamic programming
-  -> two pointers
+- subsequences -> dynamic programming -> two pointers
 
 - counting / frequency -> hashmap
 

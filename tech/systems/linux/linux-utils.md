@@ -36,7 +36,9 @@ Person:
 
 ChatGPT:
 
-- To compact all files in a directory into a `.tar.gz` archive using the command line, you can use the `tar` command. The `tar` command is a standard on Unix-like systems and is used for creating and manipulating archive files.
+- To compact all files in a directory into a `.tar.gz` archive using the command line, you can use
+  the `tar` command. The `tar` command is a standard on Unix-like systems and is used for creating
+  and manipulating archive files.
 
 Here's a basic command structure to create a `.tar.gz` archive:
 
@@ -49,10 +51,12 @@ Breaking down the command:
 - `tar`: This is the command name for creating archives.
 - `-c`: This option stands for "create", indicating that you want to create an archive.
 - `-z`: This option tells `tar` to compress the archive using gzip.
-- `-v`: This stands for "verbose". It's optional and when used, `tar` will list all files it's adding to the archive.
+- `-v`: This stands for "verbose". It's optional and when used, `tar` will list all files it's
+  adding to the archive.
 - `-f`: This option allows you to specify the filename of the archive.
 
-For example, if you have a directory named `myfiles` in your current directory and you want to create an archive called `myfiles.tar.gz`, you would use:
+For example, if you have a directory named `myfiles` in your current directory and you want to
+create an archive called `myfiles.tar.gz`, you would use:
 
 ```bash
 tar -czvf myfiles.tar.gz myfiles
@@ -66,7 +70,8 @@ Person:
 
 ChatGPT:
 
-- To extract all files from a `.tar.gz` archive, you use the `tar` command with different options. Here's how you can do it:
+- To extract all files from a `.tar.gz` archive, you use the `tar` command with different options.
+  Here's how you can do it:
 
 ```bash
 tar -xzvf name_of_archive.tar.gz -C /path/to/destination
@@ -77,17 +82,22 @@ Breaking down this command:
 - `tar`: This is the command name for working with archives.
 - `-x`: This option stands for "extract", indicating that you want to extract files from an archive.
 - `-z`: This option tells `tar` to uncompress the archive using gzip.
-- `-v`: This stands for "verbose". It's optional and when used, `tar` will list all files it's extracting.
+- `-v`: This stands for "verbose". It's optional and when used, `tar` will list all files it's
+  extracting.
 - `-f`: This option allows you to specify the filename of the archive.
-- `-C /path/to/destination`: This is also optional. It specifies the directory where you want to extract the files. If omitted, files will be extracted to the current directory.
+- `-C /path/to/destination`: This is also optional. It specifies the directory where you want to
+  extract the files. If omitted, files will be extracted to the current directory.
 
-For example, if you have an archive named `myfiles.tar.gz` and you want to extract its contents to a directory named `myfiles`, you would use:
+For example, if you have an archive named `myfiles.tar.gz` and you want to extract its contents to a
+directory named `myfiles`, you would use:
 
 ```bash
 tar -xzvf myfiles.tar.gz -C myfiles
 ```
 
-- If you want to create a `.tar.gz` archive of all files within a directory, without preserving the directory structure (i.e., just the files, not the folders), you can do this by navigating to the directory and using the `tar` command with a glob pattern. Here's how to do it:
+- If you want to create a `.tar.gz` archive of all files within a directory, without preserving the
+  directory structure (i.e., just the files, not the folders), you can do this by navigating to the
+  directory and using the `tar` command with a glob pattern. Here's how to do it:
 
 1. First, navigate to the directory containing the files you want to archive:
 
@@ -121,7 +131,8 @@ stow -vt / zsh
 - `-v`: verbose
 - `-`: target directory must be `~`
 - `*`: everything... all dirs inside .dotfiles
-- `--adopt`: adopt all the conflicts... it moves the original under home dir, and copies it to our .dotfile directory
+- `--adopt`: adopt all the conflicts... it moves the original under home dir, and copies it to our
+  .dotfile directory
 
 stow never overrides anything
 
@@ -173,8 +184,8 @@ xsv count ./data/${tab}.csv >> lines_to_sum
 
 # mlr Miller
 
-https://github.com/johnkerl/miller
-Miller is like awk, sed, cut, join, and sort for data formats such as CSV, TSV, JSON, JSON Lines, and positionally-indexed.
+https://github.com/johnkerl/miller Miller is like awk, sed, cut, join, and sort for data formats
+such as CSV, TSV, JSON, JSON Lines, and positionally-indexed.
 
 ```
 mlr --icsv --ojson cat ./data/${tab}.csv > \
@@ -206,7 +217,8 @@ iaur secure-delete
 srm -r pathname
 ```
 
-Done. Secure delete is a lot more paranoid than shred, using 38 passes instead of 3. To do a fast single pass, use
+Done. Secure delete is a lot more paranoid than shred, using 38 passes instead of 3. To do a fast
+single pass, use
 
 ```
 srm -rfll pathname
@@ -226,7 +238,8 @@ ls *old | xargs -I {} mv {} {}.old
 
 # sxhkd
 
-Script to kill and refresh keybindings (shortcuts). Can be used in vim, after save file.[^5](gubasso/references)
+Script to kill and refresh keybindings (shortcuts). Can be used in vim, after save
+file.[^5](gubasso/references)
 
 ```
 killall sxhkd; setsid sxhkd &
@@ -310,7 +323,9 @@ OBS:
 
   - python, ffmpeg, sox, audacity
   - script for reduce sound as a script
-  - "Would this work for you? When you record videos, you start by saying nothing for the first ten seconds. Then your script can use seconds 1-9 for obtaining the noise profile. Feed that into the sox noisered program"
+  - "Would this work for you? When you record videos, you start by saying nothing for the first ten
+    seconds. Then your script can use seconds 1-9 for obtaining the noise profile. Feed that into
+    the sox noisered program"
   - "ffmpeg recently have been added two audio filters for denoising: afftdn and anlmdn."
     - afftdn
 
@@ -345,14 +360,12 @@ OBS:
 
 # tmux
 
-$tmux (later):
-https://github.com/tmux-plugins/tmux-resurrect
+$tmux (later): https://github.com/tmux-plugins/tmux-resurrect
 https://github.com/tmux-plugins/tmux-open
 
-plugins:
-manage sessions / shortcuts: https://github.com/tmux-plugins/tmux-sessionist
-save / log / “screen capture” to a file / save history: https://github.com/tmux-plugins/tmux-logging
-Restore tmux environment after system restart: https://github.com/tmux-plugins/tmux-resurrect
+plugins: manage sessions / shortcuts: https://github.com/tmux-plugins/tmux-sessionist save / log /
+“screen capture” to a file / save history: https://github.com/tmux-plugins/tmux-logging Restore tmux
+environment after system restart: https://github.com/tmux-plugins/tmux-resurrect
 
 # General
 
@@ -369,17 +382,18 @@ paste -s -d+ lines_to_sum | \bc
 - Bulk rename files
   - [Bulk rename files with vim](./it/vim-neovim.md#bulk-rename-files-with-vim)
 
-______________________________________________________________________
+---
 
 (rust alternatives)
 
-- https://github.com/eza-community/eza (ls / tree alternative)
-  ► https://github.com/sharkdp/bat - bat (cat alternative)
-  ► https://github.com/BurntSushi/ripgrep - ripgrep (rg) (grep alternative)
-  ► https://github.com/sharkdp/fd - fd (find alternative)
-  ► https://github.com/XAMPPRocky/tokei - tokei (LoC, lines of code, code count, statistics about your code)
-  ► https://github.com/dalance/procs - procs (ps alternative)
-- Zellij (rust) - A terminal multiplexer workspace with batteries included https://www.reddit.com/r/rust/comments/mwukhz/zellij_a_terminal_multiplexer_workspace_with/?utm_medium=android_app&utm_source=share (like tmux alternative)
+- https://github.com/eza-community/eza (ls / tree alternative) ► https://github.com/sharkdp/bat -
+  bat (cat alternative) ► https://github.com/BurntSushi/ripgrep - ripgrep (rg) (grep alternative) ►
+  https://github.com/sharkdp/fd - fd (find alternative) ► https://github.com/XAMPPRocky/tokei -
+  tokei (LoC, lines of code, code count, statistics about your code) ►
+  https://github.com/dalance/procs - procs (ps alternative)
+- Zellij (rust) - A terminal multiplexer workspace with batteries included
+  https://www.reddit.com/r/rust/comments/mwukhz/zellij_a_terminal_multiplexer_workspace_with/?utm_medium=android_app&utm_source=share
+  (like tmux alternative)
 
 # References
 

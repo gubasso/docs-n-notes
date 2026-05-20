@@ -129,7 +129,8 @@ let differences: Vec<_> = points
 
 ## Iterators
 
-Save a range iterator and/or reversed range to the same variable (e.g. when you want to apply some conditional)
+Save a range iterator and/or reversed range to the same variable (e.g. when you want to apply some
+conditional)
 
 ```rust
 let iter = if level % 2 != 0 {
@@ -192,7 +193,8 @@ for j in 0..2 {
 
 [In Rust, is there a way to iterate through the values of an enum?](https://stackoverflow.com/questions/21371534/in-rust-is-there-a-way-to-iterate-through-the-values-of-an-enum)
 
-working with enums: [A Gentle Introduction To Rust: 2. Structs, Enums and Matching](https://stevedonovan.github.io/rust-gentle-intro/2-structs-enums-lifetimes.html#simple-enums)
+working with enums:
+[A Gentle Introduction To Rust: 2. Structs, Enums and Matching](https://stevedonovan.github.io/rust-gentle-intro/2-structs-enums-lifetimes.html#simple-enums)
 
 ## Options
 
@@ -244,7 +246,6 @@ cargo nextest run --show-output
 cargo test -p p997_find_the_town_judge -- --nocapture --test-threads 1
 
 cargo clippy --package p909_snakes_and_ladders
-
 ```
 
 [Sorting Vector of vectors of f64](https://users.rust-lang.org/t/sorting-vector-of-vectors-of-f64/16264)
@@ -269,15 +270,19 @@ fn cmp_f64(a: &f64, b: &f64) -> Ordering {
 }
 ```
 
-creating an iterator from scratch: [Creating an Iterator in Rust](https://aloso.github.io/2021/03/09/creating-an-iterator)
+creating an iterator from scratch:
+[Creating an Iterator in Rust](https://aloso.github.io/2021/03/09/creating-an-iterator)
 
 ## Study
 
 exercism.io lesson:
 
-The problem with the generic approach on the value is that it must work with both numeric and string values in the tests, which is impractical, as strings aren't inherently even or odd. Also, the tests specify to choose "even-positioned items from the iterator", not even values.
+The problem with the generic approach on the value is that it must work with both numeric and string
+values in the tests, which is impractical, as strings aren't inherently even or odd. Also, the tests
+specify to choose "even-positioned items from the iterator", not even values.
 
-If wanting to constrain a type to numeric types, you might find this SO thread to have some good advice.
+If wanting to constrain a type to numeric types, you might find this SO thread to have some good
+advice.
 https://stackoverflow.com/questions/37296351/is-there-any-trait-that-specifies-numeric-functionality
 
 ## Resources
@@ -287,13 +292,12 @@ https://stackoverflow.com/questions/37296351/is-there-any-trait-that-specifies-n
 **https://github.com/mre/idiomatic-rust**
 
 https://cfsamson.github.io/books-futures-explained/
-https://web.archive.org/web/20200808120044/https://stjepang.github.io/
-read in sequence and then:
+https://web.archive.org/web/20200808120044/https://stjepang.github.io/ read in sequence and then:
 https://web.archive.org/web/20200511234503/https://stjepang.github.io/2020/01/25/build-your-own-block-on.html
 https://web.archive.org/web/20200207092849/https://stjepang.github.io/2020/01/31/build-your-own-executor.html
-https://rust-lang.github.io/async-book/
-parei: https://rust-lang.github.io/async-book/02_execution/04_executor.html
-depois que ler (tentar implementar esse capitol), voltar no anterior que ele explica o futures, antes de mostrar o executor
+https://rust-lang.github.io/async-book/ parei:
+https://rust-lang.github.io/async-book/02_execution/04_executor.html depois que ler (tentar
+implementar esse capitol), voltar no anterior que ele explica o futures, antes de mostrar o executor
 https://cfsamson.gitbook.io/green-threads-explained-in-200-lines-of-rust/
 https://cfsamson.github.io/book-exploring-async-basics/
 https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/
@@ -301,26 +305,18 @@ https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/
 - [Awesome Rust Streaming](https://github.com/jamesmunns/awesome-rust-streaming/blob/master/README.md)
   - This is a community curated list of livestreams about the programming language Rust.
 
-CIS 198: Rust Programming University of Pennsylvania https://cis198-2016s.github.io/schedule/
-pure practice:
-Rust by example
-parei: https://doc.rust-lang.org/rust-by-example/primitives.html
+CIS 198: Rust Programming University of Pennsylvania https://cis198-2016s.github.io/schedule/ pure
+practice: Rust by example parei: https://doc.rust-lang.org/rust-by-example/primitives.html
 
-later:
-https://github.com/mre/idiomatic-rust
-https://rust-lang-nursery.github.io/rust-cookbook/ (snippets to common solution, as import csv)
-https://github.com/brson/stdx (list of best crates)
+later: https://github.com/mre/idiomatic-rust https://rust-lang-nursery.github.io/rust-cookbook/
+(snippets to common solution, as import csv) https://github.com/brson/stdx (list of best crates)
 
 Learning Rust With Entirely Too Many Linked Lists: https://rust-unofficial.github.io/too-many-lists/
-The Book
-Reading: Programming Rust
-examples: github.com/programmingrust
+The Book Reading: Programming Rust examples: github.com/programmingrust
 
-review and redo my `notes` project at gitlab
-new_temp_notes, Download
+review and redo my `notes` project at gitlab new_temp_notes, Download
 
-practice: Code examples and exercises
-github.com/programmingrust
+practice: Code examples and exercises github.com/programmingrust
 
 ### Axum Web Framework
 
@@ -331,45 +327,68 @@ github.com/programmingrust
 
 1. **bin** :
 
-- **Description** : This crate type is used to create an executable binary. When you set your crate type to `bin`, it means you're building a stand-alone executable that can be run directly from the command line.
-- **Generated Files** : The output is a binary executable file, typically without an extension (e.g., `my_executable`).
+- **Description** : This crate type is used to create an executable binary. When you set your crate
+  type to `bin`, it means you're building a stand-alone executable that can be run directly from the
+  command line.
+- **Generated Files** : The output is a binary executable file, typically without an extension
+  (e.g., `my_executable`).
 
 1. **lib** :
 
-- **Description** : This creates a Rust library. The `lib` crate type can be used to generate a static or dynamic library, depending on the target settings.
-- **Generated Files** : The primary output will be a `lib<name>.rlib` file, which is an intermediate Rust library format used for further compilation steps.
+- **Description** : This creates a Rust library. The `lib` crate type can be used to generate a
+  static or dynamic library, depending on the target settings.
+- **Generated Files** : The primary output will be a `lib<name>.rlib` file, which is an intermediate
+  Rust library format used for further compilation steps.
 
 1. **dylib** :
 
-- **Description** : This creates a dynamic library that other Rust code can link against. The `dylib` type generates a shared library that contains Rust code and metadata.
-- **Generated Files** : The output is a `lib<name>.so` file on Linux. This file can be dynamically linked by other Rust applications or libraries.
+- **Description** : This creates a dynamic library that other Rust code can link against. The
+  `dylib` type generates a shared library that contains Rust code and metadata.
+- **Generated Files** : The output is a `lib<name>.so` file on Linux. This file can be dynamically
+  linked by other Rust applications or libraries.
 
 1. **staticlib** :
 
-- **Description** : This creates a static library containing all of the local crate's code along with all upstream dependencies. It’s typically used to link Rust code into a non-Rust application statically.
-- **Generated Files** : The output is a `lib<name>.a` file on Linux. This archive file can be statically linked into other applications, providing all necessary code and dependencies.
+- **Description** : This creates a static library containing all of the local crate's code along
+  with all upstream dependencies. It’s typically used to link Rust code into a non-Rust application
+  statically.
+- **Generated Files** : The output is a `lib<name>.a` file on Linux. This archive file can be
+  statically linked into other applications, providing all necessary code and dependencies.
 
 1. **cdylib** :
 
-- **Description** : This creates a dynamic system library, which can be loaded by other programming languages (e.g., C, Python). It’s useful for creating libraries that will be used in a mixed-language environment.
-- **Generated Files** : The output is a `lib<name>.so` file on Linux. This shared library can be dynamically loaded by non-Rust applications.
+- **Description** : This creates a dynamic system library, which can be loaded by other programming
+  languages (e.g., C, Python). It’s useful for creating libraries that will be used in a
+  mixed-language environment.
+- **Generated Files** : The output is a `lib<name>.so` file on Linux. This shared library can be
+  dynamically loaded by non-Rust applications.
 
 1. **rlib** :
 
-- **Description** : This crate type is used to create a Rust library file that acts as an intermediate artifact. It contains Rust-specific metadata and is used by the Rust compiler for further compilation. Unlike `staticlib`, `rlib` files are not meant to be directly linked into non-Rust applications.
-- **Generated Files** : The output is a `lib<name>.rlib` file. This file includes both compiled code and Rust-specific metadata needed for subsequent compilation steps.
+- **Description** : This crate type is used to create a Rust library file that acts as an
+  intermediate artifact. It contains Rust-specific metadata and is used by the Rust compiler for
+  further compilation. Unlike `staticlib`, `rlib` files are not meant to be directly linked into
+  non-Rust applications.
+- **Generated Files** : The output is a `lib<name>.rlib` file. This file includes both compiled code
+  and Rust-specific metadata needed for subsequent compilation steps.
 
 ### Summary
 
 - **bin** : Generates an executable binary (e.g., `my_executable`).
 - **lib** : Generates a Rust library, typically resulting in a `lib<name>.rlib` file.
 - **dylib** : Generates a dynamic library for Rust, resulting in a `lib<name>.so` file.
-- **staticlib** : Generates a static library for use in non-Rust applications, resulting in a `lib<name>.a` file.
-- **cdylib** : Generates a dynamic system library for use in other languages, resulting in a `lib<name>.so` file.
+- **staticlib** : Generates a static library for use in non-Rust applications, resulting in a
+  `lib<name>.a` file.
+- **cdylib** : Generates a dynamic system library for use in other languages, resulting in a
+  `lib<name>.so` file.
 - **rlib** : Generates an intermediate Rust library file, resulting in a `lib<name>.rlib` file.
 
-Each crate type serves a specific purpose in Rust's ecosystem, providing flexibility in how Rust code is compiled, linked, and integrated with other systems and languages. If you have any specific questions about these types or their uses, feel free to ask!
+Each crate type serves a specific purpose in Rust's ecosystem, providing flexibility in how Rust
+code is compiled, linked, and integrated with other systems and languages. If you have any specific
+questions about these types or their uses, feel free to ask!
 
-[^1]: https://www.youtube.com/watch?v=VuVOyUbFSI0 "Rust to Postgres Database with SQLX - Rust Lang Tutorial 2021 - Jeremy Chone"
+[^1]: https://www.youtube.com/watch?v=VuVOyUbFSI0 "Rust to Postgres Database with SQLX - Rust Lang
+    Tutorial 2021 - Jeremy Chone"
 
-[^2]: https://doc.rust-lang.org/rust-by-example/error/option_unwrap/question_mark.html "Unpacking options with ?"
+[^2]: https://doc.rust-lang.org/rust-by-example/error/option_unwrap/question_mark.html "Unpacking
+    options with ?"

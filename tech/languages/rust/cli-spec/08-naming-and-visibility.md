@@ -1,12 +1,17 @@
 # 08 — Naming and Visibility (Rust)
 
-> Prerequisite: [General principles — Naming & Documentation](../../../programming/cli-design/07-naming-and-docs.md) for the verb/noun naming table, doc-comment strategy, and "comment why not what" rule. This chapter is the Rust implementation.
+> Prerequisite:
+> [General principles — Naming & Documentation](../../../programming/cli-design/07-naming-and-docs.md)
+> for the verb/noun naming table, doc-comment strategy, and "comment why not what" rule. This
+> chapter is the Rust implementation.
 
 Boring is good. Predictability beats cleverness. Pick the convention once and apply it everywhere.
 
 ## Visibility
 
-**Default: `pub(crate)`.** Use `pub` only on items that form the deliberate library API surface (re-exported from `lib.rs`). Use private (no modifier) inside a module when no sibling module needs it.
+**Default: `pub(crate)`.** Use `pub` only on items that form the deliberate library API surface
+(re-exported from `lib.rs`). Use private (no modifier) inside a module when no sibling module needs
+it.
 
 | Item lives in                                      | Default visibility    |
 | -------------------------------------------------- | --------------------- |
@@ -15,7 +20,8 @@ Boring is good. Predictability beats cleverness. Pick the convention once and ap
 | Used only within its own module                    | private (no modifier) |
 | `mod tests` items                                  | private               |
 
-Why `pub(crate)` and not `pub`: it tells the next reader *"this is not an API"*, lets `cargo doc` skip it from the public docs, and lets you refactor freely without breaking external consumers.
+Why `pub(crate)` and not `pub`: it tells the next reader _"this is not an API"_, lets `cargo doc`
+skip it from the public docs, and lets you refactor freely without breaking external consumers.
 
 ### Anti-pattern: blanket `pub`
 
@@ -27,7 +33,9 @@ pub mod domain;
 pub mod adapters;
 ```
 
-If you don't have a real consumer of these modules outside the crate, mark them `pub(crate)` (or leave them as bare `mod` in `main.rs`). `riptask/src/lib.rs:1-16` is `pub mod` across the board — the right move is `pub(crate) mod`.
+If you don't have a real consumer of these modules outside the crate, mark them `pub(crate)` (or
+leave them as bare `mod` in `main.rs`). `riptask/src/lib.rs:1-16` is `pub mod` across the board —
+the right move is `pub(crate) mod`.
 
 ### When to add `pub` to a module
 
@@ -36,7 +44,8 @@ Only when **one** of:
 - Another crate in your workspace needs to import it.
 - Integration tests (`tests/*.rs`) need access (`tests/` can only see `pub`).
 
-For #2, prefer adding a focused `pub use` re-export from `lib.rs` rather than making whole modules public.
+For #2, prefer adding a focused `pub use` re-export from `lib.rs` rather than making whole modules
+public.
 
 ## File and module naming
 
@@ -44,8 +53,10 @@ For #2, prefer adding a focused `pub use` re-export from `lib.rs` rather than ma
 - Types: `UpperCamelCase`. Acronyms count as one word: `HttpClient`, not `HTTPClient`.
 - Functions, methods, variables: `snake_case`.
 - Constants and statics: `SCREAMING_SNAKE_CASE`.
-- Lifetimes: short, meaningful. `'a` for a single anonymous one; `'src`, `'cfg`, `'ctx` when there are multiple and meaning matters. Avoid `'b`, `'c`, etc.
-- Generic type parameters: single uppercase letter (`T`, `U`, `K`, `V`) for fully generic; descriptive when meaningful (`Ctx`, `Out`).
+- Lifetimes: short, meaningful. `'a` for a single anonymous one; `'src`, `'cfg`, `'ctx` when there
+  are multiple and meaning matters. Avoid `'b`, `'c`, etc.
+- Generic type parameters: single uppercase letter (`T`, `U`, `K`, `V`) for fully generic;
+  descriptive when meaningful (`Ctx`, `Out`).
 
 ## `foo.rs` + `foo/` over `mod.rs`
 
@@ -69,11 +80,14 @@ src/
 
 Why:
 
-- Editor file pickers and recent-files lists show `foo.rs` instead of yet another `mod.rs`. With twenty `mod.rs` files in a project, finding the one you want is friction.
+- Editor file pickers and recent-files lists show `foo.rs` instead of yet another `mod.rs`. With
+  twenty `mod.rs` files in a project, finding the one you want is friction.
 - Renaming `foo/` to `foo_bar/` doesn't require touching `mod.rs` inside it.
-- The `foo.rs` is *the* file that owns the module's contract; submodules under `foo/` are implementation details. The file structure mirrors that hierarchy.
+- The `foo.rs` is _the_ file that owns the module's contract; submodules under `foo/` are
+  implementation details. The file structure mirrors that hierarchy.
 
-Both projects in our reference set (`riptask`, `ripwork`) currently use `mod.rs` — that's the inherited 2015-edition habit. Switch.
+Both projects in our reference set (`riptask`, `ripwork`) currently use `mod.rs` — that's the
+inherited 2015-edition habit. Switch.
 
 ## Subcommand / struct naming
 
@@ -89,23 +103,30 @@ Both projects in our reference set (`riptask`, `ripwork`) currently use `mod.rs`
 
 Avoid:
 
-- Suffix collisions with std types (`Path`, `Command`, `Result`). If your domain wants `Command`, namespace via `commands::Command` or pick a different word.
-- `Manager`, `Helper`, `Utils`, `Handler`, `Wrapper` — they mean nothing. Replace with a verb (`Renderer`, `Resolver`) or a noun (`Cache`, `Registry`).
-- `_cmd` / `_struct` / `_impl` suffixes. `riptask/src/commands/clone_cmd.rs` is dodging a name collision; renaming the command (`adopt_remote.rs`) is cleaner.
+- Suffix collisions with std types (`Path`, `Command`, `Result`). If your domain wants `Command`,
+  namespace via `commands::Command` or pick a different word.
+- `Manager`, `Helper`, `Utils`, `Handler`, `Wrapper` — they mean nothing. Replace with a verb
+  (`Renderer`, `Resolver`) or a noun (`Cache`, `Registry`).
+- `_cmd` / `_struct` / `_impl` suffixes. `riptask/src/commands/clone_cmd.rs` is dodging a name
+  collision; renaming the command (`adopt_remote.rs`) is cleaner.
 
 ## Function naming
 
 - Constructors: `new`, `with_<thing>`, `from_<source>`, `try_new`. Never `make_`, `create_`.
-- Getters: drop `get_`. `widget.id()` not `widget.get_id()`. ([Rust API Guidelines C-GETTER](https://rust-lang.github.io/api-guidelines/naming.html))
-- Setters: `set_<field>` is fine but prefer making the field public if it has no invariants, or returning a new value if the type is immutable.
-- Conversions: `into_<x>` (consumes), `as_<x>` (cheap borrow), `to_<x>` (expensive borrow → owned). ([C-CONV](https://rust-lang.github.io/api-guidelines/naming.html))
+- Getters: drop `get_`. `widget.id()` not `widget.get_id()`.
+  ([Rust API Guidelines C-GETTER](https://rust-lang.github.io/api-guidelines/naming.html))
+- Setters: `set_<field>` is fine but prefer making the field public if it has no invariants, or
+  returning a new value if the type is immutable.
+- Conversions: `into_<x>` (consumes), `as_<x>` (cheap borrow), `to_<x>` (expensive borrow → owned).
+  ([C-CONV](https://rust-lang.github.io/api-guidelines/naming.html))
 - Predicates: `is_<adj>`, `has_<noun>`. Return `bool`.
 - Fallible variants: `try_<verb>` returns `Result`.
 - I/O methods: `read_<x>`, `write_<x>`. Pure transforms: `parse_<x>`, `render_<x>`, `format_<x>`.
 
 ## Doc comments
 
-- Every `pub` and `pub(crate)` item carries a `///` comment. Even if it just restates the name — that's the seed for future docs.
+- Every `pub` and `pub(crate)` item carries a `///` comment. Even if it just restates the name —
+  that's the seed for future docs.
 - Every file starts with a `//!` header stating the module's purpose **and** non-purpose:
 
 ```rust
@@ -114,9 +135,12 @@ Avoid:
 //! Holds clap derive structs only. No I/O, no business logic.
 ```
 
-The non-purpose sentence is load-bearing: it lets a future reader see at a glance whether their new code belongs here. Both `ripwork/src/main.rs:1-10` and `ripwork/src/cli/gen_request.rs:1-10` do this well.
+The non-purpose sentence is load-bearing: it lets a future reader see at a glance whether their new
+code belongs here. Both `ripwork/src/main.rs:1-10` and `ripwork/src/cli/gen_request.rs:1-10` do this
+well.
 
-- Doc comments on clap fields double as `--help` text. Write them for the user, not for the developer.
+- Doc comments on clap fields double as `--help` text. Write them for the user, not for the
+  developer.
 - Cross-link with `[Other]` syntax; rustdoc resolves it.
 
 ## Crate-level docs
@@ -163,4 +187,5 @@ pub(crate) mod domain;
 pub(crate) mod adapters;
 ```
 
-Public modules are part of the API. Private modules are implementation details. Re-export individual types (not whole modules) when you want them at the crate root — keeps the surface clean.
+Public modules are part of the API. Private modules are implementation details. Re-export individual
+types (not whole modules) when you want them at the crate root — keeps the surface clean.

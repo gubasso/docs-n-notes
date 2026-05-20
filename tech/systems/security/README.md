@@ -21,4 +21,5 @@ openssl rand -base64 128 | tr -d '\n' > /etc/restic/pw.txt
 
 ## References
 
-[^1]: https://github.com/erikw/restic-automatic-backup-scheduler "github erikw / restic-automatic-backup-scheduler"
+[^1]: https://github.com/erikw/restic-automatic-backup-scheduler "github erikw /
+    restic-automatic-backup-scheduler"

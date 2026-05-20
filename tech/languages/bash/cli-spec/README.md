@@ -1,8 +1,11 @@
 # Bash CLI Spec
 
-Bash-specific conventions for building a CLI tool: layout, entry point, strict-mode caveats, module organisation, testing, linting, install, and distribution.
+Bash-specific conventions for building a CLI tool: layout, entry point, strict-mode caveats, module
+organisation, testing, linting, install, and distribution.
 
-For the language-agnostic principles, see [`tech/programming/cli-design/`](../../../programming/cli-design/). Every Bash-specific rule here applies the general principles to the specifics of Bash.
+For the language-agnostic principles, see
+[`tech/programming/cli-design/`](../../../programming/cli-design/). Every Bash-specific rule here
+applies the general principles to the specifics of Bash.
 
 ## Files
 
@@ -18,7 +21,8 @@ For the language-agnostic principles, see [`tech/programming/cli-design/`](../..
 - ShellCheck on every file; treat warnings as errors.
 - `bats-core` for tests; one test file per subcommand.
 - XDG paths via `${XDG_CONFIG_HOME:-$HOME/.config}` etc.
-- Logs to `${XDG_STATE_HOME:-$HOME/.local/state}/<app>/<app>.log` — same default as every other language in this spec.
+- Logs to `${XDG_STATE_HOME:-$HOME/.local/state}/<app>/<app>.log` — same default as every other
+  language in this spec.
 
 ## See also
 

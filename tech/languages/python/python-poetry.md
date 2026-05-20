@@ -35,7 +35,7 @@ or
 python myapp
 ```
 
-About `__main__.py` as entrypoint: https://docs.python.org/3/library/__main__.html
+About `__main__.py` as entrypoint: https://docs.python.org/3/library/**main**.html
 
 ## Deploy Example 1: `requirements.txt`
 
@@ -75,12 +75,14 @@ ENTRYPOINT ["entrypoint.sh"]
 
 ### reset a poetry virtual env
 
-To reset a Poetry virtual environment, you can follow these steps to effectively remove the current virtual environment and recreate it. This can be useful if your environment becomes corrupted or you want to start fresh.
+To reset a Poetry virtual environment, you can follow these steps to effectively remove the current
+virtual environment and recreate it. This can be useful if your environment becomes corrupted or you
+want to start fresh.
 
 #### Steps to Reset a Poetry Virtual Environment
 
-1. **Remove the Existing Virtual Environment** :
-   Use the following command to remove the current virtual environment:
+1. **Remove the Existing Virtual Environment** : Use the following command to remove the current
+   virtual environment:
 
 ```bash
 poetry env remove <python-version>
@@ -104,17 +106,17 @@ If you want to remove all virtual environments for the project, you can use:
 poetry env remove --all
 ```
 
-1. **Recreate the Virtual Environment** :
-   After removing the old virtual environment, you can recreate a new environment with:
+1. **Recreate the Virtual Environment** : After removing the old virtual environment, you can
+   recreate a new environment with:
 
 ```bash
 poetry install
 ```
 
-This will install all the dependencies listed in your `pyproject.toml` file into a new virtual environment.
+This will install all the dependencies listed in your `pyproject.toml` file into a new virtual
+environment.
 
-1. **Check the Status** :
-   You can verify the status of your new virtual environment by running:
+1. **Check the Status** : You can verify the status of your new virtual environment by running:
 
 ```bash
 poetry env info

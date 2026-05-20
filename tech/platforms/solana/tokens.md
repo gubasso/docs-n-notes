@@ -45,7 +45,9 @@ transfer:
 spl-token transfer <token-address> <amount> <recipient-address> --allow-unfunded-recipient --fund-recipient
 ```
 
-- –allow-unfunded-recipient to complete the transfer, and we are also adding the flag –fund-recipient because this is a new token and your friend won’t have an associated token account for your token account
+- –allow-unfunded-recipient to complete the transfer, and we are also adding the flag
+  –fund-recipient because this is a new token and your friend won’t have an associated token account
+  for your token account
 
 ## Resources
 

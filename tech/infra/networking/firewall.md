@@ -71,11 +71,11 @@ sudo ufw enable
 
 - check systemctl ufw status, start and enable `ufw.service`
 
-`sudo ufw app list`: show list of installed apps, can allow or deny by app name
-\- e.g. `sudo ufw allow "Nginx full"`
+`sudo ufw app list`: show list of installed apps, can allow or deny by app name \- e.g.
+`sudo ufw allow "Nginx full"`
 
-`sudo ufw allow 5000`: if want to test a service at hosted for outside access at port 5000
-if want to remove this access after testing, for example: `sudo ufw delete allow 5000`
+`sudo ufw allow 5000`: if want to test a service at hosted for outside access at port 5000 if want
+to remove this access after testing, for example: `sudo ufw delete allow 5000`
 
 run `sudo ufw status` to check
 
@@ -85,8 +85,7 @@ run `sudo ufw status` to check
 - [Enable and Disable firewalld](https://firewalld.org/documentation/howto/enable-and-disable-firewalld.html)
   - checks if iptables are enabled and disables everything to make sure there will be no conflicts
   - then installs and enables firewalld
-- replace firewalld with ufw
-  0\. How to switch firewalls from FirewallD to UFW[^fw2]
+- replace firewalld with ufw 0\. How to switch firewalls from FirewallD to UFW[^fw2]
   1. Install UFW packages
   1. Enable UFW
   1. Disable firewalld

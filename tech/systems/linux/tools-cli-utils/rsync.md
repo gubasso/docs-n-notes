@@ -6,7 +6,8 @@
   - `scp` example:
     - `scp -r my/directory username@landchad.net:~/`
 - rsync needs to be installed on both local and remote machines
-- rsync for large files: "use rsync with the -P option. If the transfer is interrupted, you can resume it where it stopped by reissuing the command."[^cli1]
+- rsync for large files: "use rsync with the -P option. If the transfer is interrupted, you can
+  resume it where it stopped by reissuing the command."[^cli1]
 - rsync basic usage
   - rsync must be installed on both the source and the destination machine.
 
@@ -66,7 +67,8 @@ rsync -av --ignore-existing source/ dest/
 
 - `-P`: same as using both `--partial --progress`
 
-- `-u / --update`: To updated more recently on the local filesystem. Files that don't exist are copied. Files that already exist, but have a newer timestamp are also copied.
+- `-u / --update`: To updated more recently on the local filesystem. Files that don't exist are
+  copied. Files that already exist, but have a newer timestamp are also copied.
 
 - `--delete`: Delete files that have been deleted in the original directory
 
@@ -76,6 +78,7 @@ rsync -av --ignore-existing source/ dest/
 
   - `rsync -avhze ssh --exclude 'KEYWORD' SOURCE/ DESTINATION/`
 
-- `--dry-run`: This option perform a trial run and will not make any changes, but gives us the same result as a real run. If the results are as expected, then we can remove the --dry-run
+- `--dry-run`: This option perform a trial run and will not make any changes, but gives us the same
+  result as a real run. If the results are as expected, then we can remove the --dry-run
 
 - `rsync --dry-run -avhze ssh --delete SOURCE/ DESTINATION/`

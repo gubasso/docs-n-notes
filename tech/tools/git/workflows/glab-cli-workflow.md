@@ -18,7 +18,7 @@ glab issue create \
 
 > Board column movement requires the UI. Use labels (`in-progress`, `review`) as CLI proxies.
 
-______________________________________________________________________
+---
 
 ## 02 — Create MR + Branch from Issue
 
@@ -32,7 +32,7 @@ Mirrors the "Create merge request" button in the GitLab UI:
 - MR title → `Draft: Resolve "<issue title>"`
 - MR description → auto-contains `Closes #<issue-id>`
 
-______________________________________________________________________
+---
 
 ## 03 — Pull Branch Locally
 
@@ -40,7 +40,7 @@ ______________________________________________________________________
 glab mr checkout <mr-id>
 ```
 
-______________________________________________________________________
+---
 
 ## 04 — Work & Sync (Rebase Workflow)
 
@@ -54,7 +54,7 @@ glab ci status
 glab ci view    # interactive TUI
 ```
 
-______________________________________________________________________
+---
 
 ## 05 — Mark Ready for Review
 
@@ -64,7 +64,7 @@ glab mr update <mr-id> --reviewer username
 glab issue update <issue-id> -l "review"
 ```
 
-______________________________________________________________________
+---
 
 ## 06 — Merge into Master
 
@@ -78,7 +78,7 @@ glab issue close <issue-id>
 
 > Issue auto-closes on merge because `glab mr for` adds `Closes #<id>` to the MR description.
 
-______________________________________________________________________
+---
 
 ## Quick Reference
 

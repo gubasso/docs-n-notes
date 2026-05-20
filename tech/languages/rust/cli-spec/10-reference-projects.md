@@ -1,6 +1,9 @@
 # 10 — Reference Projects (Rust)
 
-> Prerequisite: [General principles — Reference Projects](../../../programming/cli-design/09-reference-projects.md) for the language-agnostic organizational patterns these projects exemplify. This chapter zooms in on the Rust specifics.
+> Prerequisite:
+> [General principles — Reference Projects](../../../programming/cli-design/09-reference-projects.md)
+> for the language-agnostic organizational patterns these projects exemplify. This chapter zooms in
+> on the Rust specifics.
 
 Real-world Rust CLIs worth studying. For each: shape, what they do well, what to copy.
 
@@ -28,7 +31,8 @@ Copy: the dedicated `exit_codes.rs`, the per-feature subdirectories (`exec/`, `f
 
 ### [`sharkdp/bat`](https://github.com/sharkdp/bat) — pretty `cat`
 
-**The canonical lib+bin pattern.** `src/lib.rs` exposes the rendering engine; `src/bin/bat/` is the thin CLI on top:
+**The canonical lib+bin pattern.** `src/lib.rs` exposes the rendering engine; `src/bin/bat/` is the
+thin CLI on top:
 
 ```
 src/
@@ -60,7 +64,8 @@ src/
 └─ keys/
 ```
 
-Copy: the `components/` + `tabs/` + `popups/` split for TUI projects. Less relevant for pure CLIs but instructive.
+Copy: the `components/` + `tabs/` + `popups/` split for TUI projects. Less relevant for pure CLIs
+but instructive.
 
 ### [`ouch-org/ouch`](https://github.com/ouch-org/ouch) — universal compressor
 
@@ -74,7 +79,8 @@ src/
 └─ non_archive/         # topical: single-file compressors
 ```
 
-Copy: the `cli/` + `commands/` split this spec recommends. Topical dirs (`archive/`, `non_archive/`) for plugin-like features.
+Copy: the `cli/` + `commands/` split this spec recommends. Topical dirs (`archive/`, `non_archive/`)
+for plugin-like features.
 
 ## Workspace CLIs
 
@@ -95,7 +101,8 @@ crates/
 └─ ...
 ```
 
-Copy: extracting reusable subsystems into library crates when they have value independent of the binary. The `globset` and `ignore` crates are used by dozens of other projects.
+Copy: extracting reusable subsystems into library crates when they have value independent of the
+binary. The `globset` and `ignore` crates are used by dozens of other projects.
 
 ### [`rust-lang/cargo`](https://github.com/rust-lang/cargo) — Rust's package manager
 
@@ -115,7 +122,8 @@ pub fn cli() -> clap::Command { ... }
 pub fn exec(gctx: &GlobalContext, args: &ArgMatches) -> CliResult { ... }
 ```
 
-Copy: the uniform `exec()` signature across subcommands. Cargo uses imperative clap (not derive) but the discipline is the same.
+Copy: the uniform `exec()` signature across subcommands. Cargo uses imperative clap (not derive) but
+the discipline is the same.
 
 ### [`jj-vcs/jj`](https://github.com/jj-vcs/jj) — Jujutsu VCS
 
@@ -141,7 +149,8 @@ src/
 └─ theme/
 ```
 
-Copy: the `options/` (parsing) + `output/` (rendering) split if your CLI has substantial formatting logic.
+Copy: the `options/` (parsing) + `output/` (rendering) split if your CLI has substantial formatting
+logic.
 
 ### [`starship/starship`](https://github.com/starship/starship) — shell prompt
 
@@ -173,7 +182,9 @@ helix-event/            # event bus
 xtask/                  # build automation
 ```
 
-Copy: workspace boundaries that align with **dependency direction** — `helix-core` depends on nothing app-specific, `helix-term` depends on everything. Lower-level crates do not depend on higher-level ones.
+Copy: workspace boundaries that align with **dependency direction** — `helix-core` depends on
+nothing app-specific, `helix-term` depends on everything. Lower-level crates do not depend on
+higher-level ones.
 
 ### [`atuinsh/atuin`](https://github.com/atuinsh/atuin) — shell history
 
@@ -185,7 +196,8 @@ crates/
 └─ atuin-common/        # shared types
 ```
 
-Copy: the four-crate split (`bin` + `client` + `server` + `common`) when you ship both client and server.
+Copy: the four-crate split (`bin` + `client` + `server` + `common`) when you ship both client and
+server.
 
 ### [`zellij-org/zellij`](https://github.com/zellij-org/zellij) — terminal multiplexer
 
@@ -197,7 +209,8 @@ zellij-tile/            # plugin API
 default-plugins/
 ```
 
-Copy: a separate `<app>-tile` (or `<app>-plugin-api`) crate when you support plugins — keeps the plugin ABI small and stable.
+Copy: a separate `<app>-tile` (or `<app>-plugin-api`) crate when you support plugins — keeps the
+plugin ABI small and stable.
 
 ## Quick comparison
 
@@ -234,7 +247,8 @@ From `riptask`:
 
 From `ripwork`:
 
-- The parse-shape / runtime-shape split: `cli/<name>.rs` + `workflows/<name>.rs` (this spec calls it `commands/<name>.rs`).
+- The parse-shape / runtime-shape split: `cli/<name>.rs` + `workflows/<name>.rs` (this spec calls it
+  `commands/<name>.rs`).
 - `pub(crate)` everywhere (`src/runtime/mod.rs:1-7`).
 - The `ui/` module as the only place that prints (`CLAUDE.md:46-52`).
 - Figment-based config (`src/config.rs:1-13`).
@@ -246,4 +260,5 @@ From `ripwork`:
 
 - Dead `src/lib.rs:1-13` that exports nothing. Delete it or make it real.
 - Recursive `#[from]` chains in `src/error.rs:144-188`. Lift shared infra instead.
-- Mixing workflow-args and `common.rs`/`preflight.rs` in one directory. Keep `cli/` strictly clap-derive.
+- Mixing workflow-args and `common.rs`/`preflight.rs` in one directory. Keep `cli/` strictly
+  clap-derive.

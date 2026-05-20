@@ -6,7 +6,14 @@ Check wireless interface with `ip link`
 
 ## Summary
 
-To connect to a Wi-Fi network in `wpa_cli`’s interactive mode, first run `wpa_cli -i <interface>` to start the client with your wireless interface selected ([sirlagz.net][1]). Then trigger a scan with `scan` and display nearby networks using `scan_results` ([mankier.com][2]). Once you have the SSID you want, use `add_network` to create a new profile and note its network ID ([rbftech.com][3]). Next, configure that profile with `set_network <id> ssid "<SSID>"` and `set_network <id> psk "<passphrase>"` ([cnblogs.com][4]). Finally, bring up the connection with `enable_network <id>` or `select_network <id>`, save your settings with `save_config`, and exit with `quit` ([cnblogs.com][4], [mankier.com][2]).
+To connect to a Wi-Fi network in `wpa_cli`’s interactive mode, first run `wpa_cli -i <interface>` to
+start the client with your wireless interface selected ([sirlagz.net][1]). Then trigger a scan with
+`scan` and display nearby networks using `scan_results` ([mankier.com][2]). Once you have the SSID
+you want, use `add_network` to create a new profile and note its network ID ([rbftech.com][3]).
+Next, configure that profile with `set_network <id> ssid "<SSID>"` and
+`set_network <id> psk "<passphrase>"` ([cnblogs.com][4]). Finally, bring up the connection with
+`enable_network <id>` or `select_network <id>`, save your settings with `save_config`, and exit with
+`quit` ([cnblogs.com][4], [mankier.com][2]).
 
 ## 1. Launching `wpa_cli` in Interactive Mode
 
@@ -16,10 +23,10 @@ To connect to a Wi-Fi network in `wpa_cli`’s interactive mode, first run `wpa_
    wpa_cli -i wlan0
    ```
 
-   This command opens a prompt bound to `wlan0`, where you can enter commands interactively ([sirlagz.net][1]).
+   This command opens a prompt bound to `wlan0`, where you can enter commands interactively
+   ([sirlagz.net][1]).
 
-1. **Verify prompt**
-   At the prompt, you should see something like:
+1. **Verify prompt** At the prompt, you should see something like:
 
    ```
    Selected interface 'wlan0'
@@ -60,7 +67,8 @@ To connect to a Wi-Fi network in `wpa_cli`’s interactive mode, first run `wpa_
    > add_network
    ```
 
-   The client returns a network ID (e.g., `0`) that you’ll use for subsequent commands ([rbftech.com][3]).
+   The client returns a network ID (e.g., `0`) that you’ll use for subsequent commands
+   ([rbftech.com][3]).
 
 1. **Set the SSID**
 
@@ -110,7 +118,8 @@ To connect to a Wi-Fi network in `wpa_cli`’s interactive mode, first run `wpa_
    > save_config
    ```
 
-   This writes your network block into `/etc/wpa_supplicant.conf` for automatic reconnection on reboot ([cnblogs.com][4]).
+   This writes your network block into `/etc/wpa_supplicant.conf` for automatic reconnection on
+   reboot ([cnblogs.com][4]).
 
 1. **Exit interactive mode**
 
@@ -120,9 +129,10 @@ To connect to a Wi-Fi network in `wpa_cli`’s interactive mode, first run `wpa_
 
    This closes `wpa_cli` and returns you to the shell ([mankier.com][2]).
 
-______________________________________________________________________
+---
 
-By following these steps in interactive mode, you can scan, select, and connect to any WPA-protected Wi-Fi network using `wpa_cli` without editing configuration files by hand.
+By following these steps in interactive mode, you can scan, select, and connect to any WPA-protected
+Wi-Fi network using `wpa_cli` without editing configuration files by hand.
 
 [1]: https://sirlagz.net/2012/08/27/how-to-use-wpa_cli-to-connect-to-a-wireless-network/ "How To : Use wpa_cli To Connect To A Wireless Network – The Rantings ..."
 [2]: https://www.mankier.com/8/wpa_cli "wpa_cli: WPA command line client | wpa_supplicant System ... - ManKier"

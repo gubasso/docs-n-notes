@@ -1,38 +1,40 @@
 # Typer / Click Patterns (Python)
 
-> Prerequisite: [General CLI principles](../../../programming/cli-design/) for architecture, logging, errors, config, coding style. This file is the Python-with-Typer implementation guide.
+> Prerequisite: [General CLI principles](../../../programming/cli-design/) for architecture,
+> logging, errors, config, coding style. This file is the Python-with-Typer implementation guide.
 
-Practical Typer/Click patterns: typed CLI option declarations, Pydantic validators, multi-value parsing.
+Practical Typer/Click patterns: typed CLI option declarations, Pydantic validators, multi-value
+parsing.
 
 ## Path option
 
 Validate path existence and type at parse time:
 
 ```python
-    config_path: Annotated[
-        Optional[Path],
-        typer.Option(
-            exists=True,
-            file_okay=False,
-            dir_okay=True,
-            readable=True,
-            resolve_path=True,
-            help="Path to the configuration directory that holds the configuration files.",
-        ),
-    ] = None,
-    some_dir: Optional[Path] = typer.Option(
-        None,
-        help="Dir to save something",
+config_path: Annotated[
+    Optional[Path],
+    typer.Option(
+        exists=True,
+        file_okay=False,
+        dir_okay=True,
+        readable=True,
+        resolve_path=True,
+        help="Path to the configuration directory that holds the configuration files.",
     ),
-    list_of_dirs: Optional[List[Path]] = typer.Option(
-        None,
-        help="List of dirs",
-    ),
-    email: Optional[str] = typer.Option(
-        None,
-        help="Email address.",
-        callback=parse_valid_email,
-    ),
+] = None,
+some_dir: Optional[Path] = typer.Option(
+    None,
+    help="Dir to save something",
+),
+list_of_dirs: Optional[List[Path]] = typer.Option(
+    None,
+    help="List of dirs",
+),
+email: Optional[str] = typer.Option(
+    None,
+    help="Email address.",
+    callback=parse_valid_email,
+),
 ```
 
 ```python
@@ -47,7 +49,7 @@ def parse_valid_email(value: Optional[str]) -> Optional[EmailStr]:
         raise typer.BadParameter(f"Invalid email address: {value}")
 ```
 
-______________________________________________________________________
+---
 
 Multiple "tags" with pydantic special type/model
 

@@ -32,7 +32,7 @@ show collections
 db.getCollectionNames()
 ```
 
-______________________________________________________________________
+---
 
 **Check where db is stored in disk (directory for database)**
 https://stackoverflow.com/questions/7247474/how-can-i-tell-where-mongodb-is-storing-data-its-not-in-the-default-data-db

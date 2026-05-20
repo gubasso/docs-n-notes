@@ -32,7 +32,8 @@
 
 - https://github.com/GoogleCloudPlatform/terraformer
 
-  - About: CLI tool to generate terraform files from existing infrastructure (reverse Terraform). Infrastructure to Code
+  - About: CLI tool to generate terraform files from existing infrastructure (reverse Terraform).
+    Infrastructure to Code
   - https://github.com/gr1m0h/asdf-terraformer
 
 ## Conventions

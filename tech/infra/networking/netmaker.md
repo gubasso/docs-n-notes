@@ -6,11 +6,11 @@ the admin server, called Netmaker
 
 the agent, called Netclient
 
-*egress node:*
+_egress node:_
 
 - from inside network, go out of network
 
-*ingress node:*
+_ingress node:_
 
 - ingress gateway
 - coming from outside the network, joining in
@@ -32,7 +32,8 @@ Network name = network interface
 
 To reach/access a network
 
-- - Create access key (or)
+-
+  - Create access key (or)
 
 - Login with username/passwd
 

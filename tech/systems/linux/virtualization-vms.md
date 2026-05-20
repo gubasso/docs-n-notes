@@ -2,18 +2,20 @@
 
 ## Virtualization with KVM/QEMU
 
-To instantiate an openSUSE Tumbleweed virtual machine (VM) locally using KVM from the command line, you can follow these steps. This guide assumes you're using a Linux host system that supports KVM virtualization.
+To instantiate an openSUSE Tumbleweed virtual machine (VM) locally using KVM from the command line,
+you can follow these steps. This guide assumes you're using a Linux host system that supports KVM
+virtualization.
 
-1. **Install Necessary Packages:**
-   Ensure that KVM, QEMU, and related virtualization tools are installed on your host system.
-   **On openSUSE Host:**
+1. **Install Necessary Packages:** Ensure that KVM, QEMU, and related virtualization tools are
+   installed on your host system. **On openSUSE Host:**
 
 ```bash
 sudo zypper refresh
 sudo zypper install -t pattern kvm_server kvm_tools
 ```
 
-1. **Add User to Required Groups:** Add your user to the `libvirt` and `kvm` groups to manage virtualization without root privileges.
+1. **Add User to Required Groups:** Add your user to the `libvirt` and `kvm` groups to manage
+   virtualization without root privileges.
 
 ```bash
 sudo usermod -aG libvirt,kvm $USER
@@ -35,15 +37,15 @@ sudo systemctl start libvirtd
 
 **Step-by-Step Guide to Instantiate the VM**
 
-**1. Download the openSUSE Tumbleweed ISO**
-Navigate to the directory where you want to store the ISO and download it.
+**1. Download the openSUSE Tumbleweed ISO** Navigate to the directory where you want to store the
+ISO and download it.
 
 ```bash
 cd ~/Downloads
 wget https://download.opensuse.org/tumbleweed/iso/openSUSE-Tumbleweed-DVD-x86_64-Current.iso
 ```
 
-Alternatively, you can visit the [openSUSE Tumbleweed download page](<>) to get the latest ISO.
+Alternatively, you can visit the [openSUSE Tumbleweed download page]() to get the latest ISO.
 
 **2. Create a Virtual Disk Image** Create a virtual disk for your VM using `qemu-img`.
 
@@ -57,7 +59,8 @@ sudo chown $USER: $(dirname $DISK_PATH)
 qemu-img create -f qcow2 $DISK_PATH 20G
 ```
 
-**3. Install the VM Using virt-install** Use the `virt-install` command to set up and start the VM installation.
+**3. Install the VM Using virt-install** Use the `virt-install` command to set up and start the VM
+installation.
 
 ```bash
 virt-install \
@@ -84,7 +87,9 @@ virt-install \
 - `--graphics`: Sets up the graphical display method.
 - `--cdrom`: Points to the installation ISO file.
 
-**Note:** The `--graphics vnc` option configures the VM to use VNC for the display. Ensure that your firewall allows VNC connections, or use SSH tunneling.**4. Access the VM Installation Interface** **Option 1: Using VNC Viewer**
+**Note:** The `--graphics vnc` option configures the VM to use VNC for the display. Ensure that your
+firewall allows VNC connections, or use SSH tunneling.**4. Access the VM Installation Interface**
+**Option 1: Using VNC Viewer**
 
 1. **Find the VNC Display Port:**
 
@@ -120,7 +125,8 @@ vncviewer localhost:5900
 
 ...
 
-**6. Manage the VM After Installation** Once the installation is complete, you can manage the VM using `virsh`.
+**6. Manage the VM After Installation** Once the installation is complete, you can manage the VM
+using `virsh`.
 
 - **List VMs:**
 
@@ -153,10 +159,10 @@ virsh undefine opensuse-tumbleweed
 rm -f $DISK_PATH
 ```
 
-______________________________________________________________________
+---
 
-**Additional Configuration and Tips** **Accessing the VM Console**
-You can access the serial console if you have configured it during installation.
+**Additional Configuration and Tips** **Accessing the VM Console** You can access the serial console
+if you have configured it during installation.
 
 ```bash
 virsh console opensuse-tumbleweed
@@ -194,12 +200,11 @@ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 
 **Networking Options**
 
-- **Default NAT Networking:**
-  The default network uses NAT, allowing the VM to access external networks but not be directly accessible from the host or external networks.
+- **Default NAT Networking:** The default network uses NAT, allowing the VM to access external
+  networks but not be directly accessible from the host or external networks.
 
-- **Bridged Networking:**
-  If you need the VM to be on the same network as the host, configure bridged networking.
-  **Configure a Bridge Interface:**
+- **Bridged Networking:** If you need the VM to be on the same network as the host, configure
+  bridged networking. **Configure a Bridge Interface:**
 
 ```bash
 sudo nmcli connection add type bridge autoconnect yes con-name br0 ifname br0
@@ -213,11 +218,11 @@ sudo nmcli connection modify br0 ipv4.dns "8.8.8.8,8.8.4.4"
 --network bridge=br0
 ```
 
-**Automating VM Installation with Kickstart or AutoYaST**
-For unattended installations, use AutoYaST files to automate the installation process.
+**Automating VM Installation with Kickstart or AutoYaST** For unattended installations, use AutoYaST
+files to automate the installation process.
 
-- **Create an AutoYaST File:**
-  Generate an AutoYaST XML configuration file based on your preferences.
+- **Create an AutoYaST File:** Generate an AutoYaST XML configuration file based on your
+  preferences.
 
 - **Modify virt-install Command:**
 
@@ -236,8 +241,7 @@ virt-install \
   --extra-args 'autoyast=file:/autoinst.xml console=ttyS0,115200n8 serial'
 ```
 
-**Using Cloud Images**
-Alternatively, you can use pre-built openSUSE Tumbleweed cloud images.
+**Using Cloud Images** Alternatively, you can use pre-built openSUSE Tumbleweed cloud images.
 
 1. **Download the Cloud Image:**
 
@@ -251,8 +255,8 @@ wget https://download.opensuse.org/repositories/Cloud:/Images:/Tumbleweed/images
 qemu-img resize openSUSE-Tumbleweed-JeOS.x86_64-kvm-and-xen.qcow2 +10G
 ```
 
-1. **Create a Cloud-Init Config Drive (Optional):**
-   If you need to configure the VM using cloud-init.
+1. **Create a Cloud-Init Config Drive (Optional):** If you need to configure the VM using
+   cloud-init.
 
 1. **Define and Start the VM:**
 
@@ -269,7 +273,7 @@ virt-install \
   --import
 ```
 
-______________________________________________________________________
+---
 
 **Troubleshooting**
 
@@ -281,10 +285,11 @@ newgrp libvirt
 newgrp kvm
 ```
 
-- **SELinux/AppArmor Restrictions:**
-  If SELinux or AppArmor is enforcing, you might need to adjust policies or set them to permissive mode.
+- **SELinux/AppArmor Restrictions:** If SELinux or AppArmor is enforcing, you might need to adjust
+  policies or set them to permissive mode.
 
-- **OS Variant Not Recognized:** If `opensuse-tumbleweed` is not recognized, use `opensuse-leap` or `generic` as the OS variant.
+- **OS Variant Not Recognized:** If `opensuse-tumbleweed` is not recognized, use `opensuse-leap` or
+  `generic` as the OS variant.
 
 ```bash
 osinfo-query os | grep -i opensuse
@@ -297,7 +302,7 @@ osinfo-query os | grep -i opensuse
 
   - Use SSH tunneling to securely connect to the VNC session.
 
-______________________________________________________________________
+---
 
 **Managing VMs with virsh**
 
@@ -326,10 +331,10 @@ virsh undefine opensuse-tumbleweed
 virt-clone --original opensuse-tumbleweed --name opensuse-tumbleweed-clone --file /var/lib/libvirt/images/opensuse-tumbleweed-clone.qcow2
 ```
 
-______________________________________________________________________
+---
 
-**Alternative: Using virt-manager (GUI)**
-If you prefer a graphical interface and have a desktop environment:
+**Alternative: Using virt-manager (GUI)** If you prefer a graphical interface and have a desktop
+environment:
 
 1. **Install virt-manager:**
 
@@ -347,26 +352,28 @@ virt-manager
 
 - Click on **"Create a new virtual machine"** .
 
-- Follow the prompts to specify installation media, allocate resources, and configure storage and networking.
+- Follow the prompts to specify installation media, allocate resources, and configure storage and
+  networking.
 
-______________________________________________________________________
+---
 
-**Conclusion**
-By following these steps, you can successfully instantiate an openSUSE Tumbleweed VM using KVM from the command line. This setup allows you to test, develop, or run applications in an isolated environment that closely mimics a physical machine.
+**Conclusion** By following these steps, you can successfully instantiate an openSUSE Tumbleweed VM
+using KVM from the command line. This setup allows you to test, develop, or run applications in an
+isolated environment that closely mimics a physical machine.
 
-______________________________________________________________________
+---
 
 **References and Further Reading**
 
 - **openSUSE Documentation:**
 
-  - [Virtualization Guide](<>)
+  - [Virtualization Guide]()
 
 - **Libvirt and KVM Resources:**
 
-  - [Libvirt Documentation](<>)
+  - [Libvirt Documentation]()
 
-  - [KVM Documentation](<>)
+  - [KVM Documentation]()
 
 - **Useful Commands:**
 
@@ -386,33 +393,36 @@ A non-zero output indicates that your CPU supports virtualization.
 
 ## How do I access this VM with ssh? Find VM IP
 
-**Step 1: Ensure the VM Is Running**
-First, verify that your VM is currently running.
+**Step 1: Ensure the VM Is Running** First, verify that your VM is currently running.
 
 ```bash
 virsh list --all
 ```
 
-You should see your VM `opensuse-tumbleweed` listed with the state **running** . If it's not running, start it with:
+You should see your VM `opensuse-tumbleweed` listed with the state **running** . If it's not
+running, start it with:
 
 ```bash
 virsh start opensuse-tumbleweed
 ```
 
-______________________________________________________________________
+---
 
-**Step 2: Find the VM's IP Address** Since the VM is connected to the default virtual network (`default`), you can find its IP address using one of the following methods.Option A: Using `virsh domifaddr`\*\*
+**Step 2: Find the VM's IP Address** Since the VM is connected to the default virtual network
+(`default`), you can find its IP address using one of the following methods.Option A: Using
+`virsh domifaddr`\*\*
 
 ```bash
 virsh domifaddr opensuse-tumbleweed
 ```
 
-This command displays the IP addresses assigned to the VM. Look for an entry with the `ipv4` type.**Example Output:**
+This command displays the IP addresses assigned to the VM. Look for an entry with the `ipv4`
+type.**Example Output:**
 
 ```markdown
-Name       MAC address          Protocol     Address
--------------------------------------------------------------------------------
-vnet0      52:54:00:12:34:56    ipv4         192.168.122.100/24
+## Name MAC address Protocol Address
+
+vnet0 52:54:00:12:34:56 ipv4 192.168.122.100/24
 ```
 
 Option B: Using `virsh net-dhcp-leases`\*\*
@@ -421,7 +431,8 @@ Option B: Using `virsh net-dhcp-leases`\*\*
 virsh net-dhcp-leases default
 ```
 
-This command lists the DHCP leases for the `default` network. Find the lease associated with your VM's MAC address.**Example Output:**
+This command lists the DHCP leases for the `default` network. Find the lease associated with your
+VM's MAC address.**Example Output:**
 
 ```css
 Expiry Time          MAC address        Protocol  IP address        Hostname
@@ -429,7 +440,8 @@ Expiry Time          MAC address        Protocol  IP address        Hostname
 2023-10-05 12:34:56  52:54:00:12:34:56  ipv4      192.168.122.100/24  opensuse-tumbleweed
 ```
 
-**Option C: Check Inside the VM via VNC** Since you installed the VM with VNC graphics (`--graphics vnc`), you can connect to the VM's console to find the IP address.
+**Option C: Check Inside the VM via VNC** Since you installed the VM with VNC graphics
+(`--graphics vnc`), you can connect to the VM's console to find the IP address.
 
 1. **Find the VNC Display Port:**
 
@@ -455,7 +467,8 @@ Or for display `:1`:
 vncviewer localhost:5901
 ```
 
-- **Note:** If you're connecting remotely, you may need to set up SSH tunneling to securely access the VNC session.
+- **Note:** If you're connecting remotely, you may need to set up SSH tunneling to securely access
+  the VNC session.
 
 1. **Find the VM's IP Address Inside the VM:**
 
@@ -469,11 +482,10 @@ ip addr show
 
 - Look for the IP address under the network interface, typically named `eth0` or `ens3`.
 
-______________________________________________________________________
+---
 
-**Step 3: Ensure SSH Is Enabled in the VM**
-Inside the VM, make sure that the SSH server is installed and running.
-**1. Check if SSH Server Is Installed**
+**Step 3: Ensure SSH Is Enabled in the VM** Inside the VM, make sure that the SSH server is
+installed and running. **1. Check if SSH Server Is Installed**
 
 ```bash
 sudo zypper install openssh
@@ -481,8 +493,7 @@ sudo zypper install openssh
 
 - If it's already installed, zypper will inform you.
 
-- If not, it will proceed to install it.
-  **2. Enable and Start the SSH Service**
+- If not, it will proceed to install it. **2. Enable and Start the SSH Service**
 
 ```bash
 sudo systemctl enable sshd
@@ -497,19 +508,17 @@ sudo systemctl status sshd
 
 - Ensure the service is **active (running)** .
 
-______________________________________________________________________
+---
 
-**Step 4: Adjust Firewall Settings Inside the VM**
-To allow SSH connections, the firewall inside the VM must permit SSH traffic.
-**1. Check Current Firewall Settings**
+**Step 4: Adjust Firewall Settings Inside the VM** To allow SSH connections, the firewall inside the
+VM must permit SSH traffic. **1. Check Current Firewall Settings**
 
 ```bash
 sudo firewall-cmd --list-all
 ```
 
-- Look under `services:` to see if `ssh` is listed.
-  **2. Add SSH Service to the Firewall**
-  If SSH is not listed, add it:
+- Look under `services:` to see if `ssh` is listed. **2. Add SSH Service to the Firewall** If SSH is
+  not listed, add it:
 
 ```bash
 sudo firewall-cmd --permanent --add-service=ssh
@@ -524,12 +533,11 @@ sudo firewall-cmd --list-all
 
 - Confirm that `ssh` now appears under `services:`.
 
-______________________________________________________________________
+---
 
-**Step 5: SSH into the VM from the Host Machine**
-Now that you have the VM's IP address and SSH is configured, you can connect to it from your host machine.
-**1. Test Connectivity**
-First, ensure that your host can reach the VM.
+**Step 5: SSH into the VM from the Host Machine** Now that you have the VM's IP address and SSH is
+configured, you can connect to it from your host machine. **1. Test Connectivity** First, ensure
+that your host can reach the VM.
 
 ```bash
 ping -c 4 <vm_ip_address>
@@ -537,8 +545,7 @@ ping -c 4 <vm_ip_address>
 
 - Replace `<vm_ip_address>` with the IP address you obtained earlier.
 
-- If the ping is successful, proceed to SSH.
-  **2. Connect via SSH**
+- If the ping is successful, proceed to SSH. **2. Connect via SSH**
 
 ```bash
 ssh username@<vm_ip_address>
@@ -546,15 +553,13 @@ ssh username@<vm_ip_address>
 
 - Replace `username` with your user account in the VM.
 
-- Replace `<vm_ip_address>` with the VM's IP address.
-  **Example:**
+- Replace `<vm_ip_address>` with the VM's IP address. **Example:**
 
 ```bash
 ssh john@192.168.122.100
 ```
 
-**3. Accept the SSH Host Key**
-On first connection, you'll be prompted to accept the SSH host key:
+**3. Accept the SSH Host Key** On first connection, you'll be prompted to accept the SSH host key:
 
 ```vbnet
 The authenticity of host '192.168.122.100 (192.168.122.100)' can't be established.
@@ -562,8 +567,7 @@ ECDSA key fingerprint is SHA256:...
 Are you sure you want to continue connecting (yes/no/[fingerprint])?
 ```
 
-- Type `yes` and press **Enter** .
-  **4. Enter Your Password**
+- Type `yes` and press **Enter** . **4. Enter Your Password**
 
 ```css
 john@192.168.122.100's password:
@@ -571,12 +575,11 @@ john@192.168.122.100's password:
 
 - Enter the password you set for the user during installation.
 
-______________________________________________________________________
+---
 
-**Step 6: Optional - Set Up SSH Key Authentication**
-For convenience and enhanced security, you can set up SSH key-based authentication.
-**1. Generate an SSH Key Pair on the Host**
-If you don't already have an SSH key pair:
+**Step 6: Optional - Set Up SSH Key Authentication** For convenience and enhanced security, you can
+set up SSH key-based authentication. **1. Generate an SSH Key Pair on the Host** If you don't
+already have an SSH key pair:
 
 ```bash
 ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
@@ -584,15 +587,13 @@ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
 
 - Press **Enter** to accept the default file location.
 
-- Set a passphrase if desired.
-  **2. Copy Your Public Key to the VM**
+- Set a passphrase if desired. **2. Copy Your Public Key to the VM**
 
 ```bash
 ssh-copy-id username@<vm_ip_address>
 ```
 
-- Enter your password when prompted.
-  **3. Test SSH Key Authentication**
+- Enter your password when prompted. **3. Test SSH Key Authentication**
 
 ```bash
 ssh username@<vm_ip_address>
@@ -600,7 +601,7 @@ ssh username@<vm_ip_address>
 
 - You should now connect without needing to enter your password.
 
-______________________________________________________________________
+---
 
 **Additional Information** **Understanding the Default Network**
 
@@ -608,9 +609,8 @@ ______________________________________________________________________
 
 - The default network is typically a NAT network with the subnet `192.168.122.0/24`.
 
-- The host machine can communicate with the VM using this network.
-  Using `virt-manager` (Optional GUI Tool)\*\*
-  If you prefer a graphical interface to manage your VMs:
+- The host machine can communicate with the VM using this network. Using `virt-manager` (Optional
+  GUI Tool)\*\* If you prefer a graphical interface to manage your VMs:
 
 1. **Install virt-manager:**
 
@@ -626,8 +626,8 @@ virt-manager
 
 1. **Use virt-manager to View VM Details:**
 
-- You can view the VM's IP address, console, and other settings.
-  **Connecting to the VM Console via VNC**
+- You can view the VM's IP address, console, and other settings. **Connecting to the VM Console via
+  VNC**
 - **Find the VNC Port:**
 
 ```bash
@@ -673,20 +673,22 @@ virsh net-start default
 
   - Verify that the VM's IP address hasn't changed.
 
-______________________________________________________________________
+---
 
-**Alternative: Using Port Forwarding**
-If you prefer to use port forwarding instead of connecting via the VM's IP address:
-**1. Modify the VM's Network Configuration**
-You can add port forwarding rules to the default network by editing its XML configuration. However, this method is more complex and not generally recommended for beginners.
-**2. Use User-Mode Networking with Port Forwarding**
-Alternatively, you can create a new network configuration or modify your VM to use user-mode networking with port forwarding. This would involve more advanced steps and is not necessary if you can connect via the default network.
+**Alternative: Using Port Forwarding** If you prefer to use port forwarding instead of connecting
+via the VM's IP address: **1. Modify the VM's Network Configuration** You can add port forwarding
+rules to the default network by editing its XML configuration. However, this method is more complex
+and not generally recommended for beginners. **2. Use User-Mode Networking with Port Forwarding**
+Alternatively, you can create a new network configuration or modify your VM to use user-mode
+networking with port forwarding. This would involve more advanced steps and is not necessary if you
+can connect via the default network.
 
-______________________________________________________________________
+---
 
-**Conclusion**
-By following these steps, you should be able to access your openSUSE Tumbleweed VM via SSH from your host machine. Remember to ensure that the SSH service is running and that the firewall settings inside the VM allow SSH connections.
+**Conclusion** By following these steps, you should be able to access your openSUSE Tumbleweed VM
+via SSH from your host machine. Remember to ensure that the SSH service is running and that the
+firewall settings inside the VM allow SSH connections.
 
-______________________________________________________________________
+---
 
 If you encounter any issues or have further questions, feel free to ask for additional assistance!

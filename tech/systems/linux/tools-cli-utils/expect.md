@@ -24,20 +24,17 @@ spawn ssh user@hostname
 
 # Handle the password prompt
 
-expect "password:"
-send "your_password\\r"
+expect "password:" send "your_password\\r"
 
 # Execute a command after login
 
-expect "$ "
-send "ls -l\\r"
+expect "$ " send "ls -l\\r"
 
 # Interact with the session manually
 
 interact
 
 ````
-
 ### Example 1: Using Environment Variables
 
 ```tcl
@@ -118,7 +115,8 @@ chmod +x ssh_login.expect
 
 #### Additional Resources
 
-- [Expect Man Page](<>)
-- [Expect Official Documentation](<>)
+- [Expect Man Page]()
+- [Expect Official Documentation]()
 
-By using Expect, you can automate and test applications that require user interaction, making it a powerful tool for managing and testing interactive scripts.
+By using Expect, you can automate and test applications that require user interaction, making it a
+powerful tool for managing and testing interactive scripts.

@@ -10,6 +10,4 @@ Rmarkdown guide (r markdown r-markdown):
 
 citations:
 
-@tovolli21_1,
-[@tovolli21_8]
-[@Bartel2004; @Bartel2009a]
+@tovolli21_1, [@tovolli21_8] [@Bartel2004; @Bartel2009a]

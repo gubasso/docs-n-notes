@@ -1,6 +1,7 @@
 # Custom keymap Caps Lock ESC switch (TTY/Console)
 
-Here's how you can swap Caps Lock and Esc on a Void Linux virtual console and have it survive reboots.
+Here's how you can swap Caps Lock and Esc on a Void Linux virtual console and have it survive
+reboots.
 
 ## Summary
 
@@ -14,7 +15,8 @@ In a pure-text console (Ctrl + Alt + F2…F6), run:
 sudo showkey
 ```
 
-Press **Esc** and **Caps Lock** to see their scancodes (typically **1** and **58**, respectively). ([unix.stackexchange.com][1])
+Press **Esc** and **Caps Lock** to see their scancodes (typically **1** and **58**, respectively).
+([unix.stackexchange.com][1])
 
 ### 1.2. Write the swap mapping
 
@@ -44,9 +46,11 @@ Apply it now with:
 sudo loadkeys /usr/local/share/kbd/keymaps/us-caps-esc-swap.map
 ```
 
-This updates the translation table for all virtual consoles until reboot. ([unix.stackexchange.com][1])
+This updates the translation table for all virtual consoles until reboot.
+([unix.stackexchange.com][1])
 
-According to the `loadkeys` manual, once loaded it affects every TTY and persists until the next reboot. ([man.voidlinux.org][2])
+According to the `loadkeys` manual, once loaded it affects every TTY and persists until the next
+reboot. ([man.voidlinux.org][2])
 
 ## Make the swap persistent (Arch)
 
@@ -62,7 +66,8 @@ Void Linux (runit-based) doesn’t use systemd’s `/etc/vconsole.conf` by defau
 
 ### 2.1. Option A: `/etc/rc.local`
 
-Void sources `/etc/rc.local` in runit stage 2, making it perfect for boot-time commands. ([docs.voidlinux.org][3])
+Void sources `/etc/rc.local` in runit stage 2, making it perfect for boot-time commands.
+([docs.voidlinux.org][3])
 
 1. Create or edit `/etc/rc.local`:
 
@@ -87,7 +92,8 @@ On every reboot, runit will invoke this and reapply your mapping. ([docs.voidlin
 
 ### 2.2. Option B: Custom keymap in `/etc/rc.conf`
 
-Void’s `/etc/rc.conf` supports a `KEYMAP` variable pointing to a keymap under `/usr/share/kbd/keymaps`. ([docs.voidlinux.org][3])
+Void’s `/etc/rc.conf` supports a `KEYMAP` variable pointing to a keymap under
+`/usr/share/kbd/keymaps`. ([docs.voidlinux.org][3])
 
 1. Copy your map into the keymaps tree (e.g. under a “personal” directory):
 
@@ -108,10 +114,14 @@ Void’s `/etc/rc.conf` supports a `KEYMAP` variable pointing to a keymap under 
 
 ## 3. Notes and alternatives
 
-- Some systemd-based distros let you add a `KEYMAP_CORRECTIONS="swapCapsEsc"` line to `/etc/vconsole.conf` and have udev apply it at boot ([wiki.archlinux.org][5]), but Void relies on `rc.conf` and `loadkeys` instead.
-- On Debian/Ubuntu you can also use `localectl set-keymap --no-convert us` (and rebuild initramfs) to persist console layouts ([unix.stackexchange.com][6]).
+- Some systemd-based distros let you add a `KEYMAP_CORRECTIONS="swapCapsEsc"` line to
+  `/etc/vconsole.conf` and have udev apply it at boot ([wiki.archlinux.org][5]), but Void relies on
+  `rc.conf` and `loadkeys` instead.
+- On Debian/Ubuntu you can also use `localectl set-keymap --no-convert us` (and rebuild initramfs)
+  to persist console layouts ([unix.stackexchange.com][6]).
 
-With either `/etc/rc.local` or the `KEYMAP` method in `/etc/rc.conf`, your Caps Lock and Esc keys will remain swapped every time you boot into a TTY.
+With either `/etc/rc.local` or the `KEYMAP` method in `/etc/rc.conf`, your Caps Lock and Esc keys
+will remain swapped every time you boot into a TTY.
 
 [1]: https://unix.stackexchange.com/questions/266817/how-to-reverse-esc-and-caps-lock-on-tty "console - How to reverse ESC and CAPS_LOCK on TTY - Unix & Linux Stack ..."
 [2]: https://man.voidlinux.org/loadkeys.1 "loadkeys (1) - Void Linux manpages"

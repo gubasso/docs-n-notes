@@ -36,7 +36,8 @@
 
 ### Merge branches (one-liner)
 
-The easiest option is to merge the main branch into the feature branch using something like the following:
+The easiest option is to merge the main branch into the feature branch using something like the
+following:
 
 ```sh
 git checkout feature
@@ -68,7 +69,8 @@ git for-each-ref --format="%(refname:short) %(upstream:track) %(upstream:remoten
 git checkout -b new-branch-name origin/new-branch-name
 ```
 
-You can do it in one shot with `git`—create the local branch **with the same name** and set it to track the remote branch.
+You can do it in one shot with `git`—create the local branch **with the same name** and set it to
+track the remote branch.
 
 Assuming the remote is `origin` and the branch is `my-feature`:
 
@@ -82,7 +84,7 @@ That:
 - creates local branch `my-feature`
 - sets its upstream to `origin/my-feature` (so `git pull`/`git push` work without extra args)
 
-______________________________________________________________________
+---
 
 On newer Git, there’s also this shorter form:
 
@@ -150,8 +152,7 @@ git remote update --prune
 https://github.com/sindrets/diffview.nvim
 https://stackoverflow.com/questions/6412516/configuring-diff-tool-with-gitconfig
 https://stackoverflow.com/questions/70552371/is-there-a-neovim-version-of-vimdiff
-https://smittie.de/posts/git-mergetool/
-simulate / create a merge conflict
+https://smittie.de/posts/git-mergetool/ simulate / create a merge conflict
 https://www.rosipov.com/blog/use-vimdiff-as-git-mergetool/
 
 ### Merge just a file/path from another branch
@@ -238,8 +239,8 @@ git checkout new-feature
 
 1. Merge `develop` to `new-feature` branch
 
-a) ensure that HEAD is pointing to the correct merge-receiving branch
-b) Make sure the receiving branch and the merging branch are up-to-date
+a) ensure that HEAD is pointing to the correct merge-receiving branch b) Make sure the receiving
+branch and the merging branch are up-to-date
 
 ```sh
 git checkout receiving-branch
@@ -300,7 +301,8 @@ Or, to cleanup branches from project, see[^clear-branches].
 - [Git Feature Branch Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow)
 - [What is the difference between git pull and git reset --hard origin/<branch>?](https://stackoverflow.com/questions/43037293/what-is-the-difference-between-git-pull-and-git-reset-hard-origin-branch)
 - [Git merge conflicts](https://www.atlassian.com/git/tutorials/using-branches/merge-conflicts)
-  [^clear-branches] [How to Delete Already Merged Git Branches (local and remote)](https://www.w3docs.com/snippets/git/how-to-delete-already-merged-git-branches.html)
+  [^clear-branches]
+  [How to Delete Already Merged Git Branches (local and remote)](https://www.w3docs.com/snippets/git/how-to-delete-already-merged-git-branches.html)
   - https://github.com/hartwork/git-delete-merged-branches
 
 ## Related
@@ -319,7 +321,7 @@ Or, to cleanup branches from project, see[^clear-branches].
 
 ## General
 
-______________________________________________________________________
+---
 
 **git log to json**[^1]
 
@@ -327,7 +329,7 @@ ______________________________________________________________________
   - cli to query git log as a SQL
   - outputs as json too
 
-______________________________________________________________________
+---
 
 Personalize a ssh command used by git clone (example):
 
@@ -360,7 +362,8 @@ squash commits
   - rust: https://docs.rs/git2/latest/git2/
     - https://siciarz.net/24-days-rust-git2/
 
-- Git Objects: [10.2 Git Internals - Git Objects](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects)
+- Git Objects:
+  [10.2 Git Internals - Git Objects](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects)
 
 config git local info config
 [How to store a git config as part of the repository?](https://stackoverflow.com/questions/18329621/how-to-store-a-git-config-as-part-of-the-repository)
@@ -369,7 +372,7 @@ config git local info config
 git config --local include.path ../.gitconfig
 ```
 
-______________________________________________________________________
+---
 
 Clear Entire Git Cache
 
@@ -379,7 +382,7 @@ git add .
 git commit -am 'Removed files from the index (now ignored)'
 ```
 
-______________________________________________________________________
+---
 
 Git add all[^1]
 
@@ -391,11 +394,11 @@ git add -A #--all
 - `.`: from the relative path where command is executed
 - `-A`/`--all`: recursevely, from the root of the project (`.git`), all the project files
 
-______________________________________________________________________
+---
 
 - `git rm` = `rm` + `git add`
 
-______________________________________________________________________
+---
 
 **git encryption / git secret**
 
@@ -417,10 +420,9 @@ ______________________________________________________________________
 
 - [https://git-annex.branchable.com/tips/fully\\\_encrypted\\\_git\\\_repositories\\\_with\\\_gcrypt/](https://git-annex.branchable.com/tips/fully%5C_encrypted%5C_git%5C_repositories%5C_with%5C_gcrypt/)
 
-______________________________________________________________________
+---
 
-[^android_note_git]
-note taking markdown mobile android integrated with git:
+[^android_note_git] note taking markdown mobile android integrated with git:
 https://play.google.com/store/apps/details?id=io.gitjournal.gitjournal
 https://play.google.com/store/apps/details?id=io.spck
 https://play.google.com/store/apps/details?id=com.foxdebug.acodefree
@@ -429,11 +431,13 @@ https://play.google.com/store/apps/details?id=com.rhmsoft.edit
 - merge branch logic:
 
   - checkout the branch where you want to bring the commit
-  - just as a remote (github): I'm working in my local, checked out, and run git remote to bring the changes from outside repos
+  - just as a remote (github): I'm working in my local, checked out, and run git remote to bring the
+    changes from outside repos
 
 - if you decide to quit the merge: `git merge --abort`
 
-  - if you have already committed, to rollback and erase last commit, run: `git reset --hard ORIG_HEAD`
+  - if you have already committed, to rollback and erase last commit, run:
+    `git reset --hard ORIG_HEAD`
 
 - https://github.com/rbong/vim-flog/
 

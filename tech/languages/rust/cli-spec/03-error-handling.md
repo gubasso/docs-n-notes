@@ -1,8 +1,12 @@
 # 03 — Error Handling (Rust)
 
-> Prerequisite: [General principles — Error Messages](../../../programming/cli-design/02-error-messages.md) for the four-part anatomy (what/where/why/hint), stable `err.kind`, BSD sysexits, and audience matrix. This chapter is the Rust implementation using `thiserror` + `anyhow`.
+> Prerequisite:
+> [General principles — Error Messages](../../../programming/cli-design/02-error-messages.md) for
+> the four-part anatomy (what/where/why/hint), stable `err.kind`, BSD sysexits, and audience matrix.
+> This chapter is the Rust implementation using `thiserror` + `anyhow`.
 
-`thiserror` per layer for typed errors, `anyhow` only at the binary boundary, one top-level `AppError` enum with `exit_code()` mapped to BSD sysexits.
+`thiserror` per layer for typed errors, `anyhow` only at the binary boundary, one top-level
+`AppError` enum with `exit_code()` mapped to BSD sysexits.
 
 ## The layer table
 
@@ -16,12 +20,17 @@
 
 ## Why both `thiserror` and `anyhow`
 
-- `thiserror` builds **named, matchable** errors. Code that needs to react to a specific failure can `match` on the variant.
-- `anyhow` is for **opaque, context-rich** errors at the application boundary — you don't care which exact variant fired, you care about printing a useful chain to the user.
+- `thiserror` builds **named, matchable** errors. Code that needs to react to a specific failure can
+  `match` on the variant.
+- `anyhow` is for **opaque, context-rich** errors at the application boundary — you don't care which
+  exact variant fired, you care about printing a useful chain to the user.
 
-Inside the crate, every error has a name. At the boundary, you optionally lose the name in exchange for cheap `.context("while doing X")` chains.
+Inside the crate, every error has a name. At the boundary, you optionally lose the name in exchange
+for cheap `.context("while doing X")` chains.
 
-**Never** return `anyhow::Error` from a library crate or a public API. Inside a binary's `commands/` and `main`, it's fine — and the typed `AppError::Other(#[from] anyhow::Error)` variant lets you mix the two without ceremony.
+**Never** return `anyhow::Error` from a library crate or a public API. Inside a binary's `commands/`
+and `main`, it's fine — and the typed `AppError::Other(#[from] anyhow::Error)` variant lets you mix
+the two without ceremony.
 
 ## Skeleton: `src/error.rs`
 
@@ -96,7 +105,9 @@ The matrix test isn't optional. Treat exit codes as part of the user-facing API 
 
 ## BSD sysexits cheat sheet
 
-The full code/constant/when matrix lives in [`cli-design/02-error-messages.md#exit-codes--bsd-sysexits`](../../../programming/cli-design/02-error-messages.md#exit-codes--bsd-sysexits). Map every `AppError` variant onto a constant from that table.
+The full code/constant/when matrix lives in
+[`cli-design/02-error-messages.md#exit-codes--bsd-sysexits`](../../../programming/cli-design/02-error-messages.md#exit-codes--bsd-sysexits).
+Map every `AppError` variant onto a constant from that table.
 
 Don't use codes outside that set without writing them down. Shell scripts read your exit code.
 
@@ -154,11 +165,14 @@ pub enum WidgetServiceError {
 }
 ```
 
-Composes domain and adapter errors. **Do not** add `#[from]` arms for peer services (e.g. `OtherServiceError`) — recursive `#[from]` graphs cause ambiguous `?` inference and force you to disambiguate at call sites. Instead, lift shared infrastructure into adapters or domain.
+Composes domain and adapter errors. **Do not** add `#[from]` arms for peer services (e.g.
+`OtherServiceError`) — recursive `#[from]` graphs cause ambiguous `?` inference and force you to
+disambiguate at call sites. Instead, lift shared infrastructure into adapters or domain.
 
 ## The `Other(#[from] anyhow::Error)` arm
 
-Inside `commands/`, sometimes you want `.context("while loading user prefs")` on a one-off call without inventing a whole error variant. Add this arm to `AppError`:
+Inside `commands/`, sometimes you want `.context("while loading user prefs")` on a one-off call
+without inventing a whole error variant. Add this arm to `AppError`:
 
 ```rust
 #[error(transparent)]
@@ -204,11 +218,15 @@ fn eprint_error(e: &app_template::error::AppError) {
 }
 ```
 
-The chain walk surfaces `#[source]` and `#[from]` causes. For prettier output in dev builds, gate `color-eyre` behind a feature flag.
+The chain walk surfaces `#[source]` and `#[from]` causes. For prettier output in dev builds, gate
+`color-eyre` behind a feature flag.
 
 ## Rules
 
-- No `panic!`, `.unwrap()`, `.expect()` outside `main`, tests, build scripts, and `LazyLock` initializers.
+- No `panic!`, `.unwrap()`, `.expect()` outside `main`, tests, build scripts, and `LazyLock`
+  initializers.
 - No catch-all `_ => 1` in `exit_code()`. Map every variant explicitly.
 - Every public function returning `Result` documents the error variants it can produce.
-- Don't wrap `String` errors. If you find yourself reaching for `anyhow!("...")`, ask whether a named variant would be clearer — for one-offs at the binary edge, `anyhow!` is fine; in libs, name it.
+- Don't wrap `String` errors. If you find yourself reaching for `anyhow!("...")`, ask whether a
+  named variant would be clearer — for one-offs at the binary edge, `anyhow!` is fine; in libs, name
+  it.

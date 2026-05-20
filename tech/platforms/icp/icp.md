@@ -16,7 +16,8 @@
 
 ## General
 
-- Initial setup: https://internetcomputer.org/docs/current/tutorials/developer-journey/level-0/dev-env
+- Initial setup:
+  https://internetcomputer.org/docs/current/tutorials/developer-journey/level-0/dev-env
 
 ### Create a new project
 

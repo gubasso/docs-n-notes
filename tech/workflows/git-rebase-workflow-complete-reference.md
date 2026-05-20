@@ -2,7 +2,7 @@
 
 A step-by-step guide for teams using rebase to maintain clean, linear history.
 
-______________________________________________________________________
+---
 
 ## Branch Structure
 
@@ -21,7 +21,7 @@ master          ← stable releases, version tags (v1.0, v1.1, ...)
 - Every commit on `devel` should compile and pass tests.
 - `master` only receives merges from `devel` at release time.
 
-______________________________________________________________________
+---
 
 ## The Workflow
 
@@ -194,7 +194,8 @@ Done:
 
 ### 6. Resolve conflicts (if any)
 
-If a replayed commit touches the same lines that changed in `devel`, git stops and asks you to resolve.
+If a replayed commit touches the same lines that changed in `devel`, git stops and asks you to
+resolve.
 
 ```bash
 # Git tells you which file conflicts
@@ -221,7 +222,8 @@ git rebase --abort        # undo everything, go back to before rebase
 
 ### 7. Force-push your rebased branch
 
-Rebase rewrites commit hashes (F became F', H became H'). The remote still has the old hashes, so a normal push is rejected.
+Rebase rewrites commit hashes (F became F', H became H'). The remote still has the old hashes, so a
+normal push is rejected.
 
 ```bash
 git push origin feature/auth --force-with-lease
@@ -230,13 +232,15 @@ git push origin feature/auth --force-with-lease
 Why `--force-with-lease` instead of `--force`:
 
 - `--force` overwrites the remote unconditionally
-- `--force-with-lease` checks that nobody else pushed to your branch since your last fetch — if they did, it fails safely instead of destroying their work
+- `--force-with-lease` checks that nobody else pushed to your branch since your last fetch — if they
+  did, it fails safely instead of destroying their work
 
 ### 8. Open a Pull Request
 
 Open a PR from `feature/auth` → `devel` on GitHub/GitLab.
 
-At this point your PR shows a clean diff against the latest `devel` with no merge commits and no conflicts.
+At this point your PR shows a clean diff against the latest `devel` with no merge commits and no
+conflicts.
 
 Code review happens here.
 
@@ -261,7 +265,8 @@ devel:   A --- B --- C --- D --- E ----------- M
 feature/auth:                              F' - H'
 ```
 
-The merge commit `M` records when and what was integrated. The individual commits `F'` and `H'` are preserved with clean history.
+The merge commit `M` records when and what was integrated. The individual commits `F'` and `H'` are
+preserved with clean history.
 
 ### 10. Delete the feature branch
 
@@ -270,7 +275,7 @@ git branch -d feature/auth               # delete local
 git push origin --delete feature/auth     # delete remote
 ```
 
-______________________________________________________________________
+---
 
 ## Release Flow
 
@@ -294,11 +299,12 @@ feature/auth:     F-H┘   \   |
 fix/login-bug:              X-Y┘
 ```
 
-______________________________________________________________________
+---
 
 ## Conflict Scenario — Full Example
 
-You're working on `feature/auth`. A teammate merges `fix/login-bug` into `devel` that touches the same file you edited.
+You're working on `feature/auth`. A teammate merges `fix/login-bug` into `devel` that touches the
+same file you edited.
 
 ```
 devel:          A --- B --- C --- D (teammate's fix, touches auth.py)
@@ -344,7 +350,7 @@ Push and open PR:
 git push origin feature/auth --force-with-lease
 ```
 
-______________________________________________________________________
+---
 
 ## Multiple Rebases
 
@@ -359,7 +365,7 @@ git push origin feature/auth --force-with-lease
 
 Some teams rebase daily to avoid large conflict pileups at the end.
 
-______________________________________________________________________
+---
 
 ## Quick Reference
 
@@ -398,21 +404,21 @@ RELEASE:
   git push origin master --tags
 ```
 
-______________________________________________________________________
+---
 
 ## Common Mistakes
 
-**Rebasing a shared branch:**
-Never `git rebase` on `devel` or `master`. These are shared — other people pull from them. Rebase rewrites history and breaks everyone else's local copy.
+**Rebasing a shared branch:** Never `git rebase` on `devel` or `master`. These are shared — other
+people pull from them. Rebase rewrites history and breaks everyone else's local copy.
 
-**Forgetting to fetch before rebase:**
-Always `git fetch origin` first. Without it you rebase onto your local (stale) copy of devel, not the actual latest.
+**Forgetting to fetch before rebase:** Always `git fetch origin` first. Without it you rebase onto
+your local (stale) copy of devel, not the actual latest.
 
-**Using `--force` instead of `--force-with-lease`:**
-`--force` blindly overwrites. `--force-with-lease` checks first. Always use `--force-with-lease`.
+**Using `--force` instead of `--force-with-lease`:** `--force` blindly overwrites.
+`--force-with-lease` checks first. Always use `--force-with-lease`.
 
-**Rebasing with uncommitted changes:**
-Stash or commit before rebasing. Rebase won't start with a dirty working tree.
+**Rebasing with uncommitted changes:** Stash or commit before rebasing. Rebase won't start with a
+dirty working tree.
 
 ```bash
 git stash
@@ -420,5 +426,5 @@ git rebase origin/devel
 git stash pop
 ```
 
-**Panicking during conflict resolution:**
-`git rebase --abort` always takes you back to exactly where you were before the rebase. No damage done. Use it freely.
+**Panicking during conflict resolution:** `git rebase --abort` always takes you back to exactly
+where you were before the rebase. No damage done. Use it freely.

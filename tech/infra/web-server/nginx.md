@@ -181,7 +181,8 @@ systemctl enable nginx --now
 systemctl status nginx
 ```
 
-- test if service is working after reboot the system `reboot`... run `systemctl status nginx` and/or `ps aux | grep nginx`
+- test if service is working after reboot the system `reboot`... run `systemctl status nginx` and/or
+  `ps aux | grep nginx`
 
 # After
 
@@ -195,15 +196,15 @@ After nginx is installed and running, config https with certbot/let's encrypt:
 
 Follow these steps: [^2]
 
-- `listen 443 ssl http2;`: add `http2`, is needed, automatically falls back to HTTP 1.1 if not supported
+- `listen 443 ssl http2;`: add `http2`, is needed, automatically falls back to HTTP 1.1 if not
+  supported
 - add `http2` (can be done just after a valid certificate)
 
-[^2]`# Step 3 — Verifying that HTTP/2 is Enabled`
+[^2] `# Step 3 — Verifying that HTTP/2 is Enabled`
 
 ## General
 
-If using with SSL/Let's encrypt/certbot:...
-Better to **NOT** use with docker/container...
+If using with SSL/Let's encrypt/certbot:... Better to **NOT** use with docker/container...
 
 Simpler if it is installed directly on system.
 
@@ -251,18 +252,19 @@ server{
     - When Does Location Block Evaluation Jump to Other Locations?
 ```
 
-______________________________________________________________________
+---
 
 - nginx rate limiting, securing ddos attack
   - [Rate Limiting with NGINX and NGINX Plus](https://www.nginx.com/blog/rate-limiting-nginx/)
   - [Rate Limiting with Nginx](https://lincolnloop.com/blog/rate-limiting-nginx/)
   - [NGINX rate-limiting in a nutshell](https://www.freecodecamp.org/news/nginx-rate-limiting-in-a-nutshell-128fe9e0126c/)
 
-______________________________________________________________________
+---
 
-- How to get HTTPS working on your local development environment in 5 minutes `https://www.freecodecamp.org/news/how-to-get-https-working-on-your-local-development-environment-in-5-minutes-7af615770eec/amp/?__twitter_impression=true`
+- How to get HTTPS working on your local development environment in 5 minutes
+  `https://www.freecodecamp.org/news/how-to-get-https-working-on-your-local-development-environment-in-5-minutes-7af615770eec/amp/?__twitter_impression=true`
 
-______________________________________________________________________
+---
 
 - How does HTTPS work? What's a CA? What's a self-signed Certificate? https://youtu.be/T4Df5_cojAs
 

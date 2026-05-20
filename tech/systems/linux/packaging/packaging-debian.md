@@ -26,8 +26,8 @@ Setup the root filesystem using mmdebstrap
 sudo debootstrap --include=systemd-container,auto-apt-proxy,sudo unstable /var/lib/machines/debian-sid
 ```
 
-At [Arch wiki: nspawn Debian or Ubuntu]:
-Set the root password, run _systemd-nspawn_ without the `-b` option:
+At [Arch wiki: nspawn Debian or Ubuntu]: Set the root password, run _systemd-nspawn_ without the
+`-b` option:
 
 ```sh
 # host
@@ -109,7 +109,8 @@ gdebi my-program_version_architecture.deb
 
 > What is a metapackage?
 
-It doesn't install a debian package itself. It is a debian package with a set of dependencies, that install all of the dependencies.
+It doesn't install a debian package itself. It is a debian package with a set of dependencies, that
+install all of the dependencies.
 
 ## Overview
 

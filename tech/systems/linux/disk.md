@@ -29,9 +29,11 @@
 
 - [7 Great Apps to View Disk Usage in Linux](https://www.makeuseof.com/tag/how-to-analyze-your-disk-usage-pattern-in-linux/)
 
-  - 1. Ncurses Disk Usage (ncdu)
+  -
+    1. Ncurses Disk Usage (ncdu)
     - https://dev.yorhel.nl/ncdu
-  - 1. Disk Usage Analyzer (aka Baobab)
+  -
+    1. Disk Usage Analyzer (aka Baobab)
     - https://linuxpoison.blogspot.com/2010/01/baobab-linux-graphical-disk-usage.html
   - KDirStat
     - https://kdirstat.sourceforge.net/

@@ -1,8 +1,9 @@
 # Pydantic: model validators
 
-In **Pydantic v2** , when you use `@model_validator(mode="after")`, the validator’s signature varies depending on whether it’s defined as:
+In **Pydantic v2** , when you use `@model_validator(mode="after")`, the validator’s signature varies
+depending on whether it’s defined as:
 
-- An **instance method** (the first parameter is `self` → the *model instance*), or
+- An **instance method** (the first parameter is `self` → the _model instance_), or
 - A **class method** (the first parameter is `cls`, the second is the model instance).
 
 **class method**
@@ -26,12 +27,11 @@ def validator_name(self: T) -> T:
 
 Below are **two** valid approaches with correct type hints—pick whichever style you prefer.
 
-______________________________________________________________________
+---
 
 1. Instance method example
 
 ```python
-
 class MyModel(BaseModel):
     field1: str
     field2: int
@@ -49,12 +49,11 @@ class MyModel(BaseModel):
 - May return some error, raise a `ValueError`.
 - Returning `self` is required for a “mode=after” validator.
 
-______________________________________________________________________
+---
 
 1. Class Method Example
 
 ```python
-
 T = TypeVar("T", bound="MyModel")
 
 class MyModel(BaseModel):
@@ -70,6 +69,8 @@ class MyModel(BaseModel):
 
 ### Explanation
 
-- First param is `cls`, second param is the *model instance* (`instance`).
-- We use a generic `T` (bound to `"MyModel"`) for correct type annotations, so mypy knows we return the same type we received.
-- Rest of the logic is the same: set `instance.field1` from the dictionary if missing, and raise if it remains `None`.
+- First param is `cls`, second param is the _model instance_ (`instance`).
+- We use a generic `T` (bound to `"MyModel"`) for correct type annotations, so mypy knows we return
+  the same type we received.
+- Rest of the logic is the same: set `instance.field1` from the dictionary if missing, and raise if
+  it remains `None`.

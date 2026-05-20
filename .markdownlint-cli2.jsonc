@@ -2,7 +2,7 @@
 // Rule reference: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
 {
   "config": {
-    // mdformat owns canonical formatting; we only gate on issues it
+    // dprint owns canonical formatting; we only gate on issues it
     // can't normalize. Disable rules that fight the formatter or that
     // are noise for free-form notes.
     "default": true,
@@ -21,6 +21,7 @@
     "MD052": false,  // reference labels — many notes use ad-hoc footnote refs
     "MD042": false,  // empty links — placeholder links common in WIP notes
     "MD001": false,  // heading-increment — notes skip levels intentionally
+    "MD031": false,  // blanks-around-fences — dprint owns fence spacing
     "MD046": { "style": "fenced" }   // require fenced code blocks
   },
   "ignores": [

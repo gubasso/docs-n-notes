@@ -500,12 +500,13 @@ let book = sqlx::query_as!(Book,
   isbn,
 )
   .fetch_optional(pool).await?;
-
 ```
 
 ## Others
 
-At video [SQLx is my favorite PostgreSQL driver to use with Rust.](https://www.youtube.com/watch?v=TCERYbgvbq0)[^1], there are more explanations about:
+At video
+[SQLx is my favorite PostgreSQL driver to use with Rust.](https://www.youtube.com/watch?v=TCERYbgvbq0)[^1],
+there are more explanations about:
 
 - ipnetwork type
 - listen / notify
@@ -516,6 +517,8 @@ At video [SQLx is my favorite PostgreSQL driver to use with Rust.](https://www.y
 - sqlx migration details: https://docs.rs/sqlx/latest/sqlx/macro.migrate.html
 - \[[migrations#sqlx (rust)]\]
 
-[^1]: https://www.youtube.com/watch?v=TCERYbgvbq0 "SQLx is my favorite PostgreSQL driver to use with Rust."
+[^1]: https://www.youtube.com/watch?v=TCERYbgvbq0 "SQLx is my favorite PostgreSQL driver to use with
+    Rust."
 
-[^2]: https://www.youtube.com/watch?v=VuVOyUbFSI0 "Rust to Postgres Database with SQLX - Rust Lang Tutorial 2021 - Jeremy Chone"
+[^2]: https://www.youtube.com/watch?v=VuVOyUbFSI0 "Rust to Postgres Database with SQLX - Rust Lang
+    Tutorial 2021 - Jeremy Chone"

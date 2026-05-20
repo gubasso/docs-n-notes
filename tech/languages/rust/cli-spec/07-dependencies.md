@@ -1,8 +1,19 @@
 # 07 — Dependencies (Rust)
 
-> Prerequisite: the canonical principles each crate implements live in [`cli-design/`](../../../programming/cli-design/) — specifically [`01-logging-and-output`](../../../programming/cli-design/01-logging-and-output.md) (`tracing`, `tracing-subscriber`, `tracing-appender`), [`02-error-messages`](../../../programming/cli-design/02-error-messages.md) (`thiserror`, `anyhow`), [`03-config-precedence`](../../../programming/cli-design/03-config-precedence.md) (`figment`, `directories`), and [`08-testing-strategy`](../../../programming/cli-design/08-testing-strategy.md) (`assert_cmd`, `insta`, `tempfile`, `nextest`). This chapter is the curated default crate list with one-line justifications.
+> Prerequisite: the canonical principles each crate implements live in
+> [`cli-design/`](../../../programming/cli-design/) — specifically
+> [`01-logging-and-output`](../../../programming/cli-design/01-logging-and-output.md) (`tracing`,
+> `tracing-subscriber`, `tracing-appender`),
+> [`02-error-messages`](../../../programming/cli-design/02-error-messages.md) (`thiserror`,
+> `anyhow`), [`03-config-precedence`](../../../programming/cli-design/03-config-precedence.md)
+> (`figment`, `directories`), and
+> [`08-testing-strategy`](../../../programming/cli-design/08-testing-strategy.md) (`assert_cmd`,
+> `insta`, `tempfile`, `nextest`). This chapter is the curated default crate list with one-line
+> justifications.
 
-Opinionated default dependency list. Each entry has a one-line justification and a "skip if" condition. Pick deliberately; resist the urge to add "useful-looking" crates without a concrete need.
+Opinionated default dependency list. Each entry has a one-line justification and a "skip if"
+condition. Pick deliberately; resist the urge to add "useful-looking" crates without a concrete
+need.
 
 ## Runtime defaults
 
@@ -118,21 +129,25 @@ codegen-units = 1
 strip         = "symbols"
 ```
 
-Trim aggressively for very small CLIs (drop `tokio`, `figment`, `directories` if you don't need them). Add to taste from the conditional list above.
+Trim aggressively for very small CLIs (drop `tokio`, `figment`, `directories` if you don't need
+them). Add to taste from the conditional list above.
 
 ## Pinning policy
 
 - Pin to **major versions** in `Cargo.toml` (`"4"`, `"0.3"`). Let `Cargo.lock` pin exact versions.
 - Commit `Cargo.lock` for binaries. Don't for libraries.
 - Run `cargo update` deliberately, not as a default `just` task. Read the changelog.
-- Use `cargo deny` (configured in `deny.toml`) to enforce a license allowlist and ban yanked or vulnerable versions.
+- Use `cargo deny` (configured in `deny.toml`) to enforce a license allowlist and ban yanked or
+  vulnerable versions.
 
 ## Justification: figment over config-rs
 
 Both work. Pick figment because:
 
-- It tracks per-key source provenance. Errors say *"`timeout` in `./app.toml` (line 12) was negative"* instead of *"invalid config"*.
-- Its provider model maps cleanly onto our layered precedence (defaults → user → project → env → CLI).
+- It tracks per-key source provenance. Errors say _"`timeout` in `./app.toml` (line 12) was
+  negative"_ instead of _"invalid config"_.
+- Its provider model maps cleanly onto our layered precedence (defaults → user → project → env →
+  CLI).
 - `config-rs` requires more glue for the same outcome and has noisier errors.
 
 If you're committed to `serde_path_to_error` and don't need source tracking, `config-rs` is fine.

@@ -9,7 +9,7 @@
 | local      | `master`      | Always identical to `upstream/master` |
 | local      | `new-feature` | Your work, rebased on top of `master` |
 
-______________________________________________________________________
+---
 
 ## Cheatsheet
 
@@ -52,7 +52,7 @@ git config --get pull.ff          # current pull strategy
 git branch -vv                    # branches + tracking info + ahead/behind
 ```
 
-______________________________________________________________________
+---
 
 ## How It Works
 
@@ -69,8 +69,9 @@ new-feature:           └─f1─f2   (based on C)
 
 ### Step A — Sync master (fast-forward only)
 
-`git merge --ff-only upstream/master` slides the `master` pointer forward.
-If local `master` has diverged (has commits not in upstream), the command **fails** — this protects the rule that `master` stays identical to upstream.
+`git merge --ff-only upstream/master` slides the `master` pointer forward. If local `master` has
+diverged (has commits not in upstream), the command **fails** — this protects the rule that `master`
+stays identical to upstream.
 
 ```
 upstream/master:   A─B─C─D─E
@@ -81,7 +82,8 @@ new-feature:           └─f1─f2   (still on old C)
 
 ### Step B — Rebase feature onto master
 
-`git rebase master` replays `f1` and `f2` on top of `E`, producing new commits `f1'` and `f2'` (same diffs, new SHAs).
+`git rebase master` replays `f1` and `f2` on top of `E`, producing new commits `f1'` and `f2'` (same
+diffs, new SHAs).
 
 ```
 upstream/master:   A─B─C─D─E
@@ -102,7 +104,9 @@ Common actions in the editor: `pick`, `squash` / `s`, `fixup` / `f`, `reword` / 
 
 ### Step D — Push the rebased branch
 
-Since the commit history was rewritten (new SHAs), a regular push is rejected if the branch was already pushed. `--force-with-lease` overwrites the remote **only if** nobody else pushed to it in the meantime — safer than `--force`.
+Since the commit history was rewritten (new SHAs), a regular push is rejected if the branch was
+already pushed. `--force-with-lease` overwrites the remote **only if** nobody else pushed to it in
+the meantime — safer than `--force`.
 
 ```
 origin/new-feature:           └─f1'─f2'
@@ -117,7 +121,7 @@ A─B─C─D─E─f1'─f2'
 
 No merge commits. Clean `git log`.
 
-______________________________________________________________________
+---
 
 ## Handling Conflicts During Rebase
 
@@ -131,7 +135,7 @@ git rebase --continue
 git rebase --abort
 ```
 
-______________________________________________________________________
+---
 
 ## Recovery
 
@@ -152,19 +156,21 @@ git switch master
 git reset --hard upstream/master  # restore master to upstream state exactly
 ```
 
-______________________________________________________________________
+---
 
 ## Stacked Feature Branches
 
-If `feature-b` is based on `feature-a` (not on `master`), and you rebase `feature-a`, use `--onto` to re-root `feature-b`:
+If `feature-b` is based on `feature-a` (not on `master`), and you rebase `feature-a`, use `--onto`
+to re-root `feature-b`:
 
 ```bash
 git rebase --onto master old-feature-a-tip feature-b
 ```
 
-Where `old-feature-a-tip` is the SHA of the last commit of `feature-a` *before* it was rebased. Without `--onto`, `feature-b` will still point to the old `feature-a` commits.
+Where `old-feature-a-tip` is the SHA of the last commit of `feature-a` _before_ it was rebased.
+Without `--onto`, `feature-b` will still point to the old `feature-a` commits.
 
-______________________________________________________________________
+---
 
 ## `merge --ff-only` vs `rebase` on master
 
@@ -173,5 +179,5 @@ ______________________________________________________________________
 | master is behind upstream (no local commits) | Fast-forwards. Same result.   | Fast-forwards. Same result.               |
 | master has diverged (local commits exist)    | **Refuses.** Nothing changes. | Replays local commits on top of upstream. |
 
-Always use `--ff-only` on master — you never want local commits there.
-Use `rebase` on feature branches to keep history linear.
+Always use `--ff-only` on master — you never want local commits there. Use `rebase` on feature
+branches to keep history linear.

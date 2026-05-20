@@ -11,7 +11,8 @@
 
 - **Domain Names:** `brag.gubasso.xyz`
 - **Scheme:** `http` (connection inside the host)
-- **Forward Hostname / IP:** `brag-server` (service name from the `compose.yaml` at the same network)
+- **Forward Hostname / IP:** `brag-server` (service name from the `compose.yaml` at the same
+  network)
 - **Forward Port:** `3000` (e.g. API_PORT)
 - Check:
   - `Block common exploits`

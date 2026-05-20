@@ -32,9 +32,11 @@
   - creates a video
   - voiceover
 
-[^1]: https://www.youtube.com/watch?v=PCaP9IJkGSY "How To Edit Videos Using AI | 5 Best AI Video Editing Tools: Dan Kieft"
+[^1]: https://www.youtube.com/watch?v=PCaP9IJkGSY "How To Edit Videos Using AI | 5 Best AI Video
+    Editing Tools: Dan Kieft"
 
-[^2]: https://www.submagic.co/?via=daan86&utm_source=YouTube&utm_medium=Video&utm_campaign=Review "use 'dankieft90' for a discount"
+[^2]: https://www.submagic.co/?via=daan86&utm_source=YouTube&utm_medium=Video&utm_campaign=Review
+    "use 'dankieft90' for a discount"
 
 [^3]: https://www.veed.io/pricing?utm_source=Daan%20Kieft&utm_medium=affiliate&utm_campaign=Daan%20Kieft&irclickid=VAL0rXQ9ixyPUy7TtTxV3UnrUkH1vcxPbS7MR40&utm_content=Online%20Tracking%20Link&irgwc=1
 

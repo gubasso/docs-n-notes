@@ -28,7 +28,9 @@
   - Python-Eve
   - PostgREST
   - https://github.com/roapi/roapi
-    - ROAPI automatically spins up read-only APIs for static datasets without requiring you to write a single line of code. It builds on top of Apache Arrow and Datafusion. The core of its design can be boiled down to the following:
+    - ROAPI automatically spins up read-only APIs for static datasets without requiring you to write
+      a single line of code. It builds on top of Apache Arrow and Datafusion. The core of its design
+      can be boiled down to the following:
 
 - Fake API Data / Mock data:
 
@@ -44,8 +46,7 @@
 
   - kimai https://www.cloudron.io/store/org.kimai.cloudronapp.html
 
-random password in terminal
-https://devdojo.com/alexg/bash-random-password-generator
+random password in terminal https://devdojo.com/alexg/bash-random-password-generator
 
 - vimux repl postgresql
   - https://thegreata.pe/articles/2018/02/11/clojure-vim-and-tmux-using-your-editor-as-a-repl-scratchpad/
@@ -57,8 +58,7 @@ https://devdojo.com/alexg/bash-random-password-generator
 
 ## Unsorted Links (from README)
 
-kindle tips
-https://calibre-ebook.com/
+kindle tips https://calibre-ebook.com/
 
 - office suite like
 

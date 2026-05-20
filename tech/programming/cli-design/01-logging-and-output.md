@@ -1,6 +1,7 @@
 # 01 — Logging & Output
 
-Every CLI emits two distinct streams of information. Conflating them is the root cause of unreadable terminals, broken pipes, and unusable log files. This chapter draws the line.
+Every CLI emits two distinct streams of information. Conflating them is the root cause of unreadable
+terminals, broken pipes, and unusable log files. This chapter draws the line.
 
 ## The two layers
 
@@ -11,20 +12,25 @@ Every CLI emits two distinct streams of information. Conflating them is the root
 
 Why split them:
 
-- **Different consumers**: a user wants `"3 widgets created"`; an LLM debugging a failed run wants `level=info op=widget.create id=abc-123 status=ok ms=12`.
-- **Different reliability**: terminal output can be redirected mid-pipeline; logs must survive even when the user did `2>/dev/null`.
+- **Different consumers**: a user wants `"3 widgets created"`; an LLM debugging a failed run wants
+  `level=info op=widget.create id=abc-123 status=ok ms=12`.
+- **Different reliability**: terminal output can be redirected mid-pipeline; logs must survive even
+  when the user did `2>/dev/null`.
 - **Different retention**: terminal output is ephemeral; logs are forensic evidence after the fact.
-- **Different formats**: tables and colors corrupt logs when grep'd; structured records overwhelm humans on a TTY.
+- **Different formats**: tables and colors corrupt logs when grep'd; structured records overwhelm
+  humans on a TTY.
 
-Rule of thumb: **if a human reads it once, it's user-UX. If a tool or developer reads it later, it's program-logs.**
+Rule of thumb: **if a human reads it once, it's user-UX. If a tool or developer reads it later, it's
+program-logs.**
 
-______________________________________________________________________
+---
 
 ## Layer 1 — User-UX
 
 ### Stream discipline
 
-- `stdout` = **the result**. The data a shell pipe expects. Whatever `--format` produces. Nothing else.
+- `stdout` = **the result**. The data a shell pipe expects. Whatever `--format` produces. Nothing
+  else.
 - `stderr` = **everything else**: prompts, progress bars, status messages, error reports, warnings.
 - Anything mixing the two breaks `<cmd> | jq`, `<cmd> > out.txt`, `<cmd> | xargs`.
 
@@ -38,7 +44,8 @@ app widget list --format json 2>/dev/null | jq '.[] | .id'
 
 ### Output formats
 
-Expose a `--format` flag with at least `text` (default, human-pretty) and `json` (machine-readable). Add `yaml` / `table` / `tsv` as needed.
+Expose a `--format` flag with at least `text` (default, human-pretty) and `json` (machine-readable).
+Add `yaml` / `table` / `tsv` as needed.
 
 | Format           | Use case                                               |
 | ---------------- | ------------------------------------------------------ |
@@ -48,11 +55,14 @@ Expose a `--format` flag with at least `text` (default, human-pretty) and `json`
 | `table`          | Wide tabular output for humans.                        |
 | `tsv` / `csv`    | Spreadsheets, classic Unix pipes.                      |
 
-If the audience is genuinely interactive, `text` is OK to default to. If your CLI is most often piped, default to `json` and use `--format text` as the opt-in.
+If the audience is genuinely interactive, `text` is OK to default to. If your CLI is most often
+piped, default to `json` and use `--format text` as the opt-in.
 
 ### Color
 
-Respect the three established conventions. Precedence: **NO_COLOR > FORCE_COLOR (or CLICOLOR_FORCE) > isatty(stdout) check > CLICOLOR**.
+Respect the three established conventions. Precedence: **NO_COLOR > FORCE_COLOR (or CLICOLOR_FORCE)
+
+> isatty(stdout) check > CLICOLOR**.
 
 | Variable                           | Effect                                  |
 | ---------------------------------- | --------------------------------------- |
@@ -62,9 +72,11 @@ Respect the three established conventions. Precedence: **NO_COLOR > FORCE_COLOR 
 | `CLICOLOR=1` (default)             | Color when output is a TTY.             |
 | `--color {auto,always,never}` flag | Per-invocation override; wins over env. |
 
-Default: `auto` — color when `stdout` is a TTY, off otherwise. Detect via `isatty(1)`. Never emit ANSI escapes into a log file or a non-TTY stream by accident.
+Default: `auto` — color when `stdout` is a TTY, off otherwise. Detect via `isatty(1)`. Never emit
+ANSI escapes into a log file or a non-TTY stream by accident.
 
-References: [NO_COLOR.org](https://no-color.org/), [force-color.org](https://force-color.org/), [Indicating CLI color preference (gist)](https://gist.github.com/scop/4d5902b98f0503abec3fcbb00b38aec3).
+References: [NO_COLOR.org](https://no-color.org/), [force-color.org](https://force-color.org/),
+[Indicating CLI color preference (gist)](https://gist.github.com/scop/4d5902b98f0503abec3fcbb00b38aec3).
 
 ### Tables, progress, prompts
 
@@ -77,30 +89,38 @@ Pick one library per concern; use it consistently.
 | Prompts             | `inquire`, `dialoguer`   | `questionary`, `rich.prompt` | `read`            |
 | Colors              | `anstream`, `owo-colors` | `rich`, `colorama`           | `tput`, raw ANSI  |
 
-Progress and prompts go to `stderr`, never `stdout`. Progress should auto-hide if `stderr` is not a TTY.
+Progress and prompts go to `stderr`, never `stdout`. Progress should auto-hide if `stderr` is not a
+TTY.
 
 ### Non-interactive mode
 
 Always provide a non-interactive escape hatch for every prompt:
 
 - `--yes` / `-y` — auto-confirm all yes/no prompts.
-- `--non-interactive` — fail loudly instead of prompting; pairs with explicit flags for required inputs.
-- Detect `stdin` is not a TTY → switch to non-interactive automatically and fail rather than silently hang.
+- `--non-interactive` — fail loudly instead of prompting; pairs with explicit flags for required
+  inputs.
+- Detect `stdin` is not a TTY → switch to non-interactive automatically and fail rather than
+  silently hang.
 
 ### Anti-patterns
 
-- `println!`/`echo` scattered across the codebase. Centralize in one `ui/` module (or `ui` library boundary). It's grep-able and it's a CI lint.
+- `println!`/`echo` scattered across the codebase. Centralize in one `ui/` module (or `ui` library
+  boundary). It's grep-able and it's a CI lint.
 - Mixing log records (`[INFO 12:34:56]`) into stdout. Use the program-logs layer for that.
-- Multi-line errors with stack traces dumped on stdout. Stack traces → program-logs (verbose mode), short message → stderr.
+- Multi-line errors with stack traces dumped on stdout. Stack traces → program-logs (verbose mode),
+  short message → stderr.
 - ANSI escapes in piped output. Detect TTY; respect `NO_COLOR`.
-- Color-by-default in CI. CI rarely sets `NO_COLOR`; sniff `CI=true` or `GITHUB_ACTIONS=true` and default to no color (or to FORCE_COLOR if the CI renders ANSI, e.g. GitHub Actions does).
-- Asking interactive confirmation in a script that piped stdin from `/dev/null`. Detect and fail with a clear message.
+- Color-by-default in CI. CI rarely sets `NO_COLOR`; sniff `CI=true` or `GITHUB_ACTIONS=true` and
+  default to no color (or to FORCE_COLOR if the CI renders ANSI, e.g. GitHub Actions does).
+- Asking interactive confirmation in a script that piped stdin from `/dev/null`. Detect and fail
+  with a clear message.
 
-______________________________________________________________________
+---
 
 ## Layer 2 — Program-logs
 
-This is the new contract: every CLI writes a forensic log to a file by default, in a format that LLMs and humans can both read. The terminal is no longer the primary log destination — the file is.
+This is the new contract: every CLI writes a forensic log to a file by default, in a format that
+LLMs and humans can both read. The terminal is no longer the primary log destination — the file is.
 
 ### Default destination
 
@@ -108,9 +128,13 @@ This is the new contract: every CLI writes a forensic log to a file by default, 
 $XDG_STATE_HOME/<app>/<app>.log
 ```
 
-with `$XDG_STATE_HOME` defaulting to `~/.local/state` per the [XDG Base Directory Specification](https://specifications.freedesktop.org/basedir/latest/index.html). State home (not data home, not cache home) is the right XDG dir for logs: "actions history (logs, history, recently used files)".
+with `$XDG_STATE_HOME` defaulting to `~/.local/state` per the
+[XDG Base Directory Specification](https://specifications.freedesktop.org/basedir/latest/index.html).
+State home (not data home, not cache home) is the right XDG dir for logs: "actions history (logs,
+history, recently used files)".
 
-Rotation: size-based, e.g. 10 MB × 5 files (`<app>.log`, `<app>.log.1`, … `<app>.log.4`). Pick reasonable defaults; let users override via config.
+Rotation: size-based, e.g. 10 MB × 5 files (`<app>.log`, `<app>.log.1`, … `<app>.log.4`). Pick
+reasonable defaults; let users override via config.
 
 The destination is configurable in precedence order (low → high):
 
@@ -128,10 +152,13 @@ By default: **the log file is the only destination**. The terminal stays clean f
 Mirror to `stderr` when:
 
 - `--log-stderr` flag is passed (explicit user opt-in).
-- `--verbose` / `-v` / `-vv` / `-vvv` is passed *and* the policy is "verbose implies terminal logs". Document this.
+- `--verbose` / `-v` / `-vv` / `-vvv` is passed _and_ the policy is "verbose implies terminal logs".
+  Document this.
 - `<APP>_LOG_STDERR=1` is set.
 
-If both file and stderr are active, **emit identical records to both**. Different formats per destination is a debugging trap — when a user pastes their terminal output into a bug report, you want it to match what's on disk.
+If both file and stderr are active, **emit identical records to both**. Different formats per
+destination is a debugging trap — when a user pastes their terminal output into a bug report, you
+want it to match what's on disk.
 
 ### Verbosity flags
 
@@ -146,9 +173,12 @@ Standard convention:
 | `--quiet` / `-q` | `error` only      | Suppress warnings.                              |
 | `--silent`       | nothing           | Logs still go to file; just no terminal mirror. |
 
-Env var override (per language convention, e.g. `RUST_LOG`, `PYTHONLOGLEVEL`). The env var should accept directive syntax (e.g. `RUST_LOG=app=debug,hyper=warn`) so users can scope verbosity to a module.
+Env var override (per language convention, e.g. `RUST_LOG`, `PYTHONLOGLEVEL`). The env var should
+accept directive syntax (e.g. `RUST_LOG=app=debug,hyper=warn`) so users can scope verbosity to a
+module.
 
-**Do not invent app-specific log env vars** when an ecosystem convention exists. Users have muscle memory for `RUST_LOG`. Reuse it.
+**Do not invent app-specific log env vars** when an ecosystem convention exists. Users have muscle
+memory for `RUST_LOG`. Reuse it.
 
 ### Record format
 
@@ -179,7 +209,8 @@ ts=2026-05-18T10:23:45.123Z level=info target=app::widget op=create id=abc-123 s
 
 ### Optional / operation-specific fields
 
-Use **short, stable field names**. Document the schema in your README. LLMs benefit from convention more than from verbosity.
+Use **short, stable field names**. Document the schema in your README. LLMs benefit from convention
+more than from verbosity.
 
 | Field                  | Use                                                                                                    |
 | ---------------------- | ------------------------------------------------------------------------------------------------------ |
@@ -192,20 +223,31 @@ Use **short, stable field names**. Document the schema in your README. LLMs bene
 | `span`                 | Span/trace ID when spans are in use.                                                                   |
 | `parent`               | Parent span ID.                                                                                        |
 
-Quote any value containing spaces or `=`. Escape with the format's standard rules (logfmt for key=value, JSON for the other).
+Quote any value containing spaces or `=`. Escape with the format's standard rules (logfmt for
+key=value, JSON for the other).
 
 ### LLM-token-friendly principles
 
-Inspired by the practices emerging around AI agents debugging from logs ([Observability for AI Agents](https://mightybot.ai/blog/observability-for-ai-agents/), [Logging vs LLM Observability in 2026](https://futureagi.com/blog/logging-vs-llm-observability-2026)):
+Inspired by the practices emerging around AI agents debugging from logs
+([Observability for AI Agents](https://mightybot.ai/blog/observability-for-ai-agents/),
+[Logging vs LLM Observability in 2026](https://futureagi.com/blog/logging-vs-llm-observability-2026)):
 
 1. **One record = one line.** Multi-line records cost tokens and break grep.
-1. **Short, stable field names.** `dur_ms` beats `duration_milliseconds`. Don't rename fields between versions — LLMs and tools memorize them.
-1. **Stable schema, optional fields.** A record can omit fields it doesn't need, but the names it does emit must match the documented schema.
-1. **Don't repeat headers.** No banner lines, no per-command "===" separators. The timestamp on each record is enough.
-1. **Span entry/exit collapsed.** If you use tracing spans, emit one record per span at *exit* (with `dur_ms`), not separate `enter` + `exit` records. Halves the token count.
-1. **Errors as fields, not prose.** `err.kind=ConfigNotFound err.path=/etc/app.toml` beats `"Could not load config from /etc/app.toml because the file did not exist"`. The structured form takes fewer tokens and is grep-able.
+1. **Short, stable field names.** `dur_ms` beats `duration_milliseconds`. Don't rename fields
+   between versions — LLMs and tools memorize them.
+1. **Stable schema, optional fields.** A record can omit fields it doesn't need, but the names it
+   does emit must match the documented schema.
+1. **Don't repeat headers.** No banner lines, no per-command "===" separators. The timestamp on each
+   record is enough.
+1. **Span entry/exit collapsed.** If you use tracing spans, emit one record per span at _exit_ (with
+   `dur_ms`), not separate `enter` + `exit` records. Halves the token count.
+1. **Errors as fields, not prose.** `err.kind=ConfigNotFound err.path=/etc/app.toml` beats
+   `"Could not load config from /etc/app.toml because the file did not exist"`. The structured form
+   takes fewer tokens and is grep-able.
 1. **No ANSI escapes in the file.** Ever. They double the byte count and confuse parsers.
-1. **No multi-line stack traces in the default format.** When trace output is required, gate it behind `-vvv` and a separate `err.trace` field whose value is a single escaped line (or a pointer to a file).
+1. **No multi-line stack traces in the default format.** When trace output is required, gate it
+   behind `-vvv` and a separate `err.trace` field whose value is a single escaped line (or a pointer
+   to a file).
 
 ### Channels matrix
 
@@ -225,37 +267,52 @@ What goes where, by event class:
 ### Anti-patterns
 
 - **Default-verbose**: forces every user to add `--quiet`. Start at `warn`.
-- **App-specific env var when a convention exists** (`MYAPP_LOG` instead of `RUST_LOG`). Reuse the ecosystem's.
+- **App-specific env var when a convention exists** (`MYAPP_LOG` instead of `RUST_LOG`). Reuse the
+  ecosystem's.
 - **Different format on stderr vs file**: makes bug reports useless. Same records, both places.
 - **ANSI colors in log files**: makes the file unreadable in `less` and bloats it.
 - **Multi-line records**: breaks grep and bloats token usage for agents.
 - **Log mixed into stdout**: breaks piped consumers.
 - **Per-command log file**: hard to find later. One file per app, rotated.
 - **Logging to a hard-coded `~/.<app>/log`**: violates XDG, surprises users.
-- **Tracing every `if` branch at `info`**: signal-to-noise collapses. Reserve `info` for top-level operations.
+- **Tracing every `if` branch at `info`**: signal-to-noise collapses. Reserve `info` for top-level
+  operations.
 
-______________________________________________________________________
+---
 
 ## Implementation pointers
 
 Language-specific guides live alongside the matching language spec:
 
-- **Rust**: [`tech/languages/rust/cli-spec/04-logging.md`](../../languages/rust/cli-spec/04-logging.md) — `tracing` + `tracing-subscriber` + `tracing-appender` for the file sink. JSON via `tracing-subscriber::fmt::layer().json()`. Color via `anstream` / `owo-colors`.
-- **Python**: [`tech/languages/python/cli-spec/typer-patterns.md`](../../languages/python/cli-spec/typer-patterns.md) — `structlog` or `loguru` for structured records; `rich` for the user-UX layer.
-- **Bash**: [`tech/languages/bash/cli-spec/bash-cli-project-specs.md`](../../languages/bash/cli-spec/bash-cli-project-specs.md) — `tput` for color, `printf` for structured records, `logger` for syslog routing.
+- **Rust**:
+  [`tech/languages/rust/cli-spec/04-logging.md`](../../languages/rust/cli-spec/04-logging.md) —
+  `tracing` + `tracing-subscriber` + `tracing-appender` for the file sink. JSON via
+  `tracing-subscriber::fmt::layer().json()`. Color via `anstream` / `owo-colors`.
+- **Python**:
+  [`tech/languages/python/cli-spec/typer-patterns.md`](../../languages/python/cli-spec/typer-patterns.md)
+  — `structlog` or `loguru` for structured records; `rich` for the user-UX layer.
+- **Bash**:
+  [`tech/languages/bash/cli-spec/bash-cli-project-specs.md`](../../languages/bash/cli-spec/bash-cli-project-specs.md)
+  — `tput` for color, `printf` for structured records, `logger` for syslog routing.
 
 ## See also
 
-- [00 — Architecture](00-architecture.md): where the logging-init helper lives and how it's wired through `AppContext`.
-- [02 — Error Messages](02-error-messages.md): how errors map to log records (`err.kind`, `err.msg`) and to exit codes.
-- [03 — Config Precedence](03-config-precedence.md): how the log destination and level are loaded from CLI/env/file/default.
-- [05 — Designing for LLM Agents](05-designing-for-llm-agents.md): why the program-log schema matters for agent-assisted debugging.
+- [00 — Architecture](00-architecture.md): where the logging-init helper lives and how it's wired
+  through `AppContext`.
+- [02 — Error Messages](02-error-messages.md): how errors map to log records (`err.kind`, `err.msg`)
+  and to exit codes.
+- [03 — Config Precedence](03-config-precedence.md): how the log destination and level are loaded
+  from CLI/env/file/default.
+- [05 — Designing for LLM Agents](05-designing-for-llm-agents.md): why the program-log schema
+  matters for agent-assisted debugging.
 
 ## References
 
 - [XDG Base Directory Specification](https://specifications.freedesktop.org/basedir/latest/index.html)
-- [NO_COLOR](https://no-color.org/) · [FORCE_COLOR](https://force-color.org/) · [Indicating CLI color preference](https://gist.github.com/scop/4d5902b98f0503abec3fcbb00b38aec3)
+- [NO_COLOR](https://no-color.org/) · [FORCE_COLOR](https://force-color.org/) ·
+  [Indicating CLI color preference](https://gist.github.com/scop/4d5902b98f0503abec3fcbb00b38aec3)
 - [logfmt format](https://brandur.org/logfmt) — origin of key=value structured logging
-- [Twelve-Factor App: Logs](https://12factor.net/logs) — for context on stdout-as-log-stream (the CLI default deliberately diverges)
+- [Twelve-Factor App: Logs](https://12factor.net/logs) — for context on stdout-as-log-stream (the
+  CLI default deliberately diverges)
 - [Observability for AI Agents](https://mightybot.ai/blog/observability-for-ai-agents/)
 - [Logging vs LLM Observability in 2026](https://futureagi.com/blog/logging-vs-llm-observability-2026)

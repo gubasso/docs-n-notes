@@ -1,14 +1,17 @@
 # Bash CLI Project — Specs Overview
 
-> Prerequisite: [General CLI principles](../../../programming/cli-design/) for architecture, logging, errors, config, and coding-style rules that apply to every CLI regardless of language.
+> Prerequisite: [General CLI principles](../../../programming/cli-design/) for architecture,
+> logging, errors, config, and coding-style rules that apply to every CLI regardless of language.
 >
-> For the **agent-facing surface** (`--help`, `--json`, output-as-prompt, error shape, `doctor`, exit-code conventions, config precedence, dry-run discipline, skill wrapper, evals), see [Designing for LLM Coding Agents](../../../programming/cli-design/05-designing-for-llm-agents.md). Rules there apply to this stack; they are not duplicated here.
+> For the **agent-facing surface** (`--help`, `--json`, output-as-prompt, error shape, `doctor`,
+> exit-code conventions, config precedence, dry-run discipline, skill wrapper, evals), see
+> [Designing for LLM Coding Agents](../../../programming/cli-design/05-designing-for-llm-agents.md).
+> Rules there apply to this stack; they are not duplicated here.
 
-Bash-specific conventions for building a CLI tool: layout, entry point,
-strict-mode caveats, module organisation, testing, linting, install, and
-distribution.
+Bash-specific conventions for building a CLI tool: layout, entry point, strict-mode caveats, module
+organisation, testing, linting, install, and distribution.
 
-______________________________________________________________________
+---
 
 ## Directory Structure
 
@@ -44,11 +47,10 @@ my-cli/
 └── uninstall.sh
 ```
 
-One public function per file; filename encodes the function name; `lib/`
-holds shared machinery. Same shape as a well-organised interactive-shell
-package, applied to a standalone CLI.
+One public function per file; filename encodes the function name; `lib/` holds shared machinery.
+Same shape as a well-organised interactive-shell package, applied to a standalone CLI.
 
-______________________________________________________________________
+---
 
 ## Entry Point (`bin/my-cli`)
 
@@ -78,12 +80,12 @@ mycli::main "$@"
 ```
 
 - Shim only — no logic in `bin/`.
-- Symlink resolution matters: `stow`, `make install`, and `ln -s` in
-  `~/.local/bin` all break the naive `dirname "${BASH_SOURCE[0]}"` idiom.
-- `inherit_errexit` fixes the silent-`set -e`-disables-in-subshells
-  pitfall; guarded for pre-4.4 bash.
+- Symlink resolution matters: `stow`, `make install`, and `ln -s` in `~/.local/bin` all break the
+  naive `dirname "${BASH_SOURCE[0]}"` idiom.
+- `inherit_errexit` fixes the silent-`set -e`-disables-in-subshells pitfall; guarded for pre-4.4
+  bash.
 
-______________________________________________________________________
+---
 
 ## Strict Mode — Default, Not Gospel
 
@@ -94,28 +96,27 @@ shopt -s inherit_errexit failglob nullglob lastpipe
 
 Treat as the default. Known limits:
 
-- `set -e` is disabled inside command substitutions, `if`/`&&`/`||`
-  chains, and `local var=$(...)` (the `local` masks the inner exit).
-  See [ShellCheck SC2310/SC2311](https://www.shellcheck.net/wiki/SC2310).
-- `set -o pipefail` can turn a benign SIGPIPE (producer killed by a
-  short-circuiting `grep -q`) into a failure.
+- `set -e` is disabled inside command substitutions, `if`/`&&`/`||` chains, and `local var=$(...)`
+  (the `local` masks the inner exit). See
+  [ShellCheck SC2310/SC2311](https://www.shellcheck.net/wiki/SC2310).
+- `set -o pipefail` can turn a benign SIGPIPE (producer killed by a short-circuiting `grep -q`) into
+  a failure.
 - `set -u` overlaps with shellcheck; keep it for defence-in-depth.
-- **Do not set `IFS=$'\n\t'` globally.** It changes global word-splitting
-  semantics and breaks sourced code that assumes default IFS. Quote
-  everything (`"$@"`, `"${arr[@]}"`) and use arrays; that solves the real
-  problem without global side effects.
-  (Critique: [Gondža](https://olivergondza.github.io/2019/10/01/bash-strict-mode.html),
+- **Do not set `IFS=$'\n\t'` globally.** It changes global word-splitting semantics and breaks
+  sourced code that assumes default IFS. Quote everything (`"$@"`, `"${arr[@]}"`) and use arrays;
+  that solves the real problem without global side effects. (Critique:
+  [Gondža](https://olivergondza.github.io/2019/10/01/bash-strict-mode.html),
   [BashFAQ/105](https://mywiki.wooledge.org/BashFAQ/105).)
 
-For load-bearing logic, prefer an explicit `|| return` / `trap '...' ERR`
-over trusting `set -e` implicitly.
+For load-bearing logic, prefer an explicit `|| return` / `trap '...' ERR` over trusting `set -e`
+implicitly.
 
-______________________________________________________________________
+---
 
 ## Module Layout: One Function per File
 
-This is the core organisational pattern. Makes the code easy for humans
-and LLMs to reason about, and keeps startup O(1) via lazy sourcing.
+This is the core organisational pattern. Makes the code easy for humans and LLMs to reason about,
+and keeps startup O(1) via lazy sourcing.
 
 ### Naming
 
@@ -126,16 +127,15 @@ and LLMs to reason about, and keeps startup O(1) via lazy sourcing.
 | `lib/helpers.sh`          | `__log_err`, `__require`, … | shared     |
 | (any file) `__<n>`        | private helper, same file   | private    |
 
-- **One public function per file.** Filename mirrors the function name
-  so the dispatcher can derive it without a lookup table.
+- **One public function per file.** Filename mirrors the function name so the dispatcher can derive
+  it without a lookup table.
 - `__`-prefix marks private helpers (sourced alongside, not exported).
-- Every `.sh` under `lib/` starts with `# shellcheck shell=bash` (no
-  shebang — these are sourced, not executed).
+- Every `.sh` under `lib/` starts with `# shellcheck shell=bash` (no shebang — these are sourced,
+  not executed).
 
 ### Self-describing files
 
-Each file documents itself on line 2 with a sentinel the help/man
-generator can harvest:
+Each file documents itself on line 2 with a sentinel the help/man generator can harvest:
 
 ```bash
 # shellcheck shell=bash
@@ -147,8 +147,8 @@ mycli::cmd::dispatch() {
 }
 ```
 
-The `desc:` line is lazy-loaded — costs nothing at startup, parseable by a
-trivial `grep`-driven help generator on demand.
+The `desc:` line is lazy-loaded — costs nothing at startup, parseable by a trivial `grep`-driven
+help generator on demand.
 
 ### Loader (source on dispatch)
 
@@ -168,18 +168,16 @@ mycli::loader::dispatch() {
 }
 ```
 
-Startup stays O(1) regardless of command count — commands load only
-when invoked. This is the same shape as a Bash autoloader: source on
-first use, cache nothing.
+Startup stays O(1) regardless of command count — commands load only when invoked. This is the same
+shape as a Bash autoloader: source on first use, cache nothing.
 
 ### Host / env overlays
 
-`${XDG_CONFIG_HOME:-$HOME/.config}/my-cli/conf.d/*.sh` sourced last so
-users override defaults without forking. Same idea as per-host overlays
-in interactive Bash startup files: drop-in files in a known directory,
-sourced in lexical order after the built-in defaults.
+`${XDG_CONFIG_HOME:-$HOME/.config}/my-cli/conf.d/*.sh` sourced last so users override defaults
+without forking. Same idea as per-host overlays in interactive Bash startup files: drop-in files in
+a known directory, sourced in lexical order after the built-in defaults.
 
-______________________________________________________________________
+---
 
 ## ShellCheck Discipline
 
@@ -194,14 +192,14 @@ shell=bash
 
 Rules:
 
-- Every cross-file `source` gets an explicit `# shellcheck source=<path>`
-  directive (or rely on `source-path=` above). Without it, shellcheck
-  silently skips the file and misses half the real bugs.
-- `# shellcheck disable=SC<n>` must carry a one-line justification
-  comment; unexplained disables fail review.
+- Every cross-file `source` gets an explicit `# shellcheck source=<path>` directive (or rely on
+  `source-path=` above). Without it, shellcheck silently skips the file and misses half the real
+  bugs.
+- `# shellcheck disable=SC<n>` must carry a one-line justification comment; unexplained disables
+  fail review.
 - Reference: [shellcheck directives](https://github.com/koalaman/shellcheck/wiki/Directive).
 
-______________________________________________________________________
+---
 
 ## Errors, Signals, Temp Files
 
@@ -212,25 +210,25 @@ trap 'rm -rf "$tmpdir"; exit 130' INT
 trap 'rm -rf "$tmpdir"; exit 143' TERM
 ```
 
-- Single-quoted trap bodies (variables expand at trap time, not
-  registration time).
+- Single-quoted trap bodies (variables expand at trap time, not registration time).
 - `mktemp -d` always with `|| exit 1`, always paired with an `EXIT` trap.
 - SIGINT exits `130`, SIGTERM `143` (128 + signal number).
 - `printf '%s\n'` over `echo` (portable across bash versions).
-- Logs to stderr, data to stdout. See agent-design doc §2.6 for why this
-  matters for piping.
+- Logs to stderr, data to stdout. See agent-design doc §2.6 for why this matters for piping.
 
-Exit-code conventions (`0`/`1`/`2` + `sysexits.h` ranges + `128+N`) are
-documented in
+Exit-code conventions (`0`/`1`/`2` + `sysexits.h` ranges + `128+N`) are documented in
 [Designing for LLM Coding Agents](../../../programming/cli-design/05-designing-for-llm-agents.md)
-§2.4 and in [General — Error Messages](../../../programming/cli-design/02-error-messages.md) —
-the bash side just has to implement them consistently.
+§2.4 and in [General — Error Messages](../../../programming/cli-design/02-error-messages.md) — the
+bash side just has to implement them consistently.
 
-______________________________________________________________________
+---
 
 ## Testing (bats-core)
 
-> Prerequisite: [General principles — Testing Strategy](../../../programming/cli-design/08-testing-strategy.md) for the pyramid, tier table, isolation rules, and what to mock. This section is the bats-core implementation.
+> Prerequisite:
+> [General principles — Testing Strategy](../../../programming/cli-design/08-testing-strategy.md)
+> for the pyramid, tier table, isolation rules, and what to mock. This section is the bats-core
+> implementation.
 
 Layout:
 
@@ -272,19 +270,18 @@ setup() {
 
 Reference: [bats-core tutorial](https://bats-core.readthedocs.io/en/stable/tutorial.html).
 
-______________________________________________________________________
+---
 
 ## Linting / Formatting
 
-All checks run through **pre-commit** (see root
-\[[CLAUDE]\] § "Linting & Validation" for the repo-wide policy):
+All checks run through **pre-commit** (see root \[[CLAUDE]\] § "Linting & Validation" for the
+repo-wide policy):
 
 - [shellcheck](https://www.shellcheck.net/) — static analysis.
-- [shfmt](https://github.com/mvdan/sh) — formatter. Canonical flags:
-  `shfmt -i 2 -ci -bn -s`.
+- [shfmt](https://github.com/mvdan/sh) — formatter. Canonical flags: `shfmt -i 2 -ci -bn -s`.
 - Do not invoke linters directly; add them to `.pre-commit-config.yaml`.
 
-______________________________________________________________________
+---
 
 ## Install / XDG Paths
 
@@ -302,24 +299,28 @@ ______________________________________________________________________
 
 - Detect root vs user install via `[[ $EUID -eq 0 ]]`.
 - `uninstall.sh` reads a manifest written by `install.sh` at install time.
-- Reference: [XDG Base Directory spec](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html).
+- Reference:
+  [XDG Base Directory spec](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html).
 
 `Makefile` wraps `install` / `uninstall` / `test` / `lint` / `man`.
 
-Config precedence: see [`cli-design/03-config-precedence.md`](../../../programming/cli-design/03-config-precedence.md) for the canonical 5-layer ladder. Secret handling and missing-config error shape: see [`cli-design/05-designing-for-llm-agents.md §2.9`](../../../programming/cli-design/05-designing-for-llm-agents.md#29-config-via-env--file-never-interactive-prompts).
+Config precedence: see
+[`cli-design/03-config-precedence.md`](../../../programming/cli-design/03-config-precedence.md) for
+the canonical 5-layer ladder. Secret handling and missing-config error shape: see
+[`cli-design/05-designing-for-llm-agents.md §2.9`](../../../programming/cli-design/05-designing-for-llm-agents.md#29-config-via-env--file-never-interactive-prompts).
 
-______________________________________________________________________
+---
 
 ## Man Page
 
-Prefer [scdoc](https://git.sr.ht/~sircmpwn/scdoc) over hand-rolled
-`.1` or pandoc — tiny C dep, markdown-ish source, deterministic output:
+Prefer [scdoc](https://git.sr.ht/~sircmpwn/scdoc) over hand-rolled `.1` or pandoc — tiny C dep,
+markdown-ish source, deterministic output:
 
 ```text
 man/my-cli.1.scd   →   man/my-cli.1   (built by Makefile)
 ```
 
-______________________________________________________________________
+---
 
 ## Distribution
 
@@ -334,7 +335,7 @@ ______________________________________________________________________
 
 Avoid `shc` (obfuscating C-wrapper, not a bundler — wrong tool).
 
-______________________________________________________________________
+---
 
 ## CI
 
@@ -354,7 +355,7 @@ jobs:
       - run: bats test/
 ```
 
-______________________________________________________________________
+---
 
 ## Non-Negotiables
 

@@ -66,7 +66,7 @@ git commit data/data.xml.dvc -m "Dataset updates"
 dvc push
 ```
 
-______________________________________________________________________
+---
 
 Change file name: https://dvc.org/doc/command-reference/move#example-change-the-file-name
 
@@ -88,7 +88,7 @@ tree
 └── other.csv.dvc
 ```
 
-______________________________________________________________________
+---
 
 [Example: Change a file location](https://dvc.org/doc/command-reference/move#example-change-a-file-location)
 
@@ -123,7 +123,7 @@ tree
         └── foo.dvc
 ```
 
-______________________________________________________________________
+---
 
 [Example: Move a directory](https://dvc.org/doc/command-reference/move#example-move-a-directory)
 
@@ -150,7 +150,7 @@ tree
     └── data3.dvc
 ```
 
-______________________________________________________________________
+---
 
 If wants to access a different version of data, in a differente git branch or commit:
 
@@ -159,7 +159,7 @@ git checkout <...>
 dvc checkout
 ```
 
-______________________________________________________________________
+---
 
 [How to Update Tracked Data](https://dvc.org/doc/user-guide/how-to/update-tracked-data)
 
@@ -234,9 +234,10 @@ Suppose there is a separate repo just for a dataset (data-registry repo):
                +----------------------+
 ```
 
-- A good way to organize DVC repositories into data registries is to use directories to group similar data, e.g. `images/`, `natural-language/`, etc.
+- A good way to organize DVC repositories into data registries is to use directories to group
+  similar data, e.g. `images/`, `natural-language/`, etc.
 
-______________________________________________________________________
+---
 
 Find a file or directory
 
@@ -247,7 +248,7 @@ data.xml
 data.xml.dvc
 ```
 
-______________________________________________________________________
+---
 
 Download (simple)
 
@@ -256,7 +257,7 @@ dvc get https://github.com/iterative/dataset-registry \
           use-cases/cats-dogs
 ```
 
-______________________________________________________________________
+---
 
 Download and add to your repo (Import file or directory)
 
@@ -266,7 +267,8 @@ dvc import https://github.com/iterative/dataset-registry \
 ```
 
 - similar to: `dvc get` + `dvc add`
-- difference: `.dvc` files includes metadata to track changes in the source repository. This allows you to bring in changes from the data source later using `dvc update`.
+- difference: `.dvc` files includes metadata to track changes in the source repository. This allows
+  you to bring in changes from the data source later using `dvc update`.
 
 ### Remove / Stop tracking files
 
@@ -309,7 +311,8 @@ project's cache                  ++ | dvc pull |
 ```
 
 - `dvc pull` = `dvc fetch` + `dvc checkout`
-- `dvc fetch`: downloads all files and directories to `.dvc/cache` only (don't link files to workspace)
+- `dvc fetch`: downloads all files and directories to `.dvc/cache` only (don't link files to
+  workspace)
 - `dvc checkout`: sync `.dvc/cache` to workspace data files (e.g. `myproject/data`)
 
 ## References

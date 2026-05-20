@@ -34,7 +34,8 @@ Basic Usage of aria2
 
 - **Downloading with Multiple Connections (Segmented Downloading):**
 
-  aria2 supports segmented downloading by default. You can also specify options to fine-tune the performance. For example:
+  aria2 supports segmented downloading by default. You can also specify options to fine-tune the
+  performance. For example:
 
   ```bash
   aria2c -x 16 -s 16 -k 1M http://example.com/path/to/file.iso
@@ -46,10 +47,12 @@ Basic Usage of aria2
 
 - **Downloading Using a Metalink File:**
 
-  If you have a Metalink file (with an extension like `.meta4` or `.metalink`), aria2 can process it automatically. For example:
+  If you have a Metalink file (with an extension like `.meta4` or `.metalink`), aria2 can process it
+  automatically. For example:
 
   ```bash
   aria2c https://download.opensuse.org/tumbleweed/iso/openSUSE-Tumbleweed-DVD-x86_64-Current.iso.meta4
   ```
 
-  In this case, aria2 reads the Metalink file to retrieve multiple download sources (mirrors), verify file integrity using checksums, and even resume downloads if necessary.
+  In this case, aria2 reads the Metalink file to retrieve multiple download sources (mirrors),
+  verify file integrity using checksums, and even resume downloads if necessary.

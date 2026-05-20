@@ -9,7 +9,7 @@
 | `svh` | **Small** Viewport Height   | ✅ Landing pages, avoids layout shifts     |
 | `lvh` | **Large** Viewport Height   | ❌ Like `vh`, ignores mobile UI changes    |
 
-______________________________________________________________________
+---
 
 ### 🔁 Fallback Strategy (for older browsers)
 
@@ -18,11 +18,11 @@ height: 100vh;
 height: 100dvh; /* Overrides if supported */
 ```
 
-______________________________________________________________________
+---
 
 ### ⚠️ Notes
 
 - `dvh` adapts to UI bars (good, but may cause small layout shifts).
 - `svh` avoids shifts but always assumes UI bars are present.
 - `lvh` ignores UI bars entirely (similar to old `vh`).
-- **Keyboard overlays are *not* considered** by any of these units.
+- **Keyboard overlays are _not_ considered** by any of these units.

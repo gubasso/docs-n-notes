@@ -1,16 +1,19 @@
 ## Gopass
 
-This step-by-step guide is designed to help you get started with **gopass**, a Git-based password manager. You'll find everything from the initial setup to best practices for organization and sharing.
+This step-by-step guide is designed to help you get started with **gopass**, a Git-based password
+manager. You'll find everything from the initial setup to best practices for organization and
+sharing.
 
-______________________________________________________________________
+---
 
 ## Prerequisites
 
 - Git installed and configured.
 - An SSH key configured for accessing remote repositories.
-- `gopass` installed (see [official installation guide](https://github.com/gopasspw/gopass#installation)).
+- `gopass` installed (see
+  [official installation guide](https://github.com/gopasspw/gopass#installation)).
 
-______________________________________________________________________
+---
 
 ## 1. Configuring the Editor
 
@@ -43,7 +46,7 @@ au BufNewFile,BufRead /dev/shm/gopass.* setlocal noswapfile nobackup noundofile
 
 - [Nano Setup for Gopass](./nano-setup.md)
 
-______________________________________________________________________
+---
 
 ## 2. Creating or Cloning a Store
 
@@ -61,7 +64,8 @@ gopass init
 gopass init --store my-company
 ```
 
-> ⚠️ **Attention:** After initializing a new or existing store, navigate into its Git repository and run:
+> ⚠️ **Attention:** After initializing a new or existing store, navigate into its Git repository and
+> run:
 >
 > ```bash
 > git config --local --unset core.sshCommand
@@ -79,7 +83,7 @@ gopass clone git@example.com/pass.git
 gopass clone git@example.com/pass-work.git work
 ```
 
-______________________________________________________________________
+---
 
 ## 3. Basic Operations
 
@@ -135,7 +139,7 @@ rm ~/.config/gopass/config
 rm -rf ~/.cache/gopass
 ```
 
-______________________________________________________________________
+---
 
 ## 4. Password Generator
 
@@ -153,9 +157,10 @@ Customize generated passwords with flags:
 gopass generate --length 16 --symbols "!@#$%" example.com/service
 ```
 
-See the [character restrictions documentation](https://github.com/gopasspw/gopass/blob/master/docs/features.md#restricting-the-characters-in-generated-passwords).
+See the
+[character restrictions documentation](https://github.com/gopasspw/gopass/blob/master/docs/features.md#restricting-the-characters-in-generated-passwords).
 
-______________________________________________________________________
+---
 
 ## 5. Organization and Naming Conventions (layout/pattern)
 
@@ -189,7 +194,7 @@ comments: |
   Any additional notes here.
 ```
 
-______________________________________________________________________
+---
 
 ## 6. Importing from Another Password Manager
 
@@ -202,7 +207,7 @@ gopass import csv keepass-export.csv
 
 For more formats, see the [pass-import tool](https://github.com/roddhjav/pass-import#readme).
 
-______________________________________________________________________
+---
 
 ## 7. Additional Resources
 
@@ -212,4 +217,5 @@ ______________________________________________________________________
   - [Batch bootstrapping](https://github.com/gopasspw/gopass/blob/master/docs/setup.md#batch-bootstrapping)
   - [Team usage cheatsheet](https://woile.github.io/gopass-cheat-sheet/)
 
-- **Official documentation**: [https://github.com/gopasspw/gopass](https://github.com/gopasspw/gopass)
+- **Official documentation**:
+  [https://github.com/gopasspw/gopass](https://github.com/gopasspw/gopass)

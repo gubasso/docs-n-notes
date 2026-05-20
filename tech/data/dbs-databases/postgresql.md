@@ -108,8 +108,7 @@ psql --set=outputdir="$outputdir" <conn parameters> -f /path/to/yourscript.sql
 1. `\dt sales.*`: list of tables in sales schema.
 1. `\dt *.*`: get tables from all schemas
 
-**Run postgresql sql script from another script:**
-**import script:**
+**Run postgresql sql script from another script:** **import script:**
 
 ```[^sql12][^sql13]
 \i other_script.sql
@@ -127,11 +126,16 @@ psql ... < filename.sql
 
 **psql command flags:**
 
-- `psql -U USER_NAME_HERE` — The -U flag is used to specify the user role that will execute the script. This option can be omitted if this option’s username is the first parameter. The default username is the system’s current username, if one has not been explicitly specified.
-- `psql -h 127.0.0.1` — The -h flag is for the remote host or domain IP address where the PostgreSQL server is running. Use 127.0.0.1 for a localhost server.
+- `psql -U USER_NAME_HERE` — The -U flag is used to specify the user role that will execute the
+  script. This option can be omitted if this option’s username is the first parameter. The default
+  username is the system’s current username, if one has not been explicitly specified.
+- `psql -h 127.0.0.1` — The -h flag is for the remote host or domain IP address where the PostgreSQL
+  server is running. Use 127.0.0.1 for a localhost server.
 - `psql -d some_database` — The -d option is used for the database name.
-- `psql -a` — The -a or --echo-all flags will print all of the lines in the SQL file that contain any content.
-- `psql -f /some/path/my_script_name.sql` — The -f option will instruct psql to execute the file. This is arguably the most critical of all the options.
+- `psql -a` — The -a or --echo-all flags will print all of the lines in the SQL file that contain
+  any content.
+- `psql -f /some/path/my_script_name.sql` — The -f option will instruct psql to execute the file.
+  This is arguably the most critical of all the options.
 
 [Find the host name and port using PSQL commands](https://stackoverflow.com/questions/5598517/find-the-host-name-and-port-using-psql-commands)
 
@@ -224,7 +228,8 @@ psql ...
 PGPASSWORD=yourpass psql ...
 ```
 
-- `psql -c "CREATE USER admin WITH PASSWORD 'test101';"` : run this command in database to create a user with password
+- `psql -c "CREATE USER admin WITH PASSWORD 'test101';"` : run this command in database to create a
+  user with password
   - to run it as `postgres` user, just add `sudo -u postgres <command>` before the command
 
 ## Install and first config
@@ -240,10 +245,13 @@ sudo systemctl enable postgresql --now
 
 There are usually two default ways to login to PostgreSQL server:[^sql5]
 
-1. By running the "psql" command as a UNIX user (so-called IDENT/PEER authentication), e.g.: `sudo -u postgres psql`. Note that `sudo -u` does NOT unlock the UNIX user.
-1. by TCP/IP connection using PostgreSQL's own managed username/password (so-called TCP authentication) (i.e., NOT the UNIX password).
+1. By running the "psql" command as a UNIX user (so-called IDENT/PEER authentication), e.g.:
+   `sudo -u postgres psql`. Note that `sudo -u` does NOT unlock the UNIX user.
+1. by TCP/IP connection using PostgreSQL's own managed username/password (so-called TCP
+   authentication) (i.e., NOT the UNIX password).
 
-So you never want to set the password for UNIX account "postgres". Leave it locked as it is by default.
+So you never want to set the password for UNIX account "postgres". Leave it locked as it is by
+default.
 
 - secure users passwords[^sql4]
 
@@ -280,7 +288,8 @@ host    all             all             ::1/128                 scram-sha-256
 sudo -u postgres psql -c "ALTER USER postgres WITH ENCRYPTED PASSWORD '${MY_PASS}';"
 ```
 
-- make all users set new passwords, and change the authentication method specifications in pg_hba.conf to scram-sha-256
+- make all users set new passwords, and change the authentication method specifications in
+  pg_hba.conf to scram-sha-256
 
 ```
 CREATE ROLE foo WITH LOGIN PASSWORD 'secret';
@@ -315,7 +324,9 @@ grant web_anon to gubasso;
 
 ## PostgREST
 
-PostgREST is a standalone web server that turns your PostgreSQL database directly into a RESTful API. The structural constraints and permissions in the database determine the API endpoints and operations.[^1]
+PostgREST is a standalone web server that turns your PostgreSQL database directly into a RESTful
+API. The structural constraints and permissions in the database determine the API endpoints and
+operations.[^1]
 
 ```postgrest.conf
 db-uri = "postgres://gubasso@/postgres"

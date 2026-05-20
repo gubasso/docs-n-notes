@@ -16,11 +16,12 @@
 - Reverse Proxy: [Traefik](../../infra/networking/traefik.md)
 - Containers Manager: [Portainer](../../infra/containers/docker-portainer.md)
 - Security:
-  - [CrowdSec](<>)
-  - [Authelia](<>)
+  - [CrowdSec]()
+  - [Authelia]()
 
 # References
 
-[^sec1]: [Open Source & Collaborative Security with CrowdSec and Traefik - CrowdSec & Traefik Tutorial](https://www.youtube.com/watch?v=-GxUP6bNxF0) :techno_tim:
+[^sec1]: [Open Source & Collaborative Security with CrowdSec and Traefik - CrowdSec & Traefik Tutorial](https://www.youtube.com/watch?v=-GxUP6bNxF0)
+    :techno_tim:
 
 [^auth1]: [2 Factor Auth and Single Sign On with Authelia](https://www.youtube.com/watch?v=u6H-Qwf4nZA)

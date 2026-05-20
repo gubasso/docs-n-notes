@@ -30,7 +30,9 @@ useradd -m user_name -s /bin/bash
 
 - `-m/--create-home`
 
-- The above useradd command will also automatically create a group called user_name and makes this the default group for the user archie. Making each user have their own group (with the group name same as the user name) is the preferred way to add users.
+- The above useradd command will also automatically create a group called user_name and makes this
+  the default group for the user archie. Making each user have their own group (with the group name
+  same as the user name) is the preferred way to add users.
 
 - Set a user password
 

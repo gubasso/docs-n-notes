@@ -59,7 +59,7 @@ Creating migrations/20211001154420_<name>.down.sql
 sqlx migrate run #[^2]
 ```
 
-And **reverts** work as well (when creating the *first* migration):[^3]
+And **reverts** work as well (when creating the _first_ migration):[^3]
 
 ```
 $ sqlx migrate revert
@@ -87,4 +87,5 @@ sqlx migrate build-script
 # build.sh will be generated
 ```
 
-[^3]: https://github.com/launchbadge/sqlx/blob/main/sqlx-cli/README.md "SQLx CLI - sqlx-cli/README.md"
+[^3]: https://github.com/launchbadge/sqlx/blob/main/sqlx-cli/README.md "SQLx CLI -
+    sqlx-cli/README.md"

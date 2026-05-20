@@ -15,7 +15,8 @@ Run this in the buffer of the file you care about:
 :copen
 ```
 
-- The `-- %` tells Fugitive to pass *only* the current file (`%`) to `git log`, populating your quickfix list with commits that touched that file .
+- The `-- %` tells Fugitive to pass _only_ the current file (`%`) to `git log`, populating your
+  quickfix list with commits that touched that file .
 
 ### Alternative: `:0Gclog`
 
@@ -30,7 +31,7 @@ If you prefer to load the full history into quickfix without immediately opening
 
 ### Limiting history scope
 
-To fetch only the last *N* commits, supply a range before `-- %`:
+To fetch only the last _N_ commits, supply a range before `-- %`:
 
 ```vim
 :Gclog -10 -- %
@@ -46,7 +47,7 @@ To fetch only the last *N* commits, supply a range before `-- %`:
 
   .
 
-______________________________________________________________________
+---
 
 Fugitive’s `:Glog` (and its newer alias `:Gclog`) is just a thin wrapper around:
 
@@ -54,9 +55,13 @@ Fugitive’s `:Glog` (and its newer alias `:Gclog`) is just a thin wrapper aroun
 git log <file>
 ```
 
-—so by default it’s already scoped to the current file. If you provide your own `--` without `%`, it assumes you want the full repo log, which is why `:Gclog` by itself falls back to the project history .
+—so by default it’s already scoped to the current file. If you provide your own `--` without `%`, it
+assumes you want the full repo log, which is why `:Gclog` by itself falls back to the project
+history .
 
-Tim Pope renamed `:Glog` to `:Gclog` to emphasize that it’s not the “definitive” log interface (making way for a proper `:Git log` command) and to avoid confusion when arguments are dropped . When you explicitly give it `-- %`, it restores the file-only behavior .
+Tim Pope renamed `:Glog` to `:Gclog` to emphasize that it’s not the “definitive” log interface
+(making way for a proper `:Git log` command) and to avoid confusion when arguments are dropped .
+When you explicitly give it `-- %`, it restores the file-only behavior .
 
 ### Quick navigation and diffs
 

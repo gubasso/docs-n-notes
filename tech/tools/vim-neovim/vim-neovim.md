@@ -5,9 +5,11 @@
 ## General
 
 - https://mason-registry.dev/registry/list
-- mason -> mason-lspconfig: https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
+- mason -> mason-lspconfig:
+  https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
 
-python environment: https://www.reddit.com/r/neovim/comments/14316t9/help_me_to_get_the_best_python_neovim_environment/
+python environment:
+https://www.reddit.com/r/neovim/comments/14316t9/help_me_to_get_the_best_python_neovim_environment/
 
 - https://github.com/stevearc/conform.nvim
 
@@ -15,11 +17,10 @@ python environment: https://www.reddit.com/r/neovim/comments/14316t9/help_me_to_
 
 - https://github.com/mfussenegger/nvim-lint
 
-  - An asynchronous linter plugin for Neovim complementary to the built-in Language Server Protocol support.
+  - An asynchronous linter plugin for Neovim complementary to the built-in Language Server Protocol
+    support.
 
-fold / unfold
-https://neovim.io/doc/user/fold.html
-https://neovim.io/doc/user/fold.html
+fold / unfold https://neovim.io/doc/user/fold.html https://neovim.io/doc/user/fold.html
 
 [How to generate a number sequence in file using vi or Vim?](https://stackoverflow.com/questions/9903660/how-to-generate-a-number-sequence-in-file-using-vi-or-vim)
 
@@ -125,7 +126,7 @@ augroup mdfiletypes
 augroup END
 ```
 
-______________________________________________________________________
+---
 
 Vim Snippets: https://github.com/honza/vim-snippets
 
@@ -157,7 +158,8 @@ Vim Snippets: https://github.com/honza/vim-snippets
 
 - To paste the content of a macro saved in `q` reg, for example:
 
-  - `i^R^Rq`: Press “i” to enter insert mode, then press CTRL-R twice, then press “q” to insert the contents of the “q” register. What ought to come out looks like this:
+  - `i^R^Rq`: Press “i” to enter insert mode, then press CTRL-R twice, then press “q” to insert the
+    contents of the “q” register. What ought to come out looks like this:
     - `^[`: literal escape
     - CTRL-R twice: insert that escape character code literally
   - or...
@@ -180,10 +182,11 @@ To perform search-replace in Vim easily, we can take advantage of quickfix and g
 Say I want to substitute "define" with "describe" everywhere:
 
 - :grep "define"
-- :cfdo %s/define/describe/g | update
-  (see more in: https://twitter.com/learnvim/status/1277635983153008641?s=09)
+- :cfdo %s/define/describe/g | update (see more in:
+  https://twitter.com/learnvim/status/1277635983153008641?s=09)
 
-We can reassign Vim's `:grep` with other tool. I am a fan of ripgrep (https://github.com/BurntSushi/ripgrep). In my vimrc, do this:
+We can reassign Vim's `:grep` with other tool. I am a fan of ripgrep
+(https://github.com/BurntSushi/ripgrep). In my vimrc, do this:
 
 set grepprg=rg\\ --vimgrep\\ --smart-case\\ --follow
 
@@ -197,7 +200,8 @@ It uses `rg` instead of `grep`. `:grep` uses quickfix. `:copen` to view results.
 
 ### Command line
 
-When in command line mode, copy the word under the cursor and insert into the command line using <C-r> <C-w>.
+When in command line mode, copy the word under the cursor and insert into the command line using
+<C-r> <C-w>.
 
 ## Git
 
@@ -205,8 +209,7 @@ When in command line mode, copy the word under the cursor and insert into the co
 
 #### 2) git-conflict.nvim
 
-https://github.com/akinsho/git-conflict.nvim
-https://github.com/yorickpeterse/nvim-pqf
+https://github.com/akinsho/git-conflict.nvim https://github.com/yorickpeterse/nvim-pqf
 
 ### Git workflow
 
@@ -252,7 +255,8 @@ Explanation[^3]:
 :%s/.*/mv -i & &/g
 ```
 
-- Replaces every line in the document (say, "line"), and replaces it by "mv -i line line". `.*` is a regex saying "any character, repeated any number of times". & means "what has been found".
+- Replaces every line in the document (say, "line"), and replaces it by "mv -i line line". `.*` is a
+  regex saying "any character, repeated any number of times". & means "what has been found".
 
 ```
 :%s/.JPEG$/.jpg/g
@@ -264,7 +268,8 @@ Explanation[^3]:
 :%!bash
 ```
 
-- sends the rename shell commands (that's why mv is prepended to each file name) to an external shell for execution.
+- sends the rename shell commands (that's why mv is prepended to each file name) to an external
+  shell for execution.
 
 ### Plugins to rename
 
@@ -355,7 +360,8 @@ vim.opt.hidden = true -- " allow [^13] 'E37: No write since last change (add ! t
 
 Built-in Neovim diff-mode
 
-If you just need a quick side-by-side comparison of any two files (tracked or untracked), Neovim’s native diff mode is the simplest:
+If you just need a quick side-by-side comparison of any two files (tracked or untracked), Neovim’s
+native diff mode is the simplest:
 
 1. Open the first file:
 

@@ -44,7 +44,6 @@
 ├── .gitignore
 ├── some_script.sh
 └── some_conf.conf
-
 ```
 
 - `build`: keep persistent (hard) objects[^sql1]

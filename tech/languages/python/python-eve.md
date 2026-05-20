@@ -1,8 +1,9 @@
 # Python-Eve
 
-debug with gunicorn print console: https://stackoverflow.com/questions/27687867/is-there-a-way-to-log-python-print-statements-in-gunicorn
+debug with gunicorn print console:
+https://stackoverflow.com/questions/27687867/is-there-a-way-to-log-python-print-statements-in-gunicorn
 
-______________________________________________________________________
+---
 
 You may use flask’s abort() to interrupt the database operation:
 
@@ -20,7 +21,8 @@ app.on_insert_item += check_update_access
 
 ## steps to setup server
 
-> last section of tutorial: sumup of steps to setup server and run in production, use real script and code
+> last section of tutorial: sumup of steps to setup server and run in production, use real script
+> and code
 
 - python organize files and directories
 
@@ -28,11 +30,9 @@ app.on_insert_item += check_update_access
 
 - install python (use asdf, latest version)
 
-- set poetry
-  [^flask_intro]
+- set poetry [^flask_intro]
 
-- install pdm `eve`
-  [^eve]
+- install pdm `eve` [^eve]
 
 - install `gunicorn`
 
@@ -49,8 +49,7 @@ app.on_insert_item += check_update_access
     - ufw default deny incoming
     - ufw default allow outgoing
     - ufw allow ssh... etc...
-    - ufw enable
-      [^why_mongo]
+    - ufw enable [^why_mongo]
 
 - rate limit: let it to nginx, Cade's TI will handle it
 
@@ -91,12 +90,15 @@ app.on_insert_item += check_update_access
         - Schema definitions and validation \[ch9/11\]: Introduction to data validation [v1/6]
         - Schema definitions and validation \[ch9/11\]: Built-in validation rules [v2/6]
       - Fine-tuning your REST service \[ch10/11\]: Still a Flask app [v11/13]
-      - Schema definitions and validation \[ch9/11\]: Data-relations and embedded resource serialization [v4/6]
-      - !! (focus on only writes... just introduce all the options, as only the get method will be used for cadelab) Full range of CRUD operations [v5/6]
+      - Schema definitions and validation \[ch9/11\]: Data-relations and embedded resource
+        serialization [v4/6]
+      - !! (focus on only writes... just introduce all the options, as only the get method will be
+        used for cadelab) Full range of CRUD operations [v5/6]
       - Recap [v6/6]
         - specific config for each endpoint (data collection)
     - Fine-tuning your REST service \[ch10/11\]: Query options and security [v2/13]
-    - Fine-tuning your REST service \[ch10/11\]: Pagination options and performance optimizations [v3/13]
+    - Fine-tuning your REST service \[ch10/11\]: Pagination options and performance optimizations
+      [v3/13]
     - Fine-tuning your REST service \[ch10/11\]: Client and server projections [v4/13]
     - Fine-tuning your REST service \[ch10/11\]: JSON and XML rendering [v7/13]
     - Fine-tuning your REST service \[ch10/11\]: Event hooks [v9/13]

@@ -3,20 +3,25 @@
 Redis like Cache Layer
 
 - ElastiCache is a fully managed in-memory caching service
-- Improves application performance by allowing you to retrieve data from fast in-memory caches instead of slower disk-based databases
+- Improves application performance by allowing you to retrieve data from fast in-memory caches
+  instead of slower disk-based databases
 - Supports two popular open-source caching engines: Redis and Memcached
-- Handles common caching use cases like database query result caching, session storage, real-time analytics
+- Handles common caching use cases like database query result caching, session storage, real-time
+  analytics
 - Provides high availability through automatic detection and recovery of cache node failures
 - Enables easy scaling by adding or removing cache nodes, with minimal downtime
 - Offers enhanced security with encryption, access control, and VPC support
 - Integrates seamlessly with other AWS services like EC2, Lambda, and databases
 - Use cases: real-time bidding, social networking, gaming leaderboards, media streaming
 
-Here is a detailed explanation of AWS ElastiCache with Redis, including a practical example of setting it up for a real-world use case:
+Here is a detailed explanation of AWS ElastiCache with Redis, including a practical example of
+setting it up for a real-world use case:
 
 ## What is Amazon ElastiCache for Redis?
 
-Amazon ElastiCache for Redis is a fully managed, in-memory caching service that is protocol-compliant with Redis, an open-source key-value store. It provides sub-millisecond latency to power real-time applications[1][7].
+Amazon ElastiCache for Redis is a fully managed, in-memory caching service that is
+protocol-compliant with Redis, an open-source key-value store. It provides sub-millisecond latency
+to power real-time applications[1][7].
 
 Key benefits of ElastiCache for Redis include[1]\[2\]:
 
@@ -38,11 +43,13 @@ ElastiCache for Redis is ideal for real-time use cases such as[3]\[7\]:
 - Geospatial apps
 - Machine learning
 
-By using ElastiCache as a high-speed in-memory layer, it can significantly improve application performance and reduce load on backend databases for read-heavy workloads.
+By using ElastiCache as a high-speed in-memory layer, it can significantly improve application
+performance and reduce load on backend databases for read-heavy workloads.
 
 ## Practical Example: Boosting Database Performance
 
-Let's walk through an example of using ElastiCache for Redis to speed up a MySQL database powering a web application[8].
+Let's walk through an example of using ElastiCache for Redis to speed up a MySQL database powering a
+web application[8].
 
 ### Step 1: Create an ElastiCache Redis Cluster
 
@@ -66,7 +73,9 @@ Let's walk through an example of using ElastiCache for Redis to speed up a MySQL
 
 ### Step 3: Monitor Performance
 
-Use the ElastiCache console and CloudWatch metrics to monitor the cache hit rate, CPU utilization, memory usage, and query latency. Adjust the node type and number of nodes as needed based on your traffic.
+Use the ElastiCache console and CloudWatch metrics to monitor the cache hit rate, CPU utilization,
+memory usage, and query latency. Adjust the node type and number of nodes as needed based on your
+traffic.
 
 By implementing ElastiCache in this read-heavy database scenario, you can:
 
@@ -74,14 +83,15 @@ By implementing ElastiCache in this read-heavy database scenario, you can:
 - Decrease load on the MySQL database by absorbing the read queries
 - Easily scale the cache tier independently to handle higher request volumes
 
-This is just one example, but ElastiCache for Redis is a powerful service for any use case requiring real-time, high-throughput data access. Its compatibility with Redis and fully managed model make it easy to integrate into your stack to deliver low-latency performance at scale.
+This is just one example, but ElastiCache for Redis is a powerful service for any use case requiring
+real-time, high-throughput data access. Its compatibility with Redis and fully managed model make it
+easy to integrate into your stack to deliver low-latency performance at scale.
 
-Citations:
-[1] https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/WhatIs.html
-[2] https://aws.amazon.com/elasticache/features/
-[3] https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/elasticache-use-cases.html
-[4] https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/GettingStarted.html
-[5] https://www.projectpro.io/recipes/introduction-amazon-elasticache-and-use-cases
-[6] https://bluexp.netapp.com/blog/aws-cvo-blg-aws-elasticache-for-redis-how-to-use-the-aws-redis-service
-[7] https://aws.amazon.com/elasticache/redis/
-[8] https://aws.amazon.com/getting-started/hands-on/boosting-mysql-database-performance-with-amazon-elasticache-for-redis/module-one/
+Citations: [1] https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/WhatIs.html [2]
+https://aws.amazon.com/elasticache/features/ [3]
+https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/elasticache-use-cases.html [4]
+https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/GettingStarted.html [5]
+https://www.projectpro.io/recipes/introduction-amazon-elasticache-and-use-cases [6]
+https://bluexp.netapp.com/blog/aws-cvo-blg-aws-elasticache-for-redis-how-to-use-the-aws-redis-service
+[7] https://aws.amazon.com/elasticache/redis/ [8]
+https://aws.amazon.com/getting-started/hands-on/boosting-mysql-database-performance-with-amazon-elasticache-for-redis/module-one/

@@ -2,8 +2,7 @@
 
 ## General
 
-do-release-upgrade
-do-release-upgrade -d
+do-release-upgrade do-release-upgrade -d
 
 Actualiza la distribución de Ubuntu
 

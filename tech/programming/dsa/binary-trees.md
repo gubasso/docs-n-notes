@@ -11,8 +11,10 @@
 
 ## LeetCode Problems
 
-- 1. Maximum Depth of Binary Tree
-- 1. Path Sum
+-
+  1. Maximum Depth of Binary Tree
+-
+  1. Path Sum
 
 ## Depth-first search (DFS)
 

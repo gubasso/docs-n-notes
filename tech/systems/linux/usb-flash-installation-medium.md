@@ -5,11 +5,10 @@
 
 ## Practical rule of thumb
 
-- **Updating an already-working Arch ISO USB** (made via `dd`/`cp`/`cat` to the whole device):
-  ✅ Just re-write the new ISO to the whole device. No `wipefs`, no `parted`, no `mkfs`.
+- **Updating an already-working Arch ISO USB** (made via `dd`/`cp`/`cat` to the whole device): ✅
+  Just re-write the new ISO to the whole device. No `wipefs`, no `parted`, no `mkfs`.
 
-- **Converting the stick back to normal storage**:
-  ✅ `wipefs` + partition + format.
+- **Converting the stick back to normal storage**: ✅ `wipefs` + partition + format.
 
 ### Minimal “update” procedure (Write / `dd`)
 
@@ -38,7 +37,9 @@
 
 ### When you would use `wipefs`/partitioning again
 
-Only if you are **restoring the stick for normal storage use** (e.g., single FAT32 partition), or if the device has ended up with confusing remnants from other tooling and you want a clean “storage drive” layout. For simply updating the Arch installer, skip it.
+Only if you are **restoring the stick for normal storage use** (e.g., single FAT32 partition), or if
+the device has ended up with confusing remnants from other tooling and you want a clean “storage
+drive” layout. For simply updating the Arch installer, skip it.
 
 ### Small verification checks (optional)
 
@@ -49,9 +50,11 @@ lsblk -f
 sudo fdisk -l /dev/disk/by-id/usb-My_flash_drive
 ```
 
-You should see the ISO’s hybrid layout (often multiple partitions / ISO9660-related entries). That is expected.
+You should see the ISO’s hybrid layout (often multiple partitions / ISO9660-related entries). That
+is expected.
 
-If you want, paste the output of `ls -l /dev/disk/by-id/usb-*` and `lsblk -f` (with the USB plugged in) and I’ll point to the exact `by-id` path you should use to avoid hitting the wrong disk.
+If you want, paste the output of `ls -l /dev/disk/by-id/usb-*` and `lsblk -f` (with the USB plugged
+in) and I’ll point to the exact `by-id` path you should use to avoid hitting the wrong disk.
 
 ## Steps from scratch
 
@@ -63,7 +66,8 @@ lsblk
 sudo fdisk -l
 ```
 
-**Note:** To restore the USB drive as an empty, usable storage device after using the Arch ISO image, the ISO 9660 filesystem signature needs to be removed by running:
+**Note:** To restore the USB drive as an empty, usable storage device after using the Arch ISO
+image, the ISO 9660 filesystem signature needs to be removed by running:
 
 ```sh
 sudo wipefs --all /dev/disk/by-id/usb-_My_flash_drive_
@@ -71,7 +75,8 @@ sudo wipefs --all /dev/disk/by-id/usb-_My_flash_drive_
 
 - Has to pop of a message with success
 
-...as root, before [repartitioning](https://wiki.archlinux.org/title/Repartition "Repartition") and [reformatting](https://wiki.archlinux.org/title/Reformat "Reformat") the USB drive.
+...as root, before [repartitioning](https://wiki.archlinux.org/title/Repartition "Repartition") and
+[reformatting](https://wiki.archlinux.org/title/Reformat "Reformat") the USB drive.
 
 Check/Set Partitioning
 
@@ -80,17 +85,23 @@ sudo parted -s /dev/sdX mklabel msdos mkpart primary fat32 0% 100%
 ```
 
 - `-s`: Run in script mode, which suppresses interactive prompts.
-- `mklabel msdos`: Creates a new MBR (DOS) partition table. You can replace `msdos` with `gpt` if you need a GPT partition table.
-- `mkpart primary fat32 0% 100%`: Creates a primary partition starting from 0% to 100% of the disk space and labels it as FAT32. You can replace `fat32` with `ext4`, `ntfs`, etc., depending on the desired file system.
+- `mklabel msdos`: Creates a new MBR (DOS) partition table. You can replace `msdos` with `gpt` if
+  you need a GPT partition table.
+- `mkpart primary fat32 0% 100%`: Creates a primary partition starting from 0% to 100% of the disk
+  space and labels it as FAT32. You can replace `fat32` with `ext4`, `ntfs`, etc., depending on the
+  desired file system.
 
 This single command will:
 
 1. Create a new partition table.
 1. Create a primary partition covering the entire disk.
-1. Label it with the specified file system type.
-   After running this command, you can then format the partition if necessary using a tool like `mkfs` (e.g., `sudo mkfs.vfat /dev/sdX1` for FAT32). However, the `parted` command above is sufficient for creating the partition structure itself.
+1. Label it with the specified file system type. After running this command, you can then format the
+   partition if necessary using a tool like `mkfs` (e.g., `sudo mkfs.vfat /dev/sdX1` for FAT32).
+   However, the `parted` command above is sufficient for creating the partition structure itself.
 
-The parted command you used creates the partition but does not actually format it with a filesystem. To format the partition (which is necessary to make it usable for storing files), you need to run a command like mkfs.
+The parted command you used creates the partition but does not actually format it with a filesystem.
+To format the partition (which is necessary to make it usable for storing files), you need to run a
+command like mkfs.
 
 ```sh
 sudo mkfs.vfat /dev/sdX1
@@ -100,7 +111,8 @@ sudo mkfs.fat -F 32 /dev/disk/by-id/usb-My_flash_drive-partn
 
 Replace `/dev/sdX1` with the appropriate partition name.
 
-This will format the partition you created with `parted` into the specified filesystem. After this step, your USB drive should be ready to use.
+This will format the partition you created with `parted` into the specified filesystem. After this
+step, your USB drive should be ready to use.
 
 To check the partition format:
 
@@ -116,7 +128,9 @@ ls -l /dev/disk/by-id/usb-*
 
 ## Write
 
-(Do **not** append a partition number, so do **not** use something like `/dev/disk/by-id/usb-Kingston_DataTraveler_2.0_408D5C1654FDB471E98BED5C-0:0**-part1**` or `/dev/sdb**1**`):
+(Do **not** append a partition number, so do **not** use something like
+`/dev/disk/by-id/usb-Kingston_DataTraveler_2.0_408D5C1654FDB471E98BED5C-0:0**-part1**` or
+`/dev/sdb**1**`):
 
 - using [cat(1)](https://man.archlinux.org/man/cat.1):
 
@@ -154,13 +168,16 @@ Executing:
 sudo sync
 ```
 
-...with root privileges after the respective command ensures buffers are fully written to the device before you remove it.
+...with root privileges after the respective command ensures buffers are fully written to the device
+before you remove it.
 
-______________________________________________________________________
+---
 
-## When you *do* need wipefs/partitioning again
+## When you _do_ need wipefs/partitioning again
 
-You only need the `wipefs` + `parted` + `mkfs` sequence when your goal is **not** “make it boot Arch”, but **restore the USB to normal storage use** (single FAT32/exFAT/ext4 partition, etc.), or if you intentionally want a custom partition scheme.
+You only need the `wipefs` + `parted` + `mkfs` sequence when your goal is **not** “make it boot
+Arch”, but **restore the USB to normal storage use** (single FAT32/exFAT/ext4 partition, etc.), or
+if you intentionally want a custom partition scheme.
 
 Also, do those steps if you previously did something like:
 

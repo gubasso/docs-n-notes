@@ -9,7 +9,7 @@ wasabi_bucket_name=<my_bucket_name>
 echo "s3:https://$wasabi_service_url/$wasabi_bucket_name"
 ```
 
-______________________________________________________________________
+---
 
 - list bucket files with aws cli:
 

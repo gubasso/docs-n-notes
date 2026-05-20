@@ -19,7 +19,8 @@
 
 - max obs mic volume
 - adjust the system volume so when talk normally, chart at yellow range (mic audio track)
-- audiomixer, advanced audio properties > audio monitoring > monitor and output (hear your own microphone)
+- audiomixer, advanced audio properties > audio monitoring > monitor and output (hear your own
+  microphone)
 - add filters
 
 1. if max system vol + max obs vol is less than yellow range, add "gain" filter
@@ -111,7 +112,8 @@
 
 > https://wiki.archlinux.org/title/Open_Broadcaster_Software#Encoding_using_GStreamer
 
-You can manually install plugin to the ~/.config/obs-studio/plugins/. The folder structure is the following:
+You can manually install plugin to the ~/.config/obs-studio/plugins/. The folder structure is the
+following:
 
 ```
 ~/.config/obs-studio/plugins/plugin_name/bin/64-bit/plugin_name.so

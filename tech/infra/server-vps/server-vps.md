@@ -56,8 +56,7 @@ usermod -aG wheel,sudo,ssh-user super_user
 EDITOR=vim visudo
 ```
 
-or
-**`/etc/sudoers.d/99-local-sudoers`**
+or **`/etc/sudoers.d/99-local-sudoers`**
 
 ```
 user_name   ALL=(ALL:ALL) ALL
@@ -203,7 +202,9 @@ to logout the server
 
 find my server/host ip address: `ifconfig`
 
-"PRO TIP - any time you make changes to authentication settings on a system - ssh, pam, sudoers, and so on - open a second root terminal to that system and leave it open until AFTER you verify your changes worked correctly, so you don't get locked out of your system."
+"PRO TIP - any time you make changes to authentication settings on a system - ssh, pam, sudoers, and
+so on - open a second root terminal to that system and leave it open until AFTER you verify your
+changes worked correctly, so you don't get locked out of your system."
 
 - proxmox: OS for bare metal manage VMs
 

@@ -47,7 +47,8 @@
 - server name = subdomain
 - Computer network naming scheme: https://en.wikipedia.org//wiki/Computer_network_naming_scheme
 - A Proper Server Naming Scheme: https://mnx.io/blog/a-proper-server-naming-scheme/
-- Naming Convention Design (Servers, Computers, IT Assets) https://www.process.st/checklist/naming-convention-design-servers-computers-it-assets/
+- Naming Convention Design (Servers, Computers, IT Assets)
+  https://www.process.st/checklist/naming-convention-design-servers-computers-it-assets/
 
 ### Naming subdomains apps
 
@@ -62,7 +63,8 @@ Server home dir: [^1]
 - `~/apps`
 - `~/appstacks` \*
 
-One subdir for each "app" (one "app" can be a set of containers, within one docker-compose file). E.g.:
+One subdir for each "app" (one "app" can be a set of containers, within one docker-compose file).
+E.g.:
 
 - `~/apps/seafile`
 - `~/apps/radicale`

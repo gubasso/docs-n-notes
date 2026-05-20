@@ -1,6 +1,8 @@
 # 06 — Testing (Rust)
 
-> Prerequisite: [General principles — Testing Strategy](../../../programming/cli-design/08-testing-strategy.md) for the pyramid, isolation rules, and what to mock. This chapter is the Rust implementation.
+> Prerequisite:
+> [General principles — Testing Strategy](../../../programming/cli-design/08-testing-strategy.md)
+> for the pyramid, isolation rules, and what to mock. This chapter is the Rust implementation.
 
 ## Crate stack
 
@@ -46,7 +48,8 @@ mod tests {
 }
 ```
 
-Target: every CLI-args → domain-Request projection, every newtype constructor, every state-machine transition.
+Target: every CLI-args → domain-Request projection, every newtype constructor, every state-machine
+transition.
 
 ## Integration tests — one per subcommand
 
@@ -74,7 +77,8 @@ Rules:
 
 - One file per subcommand. Test names describe behavior, not implementation.
 - Every test gets its own `tempdir`. Never share state.
-- Use `predicates::str::contains` for stdout matching; reserve exact-equality for tiny stable strings.
+- Use `predicates::str::contains` for stdout matching; reserve exact-equality for tiny stable
+  strings.
 
 ## Snapshot tests with `insta`
 
@@ -88,7 +92,8 @@ fn widget_list_renders_table() {
 }
 ```
 
-For stdout snapshots from integration tests, use `insta::assert_snapshot!` with the captured stdout. Snapshots live in `tests/snapshots/`.
+For stdout snapshots from integration tests, use `insta::assert_snapshot!` with the captured stdout.
+Snapshots live in `tests/snapshots/`.
 
 **Review snapshot diffs as carefully as code diffs** — they're behavior.
 
@@ -96,7 +101,8 @@ Use `cargo insta review` interactively to accept/reject snapshot updates.
 
 ## Compile-fail / typestate (optional)
 
-Use `trybuild` only when you have a typestate API (a builder where the type changes per `.with_x()` call) and want to lock down the invalid call sequences. Skip otherwise.
+Use `trybuild` only when you have a typestate API (a builder where the type changes per `.with_x()`
+call) and want to lock down the invalid call sequences. Skip otherwise.
 
 ```rust
 // tests/trybuild.rs
@@ -109,7 +115,8 @@ fn ui() {
 
 ## Test runner
 
-Use `cargo nextest` via `just test`. It parallelizes correctly, fails fast, and produces a flat summary. `cargo test` is fine but slower and noisier.
+Use `cargo nextest` via `just test`. It parallelizes correctly, fails fast, and produces a flat
+summary. `cargo test` is fine but slower and noisier.
 
 ```sh
 cargo install cargo-nextest --locked
@@ -119,11 +126,17 @@ cargo nextest run --profile pre-push       # integration tests (pre-push hook)
 cargo nextest run --profile ci             # CI workflow — retries, quiet output
 ```
 
-**Foot-gun:** non-default profiles in `.config/nextest.toml` are silently inert unless invoked with `--profile <name>`. A CI workflow that just runs `cargo nextest run` ignores its own `[profile.ci]` retry/timeout/output tuning and falls back to `[profile.default]`. This is the Rust instance of the general "explicit-profile" pattern in [cli-design § Tuning test-runner output for CI + AI agents](../../../programming/cli-design/08a-testing-tools.md#tuning-test-runner-output-for-ci--ai-agents).
+**Foot-gun:** non-default profiles in `.config/nextest.toml` are silently inert unless invoked with
+`--profile <name>`. A CI workflow that just runs `cargo nextest run` ignores its own `[profile.ci]`
+retry/timeout/output tuning and falls back to `[profile.default]`. This is the Rust instance of the
+general "explicit-profile" pattern in
+[cli-design § Tuning test-runner output for CI + AI agents](../../../programming/cli-design/08a-testing-tools.md#tuning-test-runner-output-for-ci--ai-agents).
 
 ### nextest profile reference
 
-The four general output axes in the cli-design doc map to these nextest keys (refs: [config reference](https://nexte.st/docs/configuration/reference/), [running tests](https://nexte.st/docs/running/)):
+The four general output axes in the cli-design doc map to these nextest keys (refs:
+[config reference](https://nexte.st/docs/configuration/reference/),
+[running tests](https://nexte.st/docs/running/)):
 
 | General axis                            | nextest key          | Token-efficient value                                             |
 | --------------------------------------- | -------------------- | ----------------------------------------------------------------- |
@@ -166,14 +179,18 @@ success-output = "never"
 failure-output = "immediate-final"
 ```
 
-**Progress bars:** auto-suppress on non-TTY runners (GitHub Actions); set `NEXTEST_HIDE_PROGRESS_BAR=1` in workflow env if a runner emulates a TTY.
+**Progress bars:** auto-suppress on non-TTY runners (GitHub Actions); set
+`NEXTEST_HIDE_PROGRESS_BAR=1` in workflow env if a runner emulates a TTY.
 
 **Machine-readable output, if a downstream parser needs it:**
 
-- `--message-format=libtest-json` / `libtest-json-plus` — CLI flag (not a profile key); compact JSON event stream; the `-plus` variant adds nextest-specific metadata (retries, slowness).
-- `[profile.X.junit] path = "target/nextest-results.xml"` plus `store-failure-output = true` / `store-success-output = false` — JUnit XML, widely parseable.
+- `--message-format=libtest-json` / `libtest-json-plus` — CLI flag (not a profile key); compact JSON
+  event stream; the `-plus` variant adds nextest-specific metadata (retries, slowness).
+- `[profile.X.junit] path = "target/nextest-results.xml"` plus `store-failure-output = true` /
+  `store-success-output = false` — JUnit XML, widely parseable.
 
-Don't add either prophylactically — adopt them only when something downstream actually consumes the format.
+Don't add either prophylactically — adopt them only when something downstream actually consumes the
+format.
 
 ## `tests/support/mod.rs`
 
@@ -208,7 +225,8 @@ impl Fixture {
 }
 ```
 
-`env_clear` plus a curated env is the defense against test pollution. Without it, your local `RUST_LOG=trace` will break CI snapshots.
+`env_clear` plus a curated env is the defense against test pollution. Without it, your local
+`RUST_LOG=trace` will break CI snapshots.
 
 ## Locking down the exit-code matrix
 
@@ -235,8 +253,11 @@ mod tests {
 
 ## Anti-patterns specific to Rust
 
-- Calling `tracing_subscriber::fmt::init()` inside a test — installs a global subscriber and can't be re-installed cleanly across tests. Don't init logging in tests at all; use `tracing_test::traced_test` if you must.
-- Letting `cargo test` run with `--test-threads=1` "to fix" flakiness. The flakiness is from shared state; fix the state.
+- Calling `tracing_subscriber::fmt::init()` inside a test — installs a global subscriber and can't
+  be re-installed cleanly across tests. Don't init logging in tests at all; use
+  `tracing_test::traced_test` if you must.
+- Letting `cargo test` run with `--test-threads=1` "to fix" flakiness. The flakiness is from shared
+  state; fix the state.
 - Hardcoding paths like `/tmp/myapp_test` instead of `tempfile::tempdir`.
 - Using `env::set_var` in a test — leaks across the suite. Set env on `assert_cmd::Command` instead.
 
@@ -248,5 +269,7 @@ mod tests {
 
 ## References
 
-- [`assert_cmd`](https://docs.rs/assert_cmd/) · [`insta`](https://insta.rs/docs/) · [`predicates`](https://docs.rs/predicates/)
-- [`tempfile`](https://docs.rs/tempfile/) · [`trybuild`](https://docs.rs/trybuild/) · [`cargo-nextest`](https://nexte.st/)
+- [`assert_cmd`](https://docs.rs/assert_cmd/) · [`insta`](https://insta.rs/docs/) ·
+  [`predicates`](https://docs.rs/predicates/)
+- [`tempfile`](https://docs.rs/tempfile/) · [`trybuild`](https://docs.rs/trybuild/) ·
+  [`cargo-nextest`](https://nexte.st/)

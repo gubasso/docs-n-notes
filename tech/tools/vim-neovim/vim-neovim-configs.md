@@ -104,16 +104,16 @@ vim.api.nvim_create_autocmd("FileType", {
 **compose configurations multiple places**
 
 ```lua
-  {
-    "folke/which-key.nvim",
-    optional = true,
-    -- compose here
-    opts = {
-      defaults = {
-        ["<leader>t"] = { name = "+test" },
-      },
+{
+  "folke/which-key.nvim",
+  optional = true,
+  -- compose here
+  opts = {
+    defaults = {
+      ["<leader>t"] = { name = "+test" },
     },
   },
+},
 ```
 
 # nvim lua commands
@@ -125,15 +125,15 @@ https://neovim.io/doc/user/lua.html#vim.tbl_extend()
 https://neovim.io/doc/user/lua.html#vim.list_extend()
 
 ```lua
-  {
-    "williamboman/mason.nvim",
-    ft = 'rust',
-    opts = function(_, opts)
-      if type(opts.ensure_installed) == "table" then
-        vim.list_extend(opts.ensure_installed, { "codelldb" })
-      end
-    end,
-  },
+{
+  "williamboman/mason.nvim",
+  ft = 'rust',
+  opts = function(_, opts)
+    if type(opts.ensure_installed) == "table" then
+      vim.list_extend(opts.ensure_installed, { "codelldb" })
+    end
+  end,
+},
 ```
 
 ```lua

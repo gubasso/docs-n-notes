@@ -51,8 +51,13 @@ Retrieve a gpg key from a gpg keyserver
 gpg --keyserver keyserver.ubuntu.com --recv-keys [Key-ID]
 ```
 
-- GPG: [Armored ASCII vs. Binary GPG Files - Linux Journal](https://www.linuxjournal.com/files/linuxjournal.com/linuxjournal/articles/048/4892/4892s2.html)
-  "Armored ASCII (whose filename suffix is .asc) is the most portable data format gpg uses, in contrast to gpg's default binary format (which uses the filename suffix .gpg). Unlike this binary format, Armored ASCII can be copied and pasted, into e-mail for example. If saved to disk, an Armored ASCII file is identical to a normal text file. For this reason you'll probably wish to use Armored ASCII most of the time when exporting, backing up and transmitting keys."
+- GPG:
+  [Armored ASCII vs. Binary GPG Files - Linux Journal](https://www.linuxjournal.com/files/linuxjournal.com/linuxjournal/articles/048/4892/4892s2.html)
+  "Armored ASCII (whose filename suffix is .asc) is the most portable data format gpg uses, in
+  contrast to gpg's default binary format (which uses the filename suffix .gpg). Unlike this binary
+  format, Armored ASCII can be copied and pasted, into e-mail for example. If saved to disk, an
+  Armored ASCII file is identical to a normal text file. For this reason you'll probably wish to use
+  Armored ASCII most of the time when exporting, backing up and transmitting keys."
 
 - How to use symmetric (password) encryption with GPG
 
@@ -102,7 +107,9 @@ Other topics:
 
 ### **Generating a Revocation Certificate**
 
-If your private key becomes known to others, you will need to disassociate the old keys from your identity, so that you can generate new ones. To do this, you will require a revocation certificate. We’ll do this now and store it somewhere safe.
+If your private key becomes known to others, you will need to disassociate the old keys from your
+identity, so that you can generate new ones. To do this, you will require a revocation certificate.
+We’ll do this now and store it somewhere safe.
 
 ### **Backup and restore GPG Keys**
 
@@ -110,8 +117,10 @@ If your private key becomes known to others, you will need to disassociate the o
 
 **export / backup**
 
-- See: [gubasso/dotfiles: backup-gpg script](https://github.com/gubasso/dotfiles/blob/master/bin/.local/bin/backup-gpg)
+- See:
+  [gubasso/dotfiles: backup-gpg script](https://github.com/gubasso/dotfiles/blob/master/bin/.local/bin/backup-gpg)
 
 **import / restore**
 
-- See: [gubasso/dotfiles: import-gpg script](https://github.com/gubasso/dotfiles/blob/master/bin/.local/bin/import-gpg)
+- See:
+  [gubasso/dotfiles: import-gpg script](https://github.com/gubasso/dotfiles/blob/master/bin/.local/bin/import-gpg)

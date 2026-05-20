@@ -56,9 +56,9 @@ from rich.pretty import pprint
 
 **[Python – List Files in a Directory](https://www.geeksforgeeks.org/python-list-files-in-a-directory/)**
 
-______________________________________________________________________
+---
 
-______________________________________________________________________
+---
 
 [Convert Python Tuple to Dictionary](https://appdividend.com/2020/12/22/how-to-convert-python-tuple-to-dictionary/)
 
@@ -77,7 +77,7 @@ Output:
 {'eleven': 11, 'mike': 21, 'dustin': 19, 'caleb': 46}
 ```
 
-______________________________________________________________________
+---
 
 Data validation with Cerberus:
 
@@ -131,14 +131,16 @@ helloworld/
 └── README.md
 ```
 
-______________________________________________________________________
+---
 
-- `__init__.py`: is not required anymore (3.3+), but needed for compatibility issues (as for correct use of `pytest`)[^3][^4]
+- `__init__.py`: is not required anymore (3.3+), but needed for compatibility issues (as for correct
+  use of `pytest`)[^3][^4]
 
 ## Modules / Imports
 
 - About python modules/import[^2][^1]
-  - Absolute / Relative paths to imports: https://realpython.com/absolute-vs-relative-python-imports/
+  - Absolute / Relative paths to imports:
+    https://realpython.com/absolute-vs-relative-python-imports/
 
 [How to load all modules in a folder?](https://stackoverflow.com/questions/1057431/how-to-load-all-modules-in-a-folder)
 

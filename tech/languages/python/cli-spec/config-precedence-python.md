@@ -1,11 +1,16 @@
 # Config Precedence — Python Pattern
 
-> Prerequisite: [General — Config Precedence](../../../programming/cli-design/03-config-precedence.md) for the canonical rule (`defaults < user file < project file < env vars < CLI flags`), XDG paths, and per-key provenance contract. This file is a worked Python implementation of that rule.
+> Prerequisite:
+> [General — Config Precedence](../../../programming/cli-design/03-config-precedence.md) for the
+> canonical rule (`defaults < user file < project file < env vars < CLI flags`), XDG paths, and
+> per-key provenance contract. This file is a worked Python implementation of that rule.
 
 This chapter shows two Python implementations of the canonical 5-layer ladder:
 
-1. A **manual implementation** with `platformdirs`, suitable for small CLIs (≤ ~3 knobs) or when you cannot pull in `pydantic-settings`.
-1. A **`pydantic-settings` implementation** for anything larger, with the mapping back to the canonical ladder spelled out.
+1. A **manual implementation** with `platformdirs`, suitable for small CLIs (≤ ~3 knobs) or when you
+   cannot pull in `pydantic-settings`.
+1. A **`pydantic-settings` implementation** for anything larger, with the mapping back to the
+   canonical ladder spelled out.
 
 Both implementations:
 
@@ -146,12 +151,17 @@ def load_config(
 
 ### Why this shape
 
-- **`lru_cache(maxsize=1)`** — config is immutable per process; recomputing is wasteful and risks divergence across call sites.
+- **`lru_cache(maxsize=1)`** — config is immutable per process; recomputing is wasteful and risks
+  divergence across call sites.
 - **Layers merge top-down, last write wins** — matches the canonical contract one-for-one.
-- **`sources` dict** — fulfills the "name the source" requirement from cli-design/03. Errors say `timeout_secs from project-file:/repo/.myapp/config.toml was negative` instead of `invalid value`.
-- **`MYAPP_CONFIG_FILE`** — separate from the rest of the env layer because it changes *which file* the project layer reads, not the value of a field.
-- **`_coerce`** — boundary parsing only. Env vars are always strings; coerce once at the boundary, never deeper.
-- **Unknown keys silently ignored at the file layer (`if k in resolved`)** — flip this to a hard error if you want strict mode. The canonical chapter explicitly calls out this trade-off.
+- **`sources` dict** — fulfills the "name the source" requirement from cli-design/03. Errors say
+  `timeout_secs from project-file:/repo/.myapp/config.toml was negative` instead of `invalid value`.
+- **`MYAPP_CONFIG_FILE`** — separate from the rest of the env layer because it changes _which file_
+  the project layer reads, not the value of a field.
+- **`_coerce`** — boundary parsing only. Env vars are always strings; coerce once at the boundary,
+  never deeper.
+- **Unknown keys silently ignored at the file layer (`if k in resolved`)** — flip this to a hard
+  error if you want strict mode. The canonical chapter explicitly calls out this trade-off.
 
 ### Sample usage from a Typer command
 
@@ -172,11 +182,14 @@ def run(
     typer.echo(f"timeout_secs = {cfg.timeout_secs}  (from {cfg.sources['timeout_secs']})")
 ```
 
-The Typer layer never sees a half-resolved config. It assembles overrides, hands them to `load_config`, and reads a fully-merged value.
+The Typer layer never sees a half-resolved config. It assembles overrides, hands them to
+`load_config`, and reads a fully-merged value.
 
 ## Pattern 2 — `pydantic-settings` for larger configs
 
-Once you have more than ~3 knobs, switch to [`pydantic-settings`](https://docs.pydantic.dev/latest/concepts/pydantic_settings/). It gives you the ladder + validation + nested-key binding for free.
+Once you have more than ~3 knobs, switch to
+[`pydantic-settings`](https://docs.pydantic.dev/latest/concepts/pydantic_settings/). It gives you
+the ladder + validation + nested-key binding for free.
 
 ```python
 from pathlib import Path
@@ -234,14 +247,18 @@ class Config(BaseSettings):
 | 4. Env vars                  | `env_settings` (uses `env_prefix="MYAPP_"`)                  |
 | 5. CLI flags                 | `init_settings` — pass CLI flag values as `Config(**kwargs)` |
 
-The tuple returned by `settings_customise_sources` is **high-precedence-first**, which is opposite to the canonical "low to high" reading order. Keep that inversion in mind when reviewing the code; the underlying contract is unchanged.
+The tuple returned by `settings_customise_sources` is **high-precedence-first**, which is opposite
+to the canonical "low to high" reading order. Keep that inversion in mind when reviewing the code;
+the underlying contract is unchanged.
 
 ### Provenance with `pydantic-settings`
 
 Out of the box `pydantic-settings` does not expose per-key source provenance. Two options:
 
-- Print the resolved config with `Config().model_dump()` plus a parallel "which source won" map that you compute alongside it (mirror the `sources` dict from Pattern 1).
-- Use `pydantic-settings >= 2.5` `model_dump_with_meta()` (where available) to get source info per field; cross-check the version you depend on before relying on it.
+- Print the resolved config with `Config().model_dump()` plus a parallel "which source won" map that
+  you compute alongside it (mirror the `sources` dict from Pattern 1).
+- Use `pydantic-settings >= 2.5` `model_dump_with_meta()` (where available) to get source info per
+  field; cross-check the version you depend on before relying on it.
 
 ## Diagnostics
 
@@ -257,10 +274,13 @@ def print_config() -> None:
         typer.echo(f"{key:20s} = {value!r}  ({cfg.sources[key]})")
 ```
 
-The output is one line per key with the winning source named in parentheses. This is the human-debuggable form of the provenance dict.
+The output is one line per key with the winning source named in parentheses. This is the
+human-debuggable form of the provenance dict.
 
 ## See also
 
-- [General — Config Precedence](../../../programming/cli-design/03-config-precedence.md) — canonical rule and XDG paths.
-- [General — Logging & Output](../../../programming/cli-design/01-logging-and-output.md) — same provenance discipline applies to log destinations.
+- [General — Config Precedence](../../../programming/cli-design/03-config-precedence.md) — canonical
+  rule and XDG paths.
+- [General — Logging & Output](../../../programming/cli-design/01-logging-and-output.md) — same
+  provenance discipline applies to log destinations.
 - [`typer-patterns.md`](typer-patterns.md) — wiring this into Typer commands.

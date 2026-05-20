@@ -57,11 +57,14 @@ zinit light zsh-users/zsh-autosuggestions
 
 ### Login Shell vs Non-Login Shell in Zsh
 
-Before we dive into whether the files you listed are loaded in a login or non-login shell, let's clarify the difference between the two:
+Before we dive into whether the files you listed are loaded in a login or non-login shell, let's
+clarify the difference between the two:
 
 1. **Login Shell:**
 
-- A **login shell** is the first shell session you start when you log in to a computer. This can be through a terminal, SSH session, or a console login. When you start a new session in these ways, you are initiating a login shell.
+- A **login shell** is the first shell session you start when you log in to a computer. This can be
+  through a terminal, SSH session, or a console login. When you start a new session in these ways,
+  you are initiating a login shell.
 - A login shell reads specific configuration files in a defined order:
   - `/etc/zsh/zshenv`
   - `$ZDOTDIR/.zshenv`
@@ -77,7 +80,8 @@ Before we dive into whether the files you listed are loaded in a login or non-lo
 
 1. **Non-Login Shell:**
 
-- A **non-login shell** is any shell session that is started by another shell (e.g., opening a new terminal tab or window) without logging in again.
+- A **non-login shell** is any shell session that is started by another shell (e.g., opening a new
+  terminal tab or window) without logging in again.
 - A non-login shell typically reads fewer configuration files, such as:
   - `/etc/zsh/zshenv`
   - `$ZDOTDIR/.zshenv`
@@ -85,13 +89,15 @@ Before we dive into whether the files you listed are loaded in a login or non-lo
 
 ### Analyzing the Loaded Files
 
-Now, let’s look at the list of files you provided and determine if they belong to a login shell or a non-login shell.
+Now, let’s look at the list of files you provided and determine if they belong to a login shell or a
+non-login shell.
 
 #### List of Files and Their Order
 
 1. **`/etc/zsh/zshenv`:**
 
-- **Loaded in Both:** Always loaded in both login and non-login shells. This file is read first and is used to set environment variables.
+- **Loaded in Both:** Always loaded in both login and non-login shells. This file is read first and
+  is used to set environment variables.
 
 1. **`$ZDOTDIR/.zshenv`:**
 
@@ -99,27 +105,35 @@ Now, let’s look at the list of files you provided and determine if they belong
 
 1. **`/etc/ambarconfig/env.sh`:**
 
-- **Not Standard, Custom Configuration:** This is not a standard zsh configuration file. If this is sourced within `$ZDOTDIR/.zshenv`, it would still be loaded in both login and non-login shells because it’s being included by a file that’s loaded in both cases.
+- **Not Standard, Custom Configuration:** This is not a standard zsh configuration file. If this is
+  sourced within `$ZDOTDIR/.zshenv`, it would still be loaded in both login and non-login shells
+  because it’s being included by a file that’s loaded in both cases.
 
 1. **`$ZDOTDIR/.zprofile`:**
 
-- **Loaded in Login Shell Only:** Loaded only in login shells. This file is typically used for commands that should run only once, like setting the PATH or other environment variables.
+- **Loaded in Login Shell Only:** Loaded only in login shells. This file is typically used for
+  commands that should run only once, like setting the PATH or other environment variables.
 
 1. **`$HOME/.profile`:**
 
-- **Loaded in Login Shell Only:** This is a traditional shell configuration file typically sourced by `$ZDOTDIR/.zprofile` if it exists and is configured to do so.
+- **Loaded in Login Shell Only:** This is a traditional shell configuration file typically sourced
+  by `$ZDOTDIR/.zprofile` if it exists and is configured to do so.
 
 1. **`$XDG_CONFIG_HOME/shell_alias`:**
 
-- **Custom Configuration:** If this file is sourced within `.profile` or `.zprofile`, it will be loaded in a login shell.
+- **Custom Configuration:** If this file is sourced within `.profile` or `.zprofile`, it will be
+  loaded in a login shell.
 
 1. **`$XDG_CONFIG_HOME/shell_env_vars`:**
 
-- **Custom Configuration:** Similarly, if this file is sourced within `.profile` or `.zprofile`, it will be loaded in a login shell.
+- **Custom Configuration:** Similarly, if this file is sourced within `.profile` or `.zprofile`, it
+  will be loaded in a login shell.
 
 1. **`$ZDOTDIR/.zshrc`:**
 
-- **Loaded in Both:** This file is loaded in both login and non-login shells. It’s used for shell-specific settings, aliases, functions, and other configurations that need to be present in every interactive shell.
+- **Loaded in Both:** This file is loaded in both login and non-login shells. It’s used for
+  shell-specific settings, aliases, functions, and other configurations that need to be present in
+  every interactive shell.
 
 ### Conclusion
 

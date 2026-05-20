@@ -59,8 +59,7 @@ Use cases
     - kprobes: kernel functions
     - uprobes: userspace functions
     - tracepoints
-    - lsm_hooks (LSM: Linux Security Modules)
-      ...
+    - lsm_hooks (LSM: Linux Security Modules) ...
 
 - ebpf map
 

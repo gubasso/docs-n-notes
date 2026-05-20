@@ -37,4 +37,6 @@
 
 - ElastiCache accelerates application performance with in-memory caching
 
-Together, these services form the core of many cloud-based application architectures on AWS, handling the compute, database, and caching layers respectively. They integrate closely to enable building scalable, high-performance applications.
+Together, these services form the core of many cloud-based application architectures on AWS,
+handling the compute, database, and caching layers respectively. They integrate closely to enable
+building scalable, high-performance applications.

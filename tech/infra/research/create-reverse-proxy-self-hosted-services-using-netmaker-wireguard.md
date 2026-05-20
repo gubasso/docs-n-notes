@@ -1,7 +1,6 @@
 # Create a Reverse Proxy for self hosted services using Netmaker and Wireguard
 
-> link: https://www.youtube.com/watch?v=CGw4Kc424VE
-> :awesome_open_source:
+> link: https://www.youtube.com/watch?v=CGw4Kc424VE :awesome_open_source:
 
 # Goal
 

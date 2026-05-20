@@ -1,8 +1,10 @@
 # DevOps: Operational Responsibilities for Application Infrastructure
 
-> **Purpose**: This checklist identifies every ongoing duty required to deploy, operate, and harden any production application server. Use it as the master roadmap; link detailed runbooks for each task.
+> **Purpose**: This checklist identifies every ongoing duty required to deploy, operate, and harden
+> any production application server. Use it as the master roadmap; link detailed runbooks for each
+> task.
 
-______________________________________________________________________
+---
 
 ## 1 · Setup & Provisioning
 
@@ -66,7 +68,7 @@ ______________________________________________________________________
 - [ ] Schedule regular security assessments and penetration tests
 - [ ] Automate repetitive tasks to reduce operational toil
 
-______________________________________________________________________
+---
 
 **Next Steps**
 

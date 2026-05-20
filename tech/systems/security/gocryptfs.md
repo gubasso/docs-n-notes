@@ -21,17 +21,21 @@
 
 ## 1. Introduction to gocryptfs
 
-gocryptfs implements **file-based encryption** entirely in user space, mounting an encrypted directory (`CIPHERDIR`) to a plaintext view (`MOUNTPOINT`) via FUSE. It was designed to address security concerns in earlier tools like EncFS and has matured through extensive stress testing and correctness checks ([Arch Manual Pages][3], [maketecheasier][4]).
+gocryptfs implements **file-based encryption** entirely in user space, mounting an encrypted
+directory (`CIPHERDIR`) to a plaintext view (`MOUNTPOINT`) via FUSE. It was designed to address
+security concerns in earlier tools like EncFS and has matured through extensive stress testing and
+correctness checks ([Arch Manual Pages][3], [maketecheasier][4]).
 
-______________________________________________________________________
+---
 
 ## 2. Prerequisites
 
-- **FUSE support**: gocryptfs requires a FUSE implementation (`fuse3` or `fuse2`) to be installed and the kernel module loaded ([ArchWiki][1]).
+- **FUSE support**: gocryptfs requires a FUSE implementation (`fuse3` or `fuse2`) to be installed
+  and the kernel module loaded ([ArchWiki][1]).
 - **Unix-like OS**: Linux (native), macOS (beta), or WSL on Windows.
 - **Privileges**: Ability to install packages and load kernel modules (typically via `sudo`).
 
-______________________________________________________________________
+---
 
 ## 3. Installation (Arch Linux)
 
@@ -54,7 +58,8 @@ sudo pacman -S gocryptfs
    gocryptfs -init ~/vault_encrypted
    ```
 
-   This generates a `gocryptfs.conf` file containing your encrypted master key and salt, secured by your passphrase ([Arch Manual Pages][6], [ArchWiki][1]).
+   This generates a `gocryptfs.conf` file containing your encrypted master key and salt, secured by
+   your passphrase ([Arch Manual Pages][6], [ArchWiki][1]).
 
 1. **Change passphrase** (optional):
 
@@ -62,9 +67,10 @@ sudo pacman -S gocryptfs
    gocryptfs -passwd ~/vault_encrypted
    ```
 
-   This prompts for the current and new passphrases, backing up the old config to `gocryptfs.conf.bak` ([Arch Manual Pages][6], [ArchWiki][1]).
+   This prompts for the current and new passphrases, backing up the old config to
+   `gocryptfs.conf.bak` ([Arch Manual Pages][6], [ArchWiki][1]).
 
-______________________________________________________________________
+---
 
 ## 5. Mounting and Unmounting
 
@@ -80,7 +86,8 @@ gocryptfs ~/vault_encrypted ~/vault_plain
   gocryptfs -o allow_other ~/vault_encrypted ~/vault_plain
   ```
 
-  (Ensure `user_allow_other` is enabled in `/etc/fuse.conf`.) ([Arch Manual Pages][6], [Arch Manual Pages][3])
+  (Ensure `user_allow_other` is enabled in `/etc/fuse.conf`.) ([Arch Manual Pages][6],
+  [Arch Manual Pages][3])
 
 ### 5.2 Unmount
 
@@ -90,13 +97,15 @@ fusermount -u ~/vault_plain
 umount ~/vault_plain
 ```
 
-Unmounting flushes all writes and detaches the decrypted view ([Arch Manual Pages][6], [Arch Manual Pages][3]).
+Unmounting flushes all writes and detaches the decrypted view ([Arch Manual Pages][6],
+[Arch Manual Pages][3]).
 
-______________________________________________________________________
+---
 
 ## 6. Automating Mount Checks in Bash
 
-To avoid duplicate mounts, use a script that checks if the mount point is active before mounting ([Baeldung][7], [Stack Overflow][8]):
+To avoid duplicate mounts, use a script that checks if the mount point is active before mounting
+([Baeldung][7], [Stack Overflow][8]):
 
 ```bash
 #!/usr/bin/env bash
@@ -115,20 +124,27 @@ fi
 - `mountpoint -q`: checks if the directory is a mount point.
 - Alternatively, `grep -q " $MOUNTPOINT " /proc/mounts`.
 
-______________________________________________________________________
+---
 
 ## 7. Advanced Usage
 
-- **Reverse mode** (`-reverse`): Mount a plaintext directory as an encrypted view, useful for on-the-fly encrypted backups. It uses deterministic AES-SIV rather than AES-GCM to ensure stable filenames ([Nuetzlich][9], [LinuxLinks][2]).
-- **Long filename support** (`-longnames`): Enable handling of base64-encoded names up to 255 bytes by storing overflow names in `.name` files (default enabled) ([Go Packages][10], [GitHub][11]).
-- **Filename padding**: Random padding obfuscates exact file sizes by padding encrypted filenames—helpful for privacy on cloud storage ([Nuetzlich][12]).
-- **Master key mounting** (`-masterkey`): Mount directly with a raw master key (in hex or via `stdin`) if you’ve lost your passphrase but retained the key. Note the security risk of passing keys on the command line ([LinuxLinks][2]).
+- **Reverse mode** (`-reverse`): Mount a plaintext directory as an encrypted view, useful for
+  on-the-fly encrypted backups. It uses deterministic AES-SIV rather than AES-GCM to ensure stable
+  filenames ([Nuetzlich][9], [LinuxLinks][2]).
+- **Long filename support** (`-longnames`): Enable handling of base64-encoded names up to 255 bytes
+  by storing overflow names in `.name` files (default enabled) ([Go Packages][10], [GitHub][11]).
+- **Filename padding**: Random padding obfuscates exact file sizes by padding encrypted
+  filenames—helpful for privacy on cloud storage ([Nuetzlich][12]).
+- **Master key mounting** (`-masterkey`): Mount directly with a raw master key (in hex or via
+  `stdin`) if you’ve lost your passphrase but retained the key. Note the security risk of passing
+  keys on the command line ([LinuxLinks][2]).
 
-______________________________________________________________________
+---
 
 ## 8. GUI Front-End: SiriKali
 
-[SiriKali](https://mhogomchungu.github.io/sirikali/) is a Qt/C++ GUI that manages gocryptfs (and other FUSE backends) visually:
+[SiriKali](https://mhogomchungu.github.io/sirikali/) is a Qt/C++ GUI that manages gocryptfs (and
+other FUSE backends) visually:
 
 1. **Install via Flatpak**:
 
@@ -136,18 +152,23 @@ ______________________________________________________________________
    flatpak install flathub io.github.mhogomchungu.sirikali
    ```
 
-1. **Launch SiriKali**, click **“Add”**, choose the gocryptfs backend, configure your encrypted folder and mount point, then click **Mount** or **Unmount** as needed ([Flathub - Apps for Linux][13], [Mhogo Mchungu][14]).
+1. **Launch SiriKali**, click **“Add”**, choose the gocryptfs backend, configure your encrypted
+   folder and mount point, then click **Mount** or **Unmount** as needed
+   ([Flathub - Apps for Linux][13], [Mhogo Mchungu][14]).
 
-______________________________________________________________________
+---
 
 ## 9. Best Practices & Troubleshooting
 
-- **Back up your `gocryptfs.conf`** outside the encrypted directory to prevent total data loss if it’s corrupted ([ArchWiki][1]).
-- **Use a strong passphrase** to leverage the full strength of Scrypt key derivation ([Nuetzlich][15]).
+- **Back up your `gocryptfs.conf`** outside the encrypted directory to prevent total data loss if
+  it’s corrupted ([ArchWiki][1]).
+- **Use a strong passphrase** to leverage the full strength of Scrypt key derivation
+  ([Nuetzlich][15]).
 - **Always unmount** before shutting down to avoid possible corruption.
-- **FUSE errors** (e.g., “Permission denied”): ensure the `fuse` module is loaded (`sudo modprobe fuse`) and that your user is in the `fuse` group ([ArchWiki][1]).
+- **FUSE errors** (e.g., “Permission denied”): ensure the `fuse` module is loaded
+  (`sudo modprobe fuse`) and that your user is in the `fuse` group ([ArchWiki][1]).
 
-______________________________________________________________________
+---
 
 ## References
 

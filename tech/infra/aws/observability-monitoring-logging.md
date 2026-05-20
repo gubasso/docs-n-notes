@@ -16,7 +16,11 @@
 - CloudTrail will then stream events to CloudWatch Logs in addition to S3
 - You can view the events in the CloudWatch console and create metrics/alarms
 
-So in summary, CloudTrail records API activity and account events, acting as the auditing source. CloudWatch Logs can ingest the CloudTrail logs, allowing you to monitor, analyze, and alert on the auditing data in near real-time. The integration provides a powerful auditing and security analysis solution, combining CloudTrail's comprehensive logging with CloudWatch's monitoring and observability features.
+So in summary, CloudTrail records API activity and account events, acting as the auditing source.
+CloudWatch Logs can ingest the CloudTrail logs, allowing you to monitor, analyze, and alert on the
+auditing data in near real-time. The integration provides a powerful auditing and security analysis
+solution, combining CloudTrail's comprehensive logging with CloudWatch's monitoring and
+observability features.
 
 ## AWS CloudWatch vs Prometheus/Grafana
 
@@ -33,17 +37,20 @@ Key differences:
 Data storage and querying:
 
 - CloudWatch stores metrics within AWS. You query metrics directly from CloudWatch.
-- Prometheus pulls metrics from monitored targets and stores them in its own time-series database. Grafana queries this Prometheus database.
+- Prometheus pulls metrics from monitored targets and stores them in its own time-series database.
+  Grafana queries this Prometheus database.
 - Prometheus has a more powerful query language (PromQL) compared to CloudWatch.
 
 Monitoring scope:
 
 - CloudWatch is AWS-native and designed primarily for monitoring AWS services and resources.
-- Prometheus is platform-agnostic and commonly used for Kubernetes and cloud-native stack monitoring. It can monitor AWS resources using exporters.
+- Prometheus is platform-agnostic and commonly used for Kubernetes and cloud-native stack
+  monitoring. It can monitor AWS resources using exporters.
 
 Dashboarding and visualization:
 
-- Grafana provides richer dashboarding and visualization capabilities compared to CloudWatch dashboards.
+- Grafana provides richer dashboarding and visualization capabilities compared to CloudWatch
+  dashboards.
 - CloudWatch charges for each additional dashboard, while Grafana dashboards are free.
 
 Cross-account, cross-region monitoring:
@@ -61,13 +68,18 @@ Operational overhead:
 - CloudWatch is fully managed by AWS, requiring less operational work.
 - Running your own Prometheus/Grafana stack requires more setup and maintenance.
 
-So in summary, CloudWatch is well-suited if your workloads are primarily on AWS and you want a managed monitoring solution. Prometheus/Grafana is preferred for Kubernetes and cloud-native environments, cross-platform monitoring, and more flexibility and control over your monitoring setup. Many organizations also use them together, with Prometheus for granular metrics and CloudWatch for high-level AWS service monitoring.
+So in summary, CloudWatch is well-suited if your workloads are primarily on AWS and you want a
+managed monitoring solution. Prometheus/Grafana is preferred for Kubernetes and cloud-native
+environments, cross-platform monitoring, and more flexibility and control over your monitoring
+setup. Many organizations also use them together, with Prometheus for granular metrics and
+CloudWatch for high-level AWS service monitoring.
 
-The choice depends on your specific monitoring needs, existing AWS usage, and willingness to manage your own monitoring infrastructure. A combined approach leveraging both systems is also viable for comprehensive observability.
+The choice depends on your specific monitoring needs, existing AWS usage, and willingness to manage
+your own monitoring infrastructure. A combined approach leveraging both systems is also viable for
+comprehensive observability.
 
-Citations:
-[1] https://www.infracloud.io/blogs/prometheus-vs-cloudwatch/
-[2] https://grafana.com/blog/2024/05/22/how-to-visualize-amazon-cloudwatch-metrics-in-grafana/
-[3] https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-IM-use-cases.html
-[4] https://grafana.com/docs/grafana/latest/fundamentals/intro-to-prometheus/
-[5] https://www.metricfire.com/blog/prometheus-vs-cloudwatch/
+Citations: [1] https://www.infracloud.io/blogs/prometheus-vs-cloudwatch/ [2]
+https://grafana.com/blog/2024/05/22/how-to-visualize-amazon-cloudwatch-metrics-in-grafana/ [3]
+https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-IM-use-cases.html [4]
+https://grafana.com/docs/grafana/latest/fundamentals/intro-to-prometheus/ [5]
+https://www.metricfire.com/blog/prometheus-vs-cloudwatch/

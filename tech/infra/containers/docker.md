@@ -196,7 +196,7 @@ sudo docker exec <cont_name> ls
 sudo docker exec -it <cont_name> bash
 ```
 
-______________________________________________________________________
+---
 
 Listing things
 
@@ -210,13 +210,13 @@ Listing things
 
   - list IMAGES
 
-______________________________________________________________________
+---
 
 ```
 docker stop <container_name>
 ```
 
-______________________________________________________________________
+---
 
 Fetching remote images:
 
@@ -234,7 +234,7 @@ Fetching remote images:
   - always checks for updates from source
   - forces pull updated image from registry (docker hub)
 
-______________________________________________________________________
+---
 
 - `docker run`
   - creates a NEW container (doesn't run a stopped one)
@@ -251,7 +251,7 @@ flags:
     - will be able to see console outputs
 - `--rm`: removes container when it stops
 
-______________________________________________________________________
+---
 
 - `docker logs <container_name>`
   - prints the output of container console
@@ -260,7 +260,7 @@ flags:
 
 - `-f, --follow`: keep listening, attached terminal
 
-______________________________________________________________________
+---
 
 - `docker start <container_name>`
   - starts a previously stopped container
@@ -271,7 +271,7 @@ flags:
 - `-a`: starts attached
 - `-i`: STDIN opened to interact with terminal
 
-______________________________________________________________________
+---
 
 remove commands / cleanup
 
@@ -281,7 +281,8 @@ stop all containers
 sudo docker kill $(sudo docker ps -q)
 ```
 
-- How To Remove Docker Images, Containers, and Volumes: https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
+- How To Remove Docker Images, Containers, and Volumes:
+  https://www.digitalocean.com/community/tutorials/how-to-remove-docker-images-containers-and-volumes
 
 ```sh
 sudo docker kill $(sudo docker ps -q)
@@ -308,12 +309,12 @@ sudo docker network prune -f
   - removes ALL images
   - `-a`: ??
 
-______________________________________________________________________
+---
 
 - `cp <source> <container_name>:<destination>` / `cp <container_name>:<source> <host_destination>`
   - copy copies files to a running container
 
-______________________________________________________________________
+---
 
 naming tagging
 
@@ -325,25 +326,17 @@ naming tagging
 
 To create my own image.
 
-`FROM baseImage`: defines docker base image from hub
-\- `FROM node:14` / `FROM node`
-`WORKDIR /app`: sets the workdir (as a reference). dir with project files
-\- if not set, the default is `/`
-`COPY <host_source> <destination>`: copy from host file to workdir inside container
-\- `<destination>` will be create, if no exist
-\- `COPY package.json .`: example copying just one file
-\- do it before `RUN npm install` to optimize rebuild
-\- will be a layer to be monitored with a cache
-\- just `package.json` will be watched
-\- `COPY . .`: example copying hole project (where `Dockerfile` is) to workdir (except `Dockerfile` itself)
-`RUN npm install`: command to run
-\- will run when image is being built (build time)
-\- used for multi-stage builds
-`EXPOSE 3000`: port to expose to outside world
-`CMD ["node","app.mjs"]`: command to run
-\- should be last instruction
-\- will run when container starts (runtime, not when it's built)
-\- if not specified, the default `CMD` of the base image will be ran
+`FROM baseImage`: defines docker base image from hub \- `FROM node:14` / `FROM node` `WORKDIR /app`:
+sets the workdir (as a reference). dir with project files \- if not set, the default is `/`
+`COPY <host_source> <destination>`: copy from host file to workdir inside container \-
+`<destination>` will be create, if no exist \- `COPY package.json .`: example copying just one file
+\- do it before `RUN npm install` to optimize rebuild \- will be a layer to be monitored with a
+cache \- just `package.json` will be watched \- `COPY . .`: example copying hole project (where
+`Dockerfile` is) to workdir (except `Dockerfile` itself) `RUN npm install`: command to run \- will
+run when image is being built (build time) \- used for multi-stage builds `EXPOSE 3000`: port to
+expose to outside world `CMD ["node","app.mjs"]`: command to run \- should be last instruction \-
+will run when container starts (runtime, not when it's built) \- if not specified, the default `CMD`
+of the base image will be ran
 
 At terminal:
 
@@ -466,7 +459,8 @@ docker build -t node-util:cliuser --build-arg USER_ID=$(id -u) --build-arg GROUP
 
 - Named volumes: will persist in host machine even if a container ir removed
 
-  - @ cli: `docker run -d -p 3000:80 --rm --name feedback-app -v feedback:/app/feedback feedback-node:volumes`
+  - @ cli:
+    `docker run -d -p 3000:80 --rm --name feedback-app -v feedback:/app/feedback feedback-node:volumes`
     - `--name feedback-app`: name of the container being created
     - `feedback-node:volumes`: name of the image used to create this volume
     - `-v feedback:/app/feedback`: named volume `<volume_name>:<dir_path_inside_container>`
@@ -526,7 +520,7 @@ If want to hard code the container ip address:
 - `docker container inspect <container_name>`: To find a container IP address
   - at `NetworkSettings.IPAddress`
 
-______________________________________________________________________
+---
 
 Using docker native network for resolve ip addresses automatically
 
@@ -582,7 +576,7 @@ docker run -d --name mongodb \
   - service name can be used as reference for networking, etc...
     - just like a container name
 
-______________________________________________________________________
+---
 
 ```docker-compose.yaml
 services:
@@ -617,7 +611,8 @@ volumes:
 
   - same syntax as cli
   - if named volumes, need a `volumes:` key, sibling of services, with the named volume
-  - "To reuse a volume across multiple services, a named volume MUST be declared in the top-level `volumes` key."[^2]
+  - "To reuse a volume across multiple services, a named volume MUST be declared in the top-level
+    `volumes` key."[^2]
 
 - `build:`
 
@@ -687,7 +682,11 @@ docker-compose run guganpm init
 
 ## Users / Permissions:[^3]
 
-I wanted to point out that on a Linux system, the Utility Container idea doesn't quite work as you describe it. In Linux, by default Docker runs as the "Root" user, so when we do a lot of the things that you are advocating for with Utility Containers the files that get written to the Bind Mount have ownership and permissions of the Linux Root user. (On MacOS and Windows10, since Docker is being used from within a VM, the user mappings all happen automatically due to NFS mounts.)
+I wanted to point out that on a Linux system, the Utility Container idea doesn't quite work as you
+describe it. In Linux, by default Docker runs as the "Root" user, so when we do a lot of the things
+that you are advocating for with Utility Containers the files that get written to the Bind Mount
+have ownership and permissions of the Linux Root user. (On MacOS and Windows10, since Docker is
+being used from within a VM, the user mappings all happen automatically due to NFS mounts.)
 
 So, for example on Linux, if I do the following (as you described in the course):
 
@@ -715,13 +714,18 @@ drwxr-xr-x  7 scott scott 4096 Oct 31 16:14 .git/
 -rw-r--r--  1 root  root   202 Oct 31 16:16 package.json
 ```
 
-You'll see that the ownership and permissions for the package.json file are "root". But, regardless of the file that is being written to the Bind Mounted volume from commands emanating from within the docker container, e.g. "npm install", all come out with "Root" ownership.
+You'll see that the ownership and permissions for the package.json file are "root". But, regardless
+of the file that is being written to the Bind Mounted volume from commands emanating from within the
+docker container, e.g. "npm install", all come out with "Root" ownership.
 
-______________________________________________________________________
+---
 
 Solution 1: Use predefined "node" user (if you're lucky)
 
-There is a lot of discussion out there in the docker community (devops) about security around running Docker as a non-privileged user (which might be a good topic for you to cover as a video lecture - or maybe you have; I haven't completed the course yet). The Official Node.js Docker Container provides such a user that they call "node".
+There is a lot of discussion out there in the docker community (devops) about security around
+running Docker as a non-privileged user (which might be a good topic for you to cover as a video
+lecture - or maybe you have; I haven't completed the course yet). The Official Node.js Docker
+Container provides such a user that they call "node".
 
 https://github.com/nodejs/docker-node/blob/master/Dockerfile-slim.template
 
@@ -731,9 +735,12 @@ RUN groupadd --gid 1000 node \
     && useradd --uid 1000 --gid node --shell /bin/bash --create-home node
 ```
 
-Luckily enough for me on my local Linux system, my "scott" uid:gid is also 1000:1000 so, this happens to map nicely to the "node" user defined within the Official Node Docker Image.
+Luckily enough for me on my local Linux system, my "scott" uid:gid is also 1000:1000 so, this
+happens to map nicely to the "node" user defined within the Official Node Docker Image.
 
-So, in my case of using the Official Node Docker Container, all I need to do is make sure I specify that I want the container to run as a non-Root user that they make available. To do that, I just add:
+So, in my case of using the Official Node Docker Container, all I need to do is make sure I specify
+that I want the container to run as a non-Root user that they make available. To do that, I just
+add:
 
 ```Dockerfile
 FROM node:14-slim
@@ -741,7 +748,8 @@ USER node
 WORKDIR /app
 ```
 
-If I rebuild my Utility Container in the normal way and re-run "npm init", the ownership of the package.json file is written as if "scott" wrote the file.
+If I rebuild my Utility Container in the normal way and re-run "npm init", the ownership of the
+package.json file is written as if "scott" wrote the file.
 
 ```
 $ ls -la
@@ -755,11 +763,13 @@ drwxr-xr-x 13 scott scott 4096 Oct 31 16:23 ../
 -rw-r--r--  1 scott scott 204 Oct 31 16:23 package.json
 ```
 
-______________________________________________________________________
+---
 
 Solution 2: Remove the predefined "node" user and add yourself as the user[^4].
 
-However, if the Linux user that you are running as is not lucky to be mapped to 1000:1000, then you can modify the Utility Container Dockerfile to remove the predefined "node" user and add yourself as the user that the container will run as:
+However, if the Linux user that you are running as is not lucky to be mapped to 1000:1000, then you
+can modify the Utility Container Dockerfile to remove the predefined "node" user and add yourself as
+the user that the container will run as:
 
 ```Dockerfile
 FROM node:14-slim
@@ -803,7 +813,8 @@ drwxr-xr-x 13 scott scott 4096 Oct 31 16:23 ../
 -rw-r--r--  1 scott scott  202 Oct 31 16:54 package.json
 ```
 
-Keep in mind that this image will not be portable, but for the purpose of the Utility Containers like this, I don't think this is an issue at all for these "Utility Containers"
+Keep in mind that this image will not be portable, but for the purpose of the Utility Containers
+like this, I don't think this is an issue at all for these "Utility Containers"
 
 ## Deploy in production
 
@@ -818,7 +829,8 @@ Keep in mind that this image will not be portable, but for the purpose of the Ut
 - [Docker Compose](https://docs.docker.com/compose/)
 - [](https://yacht.sh/)
   - web ui for managing containers, available at linode
-- Udemy Course Academind: [Docker & Kubernetes: The Practical Guide [2022 Edition]](https://www.udemy.com/share/103Ia03@_LG5LvM93j_prIuRNO6TDsc6YuhwqudbXhJirjmPbdAU7lSzxDsoTeCwzbGUXkS6/)
+- Udemy Course Academind:
+  [Docker & Kubernetes: The Practical Guide [2022 Edition]](https://www.udemy.com/share/103Ia03@_LG5LvM93j_prIuRNO6TDsc6YuhwqudbXhJirjmPbdAU7lSzxDsoTeCwzbGUXkS6/)
 
 ## General
 
