@@ -2,55 +2,65 @@
 
 > https://gitolite.com/gitolite/
 
-<!-- toc -->
+<!--TOC-->
 
 - [Dictionary](#dictionary)
-- [Instalation[^2]](#instalation2)
+- [Installation\[^2\]](#installation2)
 - [Setup](#setup)
   - [SSHD Config](#sshd-config)
   - [Gitolite user](#gitolite-user)
   - [Basic Checks](#basic-checks)
   - [Authorize gitolite admin](#authorize-gitolite-admin)
 - [Admin Tasks](#admin-tasks)
-  - [adding users and repos[^3]](#adding-users-and-repos3)
+  - [adding users and repos\[^3\]](#adding-users-and-repos3)
+    - [Users: Add new users](#users-add-new-users)
+    - [Users: Remove a user](#users-remove-a-user)
+    - [Repos: Create new repos and manage users access](#repos-create-new-repos-and-manage-users-access)
+    - [Repos: Add existing repo (Migrate repository)](#repos-add-existing-repo-migrate-repository)
+    - [Repos: Moving servers](#repos-moving-servers)
+    - [Repos: removing/renaming remove/delete a repo](#repos-removingrenaming-removedelete-a-repo)
   - [Access Rules](#access-rules)
+    - [Basic example](#basic-example)
   - [Groups](#groups)
 - [Normal Usage (project/normal user)](#normal-usage-projectnormal-user)
 - [Advanced Cases](#advanced-cases)
-  - [separating "key admin" from "repo admin"](#separating-key-admin-from-repo-admin)
+  - [\[separating "key admin" from "repo admin"\](https://gitolite.com/gitolite/cookbook#separating-key-admin-from-repo-admin)](#separating-key-admin-from-repo-adminhttpsgitolitecomgitolitecookbookseparating-key-admin-from-repo-admin)
   - [Automation: Gitolite Triggers / Git Hooks](#automation-gitolite-triggers--git-hooks)
   - [Automation: "My own" Commands](#automation-my-own-commands)
   - [Constraints: add additional constraints to a push (VREF)](#constraints-add-additional-constraints-to-a-push-vref)
 - [References](#references)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Dictionary
 
 - **workstation:** my personal computer a.k.a. client
 - **server:** vps/remote server
 - **hosting user:** This is the user whose name goes into the repo URLs your users will be cloning, for example
-    - `ssh://git@server/repo`
-    - `git@server:repo`
-    - Usually, this is `git`
+  - `ssh://git@server/repo`
+  - `git@server:repo`
+  - Usually, this is `git`
 - **logical repo name**: within the conf file
-    - logical repo name `foo` will be `$HOME/repositories/foo.git`
-    - `bar/baz`-> `$HOME/repositories/bar/baz.git`
+  - logical repo name `foo` will be `$HOME/repositories/foo.git`
+  - `bar/baz`-> `$HOME/repositories/bar/baz.git`
 - **ref:** branch or tag
 - **refex:** a regex that matches a ref
 
-## Instalation[^2]
+## Installation[^2]
 
 - enter server as your user admin, sudo, root...
+
   - any user (`sysking`, `admin`, `your_name`)
 
 - install dependencies[^4]
-    - git perl rsync
-    - openssh
+
+  - git perl rsync
+  - openssh
 
 - install packages:
-    - ubuntu/debian: `gitolite3`
-    - arch: `gitolite`
+
+  - ubuntu/debian: `gitolite3`
+  - arch: `gitolite`
 
 ## Setup
 
@@ -59,7 +69,7 @@
 - Make sure server has `UsePAM yes`
 - SSH server can not be configured with `AllowGroup` option.
 
-See [[server-vps#Security steps]]
+See \[[server-vps#Security steps]\]
 
 ### Gitolite user
 
@@ -76,7 +86,7 @@ sudo useradd -m git -s /bin/bash
 
 ### Basic Checks
 
-Login as <gitolite_user>:
+Login as \<gitolite_user>:
 
 ```sh
 sudo su - git
@@ -91,17 +101,17 @@ which gitolite
 ```
 
 At `server:/home/git`, make sure these files/dirs do not exists:
-  - `~/.gitolite.rc`
-  - `~/.gitolite`
-  - `~/repositories`
-  - `~/.ssh/authorized_keys`
+
+- `~/.gitolite.rc`
+- `~/.gitolite`
+- `~/repositories`
+- `~/.ssh/authorized_keys`
 
 ### Authorize gitolite admin
 
 - from <workstation>: copy my local user_pub_key to -> `server:/home/git`
   - this user_pub_key is my local user, that will be the gitolite admin
-  -  `<user_admin>.pub` : has to have the name of user that will be the gitolite admin
-
+  - `<user_admin>.pub` : has to have the name of user that will be the gitolite admin
 
 ```
 scp yourkey.pub git@yourserver.tld:˜/yourname.pub
@@ -114,7 +124,7 @@ rsync -vurzP yourkey.pub git@yourserver.tld:˜/yourname.pub
 Finally, setup gitolite with yourself as the administrator:
 
 - at server
-- as <git_user> (or hosting user) `su - git`
+- as \<git_user> (or hosting user) `su - git`
 
 ```
 $HOME/bin/gitolite setup -pk YourName.pub
@@ -137,7 +147,7 @@ Management will be executed in push. E.g.:
 - gitolite will add the new users to `~/.ssh/authorized_keys` on the server
 - create a new, empty, repo called "foo".
 
----
+______________________________________________________________________
 
 ```
 gitolite help
@@ -156,8 +166,8 @@ Copy `<user>.pub` to `gitolite-admin/keydir`
 [multiple keys per user](https://gitolite.com/gitolite/basic-admin#multiple-keys-per-user)
 
 - `keydir/alice.pub`
-    - = `keydir/home/alice.pub`
-    - = `keydir/laptop/alice.pub`
+  - = `keydir/home/alice.pub`
+  - = `keydir/laptop/alice.pub`
 
 [appendix 2: old style multi-keys](https://gitolite.com/gitolite/basic-admin#appendix-2-old-style-multi-keys)
 
@@ -174,6 +184,7 @@ git rm keydir/alice.pub
 Users must have been already added to `keydir`
 
 **`conf/gitolite.conf`**
+
 ```
 repo foo
     RW+         =   alice
@@ -184,6 +195,7 @@ repo foo
 - multiple repos with same access rules
 
 **`conf/gitolite.conf`**
+
 ```
 repo foo bar
     RW+         =   alice
@@ -192,6 +204,7 @@ repo foo bar
 - multiple with repo group
 
 **`conf/gitolite.conf`**
+
 ```
 @myrepos    =   foo
 @myrepos    =   bar
@@ -206,11 +219,12 @@ repo @myrepos
 
 - Reponames can contain `/` characters (this allows you to put your repos in a tree-structure for convenience).
 
----
+______________________________________________________________________
 
 include files
 
 **`conf/gitolite.conf`**
+
 ```
 include "foo.conf"
 ```
@@ -245,9 +259,10 @@ include "foo.conf"
 
 - Full rules at: [Gitolite: access rules](https://gitolite.com/gitolite/conf#access-rules)
 
-#### Basic example:
+#### Basic example
 
 **`conf/gitolite.conf`**
+
 ```
 repo foo
     RW+                     =   alice
@@ -263,10 +278,10 @@ repo foo
 - carol can create tags whose names start with "v"+digit.
 - dave can clone/fetch.
 
-
 ### Groups
 
 **`conf/gitolite.conf`**
+
 ```
 @staff      =   alice bob carol
 @interns    =   ashok
@@ -280,6 +295,7 @@ repo foss
 ```
 
 **`conf/gitolite.conf`**
+
 ```
 @developers     =   dilbert alice wally
 @foss-repos     =   git gitolite
@@ -289,6 +305,7 @@ repo @foss-repos
 ```
 
 **`conf/gitolite.conf`**
+
 ```
 repo foo bar
 
@@ -300,12 +317,12 @@ repo foo bar
     R                       =   @managers
 ```
 
----
+______________________________________________________________________
 
 - Group lists accumulate.
 
-
 **`conf/gitolite.conf`**
+
 ```
 @staff      =   alice bob carol
 @developers     =   dilbert alice wally
@@ -313,16 +330,17 @@ repo foo bar
 
 is equal to:
 
-
 **`conf/gitolite.conf`**
+
 ```
 @staff      =   alice bob
 @staff      =   carol
 ```
 
----
+______________________________________________________________________
 
 **`conf/gitolite.conf`**
+
 ```
 @developers     =   dilbert alice
 @interns        =   ashok
@@ -332,19 +350,19 @@ is equal to:
 # wally is NOT part of @staff
 ```
 
----
+______________________________________________________________________
 
 - You can also use group names in other group names:
 
 **`conf/gitolite.conf`**
+
 ```
 @all-devs   =   @staff @interns
 ```
 
----
+______________________________________________________________________
 
 - `@all` is a special group name that is often convenient to use if you really mean "all repos" or "all users".
-
 
 ## Normal Usage (project/normal user)
 
@@ -360,9 +378,9 @@ Help with commands:
 ssh git@host help
 ```
 
--  All commands respond to a single argument of "-h" with suitable information.
+- All commands respond to a single argument of "-h" with suitable information.
 
----
+______________________________________________________________________
 
 E.g.: Bob wants to clone and work in a repo he's added and authorized. In Bob's workstation:
 
@@ -377,9 +395,13 @@ git clone git@host:foo
 - ["non-core" gitolite](https://gitolite.com/gitolite/non-core)
 
 - Commands can be run from the shell command line. Among those, the ones in the ENABLE list in the rc file can also be run remotely.
+
 - Hooks are standard git hooks.
+
 - Sugar scripts change the conf language for your convenience. The word sugar comes from "syntactic sugar".
+
 - Triggers are to gitolite what hooks are to git. I just chose a different name to avoid confusion and constant disambiguation in the docs.
+
 - VREFs are extensions to the access control check part of gitolite.
 
 ### [separating "key admin" from "repo admin"](https://gitolite.com/gitolite/cookbook#separating-key-admin-from-repo-admin)
@@ -387,14 +409,17 @@ git clone git@host:foo
 ### Automation: Gitolite Triggers / Git Hooks
 
 - [gitolite triggers](https://gitolite.com/gitolite/triggers)
+
 - [appendix B: making a trigger run after the built-in ones](https://gitolite.com/gitolite/rc#appendix-b-making-a-trigger-run-after-the-built-in-ones)
+
 - [triggers / adding your own triggers](https://gitolite.com/gitolite/cookbook#triggers)
 
 - [Git Hooks](https://gitolite.com/gitolite/cookbook#hooks)
-    - adding your own update hooks
-    - adding other (non-update) hooks
-    - variation: maintain these hooks in the gitolite-admin repo
-    - (v3.6+) variation: repo-specific hooks
+
+  - adding your own update hooks
+  - adding other (non-update) hooks
+  - variation: maintain these hooks in the gitolite-admin repo
+  - (v3.6+) variation: repo-specific hooks
 
 ### Automation: "My own" Commands
 
@@ -404,14 +429,16 @@ git clone git@host:foo
 
 - [virtual refs](https://gitolite.com/gitolite/vref#virtual-refs)
 
-
 ## References
 
-[^1]: [Server / VPS](./it/server-vps.md)
-[Setup a server / vps / domain name / security measures](#setup-a-server-vps-domain-name-security-measures)
-    * [manage security](#manage-security)
-        * [add a new user and set a password [^l1]](#add-a-new-user-and-set-a-password-l1)
 [^2]: [Gitolite: Installation and setup](https://github.com/sitaramc/gitolite#installation-and-setup)
-[^3]: [Gitolite: adding users and repos](https://github.com/sitaramc/gitolite#adding-users-and-repos)
+
 [^4]: [Gitolite: install and setup](https://gitolite.com/gitolite/install#your-server)
-[^5]: [Use Gitolite To Setup Git Repositories on Debian](https://www.vultr.com/docs/setup-git-repositories-with-gitolite-on-debian-wheezy/)
+
+[^1]: [Server / VPS](./it/server-vps.md)
+    [Setup a server / vps / domain name / security measures](#setup-a-server-vps-domain-name-security-measures)
+
+    - [manage security](#manage-security)
+      - [add a new user and set a password [^l1]](#add-a-new-user-and-set-a-password-l1)
+
+[^3]: [Gitolite: adding users and repos](https://github.com/sitaramc/gitolite#adding-users-and-repos)

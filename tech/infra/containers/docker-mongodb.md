@@ -5,7 +5,7 @@
 # Resources
 
 - [Dockerizing a Mongo Database](https://medium.com/swlh/dockerizing-a-mongo-database-ac8f8219a019)
-    - mongodb script getting envvars
+  - mongodb script getting envvars
 
 # Mongoimport
 
@@ -24,12 +24,13 @@ docker exec -i <container-name-or-id> sh -c 'mongoimport -c <c-name> -d <db-name
 - With `.sh` or `.js`
 - Executed in alphabetical order
 - Placed at: `/docker-entrypoint-initdb.d`
-    - inside container
-    - read-only (`:ro`)
+  - inside container
+  - read-only (`:ro`)
 
 Import data to mongodb (will run when container is created, first run)
 
 **`20-mongo_seed.sh`**
+
 ```
 #!/bin/bash
 mongoimport -d mydb -c myCollection --drop --type csv --headerline --file /path/to/yourfile.csv
@@ -42,6 +43,7 @@ Where:
 Need to create a db before importing?
 
 **`10-mongo_init.js`**
+
 ```
 db = db.getSiblingDB('test-database')
 ```
@@ -85,10 +87,10 @@ sudo docker run -d --rm \
 ## 3. Check if its ok
 
 - After:
-    - created container
-    - run server
-    - run init scripts
-    - imports seed data
+  - created container
+  - run server
+  - run init scripts
+  - imports seed data
 
 Test the correct creation of container:
 
@@ -125,13 +127,14 @@ docker volume rm <volume_name>
 # MongoDB Image installed in Ubuntu Container
 
 **`Dockerfile`**
+
 ```
 FROM ubuntu:focal AS ubuntu_mongo
 RUN apt-get update -y && apt-get upgrade -y \
     && apt-get install -y apt-utils locales software-properties-common gnupg \
       apt-transport-https ca-certificates wget \
     && rm -rf /var/lib/apt/lists/* \
-	  && localedef -i en_US -c -f UTF-8 \
+   && localedef -i en_US -c -f UTF-8 \
         -A /usr/share/locale/locale.alias en_US.UTF-8 \
     && wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add - \
     && echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list \
@@ -145,6 +148,3 @@ RUN mkdir -p /data/db \
 EXPOSE 27017
 CMD ["mongod", "--dbpath", "/data/db", "--bind_ip", "0.0.0.0"]
 ```
-
-
-

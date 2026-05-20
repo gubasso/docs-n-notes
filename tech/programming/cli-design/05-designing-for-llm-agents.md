@@ -6,22 +6,22 @@
 
 > A practical guide and reference for shipping CLIs that agents (Claude Code, Codex CLI, Cursor, Gemini CLI, etc.) can actually use — reliably, deterministically, and without burning your context window.
 
----
+______________________________________________________________________
 
 ## Contents
 
 1. [TL;DR](#tldr)
-2. [Strategic Choice: CLI + Skill, MCP as Exception](#1-strategic-choice-cli--skill-mcp-as-exception)
-3. [Designing the CLI for Agent Consumption](#2-designing-the-cli-for-agent-consumption)
-4. [The Skill Wrapper (SKILL.md)](#3-the-skill-wrapper-skillmd)
-5. [Cross-Agent Portability](#4-cross-agent-portability)
-6. [Verification and Evals](#5-verification-and-evals)
-7. [When to Reach for MCP](#6-when-to-reach-for-mcp)
-8. [Worked Example: `pigeon`](#7-worked-example-pigeon)
-9. [Checklist](#8-checklist)
-10. [References](#references)
+1. [Strategic Choice: CLI + Skill, MCP as Exception](#1-strategic-choice-cli--skill-mcp-as-exception)
+1. [Designing the CLI for Agent Consumption](#2-designing-the-cli-for-agent-consumption)
+1. [The Skill Wrapper (SKILL.md)](#3-the-skill-wrapper-skillmd)
+1. [Cross-Agent Portability](#4-cross-agent-portability)
+1. [Verification and Evals](#5-verification-and-evals)
+1. [When to Reach for MCP](#6-when-to-reach-for-mcp)
+1. [Worked Example: `pigeon`](#7-worked-example-pigeon)
+1. [Checklist](#8-checklist)
+1. [References](#references)
 
----
+______________________________________________________________________
 
 ## TL;DR
 
@@ -31,7 +31,7 @@
 - **Output is a prompt**: every success and every error is a turn in a conversation. Silent exit codes are dead ends for agents.
 - **Evaluate like a prompt**: build programmatic verifiers and run multi-sample evals. Agents are non-deterministic; your tooling must compensate.
 
----
+______________________________________________________________________
 
 ## 1. Strategic Choice: CLI + Skill, MCP as Exception
 
@@ -78,7 +78,7 @@ Miss one layer and the other two work harder than they should.
 - Shrivu Shankar (Abnormal Security, VP AI): migrated his stateless internal tools from MCP to CLIs; kept MCP only for Playwright. ([How I Use Every Claude Code Feature](https://blog.sshh.io/p/how-i-use-every-claude-code-feature))
 - Armin Ronacher (Flask creator): fully switched from MCP to Skills + CLI.
 
----
+______________________________________________________________________
 
 ## 2. Designing the CLI for Agent Consumption
 
@@ -205,7 +205,7 @@ Agents can't fill TTY prompts. Precedence still follows the general rule: `flags
 
 See [Maximal Studio's resend-cli](https://www.maximalstudio.in/blog/resend-cli-efficiency) for a worked example.
 
----
+______________________________________________________________________
 
 ## 3. The Skill Wrapper (SKILL.md)
 
@@ -295,7 +295,7 @@ Common, high-reliability pattern:
 
 This pattern is directly from [Anthropic's skill best practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices). It dramatically improves output quality.
 
----
+______________________________________________________________________
 
 ## 4. Cross-Agent Portability
 
@@ -303,12 +303,12 @@ The good news: **SKILL.md is a cross-agent standard**, adopted by Claude Code, C
 
 ### 4.1 Discovery paths
 
-| Agent         | Location(s)                                                 |
-|---------------|-------------------------------------------------------------|
-| Claude Code   | `~/.claude/skills/` (personal), `.claude/skills/` (project) |
-| Codex CLI     | `.agents/skills/` (walked up to repo root), `~/.codex/...`  |
-| Cursor        | Adopted SKILL.md format                                     |
-| Gemini CLI    | Adopted SKILL.md format                                     |
+| Agent       | Location(s)                                                 |
+| ----------- | ----------------------------------------------------------- |
+| Claude Code | `~/.claude/skills/` (personal), `.claude/skills/` (project) |
+| Codex CLI   | `.agents/skills/` (walked up to repo root), `~/.codex/...`  |
+| Cursor      | Adopted SKILL.md format                                     |
+| Gemini CLI  | Adopted SKILL.md format                                     |
 
 Sources: [Claude Code skills docs](https://code.claude.com/docs/en/skills), [Codex agent skills](https://developers.openai.com/codex/skills).
 
@@ -345,7 +345,7 @@ What belongs in AGENTS.md:
 
 Per Anthropic: if your skill ever references MCP tools, use `ServerName:tool_name`, not bare `tool_name`. Prevents "tool not found" errors when multiple servers are present.
 
----
+______________________________________________________________________
 
 ## 5. Verification and Evals
 
@@ -397,7 +397,7 @@ Mitigations to bake into your agent's instructions (AGENTS.md, CLAUDE.md, or the
 
 For agents writing tests for *this* CLI specifically: snapshot-test `--help`, the JSON schema, and the exit-code matrix (see [99-checklist § Designing for LLM coding agents](99-checklist.md#designing-for-llm-coding-agents)). Those three artifacts are the agent's contract with the tool; lock them down.
 
----
+______________________________________________________________________
 
 ## 6. When to Reach for MCP
 
@@ -415,7 +415,7 @@ Rule of thumb: if your tool is **local, stateless, and single-user** — ship a 
 
 If you later decide to expose your CLI via MCP too, the common pattern is a thin shim: the MCP server wraps the CLI binary via `subprocess` and exposes one tool per major subcommand (or a single `execute` tool with a command arg). You don't rewrite the CLI; the MCP is just a different transport.
 
----
+______________________________________________________________________
 
 ## 7. Worked Example: `pigeon`
 
@@ -704,7 +704,7 @@ checks:
 
 Run with `codex exec --json --eval evals/pigeon/dispatch_basic.yaml`, aggregate pass rate over 10 samples. That's your regression signal.
 
----
+______________________________________________________________________
 
 ## 8. Checklist
 
@@ -750,7 +750,7 @@ Use this when shipping a CLI you want agents to consume reliably.
 
 - [ ] Consider MCP wrapper, but only if you have stateful/auth/multi-user needs.
 
----
+______________________________________________________________________
 
 ## References
 
@@ -784,6 +784,6 @@ Field practice:
 - mgechev, *skills-best-practices* — [github.com/mgechev/skills-best-practices](https://github.com/mgechev/skills-best-practices)
 - SwirlAI, *Agent Skills: Progressive Disclosure as a System Design Pattern* — [newsletter.swirlai.com/p/agent-skills-progressive-disclosure](https://www.newsletter.swirlai.com/p/agent-skills-progressive-disclosure)
 
----
+______________________________________________________________________
 
 *Last updated: 2026-04-24*

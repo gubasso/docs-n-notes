@@ -1,6 +1,5 @@
 # Nano Setup for Gopass
 
-
 Here’s a quick way to keep your usual nano settings intact while disabling backup files **only** when gopass invokes nano:
 
 ## 1. Create a dedicated nanorc for gopass

@@ -106,9 +106,9 @@ In the root directory of your project, create a file named `.rcloneignore` (or a
 
 In this file:
 
-* Lines starting with `-` specify patterns to exclude.
-* Lines starting with `+` specify patterns to include.
-* The `+ *` line at the end ensures that all other files are included.([techwiki.co.uk][1])
+- Lines starting with `-` specify patterns to exclude.
+- Lines starting with `+` specify patterns to include.
+- The `+ *` line at the end ensures that all other files are included.([techwiki.co.uk][1])
 
 ### 🚀 Step 2: Use the Filter File in Your rclone Command
 
@@ -132,9 +132,9 @@ This command will show you which files would be synced without actually transfer
 
 ### 🔍 Additional Tips
 
-* **Pattern Matching:** rclone uses a pattern matching system similar to shell globbing. For more complex patterns, refer to the [rclone filtering documentation](https://rclone.org/filtering/).
+- **Pattern Matching:** rclone uses a pattern matching system similar to shell globbing. For more complex patterns, refer to the [rclone filtering documentation](https://rclone.org/filtering/).
 
-* **Excluding Directories Based on File Presence:** If you want to exclude directories that contain a specific file (e.g., `.ignore`), you can use the `--exclude-if-present` flag:
+- **Excluding Directories Based on File Presence:** If you want to exclude directories that contain a specific file (e.g., `.ignore`), you can use the `--exclude-if-present` flag:
 
 ```bash
   rclone sync /path/to/source remote:destination --exclude-if-present .ignore
@@ -142,7 +142,7 @@ This command will show you which files would be synced without actually transfer
 
 This will exclude any directory that contains a file named `.ignore`.
 
-* **Avoid Mixing Filter Flags:** It's recommended to avoid mixing `--include`, `--exclude`, and `--filter` flags in the same command, as this can lead to unexpected behavior. Instead, consolidate your rules into a single filter file and use the `--filter-from` flag.
+- **Avoid Mixing Filter Flags:** It's recommended to avoid mixing `--include`, `--exclude`, and `--filter` flags in the same command, as this can lead to unexpected behavior. Instead, consolidate your rules into a single filter file and use the `--filter-from` flag.
 
 By following these steps, you can effectively manage file and directory exclusions in rclone, similar to how `.gitignore` works in Git.
 

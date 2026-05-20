@@ -8,13 +8,13 @@ This file is a directory, not a tutorial. Each tool's home page is one click awa
 
 A new project of each shape is unlikely to go wrong starting with this stack. Replace any row when a real constraint pushes you off it; never start from "every team uses X" alone.
 
-| Language | Runner | Snapshot | Property-based | Mutation | HTTP fake |
-|---|---|---|---|---|---|
-| **Rust** | `cargo nextest` | `insta` (`cargo-insta`) | `proptest` | `cargo-mutants` | `wiremock` |
-| **Python** | `pytest` (`-n auto`) | `syrupy` | `hypothesis` | `mutmut` | `vcrpy` or `respx` |
-| **TypeScript / JS** | `vitest` | `vitest`-snapshot | `fast-check` | `stryker` | `msw` |
-| **Go** | `go test ./...` (`-race`) | `goldie` | `gopter` or `rapid` | `gremlins` | `httpmock` |
-| **Bash** | `bats-core` | `bats` `assert_output` | n/a (table-driven) | n/a | `bats-mock` |
+| Language            | Runner                    | Snapshot                | Property-based      | Mutation        | HTTP fake          |
+| ------------------- | ------------------------- | ----------------------- | ------------------- | --------------- | ------------------ |
+| **Rust**            | `cargo nextest`           | `insta` (`cargo-insta`) | `proptest`          | `cargo-mutants` | `wiremock`         |
+| **Python**          | `pytest` (`-n auto`)      | `syrupy`                | `hypothesis`        | `mutmut`        | `vcrpy` or `respx` |
+| **TypeScript / JS** | `vitest`                  | `vitest`-snapshot       | `fast-check`        | `stryker`       | `msw`              |
+| **Go**              | `go test ./...` (`-race`) | `goldie`                | `gopter` or `rapid` | `gremlins`      | `httpmock`         |
+| **Bash**            | `bats-core`               | `bats` `assert_output`  | n/a (table-driven)  | n/a             | `bats-mock`        |
 
 Cover the boundary at the architectural seams (file system stays real-but-sandboxed; HTTP gets a fake; clock and RNG get injected from `AppContext`). The rest of the matrix below is for when a project's needs grow past these defaults.
 
@@ -22,61 +22,61 @@ Cover the boundary at the architectural seams (file system stays real-but-sandbo
 
 ### Unit / integration runner
 
-| Lang | Tools | Notes |
-|---|---|---|
-| Rust | [`cargo test`](https://doc.rust-lang.org/cargo/commands/cargo-test.html), [`cargo nextest`](https://nexte.st/) | `nextest` is parallel-by-default, fail-fast, and has a flat summary; use it. |
-| Python | [`pytest`](https://docs.pytest.org/), [`pytest-xdist`](https://pytest-xdist.readthedocs.io/) | `pytest -n auto` parallelizes across CPUs. Stick with the `pytest` default unless a library forces `unittest`. |
-| TS/JS | [`vitest`](https://vitest.dev/), [`jest`](https://jestjs.io/), [`node:test`](https://nodejs.org/api/test.html) | `vitest` is the default for new TS projects (fast, ESM-native). `node:test` is fine for libraries with no extra deps. |
-| Go | `go test ./...`, `-parallel N`, `-race` | Built-in; `-race` always on in CI. |
-| Bash | [`bats-core`](https://bats-core.readthedocs.io/) | Standard. Use `bats-assert` and `bats-support` for readable assertions. |
+| Lang   | Tools                                                                                                          | Notes                                                                                                                 |
+| ------ | -------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Rust   | [`cargo test`](https://doc.rust-lang.org/cargo/commands/cargo-test.html), [`cargo nextest`](https://nexte.st/) | `nextest` is parallel-by-default, fail-fast, and has a flat summary; use it.                                          |
+| Python | [`pytest`](https://docs.pytest.org/), [`pytest-xdist`](https://pytest-xdist.readthedocs.io/)                   | `pytest -n auto` parallelizes across CPUs. Stick with the `pytest` default unless a library forces `unittest`.        |
+| TS/JS  | [`vitest`](https://vitest.dev/), [`jest`](https://jestjs.io/), [`node:test`](https://nodejs.org/api/test.html) | `vitest` is the default for new TS projects (fast, ESM-native). `node:test` is fine for libraries with no extra deps. |
+| Go     | `go test ./...`, `-parallel N`, `-race`                                                                        | Built-in; `-race` always on in CI.                                                                                    |
+| Bash   | [`bats-core`](https://bats-core.readthedocs.io/)                                                               | Standard. Use `bats-assert` and `bats-support` for readable assertions.                                               |
 
 ### CLI testing
 
 For testing the binary or runtime invocation of your CLI.
 
-| Lang | Tools |
-|---|---|
-| Rust | [`assert_cmd`](https://docs.rs/assert_cmd/), [`assert_fs`](https://docs.rs/assert_fs/), [`predicates`](https://docs.rs/predicates/) |
+| Lang   | Tools                                                                                                                                                                                                                                                       |
+| ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Rust   | [`assert_cmd`](https://docs.rs/assert_cmd/), [`assert_fs`](https://docs.rs/assert_fs/), [`predicates`](https://docs.rs/predicates/)                                                                                                                         |
 | Python | [`typer.testing.CliRunner`](https://typer.tiangolo.com/tutorial/testing/), [`click.testing.CliRunner`](https://click.palletsprojects.com/en/stable/testing/), [`subprocess`](https://docs.python.org/3/library/subprocess.html) + `pytest` for binary tests |
-| TS/JS | [`@oclif/test`](https://github.com/oclif/test), [`execa`](https://github.com/sindresorhus/execa) |
-| Go | `os/exec` + golden files, [`testscript`](https://pkg.go.dev/github.com/rogpeppe/go-internal/testscript) |
-| Bash | `bats-core` `run` builtin, fixture stubs on `PATH` |
+| TS/JS  | [`@oclif/test`](https://github.com/oclif/test), [`execa`](https://github.com/sindresorhus/execa)                                                                                                                                                            |
+| Go     | `os/exec` + golden files, [`testscript`](https://pkg.go.dev/github.com/rogpeppe/go-internal/testscript)                                                                                                                                                     |
+| Bash   | `bats-core` `run` builtin, fixture stubs on `PATH`                                                                                                                                                                                                          |
 
 ### Snapshot testing
 
-| Lang | Tools | Notes |
-|---|---|---|
-| Rust | [`insta`](https://insta.rs/) (CLI: [`cargo-insta`](https://insta.rs/docs/cli/)) | Inline + file snapshots; `cargo insta review` for interactive triage. |
-| Python | [`syrupy`](https://github.com/syrupy-project/syrupy), [`pytest-snapshot`](https://pypi.org/project/pytest-snapshot/) | `syrupy` is the modern default; pluggable serializers. |
-| TS/JS | [`vitest`](https://vitest.dev/guide/snapshot.html) / [`jest`](https://jestjs.io/docs/snapshot-testing) snapshots | Built-in; review diffs in PR like code. |
-| Go | [`goldie`](https://github.com/sebdah/goldie), [`cupaloy`](https://github.com/bradleyjkemp/cupaloy) | `goldie` is the most popular; `-update` flag for refresh. |
-| Bash | `bats` `assert_output` against a checked-in golden file | Manual but trivial; commit golden files alongside the test. |
+| Lang   | Tools                                                                                                                | Notes                                                                 |
+| ------ | -------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Rust   | [`insta`](https://insta.rs/) (CLI: [`cargo-insta`](https://insta.rs/docs/cli/))                                      | Inline + file snapshots; `cargo insta review` for interactive triage. |
+| Python | [`syrupy`](https://github.com/syrupy-project/syrupy), [`pytest-snapshot`](https://pypi.org/project/pytest-snapshot/) | `syrupy` is the modern default; pluggable serializers.                |
+| TS/JS  | [`vitest`](https://vitest.dev/guide/snapshot.html) / [`jest`](https://jestjs.io/docs/snapshot-testing) snapshots     | Built-in; review diffs in PR like code.                               |
+| Go     | [`goldie`](https://github.com/sebdah/goldie), [`cupaloy`](https://github.com/bradleyjkemp/cupaloy)                   | `goldie` is the most popular; `-update` flag for refresh.             |
+| Bash   | `bats` `assert_output` against a checked-in golden file                                                              | Manual but trivial; commit golden files alongside the test.           |
 
 **Rule for every snapshot tool:** never auto-update in CI. Updates happen locally, with the diff reviewed line by line, and the PR includes both the code change and the snapshot change.
 
 ### Property-based testing
 
-| Lang | Tools |
-|---|---|
-| Rust | [`proptest`](https://proptest-rs.github.io/proptest/intro.html), [`quickcheck`](https://docs.rs/quickcheck/) |
-| Python | [`hypothesis`](https://hypothesis.readthedocs.io/) |
-| TS/JS | [`fast-check`](https://fast-check.dev/) |
-| Go | [`gopter`](https://github.com/leanovate/gopter), [`rapid`](https://github.com/flyingmutant/rapid) |
-| Bash | n/a — use a table-driven loop with hand-picked edge cases |
+| Lang   | Tools                                                                                                        |
+| ------ | ------------------------------------------------------------------------------------------------------------ |
+| Rust   | [`proptest`](https://proptest-rs.github.io/proptest/intro.html), [`quickcheck`](https://docs.rs/quickcheck/) |
+| Python | [`hypothesis`](https://hypothesis.readthedocs.io/)                                                           |
+| TS/JS  | [`fast-check`](https://fast-check.dev/)                                                                      |
+| Go     | [`gopter`](https://github.com/leanovate/gopter), [`rapid`](https://github.com/flyingmutant/rapid)            |
+| Bash   | n/a — use a table-driven loop with hand-picked edge cases                                                    |
 
 `proptest` and `hypothesis` both shrink failing inputs to a minimal counterexample and persist failing seeds in a regression file — check that file into the repo so the regression is locked down. See [08 § Property-based testing](08-testing-strategy.md#property-based-testing) for when to reach for it.
 
 ### Mutation testing
 
-| Lang | Tools | Notes |
-|---|---|---|
-| Rust | [`cargo-mutants`](https://mutants.rs/) | Fast, modern, integrates with `cargo`. |
-| Python | [`mutmut`](https://mutmut.readthedocs.io/), [`cosmic-ray`](https://cosmic-ray.readthedocs.io/) | `mutmut` for most projects; `cosmic-ray` for distributed runs. |
-| TS/JS | [`stryker`](https://stryker-mutator.io/) | The mature option; also supports .NET, Scala. |
-| Go | [`gremlins`](https://gremlins.dev/) | Newer, single-binary. |
-| Java/Kotlin | [`PIT`](https://pitest.org/) | Industry standard for the JVM. |
-| C/C++ | [`Mull`](https://mull.readthedocs.io/) | Clang plugin. |
-| Bash | n/a |
+| Lang        | Tools                                                                                          | Notes                                                          |
+| ----------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| Rust        | [`cargo-mutants`](https://mutants.rs/)                                                         | Fast, modern, integrates with `cargo`.                         |
+| Python      | [`mutmut`](https://mutmut.readthedocs.io/), [`cosmic-ray`](https://cosmic-ray.readthedocs.io/) | `mutmut` for most projects; `cosmic-ray` for distributed runs. |
+| TS/JS       | [`stryker`](https://stryker-mutator.io/)                                                       | The mature option; also supports .NET, Scala.                  |
+| Go          | [`gremlins`](https://gremlins.dev/)                                                            | Newer, single-binary.                                          |
+| Java/Kotlin | [`PIT`](https://pitest.org/)                                                                   | Industry standard for the JVM.                                 |
+| C/C++       | [`Mull`](https://mull.readthedocs.io/)                                                         | Clang plugin.                                                  |
+| Bash        | n/a                                                                                            |                                                                |
 
 **Rule:** run mutation testing nightly in CI, not on every PR. Cap mutants per module so a run finishes in minutes. Track score per critical module; a drop is a regression in test quality even if all tests pass. See [08 § Mutation testing](08-testing-strategy.md#mutation-testing-as-quality-gate).
 
@@ -84,13 +84,13 @@ For testing the binary or runtime invocation of your CLI.
 
 For the network-boundary tests where you want real wire-format behavior without hitting a live service.
 
-| Lang | Tools | Notes |
-|---|---|---|
-| Rust | [`wiremock`](https://docs.rs/wiremock/), [`mockito`](https://docs.rs/mockito/), [`httpmock`](https://docs.rs/httpmock/) | All in-process HTTP servers. |
-| Python | [`vcrpy`](https://vcrpy.readthedocs.io/), [`respx`](https://lundberg.github.io/respx/), [`responses`](https://github.com/getsentry/responses) | `vcrpy` records once, replays forever (commit the cassette); `respx` is request-mocking for `httpx`. |
-| TS/JS | [`msw`](https://mswjs.io/), [`nock`](https://github.com/nock/nock), [`pollyjs`](https://netflix.github.io/pollyjs/) | `msw` works in both Node and the browser; `nock` is Node-only. |
-| Go | [`httpmock`](https://github.com/jarcoal/httpmock), [`gock`](https://github.com/h2non/gock), [`httptest`](https://pkg.go.dev/net/http/httptest) (stdlib) | `httptest` is built-in; reach for `gock` for richer matchers. |
-| Bash | `bats-mock`, hand-rolled stub script on `PATH` | A 5-line shell script that records `$@` to a tmpfile is enough for argv-contract tests. |
+| Lang   | Tools                                                                                                                                                   | Notes                                                                                                |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Rust   | [`wiremock`](https://docs.rs/wiremock/), [`mockito`](https://docs.rs/mockito/), [`httpmock`](https://docs.rs/httpmock/)                                 | All in-process HTTP servers.                                                                         |
+| Python | [`vcrpy`](https://vcrpy.readthedocs.io/), [`respx`](https://lundberg.github.io/respx/), [`responses`](https://github.com/getsentry/responses)           | `vcrpy` records once, replays forever (commit the cassette); `respx` is request-mocking for `httpx`. |
+| TS/JS  | [`msw`](https://mswjs.io/), [`nock`](https://github.com/nock/nock), [`pollyjs`](https://netflix.github.io/pollyjs/)                                     | `msw` works in both Node and the browser; `nock` is Node-only.                                       |
+| Go     | [`httpmock`](https://github.com/jarcoal/httpmock), [`gock`](https://github.com/h2non/gock), [`httptest`](https://pkg.go.dev/net/http/httptest) (stdlib) | `httptest` is built-in; reach for `gock` for richer matchers.                                        |
+| Bash   | `bats-mock`, hand-rolled stub script on `PATH`                                                                                                          | A 5-line shell script that records `$@` to a tmpfile is enough for argv-contract tests.              |
 
 **Pattern:** "record once, replay forever" is the cheapest fake for HTTP. The recorded cassette goes into version control; refreshing requires intent (a deliberate re-record commit), so silent upstream-shape drift can't sneak into the suite.
 
@@ -98,25 +98,25 @@ For the network-boundary tests where you want real wire-format behavior without 
 
 For services that talk to other services (honeycomb shape; rarely relevant to a single CLI).
 
-| Lang | Tools |
-|---|---|
-| Rust | [`pact-rust`](https://github.com/pact-foundation/pact-reference) |
-| Python | [`pact-python`](https://github.com/pact-foundation/pact-python) |
-| TS/JS | [`pact-js`](https://github.com/pact-foundation/pact-js) |
-| Go | [`pact-go`](https://github.com/pact-foundation/pact-go) |
-| Java | [`pact-jvm`](https://github.com/pact-foundation/pact-jvm), [Spring Cloud Contract](https://spring.io/projects/spring-cloud-contract) |
+| Lang   | Tools                                                                                                                                |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Rust   | [`pact-rust`](https://github.com/pact-foundation/pact-reference)                                                                     |
+| Python | [`pact-python`](https://github.com/pact-foundation/pact-python)                                                                      |
+| TS/JS  | [`pact-js`](https://github.com/pact-foundation/pact-js)                                                                              |
+| Go     | [`pact-go`](https://github.com/pact-foundation/pact-go)                                                                              |
+| Java   | [`pact-jvm`](https://github.com/pact-foundation/pact-jvm), [Spring Cloud Contract](https://spring.io/projects/spring-cloud-contract) |
 
 Pact is the canonical consumer-driven contract framework. Out of scope for a single-binary CLI; relevant the moment your CLI talks to a service you also own.
 
 ### Coverage
 
-| Lang | Tools |
-|---|---|
-| Rust | [`cargo-llvm-cov`](https://github.com/taiki-e/cargo-llvm-cov), [`tarpaulin`](https://github.com/xd009642/tarpaulin) |
-| Python | [`coverage`](https://coverage.readthedocs.io/), [`pytest-cov`](https://pytest-cov.readthedocs.io/) |
-| TS/JS | [`c8`](https://github.com/bcoe/c8), [`istanbul`](https://istanbul.js.org/) |
-| Go | `go test -cover`, `go tool cover -html=cover.out` |
-| Bash | [`kcov`](http://simonkagstrom.github.io/kcov/), [`bashcov`](https://github.com/infertux/bashcov) |
+| Lang   | Tools                                                                                                               |
+| ------ | ------------------------------------------------------------------------------------------------------------------- |
+| Rust   | [`cargo-llvm-cov`](https://github.com/taiki-e/cargo-llvm-cov), [`tarpaulin`](https://github.com/xd009642/tarpaulin) |
+| Python | [`coverage`](https://coverage.readthedocs.io/), [`pytest-cov`](https://pytest-cov.readthedocs.io/)                  |
+| TS/JS  | [`c8`](https://github.com/bcoe/c8), [`istanbul`](https://istanbul.js.org/)                                          |
+| Go     | `go test -cover`, `go tool cover -html=cover.out`                                                                   |
+| Bash   | [`kcov`](http://simonkagstrom.github.io/kcov/), [`bashcov`](https://github.com/infertux/bashcov)                    |
 
 Coverage as a *floor* against accidental regressions is fine; coverage as a *goal* is the road to [the third-party-library testing anti-pattern](08-testing-strategy.md#detecting-testing-the-third-party-library). Pair it with mutation testing for real signal.
 
@@ -124,11 +124,11 @@ Coverage as a *floor* against accidental regressions is fine; coverage as a *goa
 
 The principle from [08 § CI essentials](08-testing-strategy.md#ci-essentials): each tier has a time budget; assign each test type to the tier whose budget it fits.
 
-| Tier | Time budget | Tests run |
-|---|---|---|
-| pre-commit | < 1 s total | Lint, format-check, unit tests only |
-| pre-push | < 10 s total | Lint, format, unit + integration |
-| CI (PR) | minutes | Everything above + E2E + coverage gate |
+| Tier       | Time budget      | Tests run                                |
+| ---------- | ---------------- | ---------------------------------------- |
+| pre-commit | < 1 s total      | Lint, format-check, unit tests only      |
+| pre-push   | < 10 s total     | Lint, format, unit + integration         |
+| CI (PR)    | minutes          | Everything above + E2E + coverage gate   |
 | CI nightly | hours acceptable | Mutation testing + slower property tests |
 
 ### Tuning test-runner output for CI + AI agents
@@ -139,12 +139,12 @@ CI logs and agent-read transcripts both pay a token cost for noise that a human-
 
 **Four output axes that govern token efficiency.** Every reasonable test runner exposes these, even if the keys are named differently:
 
-| Axis | Token-efficient value | Why |
-|---|---|---|
-| Per-test status during execution | Show **failures only**, suppress pass lines | A 5k-test suite that prints one line per pass is 5k lines of noise; agents and reviewers triage from the failure list. |
-| End-of-run summary | **Failures only**, not the full pass roll-up | The summary's job is "what broke", not "what worked". |
-| Captured stdout/stderr of passing tests | **Never display** | Passing tests' chatter is noise by definition. |
-| Captured stdout/stderr of failing tests | **Always display**, ideally both inline AND in final summary | Agents triaging a failure find the output wherever they're looking. |
+| Axis                                    | Token-efficient value                                        | Why                                                                                                                    |
+| --------------------------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| Per-test status during execution        | Show **failures only**, suppress pass lines                  | A 5k-test suite that prints one line per pass is 5k lines of noise; agents and reviewers triage from the failure list. |
+| End-of-run summary                      | **Failures only**, not the full pass roll-up                 | The summary's job is "what broke", not "what worked".                                                                  |
+| Captured stdout/stderr of passing tests | **Never display**                                            | Passing tests' chatter is noise by definition.                                                                         |
+| Captured stdout/stderr of failing tests | **Always display**, ideally both inline AND in final summary | Agents triaging a failure find the output wherever they're looking.                                                    |
 
 **Progress bars in captured logs.** Most runners auto-suppress progress redraws when stdout is not a TTY (GitHub Actions et al. detect this correctly). Some CI systems emulate a TTY — when they do, the redraw stream bloats captured logs. Look for a `--no-progress` / `--reporter=dot` / `HIDE_PROGRESS=1`-style escape hatch and set it in CI env as belt-and-suspenders.
 
@@ -375,17 +375,17 @@ teardown() {
 
 When the symptom is X, reach for tool Y. Pairing this with the heuristics in [08 § Detecting "testing the third-party library"](08-testing-strategy.md#detecting-testing-the-third-party-library) covers the most common test-quality failures.
 
-| Symptom | Likely cause | Tool / pattern to reach for |
-|---|---|---|
-| High coverage, regressions still slip through | Tests cover lines but don't check behavior. | **Mutation testing** (`stryker`, `mutmut`, `cargo-mutants`). |
-| Flaky integration tests on CI but not locally | Test pollution: shared env, shared tmpdir, real clock. | **Isolation snippets** above + `env_clear` discipline. |
-| HTTP tests break the moment the upstream service is down | Live network calls in the suite. | **Recording fakes** (`vcrpy`, `msw`, `wiremock`). |
-| Test file is 90% setup, 10% assertions | Over-DRY scenarios, or every test rebuilds the world. | **DAMP refactor** + a single shared `Fixture` mechanic. |
-| Hand-written assertion for every field of a 30-field struct | Brittle, painful, drifts from reality. | **Snapshot testing** (`insta`, `syrupy`, `vitest`-snap). |
-| Parser handles "common" inputs but crashes on weird ones | Example tests miss the input space. | **Property-based testing** (`proptest`, `hypothesis`, `fast-check`). |
-| Wrapper CLI passed the wrong argv to the child after a refactor | argv builder isn't pinned. | **Argv-contract tests** + recording stub on `PATH`. |
-| Test asserts on `mock.call_args` and never on the SUT's return value | The mock is the only subject — [heuristic 2](08-testing-strategy.md#2-the-mock-is-the-only-subject). | **Rewrite with a fake at the boundary**, assert on the return value. |
-| AI-generated test file with 100% coverage but readers can't tell what's being tested | Doc-mirroring + over-stubbing — [heuristics 3 & 4](08-testing-strategy.md#3-doc-mirroring). | **Run the `test-review` skill**; refactor against the heuristics. |
+| Symptom                                                                              | Likely cause                                                                                         | Tool / pattern to reach for                                          |
+| ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| High coverage, regressions still slip through                                        | Tests cover lines but don't check behavior.                                                          | **Mutation testing** (`stryker`, `mutmut`, `cargo-mutants`).         |
+| Flaky integration tests on CI but not locally                                        | Test pollution: shared env, shared tmpdir, real clock.                                               | **Isolation snippets** above + `env_clear` discipline.               |
+| HTTP tests break the moment the upstream service is down                             | Live network calls in the suite.                                                                     | **Recording fakes** (`vcrpy`, `msw`, `wiremock`).                    |
+| Test file is 90% setup, 10% assertions                                               | Over-DRY scenarios, or every test rebuilds the world.                                                | **DAMP refactor** + a single shared `Fixture` mechanic.              |
+| Hand-written assertion for every field of a 30-field struct                          | Brittle, painful, drifts from reality.                                                               | **Snapshot testing** (`insta`, `syrupy`, `vitest`-snap).             |
+| Parser handles "common" inputs but crashes on weird ones                             | Example tests miss the input space.                                                                  | **Property-based testing** (`proptest`, `hypothesis`, `fast-check`). |
+| Wrapper CLI passed the wrong argv to the child after a refactor                      | argv builder isn't pinned.                                                                           | **Argv-contract tests** + recording stub on `PATH`.                  |
+| Test asserts on `mock.call_args` and never on the SUT's return value                 | The mock is the only subject — [heuristic 2](08-testing-strategy.md#2-the-mock-is-the-only-subject). | **Rewrite with a fake at the boundary**, assert on the return value. |
+| AI-generated test file with 100% coverage but readers can't tell what's being tested | Doc-mirroring + over-stubbing — [heuristics 3 & 4](08-testing-strategy.md#3-doc-mirroring).          | **Run the `test-review` skill**; refactor against the heuristics.    |
 
 ## References
 

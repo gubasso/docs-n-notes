@@ -1,6 +1,10 @@
 # Alacritty
 
-<!--toc-->
+<!--TOC-->
+
+- [General](#general)
+
+<!--TOC-->
 
 ## General
 

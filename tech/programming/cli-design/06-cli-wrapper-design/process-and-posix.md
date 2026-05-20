@@ -19,7 +19,7 @@ and explicit, keep the wrapped command mostly opaque, and avoid argv
 rewriting unless you have a narrow, stable reason. Every other rule
 descends from this.
 
----
+______________________________________________________________________
 
 ## 1. Argv layout & namespace separation
 
@@ -45,22 +45,23 @@ mywrap [WRAPPER-OPTS]  <verb|positional>  [--]  [CHILD-ARGS...]
   it to an env var.
 
 Sources:
+
 - [POSIX Utility Syntax Guidelines](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap12.html)
 - [GNU argument syntax](https://www.gnu.org/software/libc/manual/html_node/Argument-Syntax.html)
 - [Command Line Interface Guidelines (clig.dev)](https://clig.dev/)
 
----
+______________________________________________________________________
 
 ## 2. Where wrapper config lives — and the merge order
 
 clig.dev / 12-factor precedence ladder (highest wins):
 
 1. Command-line flags
-2. Environment variables (`MYWRAP_*` prefix)
-3. Project config (`./.mywraprc` or repo file)
-4. User config (`$XDG_CONFIG_HOME/mywrap/config.toml`)
-5. System config (`/etc/mywrap/...`)
-6. Built-in defaults
+1. Environment variables (`MYWRAP_*` prefix)
+1. Project config (`./.mywraprc` or repo file)
+1. User config (`$XDG_CONFIG_HOME/mywrap/config.toml`)
+1. System config (`/etc/mywrap/...`)
+1. Built-in defaults
 
 - Use **XDG Base Directory** paths for config/data/cache.
 - Reserve a **single namespaced env prefix** (`MYWRAP_*`); never leak
@@ -72,11 +73,12 @@ clig.dev / 12-factor precedence ladder (highest wins):
   child.
 
 Sources:
+
 - [Command Line Interface Guidelines — Configuration](https://clig.dev/)
 - [12 Factor CLI Apps — Jeff Dickey](https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46)
 - [The Twelve-Factor App — Config](https://12factor.net/config)
 
----
+______________________________________________________________________
 
 ## 3. Process model — exec vs spawn, signals, exit codes, tty
 
@@ -140,6 +142,7 @@ Use the shell convention:
   pay the cost only when you must.
 
 Sources:
+
 - [POSIX execvp](https://pubs.opengroup.org/onlinepubs/9699919799/functions/execvp.html)
 - [POSIX wait](https://pubs.opengroup.org/onlinepubs/9699919799/functions/wait.html)
 - [Bash exit status](https://www.gnu.org/s/bash/manual/html_node/Exit-Status.html)
@@ -149,7 +152,7 @@ Sources:
 - [Wikipedia: Exit status](https://en.wikipedia.org/wiki/Exit_status)
 - [sudo manpage](https://www.sudo.ws/docs/man/sudo.man/)
 
----
+______________________________________________________________________
 
 ## 4. Resolving the inner binary
 
@@ -157,9 +160,9 @@ Layered lookup, highest priority first:
 
 1. **`$MYWRAP_CHILD_BIN`** — explicit override (single source of truth
    for tests and CI).
-2. **Config file** entry (`child_bin = "/opt/foo/bin/foo"`).
-3. **`PATH` search** via `execvp` semantics.
-4. **Bundled vendor path** if you ship one
+1. **Config file** entry (`child_bin = "/opt/foo/bin/foo"`).
+1. **`PATH` search** via `execvp` semantics.
+1. **Bundled vendor path** if you ship one
    (`$XDG_DATA_HOME/mywrap/bin/foo`).
 
 ### Recursion guard (shim pattern)
@@ -182,12 +185,13 @@ Also: resolve **once**, log the resolved absolute path under
 executable (exit **126**).
 
 Sources:
+
 - [Deep dive: how pyenv works (shim pattern)](https://www.mungingdata.com/python/how-pyenv-works-shims/)
 - [pyenv shim interception pattern (readoss)](https://readoss.com/en/pyenv/pyenv/shim-interception-pattern-pyenv-hijacks-python-commands)
 - [pyenv infinite-loop failure mode (issue #2696)](https://github.com/pyenv/pyenv/issues/2696)
 - [mise vs asdf](https://mac.install.guide/mise/mise-vs-asdf)
 
----
+______________________________________________________________________
 
 ## 5. Subcommand / plugin namespacing
 
@@ -195,12 +199,12 @@ Four well-tested models — pick one. The reserved-verb namespace
 (`self`) is **not** a generic "all my verbs" prefix and should be used
 only under the narrow rule in §5.1.
 
-| Model | Examples | How it works | When to use |
-|---|---|---|---|
-| **PATH dispatch by prefix** | `git foo` → `git-foo` | Wrapper looks up `$PROG-$verb` on PATH and execs | Open, decentralized plugin ecosystems. Simplest. |
-| **PATH dispatch + longest match** | `kubectl foo bar baz` → tries `kubectl-foo-bar-baz` then `-foo-bar` then `-foo` | Same as git, but greedy on segments; underscores in filename become dashes in command | Hierarchical verb trees |
-| **Managed extension registry** | `gh extension install owner/gh-foo` | Wrapper has its own install/list/upgrade for extensions in a private dir | Discoverability + lifecycle management |
-| **Reserved-verb namespace (narrow)** | `rustup self update`, `rustup self uninstall`, `uv self update` | A reserved noun (`self`) groups wrapper-owned verbs that genuinely *target the binary itself* | **Only** when (a) the verb mutates the wrapper binary (update / uninstall) **and** (b) the same name plausibly collides with a child verb. Never as a generic "all my own commands" prefix. See §5.1. |
+| Model                                | Examples                                                                        | How it works                                                                                  | When to use                                                                                                                                                                                           |
+| ------------------------------------ | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **PATH dispatch by prefix**          | `git foo` → `git-foo`                                                           | Wrapper looks up `$PROG-$verb` on PATH and execs                                              | Open, decentralized plugin ecosystems. Simplest.                                                                                                                                                      |
+| **PATH dispatch + longest match**    | `kubectl foo bar baz` → tries `kubectl-foo-bar-baz` then `-foo-bar` then `-foo` | Same as git, but greedy on segments; underscores in filename become dashes in command         | Hierarchical verb trees                                                                                                                                                                               |
+| **Managed extension registry**       | `gh extension install owner/gh-foo`                                             | Wrapper has its own install/list/upgrade for extensions in a private dir                      | Discoverability + lifecycle management                                                                                                                                                                |
+| **Reserved-verb namespace (narrow)** | `rustup self update`, `rustup self uninstall`, `uv self update`                 | A reserved noun (`self`) groups wrapper-owned verbs that genuinely *target the binary itself* | **Only** when (a) the verb mutates the wrapper binary (update / uninstall) **and** (b) the same name plausibly collides with a child verb. Never as a generic "all my own commands" prefix. See §5.1. |
 
 ### 5.1 The `self` rule — narrow, not generic
 
@@ -210,7 +214,7 @@ is justified only when **both** of the following hold:
 
 1. The verb's *object* is the running binary itself — it updates,
    uninstalls, or otherwise mutates the wrapper, **and**
-2. The same verb name plausibly exists on the wrapped child (e.g.,
+1. The same verb name plausibly exists on the wrapped child (e.g.,
    `rustup update` already means "update toolchains" — a different
    operation — so `rustup self update` disambiguates).
 
@@ -253,17 +257,17 @@ reserved noun.
 
 What real tools do (verified against current official docs):
 
-| Tool | `version` | `help` | `completion` | `config` | self-mutate | Uses `self`? |
-|------|-----------|--------|--------------|----------|-------------|--------------|
-| **rustup** | `rustup --version` | `rustup --help` | — | — | `rustup self update`, `rustup self uninstall` | **only self-mutating** |
-| **uv** | `uv version` | `uv help` | — | — | `uv self update` | **only self-mutating** |
-| **cargo** | `cargo --version` | `cargo --help` | — | — | — | **never** (no `cargo self` exists) |
-| **gh** | `gh version` | `gh help` | `gh completion` | `gh config` | — | never |
-| **kubectl** | `kubectl version` | `kubectl help` | `kubectl completion` | `kubectl config` | — | never |
-| **git** | `git --version` | `git help` | — | `git config` | — | never |
-| **gcloud** | `gcloud version` | `gcloud help` | `gcloud completion` | `gcloud config` | — | never |
-| **op** (1Password CLI) | `op --version` | `op help` | `op completion` | — | `op update` | never |
-| **flyctl** | `fly version` | `fly help` | `flyctl completion` | `flyctl config` | — | never |
+| Tool                   | `version`          | `help`          | `completion`         | `config`         | self-mutate                                   | Uses `self`?                       |
+| ---------------------- | ------------------ | --------------- | -------------------- | ---------------- | --------------------------------------------- | ---------------------------------- |
+| **rustup**             | `rustup --version` | `rustup --help` | —                    | —                | `rustup self update`, `rustup self uninstall` | **only self-mutating**             |
+| **uv**                 | `uv version`       | `uv help`       | —                    | —                | `uv self update`                              | **only self-mutating**             |
+| **cargo**              | `cargo --version`  | `cargo --help`  | —                    | —                | —                                             | **never** (no `cargo self` exists) |
+| **gh**                 | `gh version`       | `gh help`       | `gh completion`      | `gh config`      | —                                             | never                              |
+| **kubectl**            | `kubectl version`  | `kubectl help`  | `kubectl completion` | `kubectl config` | —                                             | never                              |
+| **git**                | `git --version`    | `git help`      | —                    | `git config`     | —                                             | never                              |
+| **gcloud**             | `gcloud version`   | `gcloud help`   | `gcloud completion`  | `gcloud config`  | —                                             | never                              |
+| **op** (1Password CLI) | `op --version`     | `op help`       | `op completion`      | —                | `op update`                                   | never                              |
+| **flyctl**             | `fly version`      | `fly help`      | `flyctl completion`  | `flyctl config`  | —                                             | never                              |
 
 The pattern is consistent: only the two wrappers that can actually
 update themselves as standalone binaries (`rustup`, `uv`) use `self`,
@@ -283,6 +287,7 @@ and both restrict it to self-mutating operations. No major tool uses
   deliberately doesn't, to keep plugins decoupled.
 
 Sources:
+
 - [Cargo external tools / custom subcommands](https://doc.rust-lang.org/cargo/reference/external-tools.html)
 - [Cargo book — CLI reference](https://doc.rust-lang.org/cargo/commands/index.html)
 - [Rustup book — Basics (`rustup self update`)](https://rust-lang.github.io/rustup/basics.html)
@@ -295,7 +300,7 @@ Sources:
 - [kubectl reference (`kubectl version`, `kubectl completion`, `kubectl config`)](https://kubernetes.io/docs/reference/kubectl/)
 - [gcloud reference (top-level `version`, `help`, `config`)](https://cloud.google.com/sdk/gcloud/reference)
 
----
+______________________________________________________________________
 
 ## 6. Composition vs translation — the cardinal rule
 
@@ -318,7 +323,7 @@ Even then: parse the *minimal subset* (only the flags you must
 intercept), and **forward everything else opaque**. Use a **denylist
 of flags you claim**, not an allowlist of flags you understand.
 
----
+______________________________________________________________________
 
 ## 7. UX — help, version, completions, man pages
 
@@ -345,13 +350,14 @@ If your wrapper genuinely supports self-update or self-uninstall, put
 — and only those (see §5.1).
 
 Sources:
+
 - [Cargo external tools / `cargo help`](https://doc.rust-lang.org/cargo/reference/external-tools.html)
 - [git-help docs](https://git-scm.com/docs/git-help)
 - [gh `version` / `help` / `completion` / `config` (top-level)](https://cli.github.com/manual/)
 - [kubectl `version` / `completion` / `config` (top-level)](https://kubernetes.io/docs/reference/kubectl/)
 - [rustup self-update (only `self` use case)](https://rust-lang.github.io/rustup/basics.html)
 
----
+______________________________________________________________________
 
 ## 8. Failure modes & exit codes
 
@@ -378,13 +384,14 @@ and the override env var; exit `127` (missing) or `126` (not
 executable). This matches `/bin/sh` and is what tooling expects.
 
 Sources:
+
 - [sysexits.h(3head) — Linux man page](https://man7.org/linux/man-pages/man3/sysexits.h.3head.html)
 - [sysexits — FreeBSD man page](https://man.freebsd.org/cgi/man.cgi?query=sysexits)
 - [Bash exit status](https://www.gnu.org/s/bash/manual/html_node/Exit-Status.html)
 - [POSIX xargs (127 convention)](https://pubs.opengroup.org/onlinepubs/009695399/utilities/xargs.html)
 - [Wikipedia: Exit status](https://en.wikipedia.org/wiki/Exit_status)
 
----
+______________________________________________________________________
 
 ## 9. Testability
 
@@ -410,7 +417,7 @@ Bake the seams in from day one:
 
 **Wrappers are uniquely exposed to "testing the subprocess library"** — the failure mode where a test stubs out `std::process::Command` (Rust), `subprocess.run` (Python), or `exec.Command` (Go) and only asserts on the recorded calls, never on the wrapper's argv-translation behavior. Apply the **import-removal test** ([08 § The import-removal test](../08-testing-strategy.md#5-the-import-removal-test)): mentally delete the subprocess import the test sets up. Would the test still pass? If yes, you're testing the mock, not the wrapper — convert it to an integration test that runs the wrapper with a recording stub on `PATH` and asserts on the recorded argv. The full catalog of detection heuristics lives in [08 § Detecting "testing the third-party library"](../08-testing-strategy.md#detecting-testing-the-third-party-library).
 
----
+______________________________________________________________________
 
 ## 10. Anti-patterns — avoid by construction
 
@@ -437,7 +444,7 @@ Bake the seams in from day one:
 - **Reusing short flags the child uses.** Long, namespaced flags only
   for wrapper config; reserve shorts for the child.
 
----
+______________________________________________________________________
 
 ## One-screen start-from-scratch checklist
 
@@ -496,7 +503,7 @@ DO NOT
 [ ] duplicate features the child already provides
 ```
 
----
+______________________________________________________________________
 
 ## Single default rule — if you remember only one thing
 
@@ -506,7 +513,7 @@ supervision · forward signals · propagate exit faithfully · resolve
 via explicit override then `PATH` · reserve a distinct
 plugin/subcommand namespace.
 
----
+______________________________________________________________________
 
 ## References
 

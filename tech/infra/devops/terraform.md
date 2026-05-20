@@ -3,8 +3,11 @@
 ## Install
 
 - Install and manage versions with `tfenv`
+
 - or with asdf
+
   - https://github.com/asdf-community/asdf-hashicorp
+
   ```
   asdf plugin-add boundary https://github.com/asdf-community/asdf-hashicorp.git
   asdf plugin-add consul https://github.com/asdf-community/asdf-hashicorp.git
@@ -24,9 +27,11 @@
 ## General
 
 - https://github.com/terraform-docs/terraform-docs
+
   - https://github.com/looztra/asdf-terraform-docs
 
 - https://github.com/GoogleCloudPlatform/terraformer
+
   - About: CLI tool to generate terraform files from existing infrastructure (reverse Terraform). Infrastructure to Code
   - https://github.com/gr1m0h/asdf-terraformer
 
@@ -42,8 +47,7 @@ Basic file structure:
 - `main.tf`
   - resource definitions
 
-*.tfstate stored in S3?
-
+\*.tfstate stored in S3?
 
 ## Resources
 

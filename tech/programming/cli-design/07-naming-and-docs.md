@@ -6,11 +6,11 @@ Boring is good. Predictability beats cleverness. Pick the convention once and ap
 
 The least-public modifier that works. Promotion to a more public level is a deliberate API decision.
 
-| Item is | Default visibility |
-|---------|--------------------|
-| Used only within its own module | private (no modifier / `_name` convention) |
-| Used by sibling modules in the same crate | crate-private (`pub(crate)`, package-private, internal package) |
-| Part of the deliberate public API (re-exported from the library root) | `pub` / public |
+| Item is                                                               | Default visibility                                              |
+| --------------------------------------------------------------------- | --------------------------------------------------------------- |
+| Used only within its own module                                       | private (no modifier / `_name` convention)                      |
+| Used by sibling modules in the same crate                             | crate-private (`pub(crate)`, package-private, internal package) |
+| Part of the deliberate public API (re-exported from the library root) | `pub` / public                                                  |
 
 A blanket `pub mod foo;` / `export *` across every module is an anti-pattern. It says "everything is API" when nothing actually is. Promote individual items as their consumers appear.
 
@@ -61,15 +61,15 @@ Reasons:
 
 Use the same vocabulary across every CLI you build. The reader who learns it once should recognize it everywhere.
 
-| Concept | Name pattern | Example |
-|---------|--------------|---------|
-| Parser argument struct (parse-shape) | `<Verb>Args` | `WidgetArgs`, `InitArgs` |
-| Service request (runtime-shape input) | `<Verb>Request` | `WidgetRequest` |
-| Service response | `<Verb>Report` or `<Verb>Outcome` | `WidgetReport` |
-| Domain newtype | the concept itself, no suffix | `WidgetId`, `BranchName`, `ProjectKey` |
-| Error enum | `<Layer>Error` | `DomainError`, `GitError`, `WidgetServiceError`, `AppError` |
-| Trait / interface | noun describing the role | `GitBackend`, `Clock`, `PromptBackend` |
-| Adapter implementation | `<System><Trait>` or `<Quality><Trait>` | `LocalClock`, `RealGitBackend`, `MockGitBackend` |
+| Concept                               | Name pattern                            | Example                                                     |
+| ------------------------------------- | --------------------------------------- | ----------------------------------------------------------- |
+| Parser argument struct (parse-shape)  | `<Verb>Args`                            | `WidgetArgs`, `InitArgs`                                    |
+| Service request (runtime-shape input) | `<Verb>Request`                         | `WidgetRequest`                                             |
+| Service response                      | `<Verb>Report` or `<Verb>Outcome`       | `WidgetReport`                                              |
+| Domain newtype                        | the concept itself, no suffix           | `WidgetId`, `BranchName`, `ProjectKey`                      |
+| Error enum                            | `<Layer>Error`                          | `DomainError`, `GitError`, `WidgetServiceError`, `AppError` |
+| Trait / interface                     | noun describing the role                | `GitBackend`, `Clock`, `PromptBackend`                      |
+| Adapter implementation                | `<System><Trait>` or `<Quality><Trait>` | `LocalClock`, `RealGitBackend`, `MockGitBackend`            |
 
 ### Avoid
 
@@ -79,18 +79,18 @@ Use the same vocabulary across every CLI you build. The reader who learns it onc
 
 ## Function naming
 
-| Purpose | Pattern | Example |
-|---------|---------|---------|
-| Constructor | `new`, `with_<thing>`, `from_<source>`, `try_new` | `WidgetId::try_new`, `Config::from_file` |
-| Getter | drop `get_`; just the field name | `widget.id()`, not `widget.get_id()` |
-| Setter | `set_<field>` (or prefer making the field directly accessible if no invariant) | `config.set_log_level(...)` |
-| Conversion (consuming) | `into_<x>` | `s.into_string()` |
-| Conversion (cheap borrow) | `as_<x>` | `path.as_str()` |
-| Conversion (owned, expensive) | `to_<x>` | `id.to_string()` |
-| Predicate | `is_<adj>` / `has_<noun>` → returns `bool` | `widget.is_active()` |
-| Fallible variant | `try_<verb>` returns `Result` | `try_parse`, `try_new` |
-| I/O | `read_<x>` / `write_<x>` | `read_config`, `write_report` |
-| Pure transform | `parse_<x>` / `render_<x>` / `format_<x>` | `parse_id`, `render_table` |
+| Purpose                       | Pattern                                                                        | Example                                  |
+| ----------------------------- | ------------------------------------------------------------------------------ | ---------------------------------------- |
+| Constructor                   | `new`, `with_<thing>`, `from_<source>`, `try_new`                              | `WidgetId::try_new`, `Config::from_file` |
+| Getter                        | drop `get_`; just the field name                                               | `widget.id()`, not `widget.get_id()`     |
+| Setter                        | `set_<field>` (or prefer making the field directly accessible if no invariant) | `config.set_log_level(...)`              |
+| Conversion (consuming)        | `into_<x>`                                                                     | `s.into_string()`                        |
+| Conversion (cheap borrow)     | `as_<x>`                                                                       | `path.as_str()`                          |
+| Conversion (owned, expensive) | `to_<x>`                                                                       | `id.to_string()`                         |
+| Predicate                     | `is_<adj>` / `has_<noun>` → returns `bool`                                     | `widget.is_active()`                     |
+| Fallible variant              | `try_<verb>` returns `Result`                                                  | `try_parse`, `try_new`                   |
+| I/O                           | `read_<x>` / `write_<x>`                                                       | `read_config`, `write_report`            |
+| Pure transform                | `parse_<x>` / `render_<x>` / `format_<x>`                                      | `parse_id`, `render_table`               |
 
 See [Rust API Guidelines: Naming](https://rust-lang.github.io/api-guidelines/naming.html) for the canonical reference.
 
@@ -136,18 +136,18 @@ Reach for a fully-overridden help (`override_help` / equivalent) only when the p
 
 The same three-tier shape recurs across ecosystems. Read the table as "what they picked, and the reason that picked tier was justified":
 
-| Project | Language / parser | Pattern | Why |
-|---|---|---|---|
-| [`cargo`](https://github.com/rust-lang/cargo) | Rust / clap | Derive + `after_help` pointer to `cargo help <cmd>` | Subcommands have man-page-scale docs; the short `--help` stays terse and points at a long-form reader. The flag table is never hand-maintained. |
-| [`jj`](https://github.com/jj-vcs/jj) | Rust / clap | Derive + `long_about` literals per subcommand | Scales fine to 40+ subcommands. Prose lives next to the parser definition — no separate `help.txt` to drift. |
-| [`rustup`](https://github.com/rust-lang/rustup) | Rust / clap | Derive + `after_help = include_str!(...)` per command | Wrapper CLI: hand-authored prose covers proxy/toolchain semantics (the wrapper-narrative analog of passthrough rules and env vars). Closest reference model for any wrapper. |
-| [`astral-sh/uv`](https://github.com/astral-sh/uv) | Rust / clap | `disable_help_flag` + custom `uv help` subcommand ([PR #4906](https://github.com/astral-sh/uv/pull/4906)) | Escalated only when the *renderer* (theming, pagination, cross-refs) outgrew what clap can produce. The command tree is still derive-based. |
-| [`bacon`](https://github.com/Canop/bacon) | Rust / clap + [`clap-help`](https://github.com/Canop/clap-help) | Drop-in third-party renderer | Same motivation as `uv` solved with a reusable crate. If you're escalating for *presentation*, evaluate this before owning a custom renderer. |
-| [`ripgrep`](https://github.com/BurntSushi/ripgrep) | Rust / hand-rolled | No clap; help text authored alongside flag definitions in `crates/core/flags/` | Driven by startup-time, binary-size, and man-page-generation constraints. The upper bound of "fully custom". Don't copy unless you have ripgrep-scale distribution pressure. |
-| [`kubectl`](https://github.com/kubernetes/kubectl) | Go / cobra | `Long:` + `Example:` blocks on each command | The cobra equivalent of clap's `long_about` + `after_help`. Cobra renders the flag table; teams author only the narrative. |
-| [`gh`](https://github.com/cli/cli) | Go / cobra | Same — `Long` + `Example`, plus `HelpFunc` override on the root for the "topics" landing screen | The root override is *only* for the topic-grouping landing page; per-command help is still cobra-generated. Tier-2 escalation done at the right level. |
-| [`pip`](https://github.com/pypa/pip) | Python / argparse | `description=` + `epilog=` per subcommand | The argparse equivalent of `long_about` + `after_help`. Same shape, different syntax. |
-| [`oclif` apps (e.g. `heroku` CLI)](https://oclif.io/) | TypeScript / oclif | `description`, `examples`, `flags` decorators | Framework derives `--help` from class fields; `examples` is the narrative addendum. |
+| Project                                               | Language / parser                                               | Pattern                                                                                                   | Why                                                                                                                                                                          |
+| ----------------------------------------------------- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`cargo`](https://github.com/rust-lang/cargo)         | Rust / clap                                                     | Derive + `after_help` pointer to `cargo help <cmd>`                                                       | Subcommands have man-page-scale docs; the short `--help` stays terse and points at a long-form reader. The flag table is never hand-maintained.                              |
+| [`jj`](https://github.com/jj-vcs/jj)                  | Rust / clap                                                     | Derive + `long_about` literals per subcommand                                                             | Scales fine to 40+ subcommands. Prose lives next to the parser definition — no separate `help.txt` to drift.                                                                 |
+| [`rustup`](https://github.com/rust-lang/rustup)       | Rust / clap                                                     | Derive + `after_help = include_str!(...)` per command                                                     | Wrapper CLI: hand-authored prose covers proxy/toolchain semantics (the wrapper-narrative analog of passthrough rules and env vars). Closest reference model for any wrapper. |
+| [`astral-sh/uv`](https://github.com/astral-sh/uv)     | Rust / clap                                                     | `disable_help_flag` + custom `uv help` subcommand ([PR #4906](https://github.com/astral-sh/uv/pull/4906)) | Escalated only when the *renderer* (theming, pagination, cross-refs) outgrew what clap can produce. The command tree is still derive-based.                                  |
+| [`bacon`](https://github.com/Canop/bacon)             | Rust / clap + [`clap-help`](https://github.com/Canop/clap-help) | Drop-in third-party renderer                                                                              | Same motivation as `uv` solved with a reusable crate. If you're escalating for *presentation*, evaluate this before owning a custom renderer.                                |
+| [`ripgrep`](https://github.com/BurntSushi/ripgrep)    | Rust / hand-rolled                                              | No clap; help text authored alongside flag definitions in `crates/core/flags/`                            | Driven by startup-time, binary-size, and man-page-generation constraints. The upper bound of "fully custom". Don't copy unless you have ripgrep-scale distribution pressure. |
+| [`kubectl`](https://github.com/kubernetes/kubectl)    | Go / cobra                                                      | `Long:` + `Example:` blocks on each command                                                               | The cobra equivalent of clap's `long_about` + `after_help`. Cobra renders the flag table; teams author only the narrative.                                                   |
+| [`gh`](https://github.com/cli/cli)                    | Go / cobra                                                      | Same — `Long` + `Example`, plus `HelpFunc` override on the root for the "topics" landing screen           | The root override is *only* for the topic-grouping landing page; per-command help is still cobra-generated. Tier-2 escalation done at the right level.                       |
+| [`pip`](https://github.com/pypa/pip)                  | Python / argparse                                               | `description=` + `epilog=` per subcommand                                                                 | The argparse equivalent of `long_about` + `after_help`. Same shape, different syntax.                                                                                        |
+| [`oclif` apps (e.g. `heroku` CLI)](https://oclif.io/) | TypeScript / oclif                                              | `description`, `examples`, `flags` decorators                                                             | Framework derives `--help` from class fields; `examples` is the narrative addendum.                                                                                          |
 
 **Reading the table.** The default (Tier 1 — parser-generated structure + narrative addendum) wins across every ecosystem and at every project scale. Tier-3 escalations cluster into two distinct reasons: **presentation** (`uv`, `bacon` — colors, pagination, theming) and **parser-level constraints** (`ripgrep` — startup time, binary size). Most CLIs, including wrappers, sit at Tier 1. If your reason to escalate doesn't match one of those two buckets, treat the urge as a smell — it usually means the *commands* need reorganizing, not the help renderer.
 
@@ -177,8 +177,8 @@ The "isn't" sentence is load-bearing. It lets a future reader see at a glance wh
 The library root (or `main`'s entry file) starts with:
 
 1. A one-sentence statement of the crate's purpose.
-2. A bullet list of the major modules with one-line summaries.
-3. A link to the architecture spec that governs the layout.
+1. A bullet list of the major modules with one-line summaries.
+1. A link to the architecture spec that governs the layout.
 
 ```rust
 //! `my-cli`: synchronizes widgets between local and remote stores.

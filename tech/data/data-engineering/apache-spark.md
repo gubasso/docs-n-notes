@@ -12,7 +12,7 @@ Apache Spark is an open-source distributed computing framework used for processi
 
   - Multiple workloads: Spark supports batch processing, interactive queries, real-time analytics, machine learning, and graph processing. One application can seamlessly combine different processing types[1][2].
 
-- Spark has a master/slave architecture. The main components are[1][5]:
+- Spark has a master/slave architecture. The main components are[1]\[5\]:
 
   - Spark Driver: The central coordinator that runs the main() program, creates SparkContext, and manages the job flow and task scheduling.
 
@@ -20,7 +20,7 @@ Apache Spark is an open-source distributed computing framework used for processi
 
   - Worker Nodes: Run Spark Executors to execute tasks and store data in memory or disk.
 
-- Spark Core is the foundation, providing distributed task dispatching, scheduling, and I/O. On top of it are libraries[2]:
+- Spark Core is the foundation, providing distributed task dispatching, scheduling, and I/O. On top of it are libraries\[2\]:
 
   - Spark SQL for structured data processing
   - Spark Streaming for real-time processing
@@ -38,15 +38,15 @@ External system analysis: Here are some of the main use cases for Apache Spark:
 
 1. Big Data Processing: Spark is used for processing and analyzing large datasets that don't fit on a single machine. It can process data much faster than Hadoop MapReduce by leveraging in-memory computing and optimized execution. Common big data tasks include ETL (extract, transform, load), data cleansing, aggregations, joins, etc.
 
-2. Machine Learning: Spark's MLlib library provides distributed implementations of many machine learning and statistical algorithms. It's used for building ML models on large datasets for applications like recommendation engines, fraud detection, predictive maintenance, etc. Spark enables data scientists to train models on huge datasets quickly.
+1. Machine Learning: Spark's MLlib library provides distributed implementations of many machine learning and statistical algorithms. It's used for building ML models on large datasets for applications like recommendation engines, fraud detection, predictive maintenance, etc. Spark enables data scientists to train models on huge datasets quickly.
 
-3. Real-time Stream Processing: With Spark Streaming, you can process real-time data streams from sources like Kafka, Flume, Kinesis, or TCP sockets. It's used for real-time analytics, live dashboards, anomaly detection, and ETL on streaming data. Spark can process millions of events per second with low latency.
+1. Real-time Stream Processing: With Spark Streaming, you can process real-time data streams from sources like Kafka, Flume, Kinesis, or TCP sockets. It's used for real-time analytics, live dashboards, anomaly detection, and ETL on streaming data. Spark can process millions of events per second with low latency.
 
-4. Interactive Analytics: Spark SQL allows querying structured data inside Spark programs using SQL or DataFrames/Datasets API. It's used for ad-hoc queries, BI reporting, and powering SQL-on-Hadoop engines. Spark's in-memory caching enables interactive analysis on large datasets.
+1. Interactive Analytics: Spark SQL allows querying structured data inside Spark programs using SQL or DataFrames/Datasets API. It's used for ad-hoc queries, BI reporting, and powering SQL-on-Hadoop engines. Spark's in-memory caching enables interactive analysis on large datasets.
 
-5. Graph Processing: GraphX is Spark's API for graphs and graph-parallel computation. It's used for building and transforming interactive graphs, running parallel algorithms (e.g. PageRank, connected components), and doing graph analytics or pattern matching on social networks, fraud rings, etc.
+1. Graph Processing: GraphX is Spark's API for graphs and graph-parallel computation. It's used for building and transforming interactive graphs, running parallel algorithms (e.g. PageRank, connected components), and doing graph analytics or pattern matching on social networks, fraud rings, etc.
 
-6. Data Integration: Spark can combine data from disparate sources like Hadoop, Cassandra, HBase, S3 and more. It's used for data integration workloads that transform data from multiple systems into a unified view for downstream applications.
+1. Data Integration: Spark can combine data from disparate sources like Hadoop, Cassandra, HBase, S3 and more. It's used for data integration workloads that transform data from multiple systems into a unified view for downstream applications.
 
 So in summary, Spark is a versatile big data tool used for a wide range of processing and analytics workloads - from batch ETL jobs to real-time streaming to machine learning - all on the same computing engine. Its speed, ease of use, and ability to combine different workloads make it a popular choice for big data applications.
 

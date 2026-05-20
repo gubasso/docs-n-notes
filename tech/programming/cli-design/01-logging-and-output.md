@@ -4,10 +4,10 @@ Every CLI emits two distinct streams of information. Conflating them is the root
 
 ## The two layers
 
-| Layer | Audience | Destination (default) | Format | When written |
-|-------|----------|-----------------------|--------|--------------|
-| **1. User-UX** | Human at a terminal (or a downstream pipe consumer) | `stdout` for results · `stderr` for prompts/progress/errors | Colored, formatted, tables, prompts | Always |
-| **2. Program-logs** | Developer, LLM coding agent, ops debugging post-mortem | `$XDG_STATE_HOME/<app>/<app>.log` (rotating) | Structured `key=value` (or `--log-format=json`), no ANSI | Always (file); on-terminal only with `--log-stderr` or `-vv+` |
+| Layer               | Audience                                               | Destination (default)                                       | Format                                                   | When written                                                  |
+| ------------------- | ------------------------------------------------------ | ----------------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------- |
+| **1. User-UX**      | Human at a terminal (or a downstream pipe consumer)    | `stdout` for results · `stderr` for prompts/progress/errors | Colored, formatted, tables, prompts                      | Always                                                        |
+| **2. Program-logs** | Developer, LLM coding agent, ops debugging post-mortem | `$XDG_STATE_HOME/<app>/<app>.log` (rotating)                | Structured `key=value` (or `--log-format=json`), no ANSI | Always (file); on-terminal only with `--log-stderr` or `-vv+` |
 
 Why split them:
 
@@ -18,7 +18,7 @@ Why split them:
 
 Rule of thumb: **if a human reads it once, it's user-UX. If a tool or developer reads it later, it's program-logs.**
 
----
+______________________________________________________________________
 
 ## Layer 1 — User-UX
 
@@ -40,13 +40,13 @@ app widget list --format json 2>/dev/null | jq '.[] | .id'
 
 Expose a `--format` flag with at least `text` (default, human-pretty) and `json` (machine-readable). Add `yaml` / `table` / `tsv` as needed.
 
-| Format | Use case |
-|--------|----------|
-| `text` (default) | Interactive humans. Color, alignment, headers. |
-| `json` | Scripting, agents, CI. Newline-delimited if streaming. |
-| `yaml` | Humans who want machine-readable. |
-| `table` | Wide tabular output for humans. |
-| `tsv` / `csv` | Spreadsheets, classic Unix pipes. |
+| Format           | Use case                                               |
+| ---------------- | ------------------------------------------------------ |
+| `text` (default) | Interactive humans. Color, alignment, headers.         |
+| `json`           | Scripting, agents, CI. Newline-delimited if streaming. |
+| `yaml`           | Humans who want machine-readable.                      |
+| `table`          | Wide tabular output for humans.                        |
+| `tsv` / `csv`    | Spreadsheets, classic Unix pipes.                      |
 
 If the audience is genuinely interactive, `text` is OK to default to. If your CLI is most often piped, default to `json` and use `--format text` as the opt-in.
 
@@ -54,12 +54,12 @@ If the audience is genuinely interactive, `text` is OK to default to. If your CL
 
 Respect the three established conventions. Precedence: **NO_COLOR > FORCE_COLOR (or CLICOLOR_FORCE) > isatty(stdout) check > CLICOLOR**.
 
-| Variable | Effect |
-|----------|--------|
-| `NO_COLOR` (any non-empty value) | Disable color absolutely. |
-| `FORCE_COLOR` / `CLICOLOR_FORCE` | Force color even when piped. |
-| `CLICOLOR=0` | Disable color (weaker than `NO_COLOR`). |
-| `CLICOLOR=1` (default) | Color when output is a TTY. |
+| Variable                           | Effect                                  |
+| ---------------------------------- | --------------------------------------- |
+| `NO_COLOR` (any non-empty value)   | Disable color absolutely.               |
+| `FORCE_COLOR` / `CLICOLOR_FORCE`   | Force color even when piped.            |
+| `CLICOLOR=0`                       | Disable color (weaker than `NO_COLOR`). |
+| `CLICOLOR=1` (default)             | Color when output is a TTY.             |
 | `--color {auto,always,never}` flag | Per-invocation override; wins over env. |
 
 Default: `auto` — color when `stdout` is a TTY, off otherwise. Detect via `isatty(1)`. Never emit ANSI escapes into a log file or a non-TTY stream by accident.
@@ -70,12 +70,12 @@ References: [NO_COLOR.org](https://no-color.org/), [force-color.org](https://for
 
 Pick one library per concern; use it consistently.
 
-| Concern | Rust | Python | Bash |
-|---------|------|--------|------|
-| Tables | `comfy-table`, `tabled` | `rich`, `tabulate` | `column -t` |
-| Progress / spinners | `indicatif` | `rich.progress`, `tqdm` | `pv`, custom `\r` |
-| Prompts | `inquire`, `dialoguer` | `questionary`, `rich.prompt` | `read` |
-| Colors | `anstream`, `owo-colors` | `rich`, `colorama` | `tput`, raw ANSI |
+| Concern             | Rust                     | Python                       | Bash              |
+| ------------------- | ------------------------ | ---------------------------- | ----------------- |
+| Tables              | `comfy-table`, `tabled`  | `rich`, `tabulate`           | `column -t`       |
+| Progress / spinners | `indicatif`              | `rich.progress`, `tqdm`      | `pv`, custom `\r` |
+| Prompts             | `inquire`, `dialoguer`   | `questionary`, `rich.prompt` | `read`            |
+| Colors              | `anstream`, `owo-colors` | `rich`, `colorama`           | `tput`, raw ANSI  |
 
 Progress and prompts go to `stderr`, never `stdout`. Progress should auto-hide if `stderr` is not a TTY.
 
@@ -96,7 +96,7 @@ Always provide a non-interactive escape hatch for every prompt:
 - Color-by-default in CI. CI rarely sets `NO_COLOR`; sniff `CI=true` or `GITHUB_ACTIONS=true` and default to no color (or to FORCE_COLOR if the CI renders ANSI, e.g. GitHub Actions does).
 - Asking interactive confirmation in a script that piped stdin from `/dev/null`. Detect and fail with a clear message.
 
----
+______________________________________________________________________
 
 ## Layer 2 — Program-logs
 
@@ -115,9 +115,9 @@ Rotation: size-based, e.g. 10 MB × 5 files (`<app>.log`, `<app>.log.1`, … `<a
 The destination is configurable in precedence order (low → high):
 
 1. Built-in default: `$XDG_STATE_HOME/<app>/<app>.log`
-2. Config file: `[logging] file = "/path/to.log"`
-3. Env var: `<APP>_LOG_FILE=/path/to.log` (or `<APP>_LOG_DIR=/path/to/dir`)
-4. CLI flag: `--log-file /path/to.log`
+1. Config file: `[logging] file = "/path/to.log"`
+1. Env var: `<APP>_LOG_FILE=/path/to.log` (or `<APP>_LOG_DIR=/path/to/dir`)
+1. CLI flag: `--log-file /path/to.log`
 
 Disable entirely with `--no-log` (writes nowhere).
 
@@ -137,14 +137,14 @@ If both file and stderr are active, **emit identical records to both**. Differen
 
 Standard convention:
 
-| Flag | Level filter | Notes |
-|------|--------------|-------|
-| (none) | `warn` and above | Default. Quiet. |
-| `-v` | `info` and above | "Tell me what's happening." |
-| `-vv` | `debug` and above | "Tell me a lot." |
-| `-vvv` | `trace` and above | Full firehose; hot loops. |
-| `--quiet` / `-q` | `error` only | Suppress warnings. |
-| `--silent` | nothing | Logs still go to file; just no terminal mirror. |
+| Flag             | Level filter      | Notes                                           |
+| ---------------- | ----------------- | ----------------------------------------------- |
+| (none)           | `warn` and above  | Default. Quiet.                                 |
+| `-v`             | `info` and above  | "Tell me what's happening."                     |
+| `-vv`            | `debug` and above | "Tell me a lot."                                |
+| `-vvv`           | `trace` and above | Full firehose; hot loops.                       |
+| `--quiet` / `-q` | `error` only      | Suppress warnings.                              |
+| `--silent`       | nothing           | Logs still go to file; just no terminal mirror. |
 
 Env var override (per language convention, e.g. `RUST_LOG`, `PYTHONLOGLEVEL`). The env var should accept directive syntax (e.g. `RUST_LOG=app=debug,hyper=warn`) so users can scope verbosity to a module.
 
@@ -170,27 +170,27 @@ ts=2026-05-18T10:23:45.123Z level=info target=app::widget op=create id=abc-123 s
 
 ### Required fields
 
-| Field | Type | Notes |
-|-------|------|-------|
-| `ts` | ISO-8601 UTC, millisecond precision | Stable, sortable. Not the local TZ. |
-| `level` | `error\|warn\|info\|debug\|trace` | Lowercase. |
-| `target` | module path | E.g. `app::widget::sync`. Matches log-filter syntax. |
-| `msg` | short human string | Required only when there's no structured `op` field that conveys the intent. Keep it ≤ 80 chars. |
+| Field    | Type                                | Notes                                                                                            |
+| -------- | ----------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `ts`     | ISO-8601 UTC, millisecond precision | Stable, sortable. Not the local TZ.                                                              |
+| `level`  | `error\|warn\|info\|debug\|trace`   | Lowercase.                                                                                       |
+| `target` | module path                         | E.g. `app::widget::sync`. Matches log-filter syntax.                                             |
+| `msg`    | short human string                  | Required only when there's no structured `op` field that conveys the intent. Keep it ≤ 80 chars. |
 
 ### Optional / operation-specific fields
 
 Use **short, stable field names**. Document the schema in your README. LLMs benefit from convention more than from verbosity.
 
-| Field | Use |
-|-------|-----|
-| `op` | Operation name, e.g. `widget.create`, `git.fetch`. Prefer this over a freeform `msg`. |
-| `id`, `path`, `url`, … | Operation-specific subject. |
-| `status` | `ok` / `error` / `skip` / `noop`. |
-| `dur_ms` | Duration in milliseconds (integer). |
-| `err.kind` | Stable error code (e.g. `ConfigNotFound`, `Timeout`). See [02 — Error Messages](02-error-messages.md). |
-| `err.msg` | Human-readable error message. |
-| `span` | Span/trace ID when spans are in use. |
-| `parent` | Parent span ID. |
+| Field                  | Use                                                                                                    |
+| ---------------------- | ------------------------------------------------------------------------------------------------------ |
+| `op`                   | Operation name, e.g. `widget.create`, `git.fetch`. Prefer this over a freeform `msg`.                  |
+| `id`, `path`, `url`, … | Operation-specific subject.                                                                            |
+| `status`               | `ok` / `error` / `skip` / `noop`.                                                                      |
+| `dur_ms`               | Duration in milliseconds (integer).                                                                    |
+| `err.kind`             | Stable error code (e.g. `ConfigNotFound`, `Timeout`). See [02 — Error Messages](02-error-messages.md). |
+| `err.msg`              | Human-readable error message.                                                                          |
+| `span`                 | Span/trace ID when spans are in use.                                                                   |
+| `parent`               | Parent span ID.                                                                                        |
 
 Quote any value containing spaces or `=`. Escape with the format's standard rules (logfmt for key=value, JSON for the other).
 
@@ -199,28 +199,28 @@ Quote any value containing spaces or `=`. Escape with the format's standard rule
 Inspired by the practices emerging around AI agents debugging from logs ([Observability for AI Agents](https://mightybot.ai/blog/observability-for-ai-agents/), [Logging vs LLM Observability in 2026](https://futureagi.com/blog/logging-vs-llm-observability-2026)):
 
 1. **One record = one line.** Multi-line records cost tokens and break grep.
-2. **Short, stable field names.** `dur_ms` beats `duration_milliseconds`. Don't rename fields between versions — LLMs and tools memorize them.
-3. **Stable schema, optional fields.** A record can omit fields it doesn't need, but the names it does emit must match the documented schema.
-4. **Don't repeat headers.** No banner lines, no per-command "===" separators. The timestamp on each record is enough.
-5. **Span entry/exit collapsed.** If you use tracing spans, emit one record per span at *exit* (with `dur_ms`), not separate `enter` + `exit` records. Halves the token count.
-6. **Errors as fields, not prose.** `err.kind=ConfigNotFound err.path=/etc/app.toml` beats `"Could not load config from /etc/app.toml because the file did not exist"`. The structured form takes fewer tokens and is grep-able.
-7. **No ANSI escapes in the file.** Ever. They double the byte count and confuse parsers.
-8. **No multi-line stack traces in the default format.** When trace output is required, gate it behind `-vvv` and a separate `err.trace` field whose value is a single escaped line (or a pointer to a file).
+1. **Short, stable field names.** `dur_ms` beats `duration_milliseconds`. Don't rename fields between versions — LLMs and tools memorize them.
+1. **Stable schema, optional fields.** A record can omit fields it doesn't need, but the names it does emit must match the documented schema.
+1. **Don't repeat headers.** No banner lines, no per-command "===" separators. The timestamp on each record is enough.
+1. **Span entry/exit collapsed.** If you use tracing spans, emit one record per span at *exit* (with `dur_ms`), not separate `enter` + `exit` records. Halves the token count.
+1. **Errors as fields, not prose.** `err.kind=ConfigNotFound err.path=/etc/app.toml` beats `"Could not load config from /etc/app.toml because the file did not exist"`. The structured form takes fewer tokens and is grep-able.
+1. **No ANSI escapes in the file.** Ever. They double the byte count and confuse parsers.
+1. **No multi-line stack traces in the default format.** When trace output is required, gate it behind `-vvv` and a separate `err.trace` field whose value is a single escaped line (or a pointer to a file).
 
 ### Channels matrix
 
 What goes where, by event class:
 
-| Event | stdout | stderr | log-file | log-stderr (`-vv` etc.) |
-|-------|--------|--------|----------|--------------------------|
-| Command result (data) | ✅ | — | — | — |
-| User prompt | — | ✅ | — | — |
-| Progress bar / spinner | — | ✅ (TTY only) | — | — |
-| Warning the user must see | — | ✅ | ✅ | ✅ |
-| Error reported to user | — | ✅ | ✅ | ✅ |
-| Info-level operation log | — | — | ✅ | ✅ |
-| Debug-level call trace | — | — | ✅ | ✅ |
-| Trace-level firehose | — | — | ✅ (only if `-vvv`) | ✅ |
+| Event                     | stdout | stderr        | log-file            | log-stderr (`-vv` etc.) |
+| ------------------------- | ------ | ------------- | ------------------- | ----------------------- |
+| Command result (data)     | ✅     | —             | —                   | —                       |
+| User prompt               | —      | ✅            | —                   | —                       |
+| Progress bar / spinner    | —      | ✅ (TTY only) | —                   | —                       |
+| Warning the user must see | —      | ✅            | ✅                  | ✅                      |
+| Error reported to user    | —      | ✅            | ✅                  | ✅                      |
+| Info-level operation log  | —      | —             | ✅                  | ✅                      |
+| Debug-level call trace    | —      | —             | ✅                  | ✅                      |
+| Trace-level firehose      | —      | —             | ✅ (only if `-vvv`) | ✅                      |
 
 ### Anti-patterns
 
@@ -234,7 +234,7 @@ What goes where, by event class:
 - **Logging to a hard-coded `~/.<app>/log`**: violates XDG, surprises users.
 - **Tracing every `if` branch at `info`**: signal-to-noise collapses. Reserve `info` for top-level operations.
 
----
+______________________________________________________________________
 
 ## Implementation pointers
 

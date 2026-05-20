@@ -2,9 +2,9 @@
 
 A concise guide to establishing strong, consistent practices for your personal infrastructure. Think of this as the “starter kit” for your own security operations.
 
----
+______________________________________________________________________
 
-<!-- toc -->
+<!--TOC-->
 
 - [Secure Email Account](#secure-email-account)
 - [Essential Tools](#essential-tools)
@@ -25,52 +25,54 @@ A concise guide to establishing strong, consistent practices for your personal i
   - [Saving Your Encryption Passphrase](#saving-your-encryption-passphrase)
   - [Mounting Script](#mounting-script)
 
-<!-- tocstop -->
-
----
+<!--TOC-->
 
 ## Secure Email Account
 
 **Objective:** Use a dedicated, privacy-focused email address (with 2FA) for all critical services.
 
-* **Example:**
+- **Example:**
   `timtones@proton.me`
 
-* **Key Features to Enable:**
-  * Two-Factor Authentication (2FA) – ideally hardware token (WebAuthn/U2F)
-  * Strong, unique recovery codes stored offline
+- **Key Features to Enable:**
 
-* **Use Cases:**
-  * Infrastructure provisioning (cloud consoles, DNS providers)
-  * Server access (SSH key recovery, alerts)
-  * Online vaults and password managers
-  * Cloud storage / Nextcloud accounts
-  * Domain name registrar logins
+  - Two-Factor Authentication (2FA) – ideally hardware token (WebAuthn/U2F)
+  - Strong, unique recovery codes stored offline
+
+- **Use Cases:**
+
+  - Infrastructure provisioning (cloud consoles, DNS providers)
+  - Server access (SSH key recovery, alerts)
+  - Online vaults and password managers
+  - Cloud storage / Nextcloud accounts
+  - Domain name registrar logins
 
 > 💡 **Tip:** Wherever possible, use a hardware security key (e.g. YubiKey) for the second factor instead of SMS or TOTP to defend against phishing.
 
----
+______________________________________________________________________
 
 ## Essential Tools
 
 ### Code Editor
 
-* **Recommendation:** Switch from VS Code to **VSCodium**
-  * Fully open-source, no telemetry
-  * Compatible extensions ecosystem
+- **Recommendation:** Switch from VS Code to **VSCodium**
 
-* **Configuration Tips:**
-  * Disable unneeded telemetry and automatic crash reports
-  * Install security linters (e.g. ESLint for JavaScript, Bandit for Python)
+  - Fully open-source, no telemetry
+  - Compatible extensions ecosystem
+
+- **Configuration Tips:**
+
+  - Disable unneeded telemetry and automatic crash reports
+  - Install security linters (e.g. ESLint for JavaScript, Bandit for Python)
 
 ### Local Password Vault
 
-* **KeepassXC**
-  * File example: `timtones.kbdx`
-  * **Best Practices:**
-    * Use a strong master password (passphrase ≥ 20 characters)
-    * Enable key-file + master password combination
-    * Regularly backup vault to encrypted media
+- **KeepassXC**
+  - File example: `timtones.kbdx`
+  - **Best Practices:**
+    - Use a strong master password (passphrase ≥ 20 characters)
+    - Enable key-file + master password combination
+    - Regularly backup vault to encrypted media
 
 > 🔒 **Tip:** Automate periodic exports and verify vault integrity with
 >
@@ -78,7 +80,7 @@ A concise guide to establishing strong, consistent practices for your personal i
 > keepassxc-cli check-integrity timtones.kbdx
 > ```
 
----
+______________________________________________________________________
 
 ## Public Dotfiles
 
@@ -88,37 +90,41 @@ Maintain a public repository for your non-secret configuration and scripts:
 git clone https://github.com/gubasso/dotfiles.git
 ```
 
-* **Why:**
-  * Showcases best practices
-  * Enables easy setup on new machines
+- **Why:**
 
-* **Security Additions:**
-  * Use [git-secrets](https://github.com/awslabs/git-secrets) to scan for accidental commits of private keys
-  * And/or: pre-commit hooks to security checks
-  * Keep all secret templates out of the repo (e.g. `config.example` only)
+  - Showcases best practices
+  - Enables easy setup on new machines
+
+- **Security Additions:**
+
+  - Use [git-secrets](https://github.com/awslabs/git-secrets) to scan for accidental commits of private keys
+  - And/or: pre-commit hooks to security checks
+  - Keep all secret templates out of the repo (e.g. `config.example` only)
 
 > 📚 **Tip:** Include a `CONTRIBUTING.md` explaining how others can securely contribute (GPG-signed commits, branch protection).
 
----
+______________________________________________________________________
 
 ## Gopass (Command-Line Vault)
 
 Gopass is a modern, git-backed password manager for the CLI.
 
-* **Setup Guide:**
+- **Setup Guide:**
   [https://github.com/gubasso/docs-n-notes/blob/master/it/pass-gopass/gopass.md](https://github.com/gubasso/docs-n-notes/blob/master/it/pass-gopass/gopass.md)
 
-* **Storage:**
-  * Host the git remote in a **private** GitLab repository
-  * Encrypt all git communication via SSH and hardware-key agent
+- **Storage:**
 
-* **Usage Tips:**
-  * Organize entries by domain (`github.com`, `aws/production`, etc.)
-  * Use `gopass audit` to find weak or reused passwords
-  * Integrate with editor plugins (e.g. VS Code Gopass extension)
-  * Prioritize safer text editors like Vim/Neovim and Nano
+  - Host the git remote in a **private** GitLab repository
+  - Encrypt all git communication via SSH and hardware-key agent
 
----
+- **Usage Tips:**
+
+  - Organize entries by domain (`github.com`, `aws/production`, etc.)
+  - Use `gopass audit` to find weak or reused passwords
+  - Integrate with editor plugins (e.g. VS Code Gopass extension)
+  - Prioritize safer text editors like Vim/Neovim and Nano
+
+______________________________________________________________________
 
 ## Private Cloud Directory
 
@@ -134,16 +140,19 @@ Define a place to save and backup (sync with cloud) your private files, e.g.:
 export PRIVATE_DIR="$CLOUD_DIR/Private"
 ```
 
-* **Storage Providers:** Dropbox, Nextcloud, etc.
-* **Access Control:**
+- **Storage Providers:** Dropbox, Nextcloud, etc.
+
+- **Access Control:**
+
   ```bash
   chmod 700 "$PRIVATE_DIR"
   ```
 
-* **Backup Strategy:**
-  * Use `restic` to back up encrypted snapshots to an offsite location
+- **Backup Strategy:**
 
----
+  - Use `restic` to back up encrypted snapshots to an offsite location
+
+______________________________________________________________________
 
 ## Private Dotfiles
 
@@ -156,23 +165,28 @@ cd "$PRIVATE_DIR/.dotfiles-private"
 
 ### What to Store
 
-* Personal application settings (editor snippets, window layouts)
-* Custom desktop entries, shell aliases, etc.
-* Non-secret but machine-specific configs (theme files, UI tweaks)
+- Personal application settings (editor snippets, window layouts)
+- Custom desktop entries, shell aliases, etc.
+- Non-secret but machine-specific configs (theme files, UI tweaks)
 
 > 🔐 **Note:** Because these files aren’t secrets, you can keep them unencrypted in your cloud service. Still, treat the repo like private data.
 
 ### Deployment Methods
 
-* **GNU Stow** (preferred)
+- **GNU Stow** (preferred)
+
   1. Organize each app or service in its own directory under `.dotfiles-private/`
-  2. From inside `.dotfiles-private/`, run:
+
+  1. From inside `.dotfiles-private/`, run:
+
      ```bash
      stow brave kde suse-shell thunderbird
      ```
+
      This creates symlinks in your home directory.
 
-* **Manual Copy**
+- **Manual Copy**
+
   ```bash
   cp -r "$PRIVATE_DIR/.dotfiles-private/kde/.local/share/applications/" \
         ~/.local/share/applications/
@@ -202,10 +216,13 @@ cd "$PRIVATE_DIR/.dotfiles-private"
 
 ### Best Practices & Tips
 
-* **One Directory per Component:** Keep each application or tool in its own folder (`kde/`, `brave/`, etc.) for clarity.
-* **README and Documentation:** Add a `README.md` at the repo root explaining layout, usage of `stow`, and any dependencies.
-* **Host-Specific Overrides:** Use subfolders (e.g. `kde/tumblesuse/` vs. `kde/valinor/`) to manage different machines or OS versions.
-* **Automate on Login:** Add a small script in your shell startup (`~/.bashrc` or `~/.profile`) to pull and re-stow after each boot:
+- **One Directory per Component:** Keep each application or tool in its own folder (`kde/`, `brave/`, etc.) for clarity.
+
+- **README and Documentation:** Add a `README.md` at the repo root explaining layout, usage of `stow`, and any dependencies.
+
+- **Host-Specific Overrides:** Use subfolders (e.g. `kde/tumblesuse/` vs. `kde/valinor/`) to manage different machines or OS versions.
+
+- **Automate on Login:** Add a small script in your shell startup (`~/.bashrc` or `~/.profile`) to pull and re-stow after each boot:
 
   ```bash
   (cd "$PRIVATE_DIR/.dotfiles-private" && stow --restow *)
@@ -213,8 +230,7 @@ cd "$PRIVATE_DIR/.dotfiles-private"
 
 Thought for a couple of seconds
 
-
----
+______________________________________________________________________
 
 ## Private and Secret Dotfiles
 
@@ -223,7 +239,7 @@ Store highly sensitive configuration files in an **encrypted** directory, synced
 ### Prerequisites
 
 1. Install gocryptfs
-2. Read the detailed guide:
+1. Read the detailed guide:
    [https://github.com/gubasso/docs-n-notes/blob/master/it/gocryptfs.md](https://github.com/gubasso/docs-n-notes/blob/master/it/gocryptfs.md)
 
 ### Directory Setup
@@ -239,8 +255,8 @@ mkdir -p ~/.dotfiles-secret
 mkdir -p "$PRIVATE_DIR/.dotfiles-secret.enc"
 ```
 
-* **Encrypted directory:** `$PRIVATE_DIR/.dotfiles-secret.enc`
-* **Decrypted mount point:** `~/.dotfiles-secret`
+- **Encrypted directory:** `$PRIVATE_DIR/.dotfiles-secret.enc`
+- **Decrypted mount point:** `~/.dotfiles-secret`
 
 ### Example File Tree
 
@@ -294,15 +310,17 @@ dotfiles-secret/
 
 > **Why this matters:**
 >
-> * Separates **secret** data from non-secret configs.
-> * Cloud sync only sees encrypted blobs — even if your Nextcloud is compromised, your plaintext never leaves your control.
+> - Separates **secret** data from non-secret configs.
+> - Cloud sync only sees encrypted blobs — even if your Nextcloud is compromised, your plaintext never leaves your control.
 
 ### Saving Your Encryption Passphrase
 
 Once your encrypted directory is initialized, store the passphrase (and any mount parameters) in both of your vaults:
 
-* **KeePassXC (GUI):** Create an entry with your gocryptfs password and mount command.
-* **Gopass (CLI):**
+- **KeePassXC (GUI):** Create an entry with your gocryptfs password and mount command.
+
+- **Gopass (CLI):**
+
   ```bash
   gopass insert apps/gocryptfs/dotfiles-secret
   ```
@@ -331,11 +349,12 @@ mntcrypt "$PRIVATE_DIR/.dotfiles-secret.enc" \
 
 > 🔄 **Automation Tip:**
 >
-> * Add an entry to your shell startup (e.g. `~/.bash_profile`) to auto-mount on login:
+> - Add an entry to your shell startup (e.g. `~/.bash_profile`) to auto-mount on login:
 >
 >   ```bash
 >   if ! mountpoint -q ~/.dotfiles-secret; then
 >     mntcrypt "$PRIVATE_DIR/.dotfiles-secret.enc" "$HOME/.dotfiles-secret" apps/gocryptfs/dotfiles-secret
 >   fi
 >   ```
-> * Ensure you `chmod 700 ~/.dotfiles-secret` to restrict access to your user only.
+>
+> - Ensure you `chmod 700 ~/.dotfiles-secret` to restrict access to your user only.

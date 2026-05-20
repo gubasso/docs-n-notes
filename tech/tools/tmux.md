@@ -1,6 +1,6 @@
 # tmux
 
-<-- toc -->
+\<-- toc -->
 
 ## Colorschemes
 
@@ -17,7 +17,6 @@ bind -r -n M-h resize-pane -L 2
 
 - `-r` press and repeat
 - `-n` globally, without the need for prefix
-
 
 ## References
 

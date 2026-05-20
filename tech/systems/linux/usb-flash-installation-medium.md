@@ -5,12 +5,11 @@
 
 ## Practical rule of thumb
 
-* **Updating an already-working Arch ISO USB** (made via `dd`/`cp`/`cat` to the whole device):
+- **Updating an already-working Arch ISO USB** (made via `dd`/`cp`/`cat` to the whole device):
   ✅ Just re-write the new ISO to the whole device. No `wipefs`, no `parted`, no `mkfs`.
 
-* **Converting the stick back to normal storage**:
+- **Converting the stick back to normal storage**:
   ✅ `wipefs` + partition + format.
-
 
 ### Minimal “update” procedure (Write / `dd`)
 
@@ -21,13 +20,13 @@
    ls -l /dev/disk/by-id/usb-*
    ```
 
-2. Unmount anything auto-mounted:
+1. Unmount anything auto-mounted:
 
    ```sh
    sudo umount /dev/disk/by-id/usb-My_flash_drive* 2>/dev/null || true
    ```
 
-3. Write the new ISO to the whole device (no `-partN`):
+1. Write the new ISO to the whole device (no `-partN`):
 
    ```sh
    sudo dd bs=4M if=/path/to/archlinux-x86_64.iso of=/dev/disk/by-id/usb-My_flash_drive \
@@ -35,7 +34,7 @@
    sudo sync
    ```
 
-4. Replug the USB (recommended) so the kernel re-reads the new layout.
+1. Replug the USB (recommended) so the kernel re-reads the new layout.
 
 ### When you would use `wipefs`/partitioning again
 
@@ -69,7 +68,8 @@ sudo fdisk -l
 ```sh
 sudo wipefs --all /dev/disk/by-id/usb-_My_flash_drive_
 ```
-- Has to pop of a message with sucess
+
+- Has to pop of a message with success
 
 ...as root, before [repartitioning](https://wiki.archlinux.org/title/Repartition "Repartition") and [reformatting](https://wiki.archlinux.org/title/Reformat "Reformat") the USB drive.
 
@@ -78,6 +78,7 @@ Check/Set Partitioning
 ```sh
 sudo parted -s /dev/sdX mklabel msdos mkpart primary fat32 0% 100%
 ```
+
 - `-s`: Run in script mode, which suppresses interactive prompts.
 - `mklabel msdos`: Creates a new MBR (DOS) partition table. You can replace `msdos` with `gpt` if you need a GPT partition table.
 - `mkpart primary fat32 0% 100%`: Creates a primary partition starting from 0% to 100% of the disk space and labels it as FAT32. You can replace `fat32` with `ext4`, `ntfs`, etc., depending on the desired file system.
@@ -85,9 +86,9 @@ sudo parted -s /dev/sdX mklabel msdos mkpart primary fat32 0% 100%
 This single command will:
 
 1. Create a new partition table.
-2. Create a primary partition covering the entire disk.
-3. Label it with the specified file system type.
-After running this command, you can then format the partition if necessary using a tool like `mkfs` (e.g., `sudo mkfs.vfat /dev/sdX1` for FAT32). However, the `parted` command above is sufficient for creating the partition structure itself.
+1. Create a primary partition covering the entire disk.
+1. Label it with the specified file system type.
+   After running this command, you can then format the partition if necessary using a tool like `mkfs` (e.g., `sudo mkfs.vfat /dev/sdX1` for FAT32). However, the `parted` command above is sufficient for creating the partition structure itself.
 
 The parted command you used creates the partition but does not actually format it with a filesystem. To format the partition (which is necessary to make it usable for storing files), you need to run a command like mkfs.
 
@@ -155,7 +156,7 @@ sudo sync
 
 ...with root privileges after the respective command ensures buffers are fully written to the device before you remove it.
 
----
+______________________________________________________________________
 
 ## When you *do* need wipefs/partitioning again
 
@@ -163,11 +164,10 @@ You only need the `wipefs` + `parted` + `mkfs` sequence when your goal is **not*
 
 Also, do those steps if you previously did something like:
 
-* **reformatted** it as a normal storage drive (FAT32/exFAT/ext4) and now want it bootable again, or
-* built a **custom multiboot / persistence** layout that you want to recreate cleanly.
+- **reformatted** it as a normal storage drive (FAT32/exFAT/ext4) and now want it bootable again, or
+- built a **custom multiboot / persistence** layout that you want to recreate cleanly.
 
 In those cases:
 
-* `wipefs --all` is useful to remove confusing leftover signatures,
-* then repartition + format as desired.
-
+- `wipefs --all` is useful to remove confusing leftover signatures,
+- then repartition + format as desired.

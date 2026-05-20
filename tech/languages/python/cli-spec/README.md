@@ -6,27 +6,27 @@ For the language-agnostic principles, see [`tech/programming/cli-design/`](../..
 
 ## Files
 
-| File | Hook |
-|------|------|
-| [typer-patterns.md](typer-patterns.md) | Practical Typer/Click patterns: path options, Pydantic validators, multi-value parsing, RootModel-based custom types. |
-| [parse-cli-options-examples.py](parse-cli-options-examples.py) | Runnable examples: Typer + Pydantic for validation callbacks, tag parsing, complex key=value parsing. |
-| [config-precedence-python.md](config-precedence-python.md) | Layered config-path resolution with `lru_cache` + `pydantic-settings`. |
+| File                                                           | Hook                                                                                                                  |
+| -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| [typer-patterns.md](typer-patterns.md)                         | Practical Typer/Click patterns: path options, Pydantic validators, multi-value parsing, RootModel-based custom types. |
+| [parse-cli-options-examples.py](parse-cli-options-examples.py) | Runnable examples: Typer + Pydantic for validation callbacks, tag parsing, complex key=value parsing.                 |
+| [config-precedence-python.md](config-precedence-python.md)     | Layered config-path resolution with `lru_cache` + `pydantic-settings`.                                                |
 
 ## Stack defaults
 
-| Concern | Library |
-|---------|---------|
-| Argument parsing | `typer` (built on `click`) |
-| Validation | `pydantic` v2 |
-| Layered config | `pydantic-settings` |
-| Logging emission | `structlog` (or `loguru` for simplicity) |
-| User-UX terminal output | `rich` |
-| Interactive prompts | `questionary` (or `rich.prompt`) |
-| Tests | `pytest` + `typer.testing.CliRunner` |
-| Snapshots | `syrupy` |
-| Linting | `ruff` |
-| Formatting | `ruff format` |
-| Type checking | `mypy` or `pyright` |
+| Concern                 | Library                                  |
+| ----------------------- | ---------------------------------------- |
+| Argument parsing        | `typer` (built on `click`)               |
+| Validation              | `pydantic` v2                            |
+| Layered config          | `pydantic-settings`                      |
+| Logging emission        | `structlog` (or `loguru` for simplicity) |
+| User-UX terminal output | `rich`                                   |
+| Interactive prompts     | `questionary` (or `rich.prompt`)         |
+| Tests                   | `pytest` + `typer.testing.CliRunner`     |
+| Snapshots               | `syrupy`                                 |
+| Linting                 | `ruff`                                   |
+| Formatting              | `ruff format`                            |
+| Type checking           | `mypy` or `pyright`                      |
 
 ## TL;DR
 

@@ -1,18 +1,22 @@
 # Containers
+
 > docker, kubernetes
 
-<!-- toc -->
+<!--TOC-->
 
 - [Environment variables](#environment-variables)
   - [Using `secrets` to manage sensitive data](#using-secrets-to-manage-sensitive-data)
+    - [Approach 1) General](#approach-1-general)
+    - [Approach 2) Container Specific: Postgresql Example](#approach-2-container-specific-postgresql-example)
   - [General Env config](#general-env-config)
 - [Utils](#utils)
 - [After Install](#after-install)
 - [Commands](#commands)
 - [Dockerfile](#dockerfile)
+  - [`.dockerignore`](#dockerignore)
 - [Sharing Images](#sharing-images)
-  - [Image to file[^5]](#image-to-file5)
-  - [Usefull example:](#usefull-example)
+  - [Image to file\[^5\]](#image-to-file5)
+  - [Useful example](#useful-example)
 - [Persistent Data Storages](#persistent-data-storages)
   - [Volumes](#volumes)
   - [Bind Mounts](#bind-mounts)
@@ -24,15 +28,15 @@
   - [`docker-compose.yaml`](#docker-composeyaml)
 - [Utility Containers](#utility-containers)
   - [Using with Docker-Compose](#using-with-docker-compose)
-- [Users / Permissions:[^3]](#users--permissions3)
+- [Users / Permissions:\[^3\]](#users--permissions3)
 - [Deploy in production](#deploy-in-production)
-  - [Kubernetes](#kubernetes)
+  - [\[Kubernetes\](./it/containers-kubernetes.md)](#kubernetesitcontainers-kubernetesmd)
 - [Resources](#resources)
 - [General](#general)
   - [Optimization: build image](#optimization-build-image)
 - [References](#references)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Environment variables
 
@@ -46,6 +50,7 @@
   - runs the container execution
 
 **`compose.yaml`**
+
 ```yaml
 services:
   db:
@@ -75,6 +80,7 @@ secrets:
 ```
 
 **`entrypoint.sh`**
+
 ```sh
 #!/bin/bash
 # Read password from secret file
@@ -97,6 +103,7 @@ docker run --name some-postgres -e POSTGRES_PASSWORD_FILE=/run/secrets/postgres-
 Or with `compose`:
 
 **`compose.yaml`**
+
 ```yaml
 services:
   db:
@@ -127,6 +134,7 @@ secrets:
 ### General Env config
 
 - docker compose env
+
   - https://docs.docker.com/compose/environment-variables/set-environment-variables/
   - https://stackoverflow.com/questions/29377853/how-can-i-use-environment-variables-in-docker-compose
   - using secrets for sensitive env variables
@@ -171,7 +179,7 @@ PORT=8000
 
 ## After Install
 
-Check if instalation is correct:
+Check if installation is correct:
 
 ```
 sudo systemctl status docker
@@ -181,89 +189,94 @@ sudo docker compose version
 
 ## Commands
 
-
 **execute commands inside container**
+
 ```
 sudo docker exec <cont_name> ls
 sudo docker exec -it <cont_name> bash
 ```
 
----
+______________________________________________________________________
 
 Listing things
 
 - `docker ps -a`
-    - list CONTAINERS
-    - `ps`: list just running containers
-    - `-a`: list all created (running or not)
+
+  - list CONTAINERS
+  - `ps`: list just running containers
+  - `-a`: list all created (running or not)
 
 - `docker images`
-    - list IMAGES
 
----
+  - list IMAGES
+
+______________________________________________________________________
 
 ```
 docker stop <container_name>
 ```
 
----
+______________________________________________________________________
 
 Fetching remote images:
 
 - `docker run <image_name>`
-    - checks if already has this image saved/downloaded
-    - if not, will download for the first time
-    - if remote image is update, but has already a local version, will not check that
-    - instead, just will run the local one
+
+  - checks if already has this image saved/downloaded
+  - if not, will download for the first time
+  - if remote image is update, but has already a local version, will not check that
+  - instead, just will run the local one
 
 - `docker pull <image_name>`
-    - will download from remote
-    - if the same version from local, do nothing
-    - always checks for updates from source
-    - forces pull updated image from registry (docker hub)
 
----
+  - will download from remote
+  - if the same version from local, do nothing
+  - always checks for updates from source
+  - forces pull updated image from registry (docker hub)
+
+______________________________________________________________________
 
 - `docker run`
-    - creates a NEW container (doesn't run a stoped one)
-    - `docker run node`: Will download `node` image from docker hub, and run container
+  - creates a NEW container (doesn't run a stopped one)
+  - `docker run node`: Will download `node` image from docker hub, and run container
 
 flags:
 
 - `-it`: exposes interactive shell to host (nodejs REPL in this case)
-    - `docker run -it node`:
-    - `-i`: keeps STDIN open, for input
-    - `-t`: creates a pseudo-TTY
+  - `docker run -it node`:
+  - `-i`: keeps STDIN open, for input
+  - `-t`: creates a pseudo-TTY
 - `-d`: runs in detached mode (or as a daemon)
-    - `docker attach <container_name>` to be attached to a container running in background
-        - will be able to see console outputs
+  - `docker attach <container_name>` to be attached to a container running in background
+    - will be able to see console outputs
 - `--rm`: removes container when it stops
 
----
+______________________________________________________________________
 
 - `docker logs <container_name>`
-    - prints the output of container console
+  - prints the output of container console
 
 flags:
 
 - `-f, --follow`: keep listening, attached terminal
 
----
+______________________________________________________________________
 
 - `docker start <container_name>`
-    - starts a previously stoped container
-    - does not create a new one from an image
+  - starts a previously stopped container
+  - does not create a new one from an image
 
 flags:
 
 - `-a`: starts attached
 - `-i`: STDIN opened to interact with terminal
 
----
+______________________________________________________________________
 
 remove commands / cleanup
 
 stop all containers
+
 ```
 sudo docker kill $(sudo docker ps -q)
 ```
@@ -277,58 +290,60 @@ sudo docker network prune -f
 ```
 
 - `docker rm [<container_name> <> ...]`
-    - removes stoped conainters
-    - `docker rm naed_dharen jafac_golen persad_thupac`
+
+  - removes stopped conainters
+  - `docker rm naed_dharen jafac_golen persad_thupac`
 
 - `rmi [<image_id> <>]`
-    - remove images
-    - just if is not used by any container (stoped or running)
+
+  - remove images
+  - just if is not used by any container (stopped or running)
 
 - `docker container prune`
-    - removes ALL stoped containers
+
+  - removes ALL stopped containers
 
 - `image prune`
+
   - removes ALL images
   - `-a`: ??
 
----
+______________________________________________________________________
 
 - `cp <source> <container_name>:<destination>` / `cp <container_name>:<source> <host_destination>`
-    - copy copies files to a running container
+  - copy copies files to a running container
 
----
+______________________________________________________________________
 
 naming tagging
 
 - `docker tag <img_name>:<img_tag> <new_name>:<new_tag>`
-    - "renames" images
-    - creates a clone, keeps the old named one
-
-
+  - "renames" images
+  - creates a clone, keeps the old named one
 
 ## Dockerfile
 
 To create my own image.
 
 `FROM baseImage`: defines docker base image from hub
-    - `FROM node:14` / `FROM node`
+\- `FROM node:14` / `FROM node`
 `WORKDIR /app`: sets the workdir (as a reference). dir with project files
-    - if not set, the default is `/`
+\- if not set, the default is `/`
 `COPY <host_source> <destination>`: copy from host file to workdir inside container
-    - `<destination>` will be create, if no exist
-    - `COPY package.json .`: example copying just one file
-        - do it before `RUN npm install` to optimize rebuild
-        - will be a layer to be monitored with a cache
-        - just `package.json` will be watched
-    - `COPY . .`: example copying hole project (where `Dockerfile` is) to workdir (except `Dockerfile` itself)
+\- `<destination>` will be create, if no exist
+\- `COPY package.json .`: example copying just one file
+\- do it before `RUN npm install` to optimize rebuild
+\- will be a layer to be monitored with a cache
+\- just `package.json` will be watched
+\- `COPY . .`: example copying hole project (where `Dockerfile` is) to workdir (except `Dockerfile` itself)
 `RUN npm install`: command to run
-    - will run when image is being built (build time)
-    - used for multi-stage builds
+\- will run when image is being built (build time)
+\- used for multi-stage builds
 `EXPOSE 3000`: port to expose to outside world
 `CMD ["node","app.mjs"]`: command to run
-    - should be last instruction
-    - will run when container starts (runtime, not when it's built)
-    - if not specified, the default `CMD` of the base image will be ran
+\- should be last instruction
+\- will run when container starts (runtime, not when it's built)
+\- if not specified, the default `CMD` of the base image will be ran
 
 At terminal:
 
@@ -347,8 +362,8 @@ docker run -p 3000:3000 <image_id>
 ```
 
 - Run `CMD`
-- `-p 3000:3000`: port fowarding
-    - `<host_port>:<docker_internal_exposed_port>`
+- `-p 3000:3000`: port forwarding
+  - `<host_port>:<docker_internal_exposed_port>`
 - `<image_id>`: hash with id of the image
 
 #### `.dockerignore`
@@ -361,7 +376,6 @@ node_modules
 Dockerfile
 .env
 ```
-
 
 ## Sharing Images
 
@@ -396,7 +410,7 @@ Load a docker image from file:
 sudo docker load -i <path to image tar file>
 ```
 
-### Usefull example:
+### Useful example
 
 ```
 FROM node:14-slim
@@ -419,7 +433,7 @@ WORKDIR /app
 And then build the Docker image using the following (which also gives you a nice use of ARG):
 
 ```
-$ docker build -t node-util:cliuser --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) .
+docker build -t node-util:cliuser --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) .
 ```
 
 ## Persistent Data Storages
@@ -427,29 +441,35 @@ $ docker build -t node-util:cliuser --build-arg USER_ID=$(id -u) --build-arg GRO
 ### Volumes
 
 - Dir in host machine
+
 - Mapped inside a container (mounted)
+
 - data is not removed when a container ir removed/deleted
+
 - the dir path where volume is saved is managed by Docker
 
 - `docker volume ls`: list volumes
 
 - Anonymous volumes: removed when container ir removed
-    - @ `Dockerfile`: `VOLUME [ "/app/feedback" ]`
-    - (or) @ cli `-v /app/feedback`
-    - only if container is started with `--rm`
-    - if not, when container ir stoped, or even if container is later removed with `docker rm`
-        - anon volume will still be preserved
-    - if recreate the container, a NEW anon volume will be created
-        - will not reference to the old volume created previously
+
+  - @ `Dockerfile`: `VOLUME [ "/app/feedback" ]`
+  - (or) @ cli `-v /app/feedback`
+  - only if container is started with `--rm`
+  - if not, when container ir stopped, or even if container is later removed with `docker rm`
+    - anon volume will still be preserved
+  - if recreate the container, a NEW anon volume will be created
+    - will not reference to the old volume created previously
 
 - remove volumes:
-    - `docker volume rm VOL_NAME` or `docker volume prune`
+
+  - `docker volume rm VOL_NAME` or `docker volume prune`
 
 - Named volumes: will persist in host machine even if a container ir removed
-    - @ cli: `docker run -d -p 3000:80 --rm --name feedback-app -v feedback:/app/feedback feedback-node:volumes`
-        - `--name feedback-app`: name of the container being created
-        - `feedback-node:volumes`: name of the image used to create this volume
-        - `-v feedback:/app/feedback`: named volume `<volume_name>:<dir_path_inside_container>`
+
+  - @ cli: `docker run -d -p 3000:80 --rm --name feedback-app -v feedback:/app/feedback feedback-node:volumes`
+    - `--name feedback-app`: name of the container being created
+    - `feedback-node:volumes`: name of the image used to create this volume
+    - `-v feedback:/app/feedback`: named volume `<volume_name>:<dir_path_inside_container>`
 
 ### Bind Mounts
 
@@ -466,18 +486,19 @@ docker run -d -p 3000:80 --rm \
 ```
 
 - `-v /home/gubasso/Projects/docker-training:/app:ro \`
-    - saves all workdir files at app dir inside container
-    - `-v <absolute_workdir_host_path>:<container_workdir_path>`
-    - `-v $(pwd):/app`
-    - dir or a single file too
-    - `:ro`: enforces that the container cannot change files (Read Only)
-    - the files will be changed only from the host, never from inside
 
+  - saves all workdir files at app dir inside container
+  - `-v <absolute_workdir_host_path>:<container_workdir_path>`
+  - `-v $(pwd):/app`
+  - dir or a single file too
+  - `:ro`: enforces that the container cannot change files (Read Only)
+  - the files will be changed only from the host, never from inside
 
 - `-v /app/node_modules \`
-    - make shure `node_modules` will not be overwritten
-    - after `Dockerfile` is ran, container is created, than volumes are synced
-    - this sets this subdir `node_modules` to remain the same
+
+  - make sure `node_modules` will not be overwritten
+  - after `Dockerfile` is ran, container is created, than volumes are synced
+  - this sets this subdir `node_modules` to remain the same
 
 ### Database Persistence
 
@@ -488,7 +509,6 @@ Example for mongodb[^1]:
 - recommended, named volume: `-v data:/data/db`
 - bind moung: `docker run --name some-mongo -v /my/own/datadir:/data/db -d mongo`
 
-
 ## Networking
 
 ### Container to Host communication
@@ -497,22 +517,22 @@ connect from container to database at host
 
 - normal mongodb url: `mongodb://localhost:27017/mydb`
 - access from container to host: `mongodb://host.docker.internal:27017/mydb`
-    - `host.docker.internal` will be transformed to host IP address
+  - `host.docker.internal` will be transformed to host IP address
 
 ### Container to Container comm
 
 If want to hard code the container ip address:
 
 - `docker container inspect <container_name>`: To find a container IP address
-    - at `NetworkSettings.IPAddress`
+  - at `NetworkSettings.IPAddress`
 
----
+______________________________________________________________________
 
-Using docker native network for resolve ip addresses automaticaly
+Using docker native network for resolve ip addresses automatically
 
 - create a network: `docker network create <network_name>`
-    - have to be created first, docker will not create automatically if used in a `docker run` command
-    - `docker network create favorites-net`
+  - have to be created first, docker will not create automatically if used in a `docker run` command
+  - `docker network create favorites-net`
 
 ```
 docker run -d --name mongodb \
@@ -521,44 +541,48 @@ docker run -d --name mongodb \
 ```
 
 - for a container to connect to another, running at the same network:
-    - `mongodb://<container_name>:27017/mydb`
-    - `mongodb://mongodb:27017/mydb`
+  - `mongodb://<container_name>:27017/mydb`
+  - `mongodb://mongodb:27017/mydb`
 
 ## Docker-Compose
 
 - defaults with `--rm`
+
 - creates a `network` by default
-    - adds all containers to this network
+
+  - adds all containers to this network
 
 - cli to run: `docker-compose up`
-    - will build and start all services
-    - before run, check if it is needed to cleanup old images/containers
-    - `-d`: deattached mode
-    - `--build`: forces to rebuild
-        - if not, if image already exists, will not rebuild
-        - usefull if there was an update in image / source code / etc...
-    - can specify which service will be up, and ignore others specified at yaml file
-        - `docker-compose up server mysql php`
-        - if `server` service `depends_on:` both `mysql` and `php`
-            - `docker-compose up server` will spinup the other two automatically
+
+  - will build and start all services
+  - before run, check if it is needed to cleanup old images/containers
+  - `-d`: detached mode
+  - `--build`: forces to rebuild
+    - if not, if image already exists, will not rebuild
+    - useful if there was an update in image / source code / etc...
+  - can specify which service will be up, and ignore others specified at yaml file
+    - `docker-compose up server mysql php`
+    - if `server` service `depends_on:` both `mysql` and `php`
+      - `docker-compose up server` will spinup the other two automatically
 
 - `docker-compose down`
-    - deletes containers, networks, and shutsdown
-    - does NOT delete volumes
-    - `-v`: also deletes volumes
+
+  - deletes containers, networks, and shutsdown
+  - does NOT delete volumes
+  - `-v`: also deletes volumes
 
 - `docker-compose build`
-    - just builds all images
 
+  - just builds all images
 
 ### `docker-compose.yaml`
 
 - `services:`: each child is a container
-    - key: is the service name (that can be used as a container name)
-    - service name can be used as reference for networking, etc...
-        - just like a container name
+  - key: is the service name (that can be used as a container name)
+  - service name can be used as reference for networking, etc...
+    - just like a container name
 
----
+______________________________________________________________________
 
 ```docker-compose.yaml
 services:
@@ -586,15 +610,18 @@ volumes:
 - inside a container (`services` child)
 
 - `images:`: base image name (e.g. from docker hub, or custom one I created)
-    - `images: 'mongo'` / `images: 'node:14'`
+
+  - `images: 'mongo'` / `images: 'node:14'`
 
 - `volumes:`
-    - same syntax as cli
-    - if named volumes, need a `volumes:` key, sibling of services, with the named volume
-    - "To reuse a volume across multiple services, a named volume MUST be declared in the top-level `volumes` key."[^2]
+
+  - same syntax as cli
+  - if named volumes, need a `volumes:` key, sibling of services, with the named volume
+  - "To reuse a volume across multiple services, a named volume MUST be declared in the top-level `volumes` key."[^2]
 
 - `build:`
-    - relative path to `Dockerfile` (relative to `docker-compose.yaml`)
+
+  - relative path to `Dockerfile` (relative to `docker-compose.yaml`)
 
 - `depends_on:`: will run after the dependencies
 
@@ -608,7 +635,7 @@ Use as a isolated environment.
 docker run -it node npm init
 ```
 
-- `npm init`: will overwright default image's `CMD`
+- `npm init`: will overwrite default image's `CMD`
 
 In an empty project directory, create a simple `Dockerfile`
 
@@ -630,9 +657,9 @@ ENTRYPOINT [ "npm" ]
 ```
 
 - `ENTRYPOINT`:
-    - will not be overwritten by appended commands (as it happens with `CMD`)
-    - the appended commands will be appended to this entrypoint
-    - usefull to allow only one kind of command
+  - will not be overwritten by appended commands (as it happens with `CMD`)
+  - the appended commands will be appended to this entrypoint
+  - useful to allow only one kind of command
 
 ### Using with Docker-Compose
 
@@ -648,20 +675,19 @@ services:
 ```
 
 - Then run with `docker-compose run <service_name>` (not `up`).
-    - this will allow appended commands
-    - will not remove the container automatically (as it happens with `up`)
+  - this will allow appended commands
+  - will not remove the container automatically (as it happens with `up`)
 
 ```
 docker-compose run guganpm init
 ```
 
 - Flags for `run`:
-    - `--rm`: removes container after it stops
-
+  - `--rm`: removes container after it stops
 
 ## Users / Permissions:[^3]
 
-I wanted to point out that on a Linux system, the Utility Container idea doesn't quite work as you describe it.  In Linux, by default Docker runs as the "Root" user, so when we do a lot of the things that you are advocating for with Utility Containers the files that get written to the Bind Mount have ownership and permissions of the Linux Root user.  (On MacOS and Windows10, since Docker is being used from within a VM, the user mappings all happen automatically due to NFS mounts.)
+I wanted to point out that on a Linux system, the Utility Container idea doesn't quite work as you describe it. In Linux, by default Docker runs as the "Root" user, so when we do a lot of the things that you are advocating for with Utility Containers the files that get written to the Bind Mount have ownership and permissions of the Linux Root user. (On MacOS and Windows10, since Docker is being used from within a VM, the user mappings all happen automatically due to NFS mounts.)
 
 So, for example on Linux, if I do the following (as you described in the course):
 
@@ -671,8 +697,8 @@ WORKDIR /app
 ```
 
 ```
-$ docker build -t node-util:perm .
-$ docker run -it --rm -v $(pwd):/app node-util:perm npm init
+docker build -t node-util:perm .
+docker run -it --rm -v $(pwd):/app node-util:perm npm init
 ```
 
 ```
@@ -689,13 +715,13 @@ drwxr-xr-x  7 scott scott 4096 Oct 31 16:14 .git/
 -rw-r--r--  1 root  root   202 Oct 31 16:16 package.json
 ```
 
-You'll see that the ownership and permissions for the package.json file are "root".  But, regardless of the file that is being written to the Bind Mounted volume from commands emanating from within the docker container, e.g. "npm install", all come out with "Root" ownership.
+You'll see that the ownership and permissions for the package.json file are "root". But, regardless of the file that is being written to the Bind Mounted volume from commands emanating from within the docker container, e.g. "npm install", all come out with "Root" ownership.
 
----
+______________________________________________________________________
 
-Solution 1:  Use  predefined "node" user (if you're lucky)
+Solution 1: Use predefined "node" user (if you're lucky)
 
-There is a lot of discussion out there in the docker community (devops) about security around running Docker as a non-privileged user (which might be a good topic for you to cover as a video lecture - or maybe you have; I haven't completed the course yet).  The Official Node.js Docker Container provides such a user that they call "node".
+There is a lot of discussion out there in the docker community (devops) about security around running Docker as a non-privileged user (which might be a good topic for you to cover as a video lecture - or maybe you have; I haven't completed the course yet). The Official Node.js Docker Container provides such a user that they call "node".
 
 https://github.com/nodejs/docker-node/blob/master/Dockerfile-slim.template
 
@@ -707,7 +733,7 @@ RUN groupadd --gid 1000 node \
 
 Luckily enough for me on my local Linux system, my "scott" uid:gid is also 1000:1000 so, this happens to map nicely to the "node" user defined within the Official Node Docker Image.
 
-So, in my case of using the Official Node Docker Container, all I need to do is make sure I specify that I want the container to run as a non-Root user that they make available.  To do that, I just add:
+So, in my case of using the Official Node Docker Container, all I need to do is make sure I specify that I want the container to run as a non-Root user that they make available. To do that, I just add:
 
 ```Dockerfile
 FROM node:14-slim
@@ -729,9 +755,9 @@ drwxr-xr-x 13 scott scott 4096 Oct 31 16:23 ../
 -rw-r--r--  1 scott scott 204 Oct 31 16:23 package.json
 ```
 
----
+______________________________________________________________________
 
-Solution 2:  Remove the predefined "node" user and add yourself as the user[^4].
+Solution 2: Remove the predefined "node" user and add yourself as the user[^4].
 
 However, if the Linux user that you are running as is not lucky to be mapped to 1000:1000, then you can modify the Utility Container Dockerfile to remove the predefined "node" user and add yourself as the user that the container will run as:
 
@@ -756,13 +782,13 @@ WORKDIR /app
 And then build the Docker image using the following (which also gives you a nice use of ARG):
 
 ```
-$ docker build -t node-util:cliuser --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) .
+docker build -t node-util:cliuser --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) .
 ```
 
 And finally running it with:
 
 ```
-$ docker run -it --rm -v $(pwd):/app node-util:cliuser npm init
+docker run -it --rm -v $(pwd):/app node-util:cliuser npm init
 ```
 
 ```
@@ -791,7 +817,7 @@ Keep in mind that this image will not be portable, but for the purpose of the Ut
 - [Docker hub](https://hub.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
 - [](https://yacht.sh/)
-    - web ui for managing containers, available at linode
+  - web ui for managing containers, available at linode
 - Udemy Course Academind: [Docker & Kubernetes: The Practical Guide [2022 Edition]](https://www.udemy.com/share/103Ia03@_LG5LvM93j_prIuRNO6TDsc6YuhwqudbXhJirjmPbdAU7lSzxDsoTeCwzbGUXkS6/)
 
 ## General
@@ -800,6 +826,7 @@ Python images to choose:
 
 [Don’t use Alpine Linux for Python images: Using Alpine can make Python Docker builds 50× slower](https://pythonspeed.com/articles/alpine-docker-python/)
 [The best Docker base image for your Python application (May 2022)](https://pythonspeed.com/articles/base-image-python-docker-images/)
+
 - summary: `python:<version>-slim-bullseye`
 
 Mongodb images
@@ -823,12 +850,14 @@ EOF
 echo "FROM mongo:5.0.9" | sudo docker build -t {img_name} -
 ```
 
-
-
 ## References
 
-[^1]: [official image mongo](https://hub.docker.com/_/mongo)
-[^2]: [Reference / Compose file reference / Compose Specification / Volume](https://docs.docker.com/compose/compose-file/#volumes)
-[^3]: [Utility Containers, Permissions & Linux from: Docker & Kubernetes: The Practical Guide [2022 Edition] ](https://www.udemy.com/course/docker-kubernetes-the-practical-guide/learn/#questions/12977214/)
-[^4]: [Avoiding Permission Issues With Docker-Created Files](https://vsupalov.com/docker-shared-permissions/)
 [^5]: [How to copy Docker images from one host to another without using a repository](https://stackoverflow.com/questions/23935141/how-to-copy-docker-images-from-one-host-to-another-without-using-a-repository)
+
+[^1]: [official image mongo](https://hub.docker.com/_/mongo)
+
+[^2]: [Reference / Compose file reference / Compose Specification / Volume](https://docs.docker.com/compose/compose-file/#volumes)
+
+[^3]: [Utility Containers, Permissions & Linux from: Docker & Kubernetes: The Practical Guide [2022 Edition]](https://www.udemy.com/course/docker-kubernetes-the-practical-guide/learn/#questions/12977214/)
+
+[^4]: [Avoiding Permission Issues With Docker-Created Files](https://vsupalov.com/docker-shared-permissions/)

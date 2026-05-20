@@ -2,15 +2,15 @@
 
 This step-by-step guide is designed to help you get started with **gopass**, a Git-based password manager. You'll find everything from the initial setup to best practices for organization and sharing.
 
----
+______________________________________________________________________
 
 ## Prerequisites
 
-* Git installed and configured.
-* An SSH key configured for accessing remote repositories.
-* `gopass` installed (see [official installation guide](https://github.com/gopasspw/gopass#installation)).
+- Git installed and configured.
+- An SSH key configured for accessing remote repositories.
+- `gopass` installed (see [official installation guide](https://github.com/gopasspw/gopass#installation)).
 
----
+______________________________________________________________________
 
 ## 1. Configuring the Editor
 
@@ -23,7 +23,7 @@ export EDITOR="nano"
 export VISUAL="vim"
 ```
 
-2. **Via gopass configuration**:
+1. **Via gopass configuration**:
 
 ```bash
 gopass config edit.editor "nano --rcfile ~/.config/gopass/nanorc"
@@ -43,19 +43,19 @@ au BufNewFile,BufRead /dev/shm/gopass.* setlocal noswapfile nobackup noundofile
 
 - [Nano Setup for Gopass](./nano-setup.md)
 
----
+______________________________________________________________________
 
 ## 2. Creating or Cloning a Store
 
 ### 2.1 Creating a New Store
 
-* **Default (personal)**:
+- **Default (personal)**:
 
 ```bash
 gopass init
 ```
 
-* **Additional store**:
+- **Additional store**:
 
 ```bash
 gopass init --store my-company
@@ -79,13 +79,13 @@ gopass clone git@example.com/pass.git
 gopass clone git@example.com/pass-work.git work
 ```
 
----
+______________________________________________________________________
 
 ## 3. Basic Operations
 
 ### 3.1 Adding Passwords
 
-* **Step-by-step**:
+- **Step-by-step**:
 
 - Auto organizes
 
@@ -93,13 +93,13 @@ gopass clone git@example.com/pass-work.git work
 gopass new
 ```
 
-* **Insert manually**:
+- **Insert manually**:
 
 ```bash
 gopass insert example.com/service
 ```
 
-* **Generate a random password**:
+- **Generate a random password**:
 
 ```bash
 gopass generate example.com/service
@@ -113,13 +113,13 @@ gopass edit example.com/service
 
 ### 3.3 Syncing with Remotes
 
-* **All stores**:
+- **All stores**:
 
 ```bash
 gopass sync
 ```
 
-* **Specific store**:
+- **Specific store**:
 
 ```bash
 gopass sync --store my-company
@@ -135,7 +135,7 @@ rm ~/.config/gopass/config
 rm -rf ~/.cache/gopass
 ```
 
----
+______________________________________________________________________
 
 ## 4. Password Generator
 
@@ -155,7 +155,7 @@ gopass generate --length 16 --symbols "!@#$%" example.com/service
 
 See the [character restrictions documentation](https://github.com/gopasspw/gopass/blob/master/docs/features.md#restricting-the-characters-in-generated-passwords).
 
----
+______________________________________________________________________
 
 ## 5. Organization and Naming Conventions (layout/pattern)
 
@@ -172,11 +172,11 @@ work/
 
 **Field aliases**:
 
-* `password` (alias `p`)
-* `username` (alias `u`)
-* `url` (alias `l`)
-* `comments` (alias `c`)
-* `totp` (alias `t`)
+- `password` (alias `p`)
+- `username` (alias `u`)
+- `url` (alias `l`)
+- `comments` (alias `c`)
+- `totp` (alias `t`)
 
 **Example template**:
 
@@ -189,7 +189,7 @@ comments: |
   Any additional notes here.
 ```
 
----
+______________________________________________________________________
 
 ## 6. Importing from Another Password Manager
 
@@ -202,14 +202,14 @@ gopass import csv keepass-export.csv
 
 For more formats, see the [pass-import tool](https://github.com/roddhjav/pass-import#readme).
 
----
+______________________________________________________________________
 
 ## 7. Additional Resources
 
-* **Team sharing and bootstrapping**:
+- **Team sharing and bootstrapping**:
 
-  * [Storing team passwords with gopass](https://hceris.com/storing-passwords-with-gopass/)
-  * [Batch bootstrapping](https://github.com/gopasspw/gopass/blob/master/docs/setup.md#batch-bootstrapping)
-  * [Team usage cheatsheet](https://woile.github.io/gopass-cheat-sheet/)
-* **Official documentation**: [https://github.com/gopasspw/gopass](https://github.com/gopasspw/gopass)
+  - [Storing team passwords with gopass](https://hceris.com/storing-passwords-with-gopass/)
+  - [Batch bootstrapping](https://github.com/gopasspw/gopass/blob/master/docs/setup.md#batch-bootstrapping)
+  - [Team usage cheatsheet](https://woile.github.io/gopass-cheat-sheet/)
 
+- **Official documentation**: [https://github.com/gopasspw/gopass](https://github.com/gopasspw/gopass)

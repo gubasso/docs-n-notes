@@ -8,7 +8,7 @@ Bash-specific conventions for building a CLI tool: layout, entry point,
 strict-mode caveats, module organisation, testing, linting, install, and
 distribution.
 
----
+______________________________________________________________________
 
 ## Directory Structure
 
@@ -48,7 +48,7 @@ One public function per file; filename encodes the function name; `lib/`
 holds shared machinery. Same shape as a well-organised interactive-shell
 package, applied to a standalone CLI.
 
----
+______________________________________________________________________
 
 ## Entry Point (`bin/my-cli`)
 
@@ -83,7 +83,7 @@ mycli::main "$@"
 - `inherit_errexit` fixes the silent-`set -e`-disables-in-subshells
   pitfall; guarded for pre-4.4 bash.
 
----
+______________________________________________________________________
 
 ## Strict Mode — Default, Not Gospel
 
@@ -110,7 +110,7 @@ Treat as the default. Known limits:
 For load-bearing logic, prefer an explicit `|| return` / `trap '...' ERR`
 over trusting `set -e` implicitly.
 
----
+______________________________________________________________________
 
 ## Module Layout: One Function per File
 
@@ -119,12 +119,12 @@ and LLMs to reason about, and keeps startup O(1) via lazy sourcing.
 
 ### Naming
 
-| Path                     | Defines                         | Visibility |
-|--------------------------|---------------------------------|------------|
-| `lib/commands/cmd_<n>.sh`| `mycli::cmd::<n>`               | public     |
-| `lib/functions/fn_<n>.sh`| `mycli::fn::<n>`                | public     |
-| `lib/helpers.sh`         | `__log_err`, `__require`, …     | shared     |
-| (any file) `__<n>`       | private helper, same file       | private    |
+| Path                      | Defines                     | Visibility |
+| ------------------------- | --------------------------- | ---------- |
+| `lib/commands/cmd_<n>.sh` | `mycli::cmd::<n>`           | public     |
+| `lib/functions/fn_<n>.sh` | `mycli::fn::<n>`            | public     |
+| `lib/helpers.sh`          | `__log_err`, `__require`, … | shared     |
+| (any file) `__<n>`        | private helper, same file   | private    |
 
 - **One public function per file.** Filename mirrors the function name
   so the dispatcher can derive it without a lookup table.
@@ -179,7 +179,7 @@ users override defaults without forking. Same idea as per-host overlays
 in interactive Bash startup files: drop-in files in a known directory,
 sourced in lexical order after the built-in defaults.
 
----
+______________________________________________________________________
 
 ## ShellCheck Discipline
 
@@ -201,7 +201,7 @@ Rules:
   comment; unexplained disables fail review.
 - Reference: [shellcheck directives](https://github.com/koalaman/shellcheck/wiki/Directive).
 
----
+______________________________________________________________________
 
 ## Errors, Signals, Temp Files
 
@@ -226,7 +226,7 @@ documented in
 §2.4 and in [General — Error Messages](../../../programming/cli-design/02-error-messages.md) —
 the bash side just has to implement them consistently.
 
----
+______________________________________________________________________
 
 ## Testing (bats-core)
 
@@ -272,33 +272,33 @@ setup() {
 
 Reference: [bats-core tutorial](https://bats-core.readthedocs.io/en/stable/tutorial.html).
 
----
+______________________________________________________________________
 
 ## Linting / Formatting
 
 All checks run through **pre-commit** (see root
-[[CLAUDE]] § "Linting & Validation" for the repo-wide policy):
+\[[CLAUDE]\] § "Linting & Validation" for the repo-wide policy):
 
 - [shellcheck](https://www.shellcheck.net/) — static analysis.
 - [shfmt](https://github.com/mvdan/sh) — formatter. Canonical flags:
   `shfmt -i 2 -ci -bn -s`.
 - Do not invoke linters directly; add them to `.pre-commit-config.yaml`.
 
----
+______________________________________________________________________
 
 ## Install / XDG Paths
 
 `install.sh` honours both `PREFIX` (system) and XDG (user):
 
-| Artifact          | System                                              | User                                                      |
-|-------------------|-----------------------------------------------------|-----------------------------------------------------------|
-| binary            | `$PREFIX/bin/`                                      | `$HOME/.local/bin/`                                       |
-| lib tree          | `$PREFIX/lib/my-cli/`                               | `$HOME/.local/lib/my-cli/`                                |
-| bash completion   | `$(pkg-config --variable=completionsdir bash-completion)` | `${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion/completions/` |
-| man page          | `$PREFIX/share/man/man1/`                           | `${XDG_DATA_HOME:-$HOME/.local/share}/man/man1/`          |
-| config            | `/etc/my-cli/config.toml`                           | `${XDG_CONFIG_HOME:-$HOME/.config}/my-cli/config.toml`    |
-| state             | `/var/lib/my-cli/`                                  | `${XDG_STATE_HOME:-$HOME/.local/state}/my-cli/`           |
-| cache             | `/var/cache/my-cli/`                                | `${XDG_CACHE_HOME:-$HOME/.cache}/my-cli/`                 |
+| Artifact        | System                                                    | User                                                                |
+| --------------- | --------------------------------------------------------- | ------------------------------------------------------------------- |
+| binary          | `$PREFIX/bin/`                                            | `$HOME/.local/bin/`                                                 |
+| lib tree        | `$PREFIX/lib/my-cli/`                                     | `$HOME/.local/lib/my-cli/`                                          |
+| bash completion | `$(pkg-config --variable=completionsdir bash-completion)` | `${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion/completions/` |
+| man page        | `$PREFIX/share/man/man1/`                                 | `${XDG_DATA_HOME:-$HOME/.local/share}/man/man1/`                    |
+| config          | `/etc/my-cli/config.toml`                                 | `${XDG_CONFIG_HOME:-$HOME/.config}/my-cli/config.toml`              |
+| state           | `/var/lib/my-cli/`                                        | `${XDG_STATE_HOME:-$HOME/.local/state}/my-cli/`                     |
+| cache           | `/var/cache/my-cli/`                                      | `${XDG_CACHE_HOME:-$HOME/.cache}/my-cli/`                           |
 
 - Detect root vs user install via `[[ $EUID -eq 0 ]]`.
 - `uninstall.sh` reads a manifest written by `install.sh` at install time.
@@ -308,7 +308,7 @@ All checks run through **pre-commit** (see root
 
 Config precedence: see [`cli-design/03-config-precedence.md`](../../../programming/cli-design/03-config-precedence.md) for the canonical 5-layer ladder. Secret handling and missing-config error shape: see [`cli-design/05-designing-for-llm-agents.md §2.9`](../../../programming/cli-design/05-designing-for-llm-agents.md#29-config-via-env--file-never-interactive-prompts).
 
----
+______________________________________________________________________
 
 ## Man Page
 
@@ -319,22 +319,22 @@ Prefer [scdoc](https://git.sr.ht/~sircmpwn/scdoc) over hand-rolled
 man/my-cli.1.scd   →   man/my-cli.1   (built by Makefile)
 ```
 
----
+______________________________________________________________________
 
 ## Distribution
 
-| Approach                    | Use case                                                      |
-|-----------------------------|---------------------------------------------------------------|
-| Multi-file + `install.sh`   | Default for this repo's tools; fallback everywhere            |
-| [bashly](https://github.com/bashly-framework/bashly) bundle | Single-file build for `curl \| sh` installers |
-| Homebrew formula            | Users on macOS / linuxbrew                                    |
-| AUR `PKGBUILD`              | Arch users                                                    |
-| Nix flake                   | Reproducible dev shells, pinned toolchain                     |
-| `.deb` via `dh_make`        | Debian/Ubuntu packaging                                       |
+| Approach                                                    | Use case                                           |
+| ----------------------------------------------------------- | -------------------------------------------------- |
+| Multi-file + `install.sh`                                   | Default for this repo's tools; fallback everywhere |
+| [bashly](https://github.com/bashly-framework/bashly) bundle | Single-file build for `curl \| sh` installers      |
+| Homebrew formula                                            | Users on macOS / linuxbrew                         |
+| AUR `PKGBUILD`                                              | Arch users                                         |
+| Nix flake                                                   | Reproducible dev shells, pinned toolchain          |
+| `.deb` via `dh_make`                                        | Debian/Ubuntu packaging                            |
 
 Avoid `shc` (obfuscating C-wrapper, not a bundler — wrong tool).
 
----
+______________________________________________________________________
 
 ## CI
 
@@ -354,18 +354,18 @@ jobs:
       - run: bats test/
 ```
 
----
+______________________________________________________________________
 
 ## Non-Negotiables
 
 1. `set -euo pipefail` + `shopt -s inherit_errexit` (with documented caveats).
-2. shellcheck clean; `source=`/`source-path=` directives wired up.
-3. shfmt clean (`-i 2 -ci -bn -s`), config checked in.
-4. Namespaced functions (`mycli::<ns>::<fn>`), one public function per file.
-5. XDG-aware, `PREFIX`-overridable installer; uninstall via manifest.
-6. bats-core tests under `test/` with `test_helper/` submodules.
-7. `trap ... EXIT INT TERM` cleanup for any script that creates temp state.
-8. `printf` over `echo`; stderr for logs; stdout is parseable data only.
-9. Agent-facing surface per
+1. shellcheck clean; `source=`/`source-path=` directives wired up.
+1. shfmt clean (`-i 2 -ci -bn -s`), config checked in.
+1. Namespaced functions (`mycli::<ns>::<fn>`), one public function per file.
+1. XDG-aware, `PREFIX`-overridable installer; uninstall via manifest.
+1. bats-core tests under `test/` with `test_helper/` submodules.
+1. `trap ... EXIT INT TERM` cleanup for any script that creates temp state.
+1. `printf` over `echo`; stderr for logs; stdout is parseable data only.
+1. Agent-facing surface per
    [Designing for LLM Coding Agents](../../../programming/cli-design/05-designing-for-llm-agents.md)
    (`--help`, `--json`, error shape, `doctor`, dry-run, exit codes).

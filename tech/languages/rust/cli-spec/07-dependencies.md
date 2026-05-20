@@ -6,74 +6,74 @@ Opinionated default dependency list. Each entry has a one-line justification and
 
 ## Runtime defaults
 
-| Crate | Features | Why | Skip if |
-|-------|----------|-----|---------|
-| `clap` | `derive`, `env`, `wrap_help` | Standard parser; `env` lets flags fall back to env vars; `wrap_help` makes `--help` readable. | Never. |
-| `clap_complete` | — | Generates shell completions via a subcommand. | The CLI is dev-internal and shell completions aren't needed. |
-| `anyhow` | — | Ad-hoc context-rich errors at the binary edge. | You're writing a pure library (use only `thiserror`). |
-| `thiserror` | — | Typed error enums in `domain/`, `adapters/`, `services/`, `error.rs`. | Never. |
-| `tracing` | — | Structured logging primitive. Emitted everywhere. | Never. |
-| `tracing-subscriber` | `env-filter`, `fmt` | Installs the subscriber in `main`. | Never (in a binary). |
-| `tracing-appender` | — | Non-blocking file sink. | The CLI only ever runs interactively and stderr is enough. |
-| `serde` | `derive` | Universal serialization. | Never. |
-| `serde_json` | — | JSON I/O. | No JSON I/O anywhere. |
-| `toml` | — | Config file parsing (via figment). | No config files. |
-| `figment` | `env`, `toml` | Layered config with source provenance. | Trivial single-file config (use `toml` + `serde` directly). |
-| `directories` | — | XDG/Windows/macOS config-path resolution. | No cross-platform config paths needed. |
-| `camino` | `serde1` | UTF-8-only paths; kills `Path::to_string_lossy()` boilerplate. | The CLI only operates on user-supplied paths it never round-trips through strings. |
-| `tokio` | `rt`, `macros` | Single current-thread runtime for async. | Fully sync CLI. |
+| Crate                | Features                     | Why                                                                                           | Skip if                                                                            |
+| -------------------- | ---------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `clap`               | `derive`, `env`, `wrap_help` | Standard parser; `env` lets flags fall back to env vars; `wrap_help` makes `--help` readable. | Never.                                                                             |
+| `clap_complete`      | —                            | Generates shell completions via a subcommand.                                                 | The CLI is dev-internal and shell completions aren't needed.                       |
+| `anyhow`             | —                            | Ad-hoc context-rich errors at the binary edge.                                                | You're writing a pure library (use only `thiserror`).                              |
+| `thiserror`          | —                            | Typed error enums in `domain/`, `adapters/`, `services/`, `error.rs`.                         | Never.                                                                             |
+| `tracing`            | —                            | Structured logging primitive. Emitted everywhere.                                             | Never.                                                                             |
+| `tracing-subscriber` | `env-filter`, `fmt`          | Installs the subscriber in `main`.                                                            | Never (in a binary).                                                               |
+| `tracing-appender`   | —                            | Non-blocking file sink.                                                                       | The CLI only ever runs interactively and stderr is enough.                         |
+| `serde`              | `derive`                     | Universal serialization.                                                                      | Never.                                                                             |
+| `serde_json`         | —                            | JSON I/O.                                                                                     | No JSON I/O anywhere.                                                              |
+| `toml`               | —                            | Config file parsing (via figment).                                                            | No config files.                                                                   |
+| `figment`            | `env`, `toml`                | Layered config with source provenance.                                                        | Trivial single-file config (use `toml` + `serde` directly).                        |
+| `directories`        | —                            | XDG/Windows/macOS config-path resolution.                                                     | No cross-platform config paths needed.                                             |
+| `camino`             | `serde1`                     | UTF-8-only paths; kills `Path::to_string_lossy()` boilerplate.                                | The CLI only operates on user-supplied paths it never round-trips through strings. |
+| `tokio`              | `rt`, `macros`               | Single current-thread runtime for async.                                                      | Fully sync CLI.                                                                    |
 
 ## Dev-dependencies
 
-| Crate | Features | Why | Skip if |
-|-------|----------|-----|---------|
-| `assert_cmd` | — | Process-level CLI tests. | No integration tests (you should have them). |
-| `predicates` | — | Assertion helpers for `assert_cmd`. | Same. |
-| `insta` | `yaml` | Snapshot tests for structured output. | No structured output to snapshot. |
-| `tempfile` | — | Isolated temp dirs per test. | Same. |
-| `trybuild` | — | Compile-fail tests for typestate APIs. | No typestate. |
+| Crate        | Features | Why                                    | Skip if                                      |
+| ------------ | -------- | -------------------------------------- | -------------------------------------------- |
+| `assert_cmd` | —        | Process-level CLI tests.               | No integration tests (you should have them). |
+| `predicates` | —        | Assertion helpers for `assert_cmd`.    | Same.                                        |
+| `insta`      | `yaml`   | Snapshot tests for structured output.  | No structured output to snapshot.            |
+| `tempfile`   | —        | Isolated temp dirs per test.           | Same.                                        |
+| `trybuild`   | —        | Compile-fail tests for typestate APIs. | No typestate.                                |
 
 ## Conditional adds
 
 Add only when a specific concrete need arises.
 
-| Crate | When |
-|-------|------|
-| `color-eyre` | Pretty `anyhow`-style error chains in dev builds. Gate behind a `dev` feature; skip in release for binary size. |
-| `chrono` or `time` | Real date/time handling. Prefer `time` (smaller, no globally-mutable timezone state). Use `chrono` only if dep tree already pulls it. |
-| `glob` | Glob pattern matching (e.g. `*.txt`). |
-| `regex` | Regular expressions. Heavyweight; consider whether `str::contains` suffices first. |
-| `reqwest` | HTTP client. Use `rustls` backend, not `native-tls`, to keep static builds working. |
-| `rusqlite` or `sqlx` | SQL persistence. Pick `sqlx` only if you need async or compile-time query checking. |
-| `crossterm` | TUI input handling. Reach for it only if you need raw mode. |
-| `indicatif` | Progress bars. |
-| `dialoguer` | Interactive prompts. |
-| `dirs` | Old XDG helper. **Don't use**; `directories` supersedes it. |
-| `walkdir` | Filesystem traversal with depth/symlink controls. |
-| `ignore` | `.gitignore`-aware traversal. Bigger than `walkdir`; use only if you actually need gitignore semantics. |
-| `which` | Locate executables on PATH. |
-| `tempfile` (runtime, not dev) | If your CLI creates real tempfiles (not just tests). |
-| `parking_lot` | Faster mutex/rwlock than std. Only if profiling shows lock contention. |
-| `rayon` | Data parallelism. Use only when the workload is genuinely parallelizable and the CLI isn't I/O-bound. |
-| `once_cell` / `std::sync::LazyLock` | Prefer std `LazyLock` (1.80+) over `once_cell::sync::Lazy` for new code. |
+| Crate                               | When                                                                                                                                  |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `color-eyre`                        | Pretty `anyhow`-style error chains in dev builds. Gate behind a `dev` feature; skip in release for binary size.                       |
+| `chrono` or `time`                  | Real date/time handling. Prefer `time` (smaller, no globally-mutable timezone state). Use `chrono` only if dep tree already pulls it. |
+| `glob`                              | Glob pattern matching (e.g. `*.txt`).                                                                                                 |
+| `regex`                             | Regular expressions. Heavyweight; consider whether `str::contains` suffices first.                                                    |
+| `reqwest`                           | HTTP client. Use `rustls` backend, not `native-tls`, to keep static builds working.                                                   |
+| `rusqlite` or `sqlx`                | SQL persistence. Pick `sqlx` only if you need async or compile-time query checking.                                                   |
+| `crossterm`                         | TUI input handling. Reach for it only if you need raw mode.                                                                           |
+| `indicatif`                         | Progress bars.                                                                                                                        |
+| `dialoguer`                         | Interactive prompts.                                                                                                                  |
+| `dirs`                              | Old XDG helper. **Don't use**; `directories` supersedes it.                                                                           |
+| `walkdir`                           | Filesystem traversal with depth/symlink controls.                                                                                     |
+| `ignore`                            | `.gitignore`-aware traversal. Bigger than `walkdir`; use only if you actually need gitignore semantics.                               |
+| `which`                             | Locate executables on PATH.                                                                                                           |
+| `tempfile` (runtime, not dev)       | If your CLI creates real tempfiles (not just tests).                                                                                  |
+| `parking_lot`                       | Faster mutex/rwlock than std. Only if profiling shows lock contention.                                                                |
+| `rayon`                             | Data parallelism. Use only when the workload is genuinely parallelizable and the CLI isn't I/O-bound.                                 |
+| `once_cell` / `std::sync::LazyLock` | Prefer std `LazyLock` (1.80+) over `once_cell::sync::Lazy` for new code.                                                              |
 
 ## Avoid by default
 
 Deprecated, dead, or superseded:
 
-| Crate | Why avoid | Use instead |
-|-------|-----------|-------------|
-| `env_logger` | Old; doesn't integrate with spans. | `tracing-subscriber`. |
-| `log` (directly) | Lacks structured fields and spans. | `tracing`. |
-| `structopt` | Merged into clap; deprecated. | `clap` derive. |
-| `failure` | Unmaintained. | `thiserror` + `anyhow`. |
-| `error-chain` | Unmaintained. | Same. |
-| `confy` | Can't layer multiple files. | `figment`. |
-| `dirs` | Maintenance moved to `directories`. | `directories`. |
-| `chrono` (if you have a choice) | Global timezone state, larger surface. | `time`. |
-| `lazy_static` | Older, macro-based. | `std::sync::LazyLock`. |
-| `rustc-serialize` | Pre-`serde`. | `serde`. |
-| `serde_yaml` | Unmaintained. | `serde_yaml_ng` or skip YAML. |
+| Crate                           | Why avoid                              | Use instead                   |
+| ------------------------------- | -------------------------------------- | ----------------------------- |
+| `env_logger`                    | Old; doesn't integrate with spans.     | `tracing-subscriber`.         |
+| `log` (directly)                | Lacks structured fields and spans.     | `tracing`.                    |
+| `structopt`                     | Merged into clap; deprecated.          | `clap` derive.                |
+| `failure`                       | Unmaintained.                          | `thiserror` + `anyhow`.       |
+| `error-chain`                   | Unmaintained.                          | Same.                         |
+| `confy`                         | Can't layer multiple files.            | `figment`.                    |
+| `dirs`                          | Maintenance moved to `directories`.    | `directories`.                |
+| `chrono` (if you have a choice) | Global timezone state, larger surface. | `time`.                       |
+| `lazy_static`                   | Older, macro-based.                    | `std::sync::LazyLock`.        |
+| `rustc-serialize`               | Pre-`serde`.                           | `serde`.                      |
+| `serde_yaml`                    | Unmaintained.                          | `serde_yaml_ng` or skip YAML. |
 
 ## Cargo.toml skeleton
 

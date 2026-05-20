@@ -14,4 +14,3 @@ git ls-files | while read -r file; do
     echo "\`\`\`"
     echo
 done
-

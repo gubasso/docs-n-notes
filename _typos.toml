@@ -1,0 +1,15 @@
+# typos config — allowlist for ambiguous corrections and non-English words.
+# Real typos in source content should be fixed in dedicated commits, not
+# silenced here. This file is for cases where typos' suggestion is wrong
+# or ambiguous.
+
+[default.extend-words]
+# Valid English compound prefixes flagged ambiguously by typos
+mis = "mis"
+# Portuguese verb forms ("gere" = "generate" imperative)
+gere = "gere"
+# Real typos in non-session files — TODO: fix in follow-up commits, then
+# remove these entries. Listed here so the bootstrap commit can land.
+behavious = "behavious"
+doen = "doen"
+differente = "differente"

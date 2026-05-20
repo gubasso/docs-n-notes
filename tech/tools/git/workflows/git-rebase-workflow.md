@@ -2,14 +2,14 @@
 
 ## Remotes & Branches
 
-| Remote | Branch | Role |
-|--------|--------|------|
-| `upstream` | `master` | Source of truth (original repo) |
-| `origin` | `master` | Your fork |
-| local | `master` | Always identical to `upstream/master` |
-| local | `new-feature` | Your work, rebased on top of `master` |
+| Remote     | Branch        | Role                                  |
+| ---------- | ------------- | ------------------------------------- |
+| `upstream` | `master`      | Source of truth (original repo)       |
+| `origin`   | `master`      | Your fork                             |
+| local      | `master`      | Always identical to `upstream/master` |
+| local      | `new-feature` | Your work, rebased on top of `master` |
 
----
+______________________________________________________________________
 
 ## Cheatsheet
 
@@ -52,7 +52,7 @@ git config --get pull.ff          # current pull strategy
 git branch -vv                    # branches + tracking info + ahead/behind
 ```
 
----
+______________________________________________________________________
 
 ## How It Works
 
@@ -117,7 +117,7 @@ A─B─C─D─E─f1'─f2'
 
 No merge commits. Clean `git log`.
 
----
+______________________________________________________________________
 
 ## Handling Conflicts During Rebase
 
@@ -131,7 +131,7 @@ git rebase --continue
 git rebase --abort
 ```
 
----
+______________________________________________________________________
 
 ## Recovery
 
@@ -152,7 +152,7 @@ git switch master
 git reset --hard upstream/master  # restore master to upstream state exactly
 ```
 
----
+______________________________________________________________________
 
 ## Stacked Feature Branches
 
@@ -164,14 +164,14 @@ git rebase --onto master old-feature-a-tip feature-b
 
 Where `old-feature-a-tip` is the SHA of the last commit of `feature-a` *before* it was rebased. Without `--onto`, `feature-b` will still point to the old `feature-a` commits.
 
----
+______________________________________________________________________
 
 ## `merge --ff-only` vs `rebase` on master
 
-| Scenario | `merge --ff-only` | `rebase` |
-|----------|-------------------|----------|
-| master is behind upstream (no local commits) | Fast-forwards. Same result. | Fast-forwards. Same result. |
-| master has diverged (local commits exist) | **Refuses.** Nothing changes. | Replays local commits on top of upstream. |
+| Scenario                                     | `merge --ff-only`             | `rebase`                                  |
+| -------------------------------------------- | ----------------------------- | ----------------------------------------- |
+| master is behind upstream (no local commits) | Fast-forwards. Same result.   | Fast-forwards. Same result.               |
+| master has diverged (local commits exist)    | **Refuses.** Nothing changes. | Replays local commits on top of upstream. |
 
 Always use `--ff-only` on master — you never want local commits there.
 Use `rebase` on feature branches to keep history linear.

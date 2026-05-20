@@ -10,7 +10,7 @@ ssh -i ~/.ssh/<my-private-aws-key>.pem ec2-user@<public-ip-address>
 
 ## Cli
 
-### Command examples:
+### Command examples
 
 Get images information with filters
 
@@ -41,6 +41,7 @@ You are correct in your understanding of app servers and EC2 instances. To summa
 - An EC2 instance is essentially a virtual machine running a full operating system, typically a Linux distribution like Ubuntu or Amazon Linux.
 
 - On this EC2 instance, you can install and configure any runtime environment needed for your application, such as:
+
   - Node.js to run an Express server for a JavaScript application
   - Python and a WSGI server like Gunicorn to run a Flask or Django application
   - Java and a servlet container like Tomcat for Java-based apps

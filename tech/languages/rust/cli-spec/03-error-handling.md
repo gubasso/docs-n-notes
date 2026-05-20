@@ -6,13 +6,13 @@
 
 ## The layer table
 
-| Layer | Returns | Crate | Rule |
-|-------|---------|-------|------|
-| `domain/` | `enum DomainError` per module | `thiserror` | Invariant violations only. No I/O variants. |
-| `adapters/` | `enum <Sys>AdapterError` | `thiserror` + `#[from] std::io::Error` | One error type per adapter. Wrap upstream errors with `#[source]`. |
-| `services/` | `enum ServiceError` | `thiserror` | `#[from]` domain + adapter errors. Do NOT recursively `#[from]` peer service errors. |
-| `commands/` | `Result<(), AppError>` | `thiserror` | `AppError` `#[from]`s every service and `std::io::Error`. Plus an `Other(#[from] anyhow::Error)` arm for ad-hoc `.context(…)`. |
-| `main` | `Result<(), AppError>` → `ExitCode` | `anyhow` allowed | `AppError::exit_code() -> u8`. Unit-test the matrix. |
+| Layer       | Returns                             | Crate                                  | Rule                                                                                                                           |
+| ----------- | ----------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `domain/`   | `enum DomainError` per module       | `thiserror`                            | Invariant violations only. No I/O variants.                                                                                    |
+| `adapters/` | `enum <Sys>AdapterError`            | `thiserror` + `#[from] std::io::Error` | One error type per adapter. Wrap upstream errors with `#[source]`.                                                             |
+| `services/` | `enum ServiceError`                 | `thiserror`                            | `#[from]` domain + adapter errors. Do NOT recursively `#[from]` peer service errors.                                           |
+| `commands/` | `Result<(), AppError>`              | `thiserror`                            | `AppError` `#[from]`s every service and `std::io::Error`. Plus an `Other(#[from] anyhow::Error)` arm for ad-hoc `.context(…)`. |
+| `main`      | `Result<(), AppError>` → `ExitCode` | `anyhow` allowed                       | `AppError::exit_code() -> u8`. Unit-test the matrix.                                                                           |
 
 ## Why both `thiserror` and `anyhow`
 

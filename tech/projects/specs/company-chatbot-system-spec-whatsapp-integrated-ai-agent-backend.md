@@ -5,7 +5,7 @@
 > **Author:** Gustavo (with Claude assistance)
 > **Purpose:** Reference document for continuing exploration and eventual implementation of a company-facing AI chatbot integrated with WhatsApp.
 
----
+______________________________________________________________________
 
 ## 1. Problem Statement
 
@@ -17,7 +17,7 @@ Build a backend for a company chatbot integrated with WhatsApp that:
 - Is cost-efficient and maintainable with minimal infrastructure overhead
 - Scales to hundreds of daily interactions without requiring a dedicated ML/ops team
 
----
+______________________________________________________________________
 
 ## 2. Chosen Architecture: Agentic (No RAG)
 
@@ -40,7 +40,7 @@ This is fundamentally different from RAG's one-shot retrieval. The agent gets mu
 
 If the document corpus grows beyond ~50,000 documents, or if `grep`/`find` operations become too slow, the agentic approach without additional tooling becomes cost-prohibitive (too many tool calls per query). At that point, RAG can be added as an optimization layer (see Section 7).
 
----
+______________________________________________________________________
 
 ## 3. Technology Stack
 
@@ -52,14 +52,14 @@ Pi-mono is a TypeScript monorepo by Mario Zechner that provides composable build
 
 #### Key Packages
 
-| Package | Role |
-|---|---|
-| `@mariozechner/pi-ai` | Unified multi-provider LLM API (Anthropic, OpenAI, Google, etc.). Provider-agnostic abstraction that enables smart model routing. |
-| `@mariozechner/pi-agent-core` | Agent runtime with tool calling, state management, and event streaming. The core agent loop where tools are registered and executed. |
-| `@mariozechner/pi-coding-agent` | Full coding agent CLI (the flagship product). Can be used as an SDK for embedding in custom apps. |
-| `@mariozechner/pi-tui` | Terminal UI library with differential rendering. Useful for building monitoring dashboards. |
-| `@mariozechner/pi-web-ui` | Web components for AI chat interfaces. |
-| `@mariozechner/pi-pods` | CLI for managing vLLM deployments on GPU pods (self-hosted inference). |
+| Package                         | Role                                                                                                                                 |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `@mariozechner/pi-ai`           | Unified multi-provider LLM API (Anthropic, OpenAI, Google, etc.). Provider-agnostic abstraction that enables smart model routing.    |
+| `@mariozechner/pi-agent-core`   | Agent runtime with tool calling, state management, and event streaming. The core agent loop where tools are registered and executed. |
+| `@mariozechner/pi-coding-agent` | Full coding agent CLI (the flagship product). Can be used as an SDK for embedding in custom apps.                                    |
+| `@mariozechner/pi-tui`          | Terminal UI library with differential rendering. Useful for building monitoring dashboards.                                          |
+| `@mariozechner/pi-web-ui`       | Web components for AI chat interfaces.                                                                                               |
+| `@mariozechner/pi-pods`         | CLI for managing vLLM deployments on GPU pods (self-hosted inference).                                                               |
 
 #### Why pi-mono Over Alternatives
 
@@ -129,7 +129,7 @@ WhatsApp message arrives (user: +55 11 9xxxx-xxxx)
 
 50 clients chatting simultaneously = 50 isolated sessions.
 
----
+______________________________________________________________________
 
 ## 4. Cost Optimization Strategy
 
@@ -224,20 +224,20 @@ Routing can be implemented via:
 Beyond the per-query caching, a periodic batch job can optimize the cache over time:
 
 1. Collect all questions from the last 7 days.
-2. Embed them all.
-3. Cluster (DBSCAN or k-means).
-4. Each cluster = one "canonical question" with a cached answer.
-5. Review: does the cached answer still apply? Are documents stale?
-6. Flag clusters with no cache hit → these are new question patterns to watch.
+1. Embed them all.
+1. Cluster (DBSCAN or k-means).
+1. Each cluster = one "canonical question" with a cached answer.
+1. Review: does the cached answer still apply? Are documents stale?
+1. Flag clusters with no cache hit → these are new question patterns to watch.
 
 This provides a feedback loop for understanding what customers ask most, whether cached answers are drifting, and where the agent spends the most tokens.
 
 **Recommended implementation timeline:**
 
 1. **Day 1:** API prompt caching (zero effort, just structure API calls correctly)
-2. **Day 1:** Exact match cache (~20 lines of code)
-3. **Week 2-3:** Semantic cache (after real traffic data exists)
-4. **Month 2+:** Clustering/analytics for automated cache management
+1. **Day 1:** Exact match cache (~20 lines of code)
+1. **Week 2-3:** Semantic cache (after real traffic data exists)
+1. **Month 2+:** Clustering/analytics for automated cache management
 
 ### 4.3 Subscription vs API Pricing — Critical Distinction
 
@@ -247,7 +247,7 @@ This provides a feedback loop for understanding what customers ask most, whether
 
 The cost optimization levers available at the API level (model routing, prompt caching, semantic caching) more than compensate. A well-optimized agentic system at 500 queries/day costs less than a single Claude Pro subscription.
 
----
+______________________________________________________________________
 
 ## 5. Cost Comparison: Agentic vs. RAG
 
@@ -325,22 +325,22 @@ AGENTIC TOTAL:                                $107-117/month
 
 ### 5.4 Side-by-Side Comparison
 
-| Metric | Standard RAG | Optimized Agentic |
-|---|---|---|
-| Monthly LLM API cost | $60 | $102 |
-| Monthly infrastructure | $35-90 | $5-15 |
-| **Total monthly cost** | **$95-150** | **$107-117** |
-| Answer quality | One-shot retrieval | Multi-step, self-correcting |
-| Chunking tuning required | Yes | No |
-| Embedding pipeline | Yes | No |
-| Re-indexing on doc changes | Yes | No |
-| Vector DB operations | Yes | No |
-| Maintenance complexity | High | Low |
-| Update workflow | Re-index pipeline | Edit file, done |
+| Metric                     | Standard RAG       | Optimized Agentic           |
+| -------------------------- | ------------------ | --------------------------- |
+| Monthly LLM API cost       | $60                | $102                        |
+| Monthly infrastructure     | $35-90             | $5-15                       |
+| **Total monthly cost**     | **$95-150**        | **$107-117**                |
+| Answer quality             | One-shot retrieval | Multi-step, self-correcting |
+| Chunking tuning required   | Yes                | No                          |
+| Embedding pipeline         | Yes                | No                          |
+| Re-indexing on doc changes | Yes                | No                          |
+| Vector DB operations       | Yes                | No                          |
+| Maintenance complexity     | High               | Low                         |
+| Update workflow            | Re-index pipeline  | Edit file, done             |
 
 **Key takeaway:** Costs are essentially equivalent. The agentic approach trades slightly higher LLM costs for dramatically lower infrastructure costs and maintenance burden. At 80%+ semantic cache hit rate (realistic for company chatbots with repetitive questions), the agentic approach becomes cheaper overall.
 
----
+______________________________________________________________________
 
 ## 6. Architecture Diagrams
 
@@ -434,7 +434,7 @@ Return response → WhatsApp
 └──────────────────┘
 ```
 
----
+______________________________________________________________________
 
 ## 7. Future Optimization: RAG as an Agent Tool
 
@@ -464,14 +464,14 @@ The agent compensates for RAG's weaknesses (bad chunks, missed semantic matches)
 Adding RAG is a low-friction change in the agentic architecture:
 
 1. Set up a vector index (e.g., Qdrant, Chroma, or pgvector) alongside the existing knowledge directory.
-2. Create an embedding pipeline that indexes the knowledge directory.
-3. Register `vector_search` as a new tool in `pi-agent-core`.
-4. The agent code barely changes — it just has one more tool available.
-5. The agent naturally learns when to use vector search vs. grep vs. direct file reads.
+1. Create an embedding pipeline that indexes the knowledge directory.
+1. Register `vector_search` as a new tool in `pi-agent-core`.
+1. The agent code barely changes — it just has one more tool available.
+1. The agent naturally learns when to use vector search vs. grep vs. direct file reads.
 
 The architecture is the same. RAG becomes an optimization you bolt on later, not a foundational decision you commit to upfront.
 
----
+______________________________________________________________________
 
 ## 8. Compliance and Operational Considerations
 
@@ -500,7 +500,7 @@ This can be implemented as a tool or extension in `pi-agent-core` that triggers 
 - **Cache hit rate monitoring:** Track Layer 1 and Layer 2 hit rates to verify cost assumptions.
 - **Answer quality:** Periodically review agent responses (can be automated with a separate LLM-as-judge evaluation).
 
----
+______________________________________________________________________
 
 ## 9. Implementation Roadmap
 
@@ -534,20 +534,20 @@ This can be implemented as a tool or extension in `pi-agent-core` that triggers 
 - Add more channels (Telegram, web chat) via pi-mono's multi-channel support.
 - Consider self-hosted inference (vLLM via `pi-pods`) if API costs become significant.
 
----
+______________________________________________________________________
 
 ## 10. Key Decisions Log
 
-| Decision | Rationale |
-|---|---|
-| Agentic over RAG | Better answer quality, lower maintenance, equivalent cost at our scale. RAG can be added later as a tool if needed. |
-| pi-mono as runtime | Provider-agnostic, composable, proven by OpenClaw across 20+ channels, MIT licensed, active development. |
-| Filesystem knowledge base | No indexing pipeline, instant updates, agent navigates it naturally with file tools. |
-| Four-layer caching | Eliminates 70%+ of LLM calls, brings agentic cost below or equal to RAG. |
-| API pricing only | Consumer subscriptions (Pro/Max/Plus) violate ToS for commercial use. API pay-per-token is required and cost-efficient at our scale. |
-| No vector DB initially | Unnecessary complexity for < 50k documents. Can be added as an agent tool later without architectural changes. |
+| Decision                  | Rationale                                                                                                                            |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| Agentic over RAG          | Better answer quality, lower maintenance, equivalent cost at our scale. RAG can be added later as a tool if needed.                  |
+| pi-mono as runtime        | Provider-agnostic, composable, proven by OpenClaw across 20+ channels, MIT licensed, active development.                             |
+| Filesystem knowledge base | No indexing pipeline, instant updates, agent navigates it naturally with file tools.                                                 |
+| Four-layer caching        | Eliminates 70%+ of LLM calls, brings agentic cost below or equal to RAG.                                                             |
+| API pricing only          | Consumer subscriptions (Pro/Max/Plus) violate ToS for commercial use. API pay-per-token is required and cost-efficient at our scale. |
+| No vector DB initially    | Unnecessary complexity for < 50k documents. Can be added as an agent tool later without architectural changes.                       |
 
----
+______________________________________________________________________
 
 ## 11. Open Questions for Further Exploration
 
@@ -558,7 +558,7 @@ This can be implemented as a tool or extension in `pi-agent-core` that triggers 
 - **Offline/async queries:** Should the system support "I'll look into this and get back to you" patterns for complex queries that take too long for real-time response?
 - **Session supervisor dashboard:** A TUI-based dashboard for monitoring all active agent sessions across customers (see earlier exploration of pi-tui for this use case).
 
----
+______________________________________________________________________
 
 ## References
 

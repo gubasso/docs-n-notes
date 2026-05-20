@@ -1,11 +1,11 @@
 # Linux General Utilities
 
-<!-- toc -->
+<!--TOC-->
 
-  - [xprop](#xprop)
-  - [tar](#tar)
-  - [stow](#stow)
-- [awk](#awk)
+- [xprop](#xprop)
+- [tar](#tar)
+- [stow](#stow)
+- [\[awk\](./linux-utils-awk.md)](#awklinux-utils-awkmd)
 - [curl](#curl)
 - [NetworkManager](#networkmanager)
 - [time](#time)
@@ -20,9 +20,9 @@
 - [General](#general)
   - [sum numbers from a file](#sum-numbers-from-a-file)
   - [bulk rename](#bulk-rename)
-- [References:](#references)
+- [References](#references)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## xprop
 
@@ -31,9 +31,11 @@ get the window name / properties (help to setup picom, window compositor)
 ## tar
 
 Person:
+
 - compact all files in dir with tar gz
 
 ChatGPT:
+
 - To compact all files in a directory into a `.tar.gz` archive using the command line, you can use the `tar` command. The `tar` command is a standard on Unix-like systems and is used for creating and manipulating archive files.
 
 Here's a basic command structure to create a `.tar.gz` archive:
@@ -43,6 +45,7 @@ tar -czvf name-of-archive.tar.gz /path/to/directory
 ```
 
 Breaking down the command:
+
 - `tar`: This is the command name for creating archives.
 - `-c`: This option stands for "create", indicating that you want to create an archive.
 - `-z`: This option tells `tar` to compress the archive using gzip.
@@ -58,18 +61,19 @@ tar --exclude='.git' --exclude='target' -czvf repo_files.tar.gz repo_dir
 ```
 
 Person:
+
 - and how to get all files
 
 ChatGPT:
+
 - To extract all files from a `.tar.gz` archive, you use the `tar` command with different options. Here's how you can do it:
 
 ```bash
 tar -xzvf name_of_archive.tar.gz -C /path/to/destination
 ```
 
-
-
 Breaking down this command:
+
 - `tar`: This is the command name for working with archives.
 - `-x`: This option stands for "extract", indicating that you want to extract files from an archive.
 - `-z`: This option tells `tar` to uncompress the archive using gzip.
@@ -84,12 +88,14 @@ tar -xzvf myfiles.tar.gz -C myfiles
 ```
 
 - If you want to create a `.tar.gz` archive of all files within a directory, without preserving the directory structure (i.e., just the files, not the folders), you can do this by navigating to the directory and using the `tar` command with a glob pattern. Here's how to do it:
+
 1. First, navigate to the directory containing the files you want to archive:
 
 ```bash
 cd /path/to/directory
 ```
-2. Then, use the `tar` command with a glob pattern to match all files in the current directory:
+
+1. Then, use the `tar` command with a glob pattern to match all files in the current directory:
 
 ```bash
 tar -czvf ../name-of-archive.tar.gz *
@@ -137,6 +143,7 @@ Just GET request, with multiple parameters (query string):
 ```
 curl -G "localhost:8000/tab0032" --data-urlencode 'where={"var0542": "1"}'
 ```
+
 # NetworkManager
 
 [How to force Network Manager to rescan connections?](https://superuser.com/questions/164059/how-to-force-network-manager-to-rescan-connections)
@@ -145,7 +152,6 @@ curl -G "localhost:8000/tab0032" --data-urlencode 'where={"var0542": "1"}'
 nmcli device wifi rescan
 nmcli device wifi list
 ```
-
 
 # time
 
@@ -208,7 +214,7 @@ srm -rfll pathname
 
 # xargs
 
-- `-I`: -I allows {} to represents each file outputed from ls command
+- `-I`: -I allows {} to represents each file outputted from ls command
 
 ```
 ls | xargs -I {} slugify {}
@@ -275,59 +281,67 @@ augroup rust_work
 augroup END
 ```
 
-
 # ffmpeg
 
 OBS:
+
 - check your display # and resolution with `xrandr` command
+
 - check microphone with `arecord -l`
 
 - [Stop using kazam/obs GUI tools, record screen with ffmpeg - BugsWriter](https://www.youtube.com/watch?v=1kPeAIBLrDo)
-    - https://www.cnconnect.com.br/
-    ```
-    #!/bin/bash -x
 
-    INRES="1920x1200"
-    OUTRES="1280x720"
-    FPS="30"
+  - https://www.cnconnect.com.br/
 
-    ffmpeg -f x11grab -s "$INRES" -r "$FPS" -i :0.0 -f alsa -ac 2 \
-    -i default -vcodec libx264 -s "$OUTRES" \
-    -acodec libmp3lame -ab 128k -ar 44100 \
-    -threads 0 -f flv $1
-    ```
+  ```
+  #!/bin/bash -x
+
+  INRES="1920x1200"
+  OUTRES="1280x720"
+  FPS="30"
+
+  ffmpeg -f x11grab -s "$INRES" -r "$FPS" -i :0.0 -f alsa -ac 2 \
+  -i default -vcodec libx264 -s "$OUTRES" \
+  -acodec libmp3lame -ab 128k -ar 44100 \
+  -threads 0 -f flv $1
+  ```
 
 - [Automating Noise Reduction for Audio Processing](https://www.youtube.com/watch?v=f9P7SeUlzQg)
-    - python, ffmpeg, sox, audacity
-    - script for reduce sound as a script
-    - "Would this work for you? When you record videos, you start by saying nothing for the first ten seconds. Then your script can use seconds 1-9 for obtaining the noise profile. Feed that into the sox noisered program"
-    - "ffmpeg recently have been added two audio filters for denoising: afftdn and anlmdn."
-        - afftdn
 
+  - python, ffmpeg, sox, audacity
+  - script for reduce sound as a script
+  - "Would this work for you? When you record videos, you start by saying nothing for the first ten seconds. Then your script can use seconds 1-9 for obtaining the noise profile. Feed that into the sox noisered program"
+  - "ffmpeg recently have been added two audio filters for denoising: afftdn and anlmdn."
+    - afftdn
 
 - [Recurrent Neural Network to reduce noise with ffmpeg](https://www.youtube.com/watch?v=CEX0JHAYgj8)
-    - documentation: https://ffmpeg.org/ffmpeg-all.html#arnndn
-    - very useful instructions: https://www.amirsharif.com/using-ffmpeg-to-reduce-background-noise/
-    - commands:
-        ```
-        unzip the github models
-        unzip rnnoise-models-master.zip
 
-        extract audio from video
-        ffmpeg -i inputvideo.mp4 outaudio.mp3
+  - documentation: https://ffmpeg.org/ffmpeg-all.html#arnndn
 
-        arnndn command
-        ffmpeg -i outaudio.mp3 -af arnndn=m=rnnoise-models-master/somnolent-hogwash-2018-09-01/sh.rnnn a.wav
+  - very useful instructions: https://www.amirsharif.com/using-ffmpeg-to-reduce-background-noise/
 
-        combine original video with new audio
-        ffmpeg -i inputvideo.mp4 -i a.wav -c:v copy -map 0::v:0 -map 1:a:0 new.mp4
+  - commands:
 
-        extracting just the noise from audio
-        ffmpeg -i inputaudio.mp3 -af arnndn=m=rnnoise-models-master/beguiling-drafter-2018-08-30/bd.rnnn:mix=-1 begdra-1.mp3
-        ```
+    ```
+    unzip the github models
+    unzip rnnoise-models-master.zip
+
+    extract audio from video
+    ffmpeg -i inputvideo.mp4 outaudio.mp3
+
+    arnndn command
+    ffmpeg -i outaudio.mp3 -af arnndn=m=rnnoise-models-master/somnolent-hogwash-2018-09-01/sh.rnnn a.wav
+
+    combine original video with new audio
+    ffmpeg -i inputvideo.mp4 -i a.wav -c:v copy -map 0::v:0 -map 1:a:0 new.mp4
+
+    extracting just the noise from audio
+    ffmpeg -i inputaudio.mp3 -af arnndn=m=rnnoise-models-master/beguiling-drafter-2018-08-30/bd.rnnn:mix=-1 begdra-1.mp3
+    ```
 
 - [(FFMPEG) HOW TO NORMALIZE AUDIO?](https://www.youtube.com/watch?v=Kb2JEYFyvqs)
-    - `ffmpeg -i  input.mp3 -af loudnorm=I=-16:LRA=11:TP=-1.5 output.mp3`
+
+  - `ffmpeg -i  input.mp3 -af loudnorm=I=-16:LRA=11:TP=-1.5 output.mp3`
 
 # tmux
 
@@ -353,21 +367,20 @@ paste -s -d+ lines_to_sum | \bc
 ## bulk rename
 
 - Bulk rename files
-    - [Bulk rename files with vim](./it/vim-neovim.md#bulk-rename-files-with-vim)
+  - [Bulk rename files with vim](./it/vim-neovim.md#bulk-rename-files-with-vim)
 
-
----
+______________________________________________________________________
 
 (rust alternatives)
 
 - https://github.com/eza-community/eza (ls / tree alternative)
-► https://github.com/sharkdp/bat - bat (cat alternative)
-► https://github.com/BurntSushi/ripgrep - ripgrep (rg) (grep alternative)
-► https://github.com/sharkdp/fd - fd (find alternative)
-► https://github.com/XAMPPRocky/tokei - tokei (LoC, lines of code, code count, statistics about your code)
-► https://github.com/dalance/procs - procs (ps alternative)
+  ► https://github.com/sharkdp/bat - bat (cat alternative)
+  ► https://github.com/BurntSushi/ripgrep - ripgrep (rg) (grep alternative)
+  ► https://github.com/sharkdp/fd - fd (find alternative)
+  ► https://github.com/XAMPPRocky/tokei - tokei (LoC, lines of code, code count, statistics about your code)
+  ► https://github.com/dalance/procs - procs (ps alternative)
 - Zellij (rust) - A terminal multiplexer workspace with batteries included https://www.reddit.com/r/rust/comments/mwukhz/zellij_a_terminal_multiplexer_workspace_with/?utm_medium=android_app&utm_source=share (like tmux alternative)
 
-# References:
+# References
 
 [^1]: [How do I recursively shred an entire directory tree?](https://unix.stackexchange.com/a/146078)

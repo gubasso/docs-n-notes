@@ -12,5 +12,3 @@ npm i -D typescript @types/node
 tsc --init # or
 npx tsc --init
 ```
-
-

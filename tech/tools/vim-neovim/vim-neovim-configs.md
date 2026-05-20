@@ -1,32 +1,32 @@
 # Vim / Neovim configurations configs
+
 > nvim
 
 <!-- toc GFM -->
 
-+ [lazy.nvim](#lazynvim)
-  * [Load for filetype](#load-for-filetype)
-    - [1. ftplugin dir: `after/ftplugin/<filetype>.lua`](#1-ftplugin-dir-afterftpluginfiletypelua)
-    - [2. lazy.nvim pure](#2-lazynvim-pure)
-+ [Plugins](#plugins)
-  * [which-key](#which-key)
-+ [nvim lua commands](#nvim-lua-commands)
-  * [table/list manipulation](#tablelist-manipulation)
-
-<!-- toc -->
-
 - [lazy.nvim](#lazynvim)
   - [Load for filetype](#load-for-filetype)
-    - [1. ftplugin dir: `after/ftplugin/.lua`](#1-ftplugin-dir-afterftpluginlua)
+    - [1. ftplugin dir: `after/ftplugin/<filetype>.lua`](#1-ftplugin-dir-afterftpluginfiletypelua)
     - [2. lazy.nvim pure](#2-lazynvim-pure)
 - [Plugins](#plugins)
   - [which-key](#which-key)
 - [nvim lua commands](#nvim-lua-commands)
   - [table/list manipulation](#tablelist-manipulation)
 
-<!-- tocstop -->
+<!--TOC-->
+
+- [lazy.nvim](#lazynvim)
+  - [Load for filetype](#load-for-filetype)
+    - [1. ftplugin dir: `after/ftplugin/<filetype>.lua`](#1-ftplugin-dir-afterftpluginlua)
+    - [2. lazy.nvim pure](#2-lazynvim-pure)
+- [Plugins](#plugins)
+  - [which-key](#which-key)
+- [nvim lua commands](#nvim-lua-commands)
+  - [table/list manipulation](#tablelist-manipulation)
+
+<!--TOC-->
 
 # lazy.nvim
-
 
 ## Load for filetype
 
@@ -46,7 +46,6 @@ vim.keymap.set(
   '<cmd>wa<CR><cmd>call VimuxRunCommand("clrm; cargo test -p " . expand("%:.:h:h") . " -- --nocapture --test-threads 1")<cr>',
   { desc = 'Run Test this file' })
 ```
-
 
 ### 2. lazy.nvim pure
 
@@ -124,6 +123,7 @@ vim.api.nvim_create_autocmd("FileType", {
 https://neovim.io/doc/user/lua.html#vim.tbl_extend()
 
 https://neovim.io/doc/user/lua.html#vim.list_extend()
+
 ```lua
   {
     "williamboman/mason.nvim",
@@ -135,7 +135,6 @@ https://neovim.io/doc/user/lua.html#vim.list_extend()
     end,
   },
 ```
-
 
 ```lua
 ft = 'rust',

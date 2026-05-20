@@ -1,63 +1,42 @@
 # cli: expect
 
-<!-- toc -->
+<!--TOC-->
 
-- [Example 1: Using Environment Variables](#example-1-using-environment-variables)
-- [Example 2: Using `pass` (or `gopass`)](#example-2-using-pass-or-gopass)
+- [Set timeout](#set-timeout)
+- [Start the SSH session](#start-the-ssh-session)
+- [Handle the password prompt](#handle-the-password-prompt)
+- [Execute a command after login](#execute-a-command-after-login)
+- [Interact with the session manually](#interact-with-the-session-manually)
+  - [Example 2: Using `pass` (or `gopass`)](#example-2-using-pass-or-gopass)
+    - [Running the Script](#running-the-script)
+    - [Useful Tags](#useful-tags)
+    - [Additional Resources](#additional-resources)
 
-<!-- tocstop -->
-
-**Expect**  is a Unix automation and testing tool that scripts interactions with programs that require user input. It automates responses to prompts and can be used to handle scripts and commands that typically require manual input.
-
-#### Key Features:
-
-- Automates interactive applications.
-- Provides control over command execution and responses.
-- Enables testing of command-line tools and scripts.
-
-#### Basic Syntax:
-
-```bash
-expect [options] [script-file]
-```
-
-#### Common Options:
-
-- `-d` : Enables debugging.
-- `-c` : Executes commands directly from the command line.
-- `-f` : Specifies a script file to execute.
-
-#### Basic Commands:
-
-- `spawn` : Starts a new process.
-- `expect` : Waits for specific output from the spawned process.
-- `send` : Sends a response to the spawned process.
-- `interact` : Allows manual interaction with the process after automation steps.
-
-#### Example Script:
-
-This script automates an SSH login and executes a command:
-
-```tcl
-#!/usr/bin/expect -f
+<!--TOC-->
 
 # Set timeout
+
 set timeout -1
 
 # Start the SSH session
+
 spawn ssh user@hostname
 
 # Handle the password prompt
+
 expect "password:"
-send "your_password\r"
+send "your_password\\r"
 
 # Execute a command after login
+
 expect "$ "
-send "ls -l\r"
+send "ls -l\\r"
 
 # Interact with the session manually
+
 interact
-```
+
+````
 
 ### Example 1: Using Environment Variables
 
@@ -85,8 +64,7 @@ send "ls -l\r"
 
 # Interact with the session manually
 interact
-```
-
+````
 
 ### Example 2: Using `pass` (or `gopass`)
 
@@ -114,22 +92,22 @@ send "ls -l\r"
 interact
 ```
 
-
-#### Running the Script:
+#### Running the Script
 
 1. Save the script to a file (e.g., `ssh_login.expect`).
-2. Make the script executable:
+1. Make the script executable:
 
 ```bash
 chmod +x ssh_login.expect
 ```
-3. Execute the script:
+
+1. Execute the script:
 
 ```bash
 ./ssh_login.expect
 ```
 
-#### Useful Tags:
+#### Useful Tags
 
 - **#expect**
 - **#automation**
@@ -138,10 +116,9 @@ chmod +x ssh_login.expect
 - **#interactive**
 - **#testing**
 
-#### Additional Resources:
+#### Additional Resources
 
-- [Expect Man Page]()
-- [Expect Official Documentation]()
+- [Expect Man Page](<>)
+- [Expect Official Documentation](<>)
 
 By using Expect, you can automate and test applications that require user interaction, making it a powerful tool for managing and testing interactive scripts.
-

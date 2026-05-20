@@ -1,12 +1,13 @@
 # Nextcloud
+
 > filesync
 
 [toc]
 
 # General
 
-
 # S3 Storage
+
 > Nextcloud / Cloudron / External Storage Bucket S3
 
 !! BAD IDEA
@@ -25,16 +26,19 @@
 "Services" -> "OCC". You can then execute these commands:
 
 - Trash bin contents:
+
   ```
   trashbin:cleanup --all-users
   ```
 
 - File versions:
+
   ```
   versions:cleanup %USER%
   ```
 
 - You can show the users with the following OCC command:
+
   ```
   user:list
   ```

@@ -1,7 +1,8 @@
 # Infrastructure / DevOps
+
 > dev ops operations servers
 
-<!-- toc -->
+<!--TOC-->
 
 - [Related](#related)
 - [Proxy / Reverse Proxy](#proxy--reverse-proxy)
@@ -11,18 +12,18 @@
   - [Naming subdomains apps](#naming-subdomains-apps)
   - [Containers (Docker)](#containers-docker)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Related
 
-- [[server-vps]]
-- [[home-server]]
-- [[dns]]
-- [[backups]]
+- \[[server-vps]\]
+- \[[home-server]\]
+- \[[dns]\]
+- \[[backups]\]
 
 ## Proxy / Reverse Proxy
 
-- *[Traefik](./traefik.md)
+- \*[Traefik](./traefik.md)
 - caddy
 - nginx proxy manager
 
@@ -30,15 +31,14 @@
 
 - [Netmaker](./netmaker.md)
 
-- [What is FQDN for?  Fully Qualified Domain Name (FQDN)](https://www.linode.com/community/questions/19375/how-should-i-configure-my-hostname-and-fqdn#answer-71105)
+- [What is FQDN for? Fully Qualified Domain Name (FQDN)](https://www.linode.com/community/questions/19375/how-should-i-configure-my-hostname-and-fqdn#answer-71105)
 
 - TTL: when possible, change to 600 seconds (10 min)
 
 - VPC = Virtual Private Cloud[^net1]
+
   - full control of a private network
   - similar to a home network
-
-[^net1]: [What is a VPC? | AWS Training](https://www.youtube.com/watch?v=7XnpdZF_COA)
 
 ## Organization
 
@@ -47,8 +47,7 @@
 - server name = subdomain
 - Computer network naming scheme: https://en.wikipedia.org//wiki/Computer_network_naming_scheme
 - A Proper Server Naming Scheme: https://mnx.io/blog/a-proper-server-naming-scheme/
--  Naming Convention Design (Servers, Computers, IT Assets)  https://www.process.st/checklist/naming-convention-design-servers-computers-it-assets/
-
+- Naming Convention Design (Servers, Computers, IT Assets) https://www.process.st/checklist/naming-convention-design-servers-computers-it-assets/
 
 ### Naming subdomains apps
 
@@ -61,7 +60,7 @@ Server home dir: [^1]
 - `~/docker`
 - `~/container`
 - `~/apps`
-- `~/appstacks` *
+- `~/appstacks` \*
 
 One subdir for each "app" (one "app" can be a set of containers, within one docker-compose file). E.g.:
 
@@ -75,5 +74,6 @@ Or organize in categories. E.g.:
 
 Add this dir to a backup routine. It will have data dirs/files too, so, can not be a git repo.
 
-[^1]: [Get Docker organized for easier backups & replication. Trust me, an hour can save you days! / docker organization :awesome_open_source:](https://www.youtube.com/watch?v=sGtTvV0xbYg&t=972s)
+[^net1]: [What is a VPC? | AWS Training](https://www.youtube.com/watch?v=7XnpdZF_COA)
 
+[^1]: [Get Docker organized for easier backups & replication. Trust me, an hour can save you days! / docker organization :awesome_open_source:](https://www.youtube.com/watch?v=sGtTvV0xbYg&t=972s)

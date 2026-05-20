@@ -1,4 +1,5 @@
 # Create a Reverse Proxy for self hosted services using Netmaker and Wireguard
+
 > link: https://www.youtube.com/watch?v=CGw4Kc424VE
 > :awesome_open_source:
 
@@ -12,6 +13,7 @@
 Apps/Steps:
 
 1. Traefik (reverse proxy)
+
 - Authelia
 - Crowdsec
 - Portainer
@@ -21,6 +23,7 @@ Apps/Steps:
 "Entry VPS" = Netmaker Netclient Proxy
 
 - Create a "Entry VPS"
+
 - Install NetClient
 
 - Custom DNS:
@@ -53,4 +56,3 @@ redirects to "Entry VPS" IP
 - after https, block port 80
 - if service is at another machine
   - ip = local network ip (not public VPS ip anymore)
-

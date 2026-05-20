@@ -3,6 +3,7 @@
 > Last updated: 2026-05-19. Host: Arch Linux rootless. Living document — append new findings here.
 >
 > Companion files in this folder:
+>
 > - [libkrun-crun-newline-mangling-upstream-issue.md](./libkrun-crun-newline-mangling-upstream-issue.md) — drafted upstream bug report, not yet filed.
 
 ## What this is
@@ -11,14 +12,14 @@ A reference of what works and what does not when running rootless `podman run --
 
 ## Environment baseline (latest observation)
 
-| Component   | Version              |
-|-------------|----------------------|
-| Kernel      | 7.0.7-arch2-1        |
-| podman      | 5.8.2                |
+| Component   | Version                                     |
+| ----------- | ------------------------------------------- |
+| Kernel      | 7.0.7-arch2-1                               |
+| podman      | 5.8.2                                       |
 | crun        | 1.27.1 (with `+LIBKRUN`, commit `3ec076b3`) |
-| krun (Arch) | 1.27.1-1             |
-| libkrun     | 1.18.0-1             |
-| libkrunfw   | 5.3.0-1              |
+| krun (Arch) | 1.27.1-1                                    |
+| libkrun     | 1.18.0-1                                    |
+| libkrunfw   | 5.3.0-1                                     |
 
 The Arch `krun` package and the system `crun` binary are at the same upstream version because the `--krun` handler is built into `crun` itself when compiled with `+LIBKRUN`; the standalone `krun` symlink/wrapper is the same code path.
 
@@ -53,11 +54,13 @@ Control (default `crun`) prints both lines and exits 0.
 **Workaround:** never embed `\n` in a `-c` payload that crosses the host→guest boundary at container start. Pass commands as separate argv entries, or use `podman exec` against an already-running container with a fresh argv vector. The devcontainerctl direct adapter (`lib/dctl/runtime/krun.sh`) works because it never embeds multi-line scripts.
 
 **Cascade symptoms to recognise:**
+
 - `@devcontainers/cli`: `Shell server terminated (code: 1|255, signal: null)` followed by misleading `unable to find user <name>: no matching entries in passwd file` (because the in-container passwd probe also fails over the broken channel — regardless of which user is queried, including `root` which definitely exists).
 
 **Upstream:** report drafted at [libkrun-crun-newline-mangling-upstream-issue.md](./libkrun-crun-newline-mangling-upstream-issue.md). File against `containers/crun` first (the `--krun` handler dispatches from there), mirror to `containers/libkrun`. Update this row with the issue URL after filing. <!-- TODO(upstream-url): replace this comment with the filed issue URL once the bug is reported. Search: TODO(upstream-url) -->
 
 **Suspected sibling bugs (cross-reference when filing):**
+
 - [containers/libkrun#273](https://github.com/containers/libkrun/issues/273) — `--` not forwarded correctly (argument-passing).
 - [containers/podman#28067](https://github.com/containers/podman/issues/28067) — TUI character handling broken under krun (Enter/newlines).
 - [containers/crun#1098](https://github.com/containers/crun/issues/1098) — `podman exec` into a krun'd container does not enter the VM (different bug, same handler).

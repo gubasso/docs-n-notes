@@ -1,12 +1,12 @@
 # CSS
 
-<!-- toc -->
+<!--TOC-->
 
 - [General](#general)
 - [Frameworks](#frameworks)
 - [Icons / SVG](#icons--svg)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## General
 
@@ -15,19 +15,27 @@
 ## Frameworks
 
 - https://open-props.style/
+
   - just css variables
 
 - tailwind
 
 ## Icons / SVG
 
-* https://lucide.dev/
-* https://iconify.design/
-  - svelte: https://joyofcode.xyz/using-iconify-with-svelte
-- https://tabler-icons.io/
-- https://icon-icons.com/
-- https://heroicons.com/
-- https://eos-icons.com/
-- https://octet.design/resources/free-charts-icon-set/
-    - free icons charts set
+- https://lucide.dev/
 
+- https://iconify.design/
+
+  - svelte: https://joyofcode.xyz/using-iconify-with-svelte
+
+- https://tabler-icons.io/
+
+- https://icon-icons.com/
+
+- https://heroicons.com/
+
+- https://eos-icons.com/
+
+- https://octet.design/resources/free-charts-icon-set/
+
+  - free icons charts set

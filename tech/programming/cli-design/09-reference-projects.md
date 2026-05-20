@@ -173,20 +173,20 @@ Crates are ordered by dependency direction: lower-level crates *never* depend on
 
 ## Comparison table
 
-| Project | Shape | Key takeaway |
-|---------|-------|--------------|
-| fd | single crate | per-feature subdirs |
-| bat | lib + bin | reusable lib + thin bin |
-| gitui | single crate (TUI) | components / tabs / popups |
-| ouch | single crate | cli/ + commands/ split |
-| starship | single crate | context.rs + modules/ |
-| eza | single crate | options/ vs output/ |
-| jj | workspace (cli subcrate) | command_error.rs + ui.rs |
-| cargo | workspace + bin/commands/ | uniform `exec()` signature |
-| ripgrep | workspace (subsystems) | publishable libraries |
-| helix | workspace (8 crates) | dependency-direction boundaries |
-| atuin | workspace (4 crates) | bin + client + server + common |
-| zellij | workspace + plugin ABI | separate plugin-API crate |
+| Project  | Shape                     | Key takeaway                    |
+| -------- | ------------------------- | ------------------------------- |
+| fd       | single crate              | per-feature subdirs             |
+| bat      | lib + bin                 | reusable lib + thin bin         |
+| gitui    | single crate (TUI)        | components / tabs / popups      |
+| ouch     | single crate              | cli/ + commands/ split          |
+| starship | single crate              | context.rs + modules/           |
+| eza      | single crate              | options/ vs output/             |
+| jj       | workspace (cli subcrate)  | command_error.rs + ui.rs        |
+| cargo    | workspace + bin/commands/ | uniform `exec()` signature      |
+| ripgrep  | workspace (subsystems)    | publishable libraries           |
+| helix    | workspace (8 crates)      | dependency-direction boundaries |
+| atuin    | workspace (4 crates)      | bin + client + server + common  |
+| zellij   | workspace + plugin ABI    | separate plugin-API crate       |
 
 ## See also
 

@@ -14,7 +14,7 @@ refactor/rewrite is undertaken.
 This document is the source of truth for "how we rewrite". It is *not*
 a discussion of *when* to rewrite — assume the decision is made.
 
----
+______________________________________________________________________
 
 ## 0. Non-Negotiables (read this section first)
 
@@ -28,11 +28,11 @@ non-negotiable rules:
    the source system (within the explicit parity boundary set in
    Phase A). Where parity is intentionally broken, document it as an
    ADR.
-2. **Re-derive the internal implementation from the contract, not from
+1. **Re-derive the internal implementation from the contract, not from
    the source code.** Design must flow from the extracted specification
    plus the target language's idioms — *not* from the source's module
    layout, class hierarchy, error model, or concurrency strategy.
-3. **No transliteration.** Mechanical mapping of source-language
+1. **No transliteration.** Mechanical mapping of source-language
    constructs into target-language syntax is forbidden. Specifically:
    - Shell pipelines must not become subprocess chains; redesign in the
      target's I/O primitives.
@@ -44,16 +44,16 @@ non-negotiable rules:
    - The original concurrency model (threads vs. async vs. green
      threads vs. processes) must not be copied; choose what fits the
      target language and workload.
-4. **Improve where the new ecosystem offers leverage.** Stronger
+1. **Improve where the new ecosystem offers leverage.** Stronger
    typing, native async, structured logging, real parallelism, better
    packaging, single-binary distribution, faster I/O — use them.
    Improvements **inside** the contract are encouraged; behavioral
    changes **across** the contract require an explicit ADR.
-5. **No scope creep.** The rewrite preserves features and adds nothing
+1. **No scope creep.** The rewrite preserves features and adds nothing
    that did not exist in the source. New features ship in a separate
    change *after* the rewrite is decommissioned-complete.
    See [§7 anti-patterns: second-system effect](#7-anti-patterns--failure-modes-named-in-the-literature).
-6. **Gated phase model.** Phases A→F (see [§3](#3-mandatory-phase-model))
+1. **Gated phase model.** Phases A→F (see [§3](#3-mandatory-phase-model))
    are mandatory and ordered. Skipping or reordering phases is a
    defect; agents must refuse to advance until the previous phase's
    artifacts exist.
@@ -63,25 +63,25 @@ non-negotiable rules:
 > structurally the source language. The whole point of this guideline
 > is to make that failure mode hard to commit.
 
----
+______________________________________________________________________
 
 ## 1. Glossary
 
-| Term | Definition |
-|---|---|
-| **Contract** | The external, observable surface a system promises: CLI flags, subcommands, exit codes, stdout/stderr shape, HTTP routes, request/response schemas, headers, error payloads, on-disk formats, wire formats, env vars, config schema, semver promises. The contract is what users (humans, scripts, integrating services) *depend on*. |
-| **Transliteration** | Mechanical mapping of source-language constructs into target-language syntax, preserving source-side structure. Always wrong in this guideline. |
-| **Characterization test** | A test that documents the *current* observable behavior of the source system before any rewrite. Captures both documented and undocumented behavior. (Feathers, *Working Effectively with Legacy Code*.) |
-| **Golden test / approval test / snapshot test** | A characterization test where the expected output is a stored fixture; deviations are diffed and explicitly re-approved. |
-| **Differential test** | A test that runs the same input through the source and target implementations and asserts output equivalence (with documented allowed differences). |
-| **Property test** | A test that asserts an invariant holds for randomly-generated inputs, language-neutrally. Runs against both source and target. |
-| **Parity test** | Any of {characterization, golden, differential, property} test that gates the rewrite. |
-| **Parity boundary** | The explicit, documented set of behaviors the rewrite **does** and **does not** preserve. Anything outside the boundary requires an ADR. |
-| **Translation smell** | An idiom that betrays source-language origin in target-language code (e.g., getter/setter methods in Go, `Vec<Box<dyn Trait>>` mirroring a Java class hierarchy in Rust, callback chains where async/await fits). |
-| **Strangler Fig** | An incremental rewrite pattern: route traffic between old and new behind a seam; grow the new implementation until the old can be removed. |
-| **ADR** | Architecture Decision Record. A short doc capturing context, decision, and consequences for one significant choice during the rewrite. |
+| Term                                            | Definition                                                                                                                                                                                                                                                                                                                            |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Contract**                                    | The external, observable surface a system promises: CLI flags, subcommands, exit codes, stdout/stderr shape, HTTP routes, request/response schemas, headers, error payloads, on-disk formats, wire formats, env vars, config schema, semver promises. The contract is what users (humans, scripts, integrating services) *depend on*. |
+| **Transliteration**                             | Mechanical mapping of source-language constructs into target-language syntax, preserving source-side structure. Always wrong in this guideline.                                                                                                                                                                                       |
+| **Characterization test**                       | A test that documents the *current* observable behavior of the source system before any rewrite. Captures both documented and undocumented behavior. (Feathers, *Working Effectively with Legacy Code*.)                                                                                                                              |
+| **Golden test / approval test / snapshot test** | A characterization test where the expected output is a stored fixture; deviations are diffed and explicitly re-approved.                                                                                                                                                                                                              |
+| **Differential test**                           | A test that runs the same input through the source and target implementations and asserts output equivalence (with documented allowed differences).                                                                                                                                                                                   |
+| **Property test**                               | A test that asserts an invariant holds for randomly-generated inputs, language-neutrally. Runs against both source and target.                                                                                                                                                                                                        |
+| **Parity test**                                 | Any of {characterization, golden, differential, property} test that gates the rewrite.                                                                                                                                                                                                                                                |
+| **Parity boundary**                             | The explicit, documented set of behaviors the rewrite **does** and **does not** preserve. Anything outside the boundary requires an ADR.                                                                                                                                                                                              |
+| **Translation smell**                           | An idiom that betrays source-language origin in target-language code (e.g., getter/setter methods in Go, `Vec<Box<dyn Trait>>` mirroring a Java class hierarchy in Rust, callback chains where async/await fits).                                                                                                                     |
+| **Strangler Fig**                               | An incremental rewrite pattern: route traffic between old and new behind a seam; grow the new implementation until the old can be removed.                                                                                                                                                                                            |
+| **ADR**                                         | Architecture Decision Record. A short doc capturing context, decision, and consequences for one significant choice during the rewrite.                                                                                                                                                                                                |
 
----
+______________________________________________________________________
 
 ## 2. The Core Principle (one paragraph for prompt injection)
 
@@ -98,7 +98,7 @@ non-negotiable rules:
 > behavior, and (f) cut over via parallel-run with an explicit
 > rollback. Transliteration is forbidden. Scope creep is forbidden.
 
----
+______________________________________________________________________
 
 ## 3. Mandatory Phase Model
 
@@ -147,14 +147,14 @@ system *promises*, independent of how it is implemented.
 **How to extract:**
 
 1. Read user-facing docs, `--help` output, man pages, README.
-2. Capture every documented exit code; capture every documented HTTP
+1. Capture every documented exit code; capture every documented HTTP
    status. Run the source binary against representative inputs and
    record outputs.
-3. For HTTP services, capture production traffic with mitmproxy/
+1. For HTTP services, capture production traffic with mitmproxy/
    GoReplay/WireMock if possible.
-4. For libraries with public APIs, list every exported symbol and its
+1. For libraries with public APIs, list every exported symbol and its
    documented contract.
-5. Treat **observed behavior** as authoritative when it diverges from
+1. Treat **observed behavior** as authoritative when it diverges from
    documented behavior — users depend on what the system does, not
    what the docs say (see Chesterton's Fence in [§7](#7-anti-patterns--failure-modes-named-in-the-literature)).
 
@@ -203,7 +203,7 @@ and the target language's idioms. The source code is **not an input**.
     concurrency model, I/O model, dependency choices. Must justify
     each choice by reference to:
     1. A specific contract requirement, AND
-    2. A specific target-language idiom guideline (Effective Go, Rust
+    1. A specific target-language idiom guideline (Effective Go, Rust
        API Guidelines, PEP 8/20, .NET Framework Design Guidelines,
        Kotlin coding conventions, Google C++ Style Guide, C++ Core
        Guidelines, …).
@@ -274,7 +274,7 @@ across all parity-test classes.
   target with at least the same input-space coverage.
 - **Differential tests:** for each parity-relevant function/route, run
   the same inputs against source and target and assert equivalence.
-  Use [Trail of Bits **DIFFER**] for transformed-program differential
+  Use \[Trail of Bits **DIFFER**\] for transformed-program differential
   testing where applicable.
 - **Fuzz campaign:** coverage-guided fuzzing (AFL++, libFuzzer,
   cargo-fuzz, jazzer, OSS-Fuzz harness if appropriate) for at least
@@ -301,41 +301,41 @@ step.
    traffic; only source's responses are user-visible; target's
    responses are logged and diffed. Run until divergence rate is
    acceptable.
-2. **Canary**: route a small percentage (1–5%) of user traffic to the
+1. **Canary**: route a small percentage (1–5%) of user traffic to the
    target. Monitor error rate, latency, resource usage. Roll back on
    regression.
-3. **Progressive rollout**: 5% → 25% → 50% → 100%, gated by SLO
+1. **Progressive rollout**: 5% → 25% → 50% → 100%, gated by SLO
    adherence at each step.
-4. **Cutover**: source goes read-only / off; target is the system of
+1. **Cutover**: source goes read-only / off; target is the system of
    record.
-5. **Rollback plan**: at every step, a documented, tested procedure
+1. **Rollback plan**: at every step, a documented, tested procedure
    to revert traffic to the source.
-6. **Decommission**: after a confidence period (days–weeks), remove
+1. **Decommission**: after a confidence period (days–weeks), remove
    source code from the repo and announce end-of-life. Capture
    lessons in `adr/9999-postmortem.md`.
 
 **Gate:** Cutover is irreversible only after the confidence period;
 until then, rollback must remain possible.
 
----
+______________________________________________________________________
 
 ## 4. Strategy Patterns (When to Use Which)
 
-| Pattern | When to use | Reference |
-|---|---|---|
-| **Strangler Fig** | Long-lived production system; cannot stop the world; replace component-by-component behind a routing seam. Default for services. | https://martinfowler.com/bliki/StranglerFigApplication.html · https://martinfowler.com/articles/2024-strangler-fig-rewrite.html |
-| **Branch by Abstraction** | Inside one codebase: introduce an abstraction over the part being rewritten; ship old and new behind a flag; flip. Default for libraries / monoliths being modernized in-place. | https://martinfowler.com/bliki/BranchByAbstraction.html · https://docs.aws.amazon.com/prescriptive-guidance/modernization-decomposing-monoliths/branch-by-abstraction.html |
-| **Parallel Run** | The rewrite must prove behavioral equivalence under live traffic before cutover. | https://engineering.zalando.com/posts/2021/11/parallel-run.html |
-| **Traffic Shadowing** | Service rewrites; replay production traffic against the new implementation without user impact. | https://emissary-ingress.dev/docs/3.9/topics/using/shadowing/ · https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/traffic_splitting.html |
-| **Canary / Progressive rollout** | Final cutover step. | https://goreplay.org/blog/canary-deployment-strategy-20250808133113/ |
-| **Big-bang rewrite** | **Default-prohibited.** Allowed only when the system is small enough that the entire rewrite fits in one parity-test gated cycle, and when there is no live production traffic to migrate. Document explicitly in ADR. | https://www.joelonsoftware.com/2000/04/06/things-you-should-never-do-part-i/ |
+| Pattern                          | When to use                                                                                                                                                                                                            | Reference                                                                                                                                                                  |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Strangler Fig**                | Long-lived production system; cannot stop the world; replace component-by-component behind a routing seam. Default for services.                                                                                       | https://martinfowler.com/bliki/StranglerFigApplication.html · https://martinfowler.com/articles/2024-strangler-fig-rewrite.html                                            |
+| **Branch by Abstraction**        | Inside one codebase: introduce an abstraction over the part being rewritten; ship old and new behind a flag; flip. Default for libraries / monoliths being modernized in-place.                                        | https://martinfowler.com/bliki/BranchByAbstraction.html · https://docs.aws.amazon.com/prescriptive-guidance/modernization-decomposing-monoliths/branch-by-abstraction.html |
+| **Parallel Run**                 | The rewrite must prove behavioral equivalence under live traffic before cutover.                                                                                                                                       | https://engineering.zalando.com/posts/2021/11/parallel-run.html                                                                                                            |
+| **Traffic Shadowing**            | Service rewrites; replay production traffic against the new implementation without user impact.                                                                                                                        | https://emissary-ingress.dev/docs/3.9/topics/using/shadowing/ · https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_conn_man/traffic_splitting.html        |
+| **Canary / Progressive rollout** | Final cutover step.                                                                                                                                                                                                    | https://goreplay.org/blog/canary-deployment-strategy-20250808133113/                                                                                                       |
+| **Big-bang rewrite**             | **Default-prohibited.** Allowed only when the system is small enough that the entire rewrite fits in one parity-test gated cycle, and when there is no live production traffic to migrate. Document explicitly in ADR. | https://www.joelonsoftware.com/2000/04/06/things-you-should-never-do-part-i/                                                                                               |
 
 **Migrations playbook (Larson):** *Derisk → Enable → Finish.* A
 migration that has not been finished is a migration that is generating
 ongoing cost. Plan the *Finish* before starting the *Derisk*.
 https://lethain.com/migrations/
 
----
+______________________________________________________________________
 
 ## 5. Idiomatic Target-Language Canon (Pointer Table)
 
@@ -343,21 +343,21 @@ The guideline stays language-agnostic; the agent must consult the
 target's canonical references for every non-trivial idiom choice in
 Phase C and D.
 
-| Target | Canonical references |
-|---|---|
-| **Go** | Effective Go — https://go.dev/doc/effective_go (note its explicit "a straightforward translation from C++ or Java into Go is unlikely to be satisfactory"); Go Code Review Comments — https://go.dev/wiki/CodeReviewComments |
-| **Rust** | Rust API Guidelines — https://rust-lang.github.io/api-guidelines/ ; Rust Style Guide — https://doc.rust-lang.org/1.0.0/style/ ; *Rust for Rustaceans* (Gjengset) |
-| **Python** | PEP 8 — https://peps.python.org/pep-0008/ ; PEP 20 (Zen) — https://peps.python.org/pep-0020/ ; Google Python Style Guide — https://google.github.io/styleguide/pyguide.html |
-| **TypeScript / JavaScript** | TypeScript Deep Dive — https://basarat.gitbook.io/typescript ; Microsoft TS coding guidelines (internal); Node.js best practices — https://github.com/goldbergyoni/nodebestpractices |
-| **.NET / C#** | Framework Design Guidelines — https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/ |
-| **Kotlin** | Coding conventions — https://kotlinlang.org/docs/coding-conventions.html ; *Effective Java* (Bloch) for JVM heritage |
-| **Java** | *Effective Java* (Bloch); Google Java Style — https://google.github.io/styleguide/javaguide.html |
-| **C++** | Google C++ Style Guide — https://google.github.io/styleguide/cppguide.html ; C++ Core Guidelines — https://github.com/isocpp/CppCoreGuidelines |
-| **Scala** | Scala Style Guide — https://docs.scala-lang.org/style/ |
-| **Bash (target)** | Google Shell Style Guide — https://google.github.io/styleguide/shellguide.html ; shellcheck rules |
-| **CLI design (cross-cutting)** | CLI Guidelines — https://clig.dev/ |
+| Target                         | Canonical references                                                                                                                                                                                                         |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Go**                         | Effective Go — https://go.dev/doc/effective_go (note its explicit "a straightforward translation from C++ or Java into Go is unlikely to be satisfactory"); Go Code Review Comments — https://go.dev/wiki/CodeReviewComments |
+| **Rust**                       | Rust API Guidelines — https://rust-lang.github.io/api-guidelines/ ; Rust Style Guide — https://doc.rust-lang.org/1.0.0/style/ ; *Rust for Rustaceans* (Gjengset)                                                             |
+| **Python**                     | PEP 8 — https://peps.python.org/pep-0008/ ; PEP 20 (Zen) — https://peps.python.org/pep-0020/ ; Google Python Style Guide — https://google.github.io/styleguide/pyguide.html                                                  |
+| **TypeScript / JavaScript**    | TypeScript Deep Dive — https://basarat.gitbook.io/typescript ; Microsoft TS coding guidelines (internal); Node.js best practices — https://github.com/goldbergyoni/nodebestpractices                                         |
+| **.NET / C#**                  | Framework Design Guidelines — https://learn.microsoft.com/en-us/dotnet/standard/design-guidelines/                                                                                                                           |
+| **Kotlin**                     | Coding conventions — https://kotlinlang.org/docs/coding-conventions.html ; *Effective Java* (Bloch) for JVM heritage                                                                                                         |
+| **Java**                       | *Effective Java* (Bloch); Google Java Style — https://google.github.io/styleguide/javaguide.html                                                                                                                             |
+| **C++**                        | Google C++ Style Guide — https://google.github.io/styleguide/cppguide.html ; C++ Core Guidelines — https://github.com/isocpp/CppCoreGuidelines                                                                               |
+| **Scala**                      | Scala Style Guide — https://docs.scala-lang.org/style/                                                                                                                                                                       |
+| **Bash (target)**              | Google Shell Style Guide — https://google.github.io/styleguide/shellguide.html ; shellcheck rules                                                                                                                            |
+| **CLI design (cross-cutting)** | CLI Guidelines — https://clig.dev/                                                                                                                                                                                           |
 
----
+______________________________________________________________________
 
 ## 6. Refusal List (Translation Smells to Reject)
 
@@ -368,55 +368,55 @@ following. Each item is named so reviewers can cite the specific smell.
    inheritance tree from an OOP source into Rust traits, Go
    interfaces, or Haskell typeclasses 1:1. Re-derive the abstraction
    from the contract.
-2. **Shell-pipeline-as-subprocess-chain.** Re-implementing a Bash
+1. **Shell-pipeline-as-subprocess-chain.** Re-implementing a Bash
    pipeline (`a | b | c`) by spawning `a`, `b`, `c` as subprocesses
    in the target. The target should do the I/O natively.
-3. **Exception-to-Result mechanical mapping.** Wrapping every
+1. **Exception-to-Result mechanical mapping.** Wrapping every
    try/except in `Result<T, E>` (or vice versa) without redesigning
    what is actually a recoverable error vs. a bug vs. a logic
    precondition.
-4. **GIL-shaped concurrency in a non-GIL target.** Carrying over
+1. **GIL-shaped concurrency in a non-GIL target.** Carrying over
    Python's "one big lock + threads" model into Go/Rust, where the
    idiomatic model is goroutines/channels or `tokio` tasks.
-5. **Callback chains where async/await fits.** Translating a JS
+1. **Callback chains where async/await fits.** Translating a JS
    callback-style API into the target without using the target's
    native async primitives.
-6. **Getter/setter methods in Go.** Go uses direct field access for
+1. **Getter/setter methods in Go.** Go uses direct field access for
    public fields, named accessors only when behavior is non-trivial.
-7. **`Vec<Box<dyn Trait>>` mirroring a Java `List<Interface>` when a
+1. **`Vec<Box<dyn Trait>>` mirroring a Java `List<Interface>` when a
    sum type (enum) is what the domain actually has.**
-8. **`null`/`None` everywhere instead of typed absence.** Rust
+1. **`null`/`None` everywhere instead of typed absence.** Rust
    `Option<T>`, Kotlin nullable types, TS strict-null-checks should
    carry semantic weight, not be a syntactic translation of
    `someVar == null` checks.
-9. **String-typed configuration.** If the source passed config as
+1. **String-typed configuration.** If the source passed config as
    stringly-typed env vars, the target should parse them into a
    typed config struct at startup.
-10. **Source-side directory names / module names / file names** in
-    the target tree when those names violate target conventions
-    (e.g., `utils/` and `helpers/` in Go; PascalCase files in
-    snake_case ecosystems).
-11. **Mirrored test structure.** Translating the source's test files
-    1:1 instead of writing target-idiomatic tests against the parity
-    contract.
-12. **Comments translated verbatim.** Source-language comments
-    explaining source-side idioms are often nonsense in the target
-    language.
-13. **Re-creating shell-isms in higher-level targets.** Re-implementing
-    `find`, `grep`, `xargs`, `sed` calls as subprocess invocations
-    when the target ecosystem has native libraries (e.g., `walkdir`,
-    `regex`, `serde_json` in Rust; `pathlib`, `re`, `json` in Python).
-14. **Hand-rolled CLI parsing translated from `getopts`/`argparse`.**
-    Use the target's idiomatic CLI library (`clap`, `cobra`, `click`,
-    `oclif`, `picocli`).
-15. **Mirroring the source's serialization format choices when the
-    contract permits change.** (Caveat: the contract often does *not*
-    permit change. Check Phase A.)
-16. **Logging strings instead of structured fields** in a target that
-    has structured logging (Go's `slog`, Rust's `tracing`, Python's
-    `structlog`).
+1. **Source-side directory names / module names / file names** in
+   the target tree when those names violate target conventions
+   (e.g., `utils/` and `helpers/` in Go; PascalCase files in
+   snake_case ecosystems).
+1. **Mirrored test structure.** Translating the source's test files
+   1:1 instead of writing target-idiomatic tests against the parity
+   contract.
+1. **Comments translated verbatim.** Source-language comments
+   explaining source-side idioms are often nonsense in the target
+   language.
+1. **Re-creating shell-isms in higher-level targets.** Re-implementing
+   `find`, `grep`, `xargs`, `sed` calls as subprocess invocations
+   when the target ecosystem has native libraries (e.g., `walkdir`,
+   `regex`, `serde_json` in Rust; `pathlib`, `re`, `json` in Python).
+1. **Hand-rolled CLI parsing translated from `getopts`/`argparse`.**
+   Use the target's idiomatic CLI library (`clap`, `cobra`, `click`,
+   `oclif`, `picocli`).
+1. **Mirroring the source's serialization format choices when the
+   contract permits change.** (Caveat: the contract often does *not*
+   permit change. Check Phase A.)
+1. **Logging strings instead of structured fields** in a target that
+   has structured logging (Go's `slog`, Rust's `tracing`, Python's
+   `structlog`).
 
----
+______________________________________________________________________
 
 ## 7. Anti-Patterns / Failure Modes Named in the Literature
 
@@ -459,7 +459,7 @@ following. Each item is named so reviewers can cite the specific smell.
   must be **derived from the contract**, not from the source tests.
   https://arxiv.org/abs/2605.02195
 
----
+______________________________________________________________________
 
 ## 8. AI-Agent Prompting Tactics (To Be Embedded When This Doc Is Loaded)
 
@@ -473,36 +473,37 @@ guidance and from the LLM-translation literature.
    second prompt does not include the source code in its context*.
    This separation is the single highest-leverage mitigation for
    transliteration.
-2. **Affirmative idiom anchors beat negative rules.** "Use the `?`
+1. **Affirmative idiom anchors beat negative rules.** "Use the `?`
    operator and `thiserror`-style enum errors" outperforms "don't
    translate try/except literally." Pair each refusal in
    [§6](#6-refusal-list-translation-smells-to-reject) with an
    affirmative idiom.
-3. **Permission to say "I don't know".** For ambiguous contract gaps,
+1. **Permission to say "I don't know".** For ambiguous contract gaps,
    require the agent to ask a clarification question rather than
    guess. The contract is authoritative; if it is silent, the human
    decides.
-4. **Two-pass review.**
+1. **Two-pass review.**
    - **Pass 1:** correctness against parity tests.
    - **Pass 2:** translation-smell review against
      [§6 refusal list](#6-refusal-list-translation-smells-to-reject).
      Frame: "Pretend you do not know what language this was
      originally written in. Does this code look like idiomatic
      [target]?"
-5. **Differential-by-construction.** Every implemented feature ships
+1. **Differential-by-construction.** Every implemented feature ships
    with the parity test that pins it. No code without its test.
-6. **Chain-of-thought scaffold in the prompt.**
+1. **Chain-of-thought scaffold in the prompt.**
    `extract → freeze → design → implement → verify → review`. Make
    the phase explicit in every interaction.
-7. **Few-shot exemplars of idiomatic target code** beat abstract
+1. **Few-shot exemplars of idiomatic target code** beat abstract
    style-guide pointers. Include 1–3 high-quality target-language
    snippets at the start of Phase C and D.
-8. **Architectural context as XML/structured blocks.** Wrap the
+1. **Architectural context as XML/structured blocks.** Wrap the
    contract, the design, and the implementation request in clearly
    delineated structured sections so the agent does not conflate
    "what to build" with "how the source built it."
 
 References:
+
 - Anthropic prompt engineering best practices — https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/claude-4-best-practices
 - Claude Code best practices — https://www.anthropic.com/engineering/claude-code-best-practices
 - Claude Code sub-agents — https://docs.anthropic.com/en/docs/claude-code/sub-agents
@@ -510,7 +511,7 @@ References:
 - OpenAI code generation guide — https://developers.openai.com/api/docs/guides/code-generation
 - GitHub Copilot custom instructions — https://docs.github.com/en/copilot/reference/custom-instructions-support
 
----
+______________________________________________________________________
 
 ## 9. Verification Tooling Roster
 
@@ -578,30 +579,30 @@ harness either).
   https://adr.github.io/
 - **adr-tools** — https://github.com/npryce/adr-tools
 
----
+______________________________________________________________________
 
 ## 10. Case Studies Worth Citing
 
 A short list of real cross-language rewrites with primary-source
 writeups. Use as design exemplars and in ADR justification.
 
-| Project | Move | Lesson | Source |
-|---|---|---|---|
-| **Discord Read States** | Go → Rust | Preserved service API; Rust's memory model eliminated GC-induced tail-latency spikes. Initial port was deliberately rough, then redesigned. | https://discord.com/blog/why-discord-is-switching-from-go-to-rust |
-| **Cloudflare Pingora** | NGINX/C → Rust | New proxy framework; preserved external behavior of the L7 platform, redesigned the substrate. | https://blog.cloudflare.com/how-we-built-pingora-the-proxy-that-connects-cloudflare-to-the-internet |
-| **Cloudflare ROFL** | NGINX module (C/Lua) → Rust | Drop-in replacement at the operator level; idiomatic Rust internally. | https://blog.cloudflare.com/rust-nginx-module |
-| **Cloudflare FL2** | NGINX/LuaJIT → Rust | Major substrate replacement under a stable platform contract. | https://blog.cloudflare.com/it-it/20-percent-internet-upgrade/ |
-| **Mozilla Stylo / Quantum CSS** | C++ → Rust | Incremental in-tree replacement of a hot subsystem (CSS engine), Quantum project. | https://hacks.mozilla.org/2017/08/inside-a-super-fast-css-engine-quantum-css-aka-stylo/ |
-| **Astral `ruff`** | Python lint tooling → Rust | Single tool replacing Flake8 + ~90 plugins, Black, isort, etc. Preserved CLI/config contracts of the originals. | https://github.com/astral-sh/ruff |
-| **Astral `uv`** | pip/virtualenv/Poetry/pipenv → Rust | Replaced the Python packaging stack with a single Rust tool; preserved workflow contract. | https://github.com/astral-sh/uv · https://astral.sh/blog/uv-unified-python-packaging |
-| **esbuild** | JS bundler tooling → Go | Workflow preservation, internal redesign. FAQ explicitly documents intentional behavioral differences. | https://esbuild.github.io/faq/ |
-| **swc, oxc, biome, Bun** | JS/TS tooling → Rust / Zig | Same pattern: preserve developer workflow, redesign substrate. | https://swc.rs/ · https://oxc.rs/ · https://biomejs.dev/blog/annoucing-biome/ · https://bun.com/docs |
-| **Deno 2** | — | Explicitly *not* a Node clone in Rust. Useful as a stated parity-boundary example. | https://deno.com/blog/v2.0 |
-| **ripgrep** | grep replacement, Rust | Intentionally **not** a drop-in `grep`. Cite as a parity-boundary example: where deviation from source behavior is a *design goal*, declare it. | https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md · https://burntsushi.net/ripgrep/ |
-| **fd** | find replacement, Rust | Default-case-insensitive, respects `.gitignore`. Same parity-boundary lesson as ripgrep. | https://github.com/sharkdp/fd |
-| **eza** | ls replacement, Rust | Same parity-boundary lesson; modern defaults. | https://eza.rocks/ · https://github.com/eza-community/eza |
-| **bat** | cat with syntax highlighting, Rust | Preserves piping/redirection contract; adds modern features when TTY. | https://github.com/sharkdp/bat |
-| **gitoxide** | git internals, Rust | Idiomatic pure-Rust Git; deliberately not a transliteration of C. | https://github.com/GitoxideLabs/gitoxide |
+| Project                         | Move                                | Lesson                                                                                                                                          | Source                                                                                               |
+| ------------------------------- | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| **Discord Read States**         | Go → Rust                           | Preserved service API; Rust's memory model eliminated GC-induced tail-latency spikes. Initial port was deliberately rough, then redesigned.     | https://discord.com/blog/why-discord-is-switching-from-go-to-rust                                    |
+| **Cloudflare Pingora**          | NGINX/C → Rust                      | New proxy framework; preserved external behavior of the L7 platform, redesigned the substrate.                                                  | https://blog.cloudflare.com/how-we-built-pingora-the-proxy-that-connects-cloudflare-to-the-internet  |
+| **Cloudflare ROFL**             | NGINX module (C/Lua) → Rust         | Drop-in replacement at the operator level; idiomatic Rust internally.                                                                           | https://blog.cloudflare.com/rust-nginx-module                                                        |
+| **Cloudflare FL2**              | NGINX/LuaJIT → Rust                 | Major substrate replacement under a stable platform contract.                                                                                   | https://blog.cloudflare.com/it-it/20-percent-internet-upgrade/                                       |
+| **Mozilla Stylo / Quantum CSS** | C++ → Rust                          | Incremental in-tree replacement of a hot subsystem (CSS engine), Quantum project.                                                               | https://hacks.mozilla.org/2017/08/inside-a-super-fast-css-engine-quantum-css-aka-stylo/              |
+| **Astral `ruff`**               | Python lint tooling → Rust          | Single tool replacing Flake8 + ~90 plugins, Black, isort, etc. Preserved CLI/config contracts of the originals.                                 | https://github.com/astral-sh/ruff                                                                    |
+| **Astral `uv`**                 | pip/virtualenv/Poetry/pipenv → Rust | Replaced the Python packaging stack with a single Rust tool; preserved workflow contract.                                                       | https://github.com/astral-sh/uv · https://astral.sh/blog/uv-unified-python-packaging                 |
+| **esbuild**                     | JS bundler tooling → Go             | Workflow preservation, internal redesign. FAQ explicitly documents intentional behavioral differences.                                          | https://esbuild.github.io/faq/                                                                       |
+| **swc, oxc, biome, Bun**        | JS/TS tooling → Rust / Zig          | Same pattern: preserve developer workflow, redesign substrate.                                                                                  | https://swc.rs/ · https://oxc.rs/ · https://biomejs.dev/blog/annoucing-biome/ · https://bun.com/docs |
+| **Deno 2**                      | —                                   | Explicitly *not* a Node clone in Rust. Useful as a stated parity-boundary example.                                                              | https://deno.com/blog/v2.0                                                                           |
+| **ripgrep**                     | grep replacement, Rust              | Intentionally **not** a drop-in `grep`. Cite as a parity-boundary example: where deviation from source behavior is a *design goal*, declare it. | https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md · https://burntsushi.net/ripgrep/           |
+| **fd**                          | find replacement, Rust              | Default-case-insensitive, respects `.gitignore`. Same parity-boundary lesson as ripgrep.                                                        | https://github.com/sharkdp/fd                                                                        |
+| **eza**                         | ls replacement, Rust                | Same parity-boundary lesson; modern defaults.                                                                                                   | https://eza.rocks/ · https://github.com/eza-community/eza                                            |
+| **bat**                         | cat with syntax highlighting, Rust  | Preserves piping/redirection contract; adds modern features when TTY.                                                                           | https://github.com/sharkdp/bat                                                                       |
+| **gitoxide**                    | git internals, Rust                 | Idiomatic pure-Rust Git; deliberately not a transliteration of C.                                                                               | https://github.com/GitoxideLabs/gitoxide                                                             |
 
 **Negative / cautionary:**
 
@@ -613,10 +614,11 @@ in secondary sources but **no primary Dropbox post** explicitly frames
 Magic Pocket as a Go-to-Rust *rewrite*. Cite the primary Magic Pocket
 posts for storage-design context and the QCon talk for the Rust
 optimization angle only:
+
 - https://dropbox.tech/tech/2016/05/inside-the-magic-pocket/
 - https://qconsf.com/sf2016/sf2016/presentation/going-rust-optimizing-storage-dropbox.html
 
----
+______________________________________________________________________
 
 ## 11. LLM Code Translation: Research Findings
 
@@ -655,7 +657,7 @@ optional*. The published correct-translation rates make unsupervised
 LLM rewrites untrustworthy by default; the parity tests are what move
 the rewrite from "plausible code" to "verified rewrite".
 
----
+______________________________________________________________________
 
 ## 12. Agent Skill / Prompt Libraries to Study
 
@@ -680,7 +682,7 @@ ones in particular are structural templates worth modeling after.
   https://blog.netnerds.net/2024/10/aider-is-awesome/
 - **GitHub Copilot customization** — https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-copilot-overview · https://docs.github.com/en/copilot/reference/custom-instructions-support
 
----
+______________________________________________________________________
 
 ## 13. Recommended Repository Layout for a Rewrite
 
@@ -725,7 +727,7 @@ new-project/
 └── ...                             # target-ecosystem-native rest
 ```
 
----
+______________________________________________________________________
 
 ## 14. Top 15 Load-Bearing References (Citation Anchors)
 
@@ -733,22 +735,22 @@ For ADR justification and review citations. These are the URLs an
 agent should default to when grounding a rewrite decision.
 
 1. https://martinfowler.com/bliki/StranglerFigApplication.html — Strangler Fig
-2. https://martinfowler.com/bliki/BranchByAbstraction.html — Branch by Abstraction
-3. https://www.joelonsoftware.com/2000/04/06/things-you-should-never-do-part-i/ — Spolsky's warning
-4. https://understandlegacycode.com/blog/key-points-of-working-effectively-with-legacy-code/ — Feathers, *Working Effectively with Legacy Code*
-5. https://lethain.com/migrations/ — Larson, derisk/enable/finish
-6. https://discord.com/blog/why-discord-is-switching-from-go-to-rust — Discord Go→Rust case study
-7. https://arxiv.org/abs/2308.03109 — *Lost in Translation* (ICSE 2024)
-8. https://arxiv.org/abs/2504.09691 — Google: Migrating Code at Scale with LLMs
-9. https://www2.eecs.berkeley.edu/Pubs/TechRpts/2025/EECS-2025-174.pdf — Formal Compositional Reasoning
-10. https://blog.trailofbits.com/2024/01/31/introducing-differ-a-new-tool-for-testing-and-validating-transformed-programs/ — DIFFER
-11. https://go.dev/doc/effective_go — Effective Go (canonical anti-transliteration statement)
-12. https://rust-lang.github.io/api-guidelines/ — Rust API Guidelines
-13. https://clig.dev/ — CLI Guidelines
-14. https://approvaltests.com/ — Approval / golden testing
-15. https://github.com/openai/skills/blob/main/skills/.curated/migrate-to-codex/SKILL.md — official migration-flavored skill template
+1. https://martinfowler.com/bliki/BranchByAbstraction.html — Branch by Abstraction
+1. https://www.joelonsoftware.com/2000/04/06/things-you-should-never-do-part-i/ — Spolsky's warning
+1. https://understandlegacycode.com/blog/key-points-of-working-effectively-with-legacy-code/ — Feathers, *Working Effectively with Legacy Code*
+1. https://lethain.com/migrations/ — Larson, derisk/enable/finish
+1. https://discord.com/blog/why-discord-is-switching-from-go-to-rust — Discord Go→Rust case study
+1. https://arxiv.org/abs/2308.03109 — *Lost in Translation* (ICSE 2024)
+1. https://arxiv.org/abs/2504.09691 — Google: Migrating Code at Scale with LLMs
+1. https://www2.eecs.berkeley.edu/Pubs/TechRpts/2025/EECS-2025-174.pdf — Formal Compositional Reasoning
+1. https://blog.trailofbits.com/2024/01/31/introducing-differ-a-new-tool-for-testing-and-validating-transformed-programs/ — DIFFER
+1. https://go.dev/doc/effective_go — Effective Go (canonical anti-transliteration statement)
+1. https://rust-lang.github.io/api-guidelines/ — Rust API Guidelines
+1. https://clig.dev/ — CLI Guidelines
+1. https://approvaltests.com/ — Approval / golden testing
+1. https://github.com/openai/skills/blob/main/skills/.curated/migrate-to-codex/SKILL.md — official migration-flavored skill template
 
----
+______________________________________________________________________
 
 ## 15. Full Reference Library
 
@@ -780,7 +782,7 @@ Grouped by topic for fast lookup during a rewrite.
 
 - Feathers, *Working Effectively with Legacy Code* (summary) — https://understandlegacycode.com/blog/key-points-of-working-effectively-with-legacy-code/
 - Characterization test (Wikipedia) — https://en.wikipedia.org/wiki/Characterization_test
-- DaedTech: Characterization tests — https://daedtech.com/characterization-tests/
+- DeadTech: Characterization tests — https://daedtech.com/characterization-tests/
 - Honeybadger: Ruby legacy characterization tests — https://www.honeybadger.io/blog/ruby-legacy-characterization-test/
 - ApprovalTests — https://approvaltests.com/
 - Pact (consumer-driven contracts) — https://docs.pact.io/
@@ -943,7 +945,7 @@ Grouped by topic for fast lookup during a rewrite.
 - adr-tools — https://github.com/npryce/adr-tools
 - Henderson's ADR collection — https://github.com/joelparkerhenderson/architecture-decision-record
 
----
+______________________________________________________________________
 
 ## 16. Quick-Start Checklist (For Pasting Into a New Project)
 
@@ -1000,7 +1002,7 @@ Grouped by topic for fast lookup during a rewrite.
     [ ] adr/9999-postmortem.md
 ```
 
----
+______________________________________________________________________
 
 ## 17. Companion Documents
 
@@ -1013,7 +1015,7 @@ Grouped by topic for fast lookup during a rewrite.
 - `tech/data/dbs-databases/migrations.md` — DB-schema migration (a
   data-side counterpart to this code-side guideline)
 
----
+______________________________________________________________________
 
 > **End of guideline.** This document is the spec. When loaded as a
 > prompt or skill, the agent must treat [§0 non-negotiables](#0-non-negotiables-read-this-section-first),

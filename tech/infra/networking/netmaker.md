@@ -13,7 +13,7 @@ the agent, called Netclient
 *ingress node:*
 
 - ingress gateway
-- comming from outside the network, joining in
+- coming from outside the network, joining in
 
 # Install Netmaker Server
 
@@ -32,13 +32,14 @@ Network name = network interface
 
 To reach/access a network
 
-- * Create access key (or)
+- - Create access key (or)
+
 - Login with username/passwd
 
 - Install netmaker on the client
 
 # References
 
-[^1]: [Netmaker - A powerful, open source, self hosted, GUI for setting up Wireguard networks and VPNs. :awesome_open_source:](https://www.youtube.com/watch?v=X-BYDYoM_3w)
 [^2]: [Netmaker Documentation](https://docs.netmaker.org/)
 
+[^1]: [Netmaker - A powerful, open source, self hosted, GUI for setting up Wireguard networks and VPNs. :awesome_open_source:](https://www.youtube.com/watch?v=X-BYDYoM_3w)

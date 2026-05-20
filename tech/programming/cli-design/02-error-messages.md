@@ -7,9 +7,9 @@ Error messages have four audiences: the end user trying to recover, the ops engi
 Every error report has four parts. Write them in this order; omit a part only when it would be redundant.
 
 1. **What** — the operation that failed, in one concrete line.
-2. **Where** — the specific input, file, or step that triggered it.
-3. **Why** — the root cause, walked from the error chain.
-4. **Hint** — actionable next step, when one is known.
+1. **Where** — the specific input, file, or step that triggered it.
+1. **Why** — the root cause, walked from the error chain.
+1. **Hint** — actionable next step, when one is known.
 
 Example (good):
 
@@ -38,40 +38,40 @@ A hint is only useful when:
 
 When you don't know the fix, **omit the hint** — don't fabricate. A missing hint is honest; a wrong hint is worse than nothing.
 
----
+______________________________________________________________________
 
 ## Audiences
 
-| Audience | What they want | How the error serves them |
-|----------|----------------|---------------------------|
-| **End user** | Recover, now. | `What`, `Where`, `Hint`. The `Why` if it's intelligible. |
-| **Ops engineer** | Triage at 2am. | Stable error key (`err.kind=…`), exit code, log record. |
-| **Developer** | Reproduce + fix. | Full chain (`Caused by:`), `RUST_LOG=trace` style verbose mode. |
-| **LLM agent** | Read logs, infer cause, suggest a fix. | Structured `err.kind` + `err.msg` fields in the program-log. Stable schema. |
+| Audience         | What they want                         | How the error serves them                                                   |
+| ---------------- | -------------------------------------- | --------------------------------------------------------------------------- |
+| **End user**     | Recover, now.                          | `What`, `Where`, `Hint`. The `Why` if it's intelligible.                    |
+| **Ops engineer** | Triage at 2am.                         | Stable error key (`err.kind=…`), exit code, log record.                     |
+| **Developer**    | Reproduce + fix.                       | Full chain (`Caused by:`), `RUST_LOG=trace` style verbose mode.             |
+| **LLM agent**    | Read logs, infer cause, suggest a fix. | Structured `err.kind` + `err.msg` fields in the program-log. Stable schema. |
 
 The user-UX message goes to `stderr`. The structured record goes to the program-log file. Both must agree on the facts (see [01 — Logging & Output](01-logging-and-output.md)).
 
----
+______________________________________________________________________
 
 ## Stable error keys
 
 Every error variant gets a **stable kind identifier** — a short, machine-matchable string that does not change between versions.
 
-| Bad | Good |
-|-----|------|
-| `"Error: could not find file"` | `err.kind=ConfigNotFound` |
-| `"Network problem"` | `err.kind=NetworkUnavailable` |
-| `"Invalid argument"` | `err.kind=BadFlagValue` |
+| Bad                            | Good                          |
+| ------------------------------ | ----------------------------- |
+| `"Error: could not find file"` | `err.kind=ConfigNotFound`     |
+| `"Network problem"`            | `err.kind=NetworkUnavailable` |
+| `"Invalid argument"`           | `err.kind=BadFlagValue`       |
 
 The kind appears:
 
 1. In the program-log record (`err.kind=ConfigNotFound`).
-2. Optionally in the user-UX message (some tools show `[E0309]` style codes; do this only if your error space is small enough that codes are memorable).
-3. In documentation / runbook entries (`See "ConfigNotFound" in TROUBLESHOOTING.md`).
+1. Optionally in the user-UX message (some tools show `[E0309]` style codes; do this only if your error space is small enough that codes are memorable).
+1. In documentation / runbook entries (`See "ConfigNotFound" in TROUBLESHOOTING.md`).
 
 LLM agents pattern-match on these. Renaming a kind is a breaking change.
 
----
+______________________________________________________________________
 
 ## Error layering
 
@@ -100,33 +100,33 @@ Rules:
 
 The chain walk that prints `caused by:` lines is how the user (and the LLM reading the log) sees the *why*.
 
----
+______________________________________________________________________
 
 ## Exit codes — BSD sysexits
 
 Use `sysexits(3)` codes for predictable mapping. Don't invent new codes without writing them in your README.
 
-| Code | Constant | When |
-|------|----------|------|
-| `0` | success | Normal exit. |
-| `1` | (catch-all) | **Avoid.** Pick something specific. |
-| `2` | (shell builtin error) | **Avoid.** Conflicts with `bash` syntax errors. |
-| `64` | `EX_USAGE` | Wrong CLI usage (bad flag, missing arg). |
-| `65` | `EX_DATAERR` | Input data was malformed. |
-| `66` | `EX_NOINPUT` | Input file did not exist / unreadable. |
-| `69` | `EX_UNAVAILABLE` | Service required but not available. |
-| `70` | `EX_SOFTWARE` | Internal bug. |
-| `73` | `EX_CANTCREAT` | Could not create output file. |
-| `74` | `EX_IOERR` | I/O error during execution. |
-| `75` | `EX_TEMPFAIL` | Transient; retry may help. |
-| `77` | `EX_NOPERM` | Permission denied. |
-| `78` | `EX_CONFIG` | Config file invalid. |
+| Code | Constant              | When                                            |
+| ---- | --------------------- | ----------------------------------------------- |
+| `0`  | success               | Normal exit.                                    |
+| `1`  | (catch-all)           | **Avoid.** Pick something specific.             |
+| `2`  | (shell builtin error) | **Avoid.** Conflicts with `bash` syntax errors. |
+| `64` | `EX_USAGE`            | Wrong CLI usage (bad flag, missing arg).        |
+| `65` | `EX_DATAERR`          | Input data was malformed.                       |
+| `66` | `EX_NOINPUT`          | Input file did not exist / unreadable.          |
+| `69` | `EX_UNAVAILABLE`      | Service required but not available.             |
+| `70` | `EX_SOFTWARE`         | Internal bug.                                   |
+| `73` | `EX_CANTCREAT`        | Could not create output file.                   |
+| `74` | `EX_IOERR`            | I/O error during execution.                     |
+| `75` | `EX_TEMPFAIL`         | Transient; retry may help.                      |
+| `77` | `EX_NOPERM`           | Permission denied.                              |
+| `78` | `EX_CONFIG`           | Config file invalid.                            |
 
 Reference: [`sysexits(3)`](https://man.freebsd.org/cgi/man.cgi?query=sysexits&sektion=3).
 
 **Treat the matrix as part of the user-facing API.** Unit-test that each error variant maps to its declared code. Shell scripts depend on these.
 
----
+______________________________________________________________________
 
 ## Printing the chain
 
@@ -159,37 +159,37 @@ In the program-log, the same information appears as fields:
 ts=... level=error op=config.load err.kind=ConfigInvalid err.path=/home/user/.config/app/config.toml err.line=12 err.msg="timeout_secs must be a positive integer"
 ```
 
----
+______________________________________________________________________
 
 ## Pretty-printing libraries
 
 When the default chain walk isn't enough, reach for a dedicated library:
 
-| Language | Library | What it adds |
-|----------|---------|--------------|
-| Rust | [`miette`](https://docs.rs/miette/) | Source-snippet rendering, ASCII art pointers, structured help. |
-| Rust | [`color-eyre`](https://docs.rs/color-eyre/) | Colored `anyhow`-style chains with spantraces. |
-| Python | [`rich.traceback`](https://rich.readthedocs.io/en/latest/traceback.html) | Colorized tracebacks with source lines. |
-| Go | `errors.Is` / `errors.As` + custom formatter | Idiomatic chain walking. |
-| Bash | Custom `trap ERR` handler + `set -E` | Linenumber + last command. |
+| Language | Library                                                                  | What it adds                                                   |
+| -------- | ------------------------------------------------------------------------ | -------------------------------------------------------------- |
+| Rust     | [`miette`](https://docs.rs/miette/)                                      | Source-snippet rendering, ASCII art pointers, structured help. |
+| Rust     | [`color-eyre`](https://docs.rs/color-eyre/)                              | Colored `anyhow`-style chains with spantraces.                 |
+| Python   | [`rich.traceback`](https://rich.readthedocs.io/en/latest/traceback.html) | Colorized tracebacks with source lines.                        |
+| Go       | `errors.Is` / `errors.As` + custom formatter                             | Idiomatic chain walking.                                       |
+| Bash     | Custom `trap ERR` handler + `set -E`                                     | Linenumber + last command.                                     |
 
 Gate the heavyweight ones behind a `--pretty-errors` flag or a debug build feature — they're for interactive humans, not for piping into another tool.
 
----
+______________________________________________________________________
 
 ## Error messages for the LLM agent
 
 When an LLM agent runs your CLI and reads its logs to debug:
 
 1. **Stable `err.kind`** lets the agent pattern-match against a known taxonomy.
-2. **Structured fields** (`err.path`, `err.line`, `err.value`) let the agent reason about the failure without parsing prose.
-3. **Predictable chain depth** — don't randomize whether you wrap N times.
-4. **No noisy stack traces in the default log**. Stack traces (when emitted) go behind `-vvv` or into a separate `err.trace` field with a stable encoding.
-5. **One `op` per top-level command invocation**, with `status=error` and an `err.*` group when it fails. The agent can grep `status=error` to find every failure in a session.
+1. **Structured fields** (`err.path`, `err.line`, `err.value`) let the agent reason about the failure without parsing prose.
+1. **Predictable chain depth** — don't randomize whether you wrap N times.
+1. **No noisy stack traces in the default log**. Stack traces (when emitted) go behind `-vvv` or into a separate `err.trace` field with a stable encoding.
+1. **One `op` per top-level command invocation**, with `status=error` and an `err.*` group when it fails. The agent can grep `status=error` to find every failure in a session.
 
 See [05 — Designing for LLM Agents](05-designing-for-llm-agents.md) for the broader pattern.
 
----
+______________________________________________________________________
 
 ## Anti-patterns
 
@@ -202,7 +202,7 @@ See [05 — Designing for LLM Agents](05-designing-for-llm-agents.md) for the br
 - **Multi-paragraph error blobs on stderr** in non-verbose mode. The user wants three lines: what, where, fix.
 - **Translating `err.kind`** into localized text. The kind is an API key, not a user-facing label.
 
----
+______________________________________________________________________
 
 ## Checklist
 

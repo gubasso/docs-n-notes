@@ -1,13 +1,13 @@
 # Debian packaging
 
-<!-- toc -->
+<!--TOC-->
 
 - [Pre-Requisites](#pre-requisites)
 - [General](#general)
 - [Overview](#overview)
 - [Resources](#resources)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Pre-Requisites
 
@@ -44,10 +44,9 @@ apt-get update -y && apt-get upgrade -y
 apt-get install -y neovim sudo debconf locales
 ```
 
-Follow the steps to setup users and groups from [[server-vps]].
+Follow the steps to setup users and groups from \[[server-vps]\].
 
-Follow the steps to setup hostname and hosts [[server-vps]].
-
+Follow the steps to setup hostname and hosts \[[server-vps]\].
 
 Boot into the container / login in the machine:
 
@@ -61,8 +60,8 @@ sudo systemd-nspawn --bind=/home/gubasso/Projects:/home/sid/Projects -b -D /var/
 The container can be powered off by running `poweroff`.
 
 At [Packaging Pre-Requisites]: Configuring locales
-- but follows this [Setup locale]
 
+- but follows this [Setup locale]
 
 ## General
 
@@ -120,7 +119,7 @@ It doesn't install a debian package itself. It is a debian package with a set of
 $HOME/debpkgs/my-program_version_architecture/DEBIAN/control
 ```
 
-- Pre / Post instalation scripts
+- Pre / Post installation scripts
 
 ```
 $HOME/debpkgs/my-program_version_architecture/DEBIAN/preinst
@@ -166,17 +165,12 @@ my_program-icon.xpm
 my_program.desktop
 ```
 
-
 ## Resources
 
 - [Playlist: make debian package - socool sun](https://www.youtube.com/playlist?list=PLcTpn5-ROA4wd3dBSW7j1m1MKFhDjqZk1)
 - [A beginner's guide to debian packaging - DebConf Videos](https://www.youtube.com/watch?v=fr_5n2hJ2eU)
 
-[Packaging Pre-Requisites]: https://wiki.debian.org/Packaging/Pre-Requisites "Debian wiki: Packaging Pre-Requisites"
-[Packaging Learn]: https://wiki.debian.org/Packaging/Learn "Debian wiki: Packaging Learn"
-[Building Tutorial]: https://wiki.debian.org/BuildingTutorial "Debian wiki: Building Tutorial"
-[Packaging Pre-Requisites: nspawn]: https://wiki.debian.org/Packaging/Pre-Requisites/nspawn "Debian wiki: Packaging Pre-Requisites nspawn"
-[Arch wiki: nspawn Debian or Ubuntu]: https://wiki.archlinux.org/title/Systemd-nspawn#Create_a_Debian_or_Ubuntu_environment "Arch wiki: systemd-nspawn: Create a Debian or Ubuntu environment"
-[Setting up Sid Development Environment for Debian Packaging]: https://wiki.abrahamraji.in/creating-a-sid-env.html "Abraham's Braindump: Setting up Sid Development Environment for Debian Packaging"
-[Simple Packaging Tutorial: The Long Version]: https://wiki.abrahamraji.in/simple-packaging-tutorial.html "Abraham's Braindump: Simple Packaging Tutorial: The Long Version"
-[Setup locale]: https://wiki.archlinux.org/title/installation_guide#Localization "Arch wiki: Installation guide: 3.4 Localization"
+[arch wiki: nspawn debian or ubuntu]: https://wiki.archlinux.org/title/Systemd-nspawn#Create_a_Debian_or_Ubuntu_environment "Arch wiki: systemd-nspawn: Create a Debian or Ubuntu environment"
+[packaging pre-requisites]: https://wiki.debian.org/Packaging/Pre-Requisites "Debian wiki: Packaging Pre-Requisites"
+[packaging pre-requisites: nspawn]: https://wiki.debian.org/Packaging/Pre-Requisites/nspawn "Debian wiki: Packaging Pre-Requisites nspawn"
+[setup locale]: https://wiki.archlinux.org/title/installation_guide#Localization "Arch wiki: Installation guide: 3.4 Localization"

@@ -4,15 +4,15 @@
 
 Duplicating a Brave browser profile on Linux involves copying specific profile data from your existing profile to a new one. This allows you to have a new profile that mirrors your current settings and extensions. Below is a step-by-step guide to achieve this safely.
 
----
+______________________________________________________________________
 
 **Important Note:**
 
-- **Backup Your Data:**  Before proceeding, it's highly recommended to back up your Brave browser data to prevent any potential loss.
+- **Backup Your Data:** Before proceeding, it's highly recommended to back up your Brave browser data to prevent any potential loss.
 
-- **Proceed with Caution:**  Manipulating browser profile files can lead to data corruption if not done carefully.
+- **Proceed with Caution:** Manipulating browser profile files can lead to data corruption if not done carefully.
 
----
+______________________________________________________________________
 
 **Step-by-Step Guide**
 
@@ -27,15 +27,16 @@ Brave stores user data in `~/.config/BraveSoftware/Brave-Browser/`. Navigate to 
 ```Copy code
 cd ~/.config/BraveSoftware/Brave-Browser/
 ```
+
 **4. Backup the Brave-Browser Directory (Highly Recommended)**
 Create a backup of your current profiles:
 
 ```Copy code
 cp -r Brave-Browser Brave-Browser-backup
 ```
+
 **5. Identify Your Current Profile Directory**
 List the contents to see existing profiles:
-
 
 You should see directories like:
 
@@ -47,7 +48,7 @@ You should see directories like:
 **6. Create a New Profile via Brave Interface**
 
 - Reopen Brave Browser.
-- Click on the **profile icon**  (usually at the top-right corner).
+- Click on the **profile icon** (usually at the top-right corner).
 - Select **"Add Profile"** .
 - Name the new profile (e.g., **"Duplicated Profile"** ).
 
@@ -79,8 +80,8 @@ cp Default/Bookmarks 'Profile 1'/
 cp Default/Favicons 'Profile 1'/
 cp Default/Top\ Sites 'Profile 1'/
 
-set -l pn 1
-set -l dest "Profile $pn"
+set -l on 1
+set -l dest "Profile $on"
 cp -r Default/Extensions "$dest"/
 cp Default/Preferences "$dest"/
 cp Default/Bookmarks "$dest"/
@@ -90,7 +91,7 @@ cp Default/Top\ Sites "$dest"/
 
 See [brave-create-profile.fish](./brave-create-profile.fish) script.
 
-**Note:**  Avoid copying files like `Cookies`, `History`, `Login Data`, and `Cache` to prevent conflicts and potential corruption.
+**Note:** Avoid copying files like `Cookies`, `History`, `Login Data`, and `Cache` to prevent conflicts and potential corruption.
 
 **10. Adjust File Permissions (If Necessary)**
 
@@ -99,6 +100,7 @@ Ensure that the new profile directory has the correct permissions:
 ```Copy code
 chmod -R 700 'Profile 1'
 ```
+
 **11. Edit the Preferences File**
 
 Modify the `Preferences` file in the new profile to avoid any internal conflicts.
@@ -114,8 +116,8 @@ nano 'Profile 1'/Preferences
 Or with `jq`:
 
 ```fish
-set -l pn 1
-set -l dest "Profile $pn"
+set -l on 1
+set -l dest "Profile $on"
 jq '.profile.name = "duplicated-profile"' \
   "$dest/Preferences" > "$dest/Preferences.tmp" \
   && mv "$dest/Preferences.tmp" "$dest/Preferences"
@@ -143,13 +145,14 @@ If some extensions aren't functioning correctly, reinstall them:
 **15. Sync Additional Data (Optional)**
 
 If you use Brave Sync:
+
 - Go to `brave://settings/braveSync/setup`.
 - Set up sync to synchronize bookmarks, passwords, and more.
 
----
+______________________________________________________________________
 
 **Additional Tips**
 
-- **Avoid Copying Encrypted Data:**  Certain data like saved passwords are encrypted and tied to the original profile, so copying them won't work.
-- **Regular Backups:**  Keep regular backups of your browser data to prevent loss in case of corruption.
-- **Profile Management:**  Use Brave's built-in profile management for easier handling of multiple profiles.
+- **Avoid Copying Encrypted Data:** Certain data like saved passwords are encrypted and tied to the original profile, so copying them won't work.
+- **Regular Backups:** Keep regular backups of your browser data to prevent loss in case of corruption.
+- **Profile Management:** Use Brave's built-in profile management for easier handling of multiple profiles.

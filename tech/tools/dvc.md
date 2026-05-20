@@ -1,26 +1,29 @@
 # DVC Data Versioning
+
 > https://dvc.org/doc
 
-## Instalation and Setup
+## Installation and Setup
 
 1. asdf python local env
-2. poetry add dvc
-3. run with: `poetry run dvc`
-    - `alias dvc='poetry run dvc'`
+1. poetry add dvc
+1. run with: `poetry run dvc`
+   - `alias dvc='poetry run dvc'`
 
 ### Setup remote
 
 - [External Dependencies](https://dvc.org/doc/user-guide/external-dependencies)
-    - Amazon S3
-    - Microsoft Azure Blob Storage
-    - Google Cloud Storage
-    - SSH
-    - HDFS
-    - HTTP
-    - Local files and directories outside the workspace
+
+  - Amazon S3
+  - Microsoft Azure Blob Storage
+  - Google Cloud Storage
+  - SSH
+  - HDFS
+  - HTTP
+  - Local files and directories outside the workspace
 
 - Managing External Data https://dvc.org/doc/user-guide/managing-external-data
-    - remote storage Amazon S3, Wasabi...
+
+  - remote storage Amazon S3, Wasabi...
 
 #### Local remote
 
@@ -32,7 +35,6 @@ git commit .dvc/config -m "Configure local remote"
 ### Remote server/cloud
 
 [Setup a Google Drive DVC Remote](https://dvc.org/doc/user-guide/setup-google-drive-remote)
-
 
 ## Basic Usage
 
@@ -64,7 +66,7 @@ git commit data/data.xml.dvc -m "Dataset updates"
 dvc push
 ```
 
----
+______________________________________________________________________
 
 Change file name: https://dvc.org/doc/command-reference/move#example-change-the-file-name
 
@@ -86,7 +88,7 @@ tree
 └── other.csv.dvc
 ```
 
----
+______________________________________________________________________
 
 [Example: Change a file location](https://dvc.org/doc/command-reference/move#example-change-a-file-location)
 
@@ -121,7 +123,7 @@ tree
         └── foo.dvc
 ```
 
----
+______________________________________________________________________
 
 [Example: Move a directory](https://dvc.org/doc/command-reference/move#example-move-a-directory)
 
@@ -148,8 +150,7 @@ tree
     └── data3.dvc
 ```
 
----
-
+______________________________________________________________________
 
 If wants to access a different version of data, in a differente git branch or commit:
 
@@ -158,7 +159,7 @@ git checkout <...>
 dvc checkout
 ```
 
----
+______________________________________________________________________
 
 [How to Update Tracked Data](https://dvc.org/doc/user-guide/how-to/update-tracked-data)
 
@@ -185,30 +186,28 @@ dvc add train.tsv
 
 - `dvc checkout`: sync data previously saved
 
-
 ## Other Use Cases
 
 ### Space Optimization: Large datasets
 
 - Large datasets versioning https://dvc.org/doc/start/data-management#large-datasets-versioning
-    - cache:
-        - shared cache https://dvc.org/doc/user-guide/how-to/share-a-dvc-cache
-        -[Setting up an external cache ](https://dvc.org/doc/user-guide/managing-external-data#setting-up-an-external-cache)
-    - Managing External Data https://dvc.org/doc/user-guide/managing-external-data
-        - remote storage Amazon S3, Wasabi...
+  - cache:
+    - shared cache https://dvc.org/doc/user-guide/how-to/share-a-dvc-cache
+      -[Setting up an external cache](https://dvc.org/doc/user-guide/managing-external-data#setting-up-an-external-cache)
+  - Managing External Data https://dvc.org/doc/user-guide/managing-external-data
+    - remote storage Amazon S3, Wasabi...
 
 [Large Dataset Optimization](https://dvc.org/doc/user-guide/large-dataset-optimization)
 
 - File link types for the DVC cache
-    - `reflink`
-    - `hardlink`
-    - `symlink`
-    - `copy`
+  - `reflink`
+  - `hardlink`
+  - `symlink`
+  - `copy`
 
 ### Access a separate DVC repo
 
-Supose there is a separate repo just for a dataset (data-registry repo):
-
+Suppose there is a separate repo just for a dataset (data-registry repo):
 
 ```
 +-------------+     +--------------+     +-------------+
@@ -237,7 +236,7 @@ Supose there is a separate repo just for a dataset (data-registry repo):
 
 - A good way to organize DVC repositories into data registries is to use directories to group similar data, e.g. `images/`, `natural-language/`, etc.
 
----
+______________________________________________________________________
 
 Find a file or directory
 
@@ -248,7 +247,7 @@ data.xml
 data.xml.dvc
 ```
 
----
+______________________________________________________________________
 
 Download (simple)
 
@@ -257,7 +256,7 @@ dvc get https://github.com/iterative/dataset-registry \
           use-cases/cats-dogs
 ```
 
----
+______________________________________________________________________
 
 Download and add to your repo (Import file or directory)
 
@@ -267,9 +266,9 @@ dvc import https://github.com/iterative/dataset-registry \
 ```
 
 - similar to: `dvc get` + `dvc add`
-- difference:  `.dvc` files includes metadata to track changes in the source repository. This allows you to bring in changes from the data source later using `dvc update`.
+- difference: `.dvc` files includes metadata to track changes in the source repository. This allows you to bring in changes from the data source later using `dvc update`.
 
-### Remove / Stop tracking files:
+### Remove / Stop tracking files
 
 [How to Stop Tracking Data](https://dvc.org/doc/user-guide/how-to/stop-tracking-data)
 
@@ -279,7 +278,6 @@ rm data.csv
 dvc gc -w
 git add . && git commit
 ```
-
 
 ### Merge Conflicts in DVC Files
 
@@ -315,12 +313,3 @@ project's cache                  ++ | dvc pull |
 - `dvc checkout`: sync `.dvc/cache` to workspace data files (e.g. `myproject/data`)
 
 ## References
-
-[^1]: [Versioning Data with DVC (Hands-On Tutorial!)](https://www.youtube.com/watch?v=kLKBcPonMYw)
-[^2]: [Sharing Data and Models with DVC (Hands-On Data Science Tutorial!)](https://www.youtube.com/watch?v=EE7Gk84OZY8)
-[^3]: [DVC: Data Registry](https://dvc.org/doc/use-cases/data-registry)
-
-
-
-
-

@@ -15,7 +15,7 @@ Run this in the buffer of the file you care about:
 :copen
 ```
 
-* The `-- %` tells Fugitive to pass *only* the current file (`%`) to `git log`, populating your quickfix list with commits that touched that file .
+- The `-- %` tells Fugitive to pass *only* the current file (`%`) to `git log`, populating your quickfix list with commits that touched that file .
 
 ### Alternative: `:0Gclog`
 
@@ -25,8 +25,8 @@ If you prefer to load the full history into quickfix without immediately opening
 :0Gclog
 ```
 
-* Here, `0` is treated as “the whole file,” so Fugitive shows every commit for that file .
-* Navigate between entries with `]q` (next) and `[q` (previous) .
+- Here, `0` is treated as “the whole file,” so Fugitive shows every commit for that file .
+- Navigate between entries with `]q` (next) and `[q` (previous) .
 
 ### Limiting history scope
 
@@ -36,8 +36,9 @@ To fetch only the last *N* commits, supply a range before `-- %`:
 :Gclog -10 -- %
 ```
 
-* This loads the ten most recent commits for the file into quickfix .
-* The original `:Glog` command (the predecessor of `:Gclog`) supports the same syntax:
+- This loads the ten most recent commits for the file into quickfix .
+
+- The original `:Glog` command (the predecessor of `:Gclog`) supports the same syntax:
 
   ```vim
   :Glog -- %
@@ -45,7 +46,7 @@ To fetch only the last *N* commits, supply a range before `-- %`:
 
   .
 
----
+______________________________________________________________________
 
 Fugitive’s `:Glog` (and its newer alias `:Gclog`) is just a thin wrapper around:
 
@@ -59,8 +60,9 @@ Tim Pope renamed `:Glog` to `:Gclog` to emphasize that it’s not the “definit
 
 ### Quick navigation and diffs
 
-* Press <Enter> on any quickfix entry to open that file revision in a read-only buffer .
-* To view a side-by-side diff against your working copy (or against another commit), use:
+- Press <Enter> on any quickfix entry to open that file revision in a read-only buffer .
+
+- To view a side-by-side diff against your working copy (or against another commit), use:
 
   ```vim
   :Gdiffsplit <SHA>
@@ -76,25 +78,30 @@ Tim Pope renamed `:Glog` to `:Gclog` to emphasize that it’s not the “definit
 
 E.g. to see how the file looked three commits ago:
 
-```vim
+````vim
 :Gedit HEAD~3:%
 ``` :contentReference[oaicite:2]{index=2}
-```
+````
 
 ## Fugitive + Trouble
 
 **[Resolve Git Merge Conflicts with Neovim and Fugitive!](https://www.youtube.com/watch?v=vpwJ7fqD1CE)**
 
 vim-fugitive
+
 - `Gvdiff`: normal diff from last version (last commit)
+
 - `Gvdiffsplit!`: 3 way split
-    - `buffers` to identify which
-    - select diff from local or remote to be applied
-        - Pointer on top of conflict text area:
-            - `diffget [press-tab]`: show to select one of 3 buffers
-        - (or) at buffer you want to select, press: `dp` (diff push)
-    - `Gwrite` to stage conflict changes
+
+  - `buffers` to identify which
+  - select diff from local or remote to be applied
+    - Pointer on top of conflict text area:
+      - `diffget [press-tab]`: show to select one of 3 buffers
+    - (or) at buffer you want to select, press: `dp` (diff push)
+  - `Gwrite` to stage conflict changes
+
 - `Gitsign` stage a hunk of file
 
 - lsp/troubble, jump between diagnostics (add shortcut)
-    - e.g. `]d` next, `[d` prev
+
+  - e.g. `]d` next, `[d` prev

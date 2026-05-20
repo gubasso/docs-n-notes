@@ -2,7 +2,7 @@
 
 Here is a **direct, summarized step-by-step guide** to install a Python module locally in a virtual environment and use its CLI:
 
----
+______________________________________________________________________
 
 ## 🛠️ Install Local Python Module with CLI Access in a Virtual Environment
 
@@ -10,7 +10,7 @@ Here is a **direct, summarized step-by-step guide** to install a Python module l
 
 Install a local Python project in "editable" mode so its command-line interface (CLI) is directly available in the terminal.
 
----
+______________________________________________________________________
 
 ### 📌 Step-by-Step
 
@@ -20,34 +20,34 @@ Install a local Python project in "editable" mode so its command-line interface 
    git clone https://github.com/SUSE-Enceladus/img-proof.git
    ```
 
-2. **Go to project root**
+1. **Go to project root**
 
    ```bash
    cd img-proof
    ```
 
-3. **Create and activate virtual environment**
+1. **Create and activate virtual environment**
 
    ```bash
    python3 -m venv .venv
    source .venv/bin/activate
    ```
 
-4. **Install the module in editable mode**
+1. **Install the module in editable mode**
 
    ```bash
    pip install -e .
    ```
 
-5. **Run the CLI command**
+1. **Run the CLI command**
 
    ```bash
    img-proof --help
    ```
 
----
+______________________________________________________________________
 
 ### ⚙️ Result
 
-* `img-proof` is now available as if it were a globally installed command — **only inside the venv**.
-* Code changes in the project take effect immediately (editable mode).
+- `img-proof` is now available as if it were a globally installed command — **only inside the venv**.
+- Code changes in the project take effect immediately (editable mode).

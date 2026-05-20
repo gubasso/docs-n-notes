@@ -6,15 +6,15 @@ The shape every CLI should default to. Define the directory roles, split parse-s
 
 The other chapters use these terms. Read them here once.
 
-| Term | Meaning |
-|------|---------|
-| **parse-shape** | The argument struct the CLI parser produces. Strings, `Option<String>`, booleans. Constrained by what's ergonomic on the command line. |
-| **runtime-shape** | The domain struct the handler uses after parsing. Newtypes, parsed enums, validated paths. Cannot represent invalid states. |
-| **AppContext** | The single value built once in `main` and threaded by reference. Holds resolved config, paths, runtime handle, UI, and the root tracing span. |
-| **command** | A subcommand handler — one `run(&AppContext, <Verb>Args) -> Result<(), AppError>` per subcommand. |
-| **service** | Use-case orchestration shared by ≥2 commands. Optional. |
-| **adapter** | The only place that talks to the outside world. One per external system. |
-| **domain** | Pure types + invariants. No I/O. |
+| Term              | Meaning                                                                                                                                       |
+| ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **parse-shape**   | The argument struct the CLI parser produces. Strings, `Option<String>`, booleans. Constrained by what's ergonomic on the command line.        |
+| **runtime-shape** | The domain struct the handler uses after parsing. Newtypes, parsed enums, validated paths. Cannot represent invalid states.                   |
+| **AppContext**    | The single value built once in `main` and threaded by reference. Holds resolved config, paths, runtime handle, UI, and the root tracing span. |
+| **command**       | A subcommand handler — one `run(&AppContext, <Verb>Args) -> Result<(), AppError>` per subcommand.                                             |
+| **service**       | Use-case orchestration shared by ≥2 commands. Optional.                                                                                       |
+| **adapter**       | The only place that talks to the outside world. One per external system.                                                                      |
+| **domain**        | Pure types + invariants. No I/O.                                                                                                              |
 
 ## Directory roles
 
@@ -147,7 +147,7 @@ Resolve once here, never recompute. Language-specific defaults live in each `cli
 
 **Does NOT own**: pure unit tests — those colocate inside each module.
 
----
+______________________________________________________________________
 
 ## Parse-shape vs runtime-shape
 
@@ -169,16 +169,16 @@ The projection from parse-shape → runtime-shape happens once, at the top of ea
 
 After projection, downstream code **cannot represent an invalid state**. This is the "parse, don't validate" principle made concrete (see [04 — Coding Style](04-coding-style-rust-zig.md), rule 2).
 
----
+______________________________________________________________________
 
 ## The four-edit rule for subcommands
 
 Adding a new subcommand `widget` touches exactly four files:
 
 1. `cli/widget.rs` — parse-shape struct.
-2. `cli/<root>` — register the variant in the subcommand enum.
-3. `commands/widget.rs` — handler (free `run` function).
-4. `main.rs` (or the dispatch arm) — dispatch.
+1. `cli/<root>` — register the variant in the subcommand enum.
+1. `commands/widget.rs` — handler (free `run` function).
+1. `main.rs` (or the dispatch arm) — dispatch.
 
 No registry macros, no auto-discovery, no plugin trait. Explicit dispatch over magic. The compiler tells you when you forgot an arm.
 
@@ -194,12 +194,12 @@ No registry macros, no auto-discovery, no plugin trait. Explicit dispatch over m
 The default is: keep the work inline in `commands/widget.rs`. Extract `services/widget` only when **at least one** is true:
 
 1. Another command needs the same orchestration.
-2. The pure core is non-trivial and you want to unit-test it without the parser.
-3. The handler exceeds ~200 LOC.
+1. The pure core is non-trivial and you want to unit-test it without the parser.
+1. The handler exceeds ~200 LOC.
 
 Otherwise, inline. Premature service extraction creates passthrough wrappers that obscure the call graph.
 
----
+______________________________________________________________________
 
 ## Cross-cutting concerns (middleware, telemetry, hooks)
 
@@ -211,7 +211,7 @@ Pre/post-command interception, telemetry wrappers, retry/recovery decorators —
 
 Do **not** decorate handlers inside `commands/`. That scatters cross-cutting policy across every subcommand and breaks the four-edit rule.
 
----
+______________________________________________________________________
 
 ## One `AppContext`, built once
 
@@ -234,7 +234,7 @@ The context carries:
 
 **No globals.** No process-wide `static`, no thread-locals, no implicit context. Commands take an explicit `&AppContext`; tests construct one with fakes (`MockClock`, `InMemoryUi`).
 
----
+______________________________________________________________________
 
 ## Crate organization: single → workspace
 
@@ -243,9 +243,9 @@ Start **single-crate, single-binary**. This is what `fd`, `gitui`, `ouch`, and `
 Migrate to a workspace only when **one** of these triggers fires (do not migrate proactively):
 
 1. **Second binary sharing ≥30% of code.** A daemon, a helper, a TUI variant. Split into `app-core` (library) + `app-cli` (binary) + new consumer.
-2. **A subsystem is publishable on its own.** `ripgrep` extracted `grep-matcher`, `grep-regex`, `grep-searcher`, `grep-printer` because each is reusable. If it has zero app-specific concerns, it earns its own crate.
-3. **Compile time exceeds tolerance.** Incremental `check` over ~10 s and the slow code is structurally separable.
-4. **Plugins/adapters need independent dep trees.** Helix splits `helix-lsp` so the LSP client's deps don't bloat the core.
+1. **A subsystem is publishable on its own.** `ripgrep` extracted `grep-matcher`, `grep-regex`, `grep-searcher`, `grep-printer` because each is reusable. If it has zero app-specific concerns, it earns its own crate.
+1. **Compile time exceeds tolerance.** Incremental `check` over ~10 s and the slow code is structurally separable.
+1. **Plugins/adapters need independent dep trees.** Helix splits `helix-lsp` so the LSP client's deps don't bloat the core.
 
 **Hard threshold**: at ~8k LOC of application code, take a serious look. Below that, the cost of workspace navigation outweighs the wins.
 
@@ -265,18 +265,18 @@ The single-crate rules above still hold per-crate. Specifically:
 - **No cross-crate `cli/` imports.** Each binary owns its own parse-shape. Crates communicate via runtime-shape request types defined in `domain/`.
 - **One `AppContext` per binary.** Don't share the struct across binaries — each may need different fields. If construction logic is shared, factor it as a builder in `app-core`.
 
----
+______________________________________________________________________
 
 ## When to add a library file (`lib.rs` / `__init__.py` API)
 
 Only when one of these is true:
 
 1. Another consumer (a second crate, a Tauri app, a sibling binary) needs the same logic.
-2. Integration tests need access to internals that aren't reachable from a binary-only crate.
+1. Integration tests need access to internals that aren't reachable from a binary-only crate.
 
 A no-op library file that just declares private modules is dead weight. If you don't have a real consumer, **don't** create the public surface — keep modules internal.
 
----
+______________________________________________________________________
 
 ## See also
 

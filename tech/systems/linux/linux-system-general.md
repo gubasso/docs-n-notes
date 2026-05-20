@@ -2,7 +2,7 @@
 
 > system settings
 
-<!-- toc -->
+<!--TOC-->
 
 - [Users management](#users-management)
 - [Group management](#group-management)
@@ -18,7 +18,7 @@
 - [Set Hostname](#set-hostname)
 - [Resources](#resources)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Users management
 
@@ -27,7 +27,9 @@
 ```sh
 useradd -m user_name -s /bin/bash
 ```
+
 - `-m/--create-home`
+
 - The above useradd command will also automatically create a group called user_name and makes this the default group for the user archie. Making each user have their own group (with the group name same as the user name) is the preferred way to add users.
 
 - Set a user password
@@ -41,8 +43,8 @@ passwd user_name
 ```sh
 userdel -r <user>
 ```
-- `-r`: delete user's directories
 
+- `-r`: delete user's directories
 
 ## Group management
 
@@ -102,6 +104,7 @@ pacman -S archlinux-keyring --noconfirm && pacman -Syyu --noconfirm
 ```
 sudo zypper ref && sudo zypper dup -y
 ```
+
 - `ref` = `refresh`
 
 ## Set Timezone
@@ -123,7 +126,7 @@ sudo zypper ref && sudo zypper dup -y
 
 ## Set Hostname
 
-See [[dns#Fully qualified domain name (FQDN)]].
+See \[[dns#Fully qualified domain name (FQDN)]\].
 
 - command: `hostnamectl set-hostname example-hostname`
 - edit `/etc/hosts`

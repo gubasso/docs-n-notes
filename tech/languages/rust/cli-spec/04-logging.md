@@ -4,16 +4,16 @@
 
 ## Crate stack
 
-| Concern | Crate |
-|---------|-------|
-| Emission API (libs + bin) | `tracing` |
-| Subscriber install (bin only) | `tracing-subscriber` (`env-filter`, `fmt`) |
-| Non-blocking file sink | `tracing-appender` |
-| Pretty error formatter (optional) | `color-eyre` (dev builds) |
-| Color in user-UX layer | `anstream`, `owo-colors`, or `nu-ansi-term` |
-| Tables | `comfy-table`, `tabled` |
-| Progress / spinners | `indicatif` |
-| Prompts | `inquire`, `dialoguer` |
+| Concern                           | Crate                                       |
+| --------------------------------- | ------------------------------------------- |
+| Emission API (libs + bin)         | `tracing`                                   |
+| Subscriber install (bin only)     | `tracing-subscriber` (`env-filter`, `fmt`)  |
+| Non-blocking file sink            | `tracing-appender`                          |
+| Pretty error formatter (optional) | `color-eyre` (dev builds)                   |
+| Color in user-UX layer            | `anstream`, `owo-colors`, or `nu-ansi-term` |
+| Tables                            | `comfy-table`, `tabled`                     |
+| Progress / spinners               | `indicatif`                                 |
+| Prompts                           | `inquire`, `dialoguer`                      |
 
 ## Rules
 

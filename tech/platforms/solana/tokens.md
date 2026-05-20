@@ -20,7 +20,6 @@ create a token account for handling the balances for this token
 spl-token create-account <token-address>
 ```
 
-
 mint some tokens
 
 ```sh
@@ -39,7 +38,6 @@ view all the spl-token accounts under your wallet
 ```sh
 spl-token accounts
 ```
-
 
 transfer:
 

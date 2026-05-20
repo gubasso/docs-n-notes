@@ -22,7 +22,7 @@ mongo_curse = mongo.db.tab0042.find()
 list_cur = list(mongo_curse)
 # python list to json_data
 json_data = dumps(list_cur)
-# respose as json data
+# response as json data
 return Response(json_data, mimetype='application/json')
 ```
 
@@ -49,7 +49,8 @@ qstr = request.args.to_dict() # just {'A': 123, 'B': 789}
 return Response(json_data, mimetype='application/json')
 ```
 
-## References:
+## References
 
 [^1]: [How do you access the query string in Flask routes?](https://stackoverflow.com/questions/11774265/how-do-you-access-the-query-string-in-flask-routes/69998227#69998227)
+
 [^2]: [Getting the array as GET query parameters in Python](https://stackoverflow.com/questions/7940085/getting-the-array-as-get-query-parameters-in-python/7940355#7940355)

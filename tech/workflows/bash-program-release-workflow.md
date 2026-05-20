@@ -9,7 +9,7 @@ tag) fans out to: a `curl | bash` installer, an AUR package, and the
 openSUSE Build Service (OBS) for `.rpm`/`.deb` across openSUSE, Fedora,
 Debian, and Ubuntu.
 
-<!-- toc -->
+<!--TOC-->
 
 - [When this applies](#when-this-applies)
 - [The lean default path](#the-lean-default-path)
@@ -31,7 +31,7 @@ Debian, and Ubuntu.
 - [Alternatives — when to pick them](#alternatives--when-to-pick-them)
 - [References](#references)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## When this applies
 
@@ -49,19 +49,18 @@ Debian, and Ubuntu.
 Six moving parts:
 
 1. `VERSION` file as single source of truth.
-2. Conventional commits + `git-cliff` for `CHANGELOG.md`.
-3. `Makefile` that respects `PREFIX`/`DESTDIR` (GNU conventions) and
+1. Conventional commits + `git-cliff` for `CHANGELOG.md`.
+1. `Makefile` that respects `PREFIX`/`DESTDIR` (GNU conventions) and
    has a `dist` target.
-4. GitHub Actions workflow triggered on `v*` tag → builds tarball,
+1. GitHub Actions workflow triggered on `v*` tag → builds tarball,
    attaches `SHA256SUMS` + SLSA provenance, publishes release, triggers
    the OBS service run.
-5. AUR PKGBUILDs (stable + `-git`) pushed via `git subtree` from
+1. AUR PKGBUILDs (stable + `-git`) pushed via `git subtree` from
    `packaging/aur/`.
-6. OBS project (`home:<user>:<tool>`) pulls the same `v*` tag via
+1. OBS project (`home:<user>:<tool>`) pulls the same `v*` tag via
    `obs_scm` and emits signed `.rpm`/`.deb` repos for openSUSE
    Tumbleweed/Leap, Fedora, Debian, Ubuntu. End-user install: curl
-   one-liner, AUR (`yay`/`paru`), or `zypper ar` / `dnf
-   config-manager` / `apt` against the OBS-hosted repo.
+   one-liner, AUR (`yay`/`paru`), or `zypper ar` / `dnf config-manager` / `apt` against the OBS-hosted repo.
 
 ## 1. Versioning — single source of truth
 
@@ -122,9 +121,9 @@ sysconfdir ?= $(PREFIX)/etc
 INSTALL ?= install
 
 install:
-	$(INSTALL) -d "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" "$(DESTDIR)$(datadir)"
-	$(INSTALL) -m 0755 bin/<tool> "$(DESTDIR)$(bindir)/"
-	# ... etc
+ $(INSTALL) -d "$(DESTDIR)$(bindir)" "$(DESTDIR)$(libdir)" "$(DESTDIR)$(datadir)"
+ $(INSTALL) -m 0755 bin/<tool> "$(DESTDIR)$(bindir)/"
+ # ... etc
 ```
 
 Every install path uses `$(DESTDIR)$(prefix-var)`. This is the
@@ -135,7 +134,7 @@ Keep the `~/.local` ergonomics by exposing a convenience target:
 
 ```make
 user-install:
-	$(MAKE) PREFIX="$$HOME/.local" install
+ $(MAKE) PREFIX="$$HOME/.local" install
 ```
 
 Add a `dist` target that produces a reproducible tarball:
@@ -145,8 +144,8 @@ VERSION := $(shell cat VERSION)
 DIST    := <tool>-$(VERSION)
 
 dist:
-	git archive --format=tar.gz --prefix=$(DIST)/ -o $(DIST).tar.gz HEAD
-	sha256sum $(DIST).tar.gz > $(DIST).tar.gz.sha256
+ git archive --format=tar.gz --prefix=$(DIST)/ -o $(DIST).tar.gz HEAD
+ sha256sum $(DIST).tar.gz > $(DIST).tar.gz.sha256
 ```
 
 `git archive` produces a clean tarball from the committed tree — no
@@ -235,11 +234,11 @@ curl -fsSL https://raw.githubusercontent.com/<user>/<tool>/main/install.sh | bas
 The script **must**:
 
 1. Discover the latest tag via the GitHub Releases API.
-2. Download the tarball **and** its `.sha256`.
-3. **Verify the checksum before extracting.** This is the only
+1. Download the tarball **and** its `.sha256`.
+1. **Verify the checksum before extracting.** This is the only
    legitimate complaint about the `curl|bash` pattern — address it.
-4. Unpack to a temp dir.
-5. Run `make install` (default `PREFIX=$HOME/.local`, overridable via
+1. Unpack to a temp dir.
+1. Run `make install` (default `PREFIX=$HOME/.local`, overridable via
    env var).
 
 Optionally also verify with `gh attestation verify` when the user has
@@ -319,7 +318,7 @@ Do these **once** in the web UI at
    login; create a sub-project `home:<user>:<tool>` to isolate this
    tool's repos and metadata.
 
-2. **Enable target repositories** in `_meta`. From the WebUI use
+1. **Enable target repositories** in `_meta`. From the WebUI use
    *Repositories → Add from a Distribution*; from the CLI use
    `osc meta prj -e home:<user>:<tool>` and paste the XML below.
    Always cross-check current repo names in the WebUI picker — Leap
@@ -358,13 +357,13 @@ Do these **once** in the web UI at
    builds the noarch artifact once per repo and serves it for every
    architecture.
 
-3. **Create the package container.**
+1. **Create the package container.**
 
    ```bash
    osc meta pkg -e home:<user>:<tool> <tool>
    ```
 
-4. **Create a scoped trigger token** (a leaked token can then only
+1. **Create a scoped trigger token** (a leaked token can then only
    re-run *this* package's services, not your whole account):
 
    ```bash
@@ -372,12 +371,11 @@ Do these **once** in the web UI at
    ```
 
    Store the secret string as the GitHub Actions secret `OBS_TOKEN`
-   (`Settings → Secrets and variables → Actions → New repository
-   secret`). The `osc token` output also includes a numeric `id`; the
+   (`Settings → Secrets and variables → Actions → New repository secret`). The `osc token` output also includes a numeric `id`; the
    `runservice` endpoint uses the secret string in the
    `Authorization` header, not the id.
 
-5. **Sanity-check the project once** before wiring CI: stand it up in
+1. **Sanity-check the project once** before wiring CI: stand it up in
    `home:<user>:test-<tool>`, run one full cycle (manual tag push →
    `curl` → green Tumbleweed build), then rename to the real project.
    Renaming a published project breaks every `zypper addrepo` URL
@@ -471,12 +469,9 @@ assembles a proper Debian source package from these flat files (no
   `DEBTRANSFORM-TAR: <tool>-%{version}.tar.gz` so the upstream
   tarball isn't ambiguous, and `DEBTRANSFORM-RELEASE: 1` to
   auto-bump the Debian release per build.
-- `debian.control` — `Source:` block + `Package:` block, `Architecture:
-  all` (noarch equivalent), `Depends: bash (>= 4.0), coreutils,
-  ${misc:Depends}`.
+- `debian.control` — `Source:` block + `Package:` block, `Architecture: all` (noarch equivalent), `Depends: bash (>= 4.0), coreutils, ${misc:Depends}`.
 - `debian.rules` — three-line `dh $@` form with an
-  `override_dh_auto_install` that calls `$(MAKE) install
-  DESTDIR=debian/<tool> PREFIX=/usr`.
+  `override_dh_auto_install` that calls `$(MAKE) install DESTDIR=debian/<tool> PREFIX=/usr`.
 - `debian.changelog` — minimal initial entry; `set_version` keeps it
   in sync at build time.
 
@@ -570,31 +565,30 @@ CI builds the tarball, attaches `SHA256SUMS`, attaches SLSA provenance,
 publishes the release with generated notes, and triggers an OBS service
 run that rebuilds the `.rpm`/`.deb` for every enabled distro. The
 `install.sh` one-liner picks up the new tag immediately; the AUR
-package picks it up after a `git subtree push --prefix packaging/aur/<tool>
-aur:<tool> master`; OBS-hosted repos refresh within minutes-to-an-hour
+package picks it up after a `git subtree push --prefix packaging/aur/<tool> aur:<tool> master`; OBS-hosted repos refresh within minutes-to-an-hour
 once the build queue drains.
 
 ## Files to add — checklist
 
-| Path | Purpose |
-|---|---|
-| `VERSION` | One line, e.g. `0.1.0`. Source of truth. |
-| `cliff.toml` | git-cliff config (Keep-a-Changelog preset). |
-| `CHANGELOG.md` | Generated by git-cliff at each release; committed. |
-| `install.sh` | curl-piped installer: discover latest tag → download tarball + `.sha256` → verify → install to `~/.local` by default. |
-| `.github/workflows/release.yml` | Tag-triggered: test → `make dist` → git-cliff notes → attest-build-provenance → `gh release create` → trigger OBS service run. Needs `OBS_TOKEN` repo secret. |
-| `packaging/aur/<tool>/PKGBUILD` | Stable-release PKGBUILD. |
-| `packaging/aur/<tool>-git/PKGBUILD` | VCS variant tracking `main`. |
-| `packaging/obs/_meta.xml` | OBS project `_meta` (repos enabled: Tumbleweed, Leap 15.6, Fedora_41, Debian_12, xUbuntu_24.04). Source of truth for `osc meta prj -e`. |
-| `packaging/obs/_service` | `obs_scm` (`mode="manual"`) pulling `main` and deriving version from `@PARENT_TAG@`; `tar` + `recompress` + `set_version` at build time. |
-| `packaging/obs/<tool>.spec` | RPM recipe — `BuildArch: noarch`, `%make_install PREFIX=%{_prefix} DESTDIR=%{buildroot}`. |
-| `packaging/obs/<tool>.dsc` | Debian source control header with `DEBTRANSFORM-TAR` + `DEBTRANSFORM-RELEASE`. |
-| `packaging/obs/debian.control` | Debian `Source:` + `Package:` blocks, `Architecture: all`. |
-| `packaging/obs/debian.rules` | `dh $@` form with `override_dh_auto_install` calling `$(MAKE) install DESTDIR=debian/<tool> PREFIX=/usr`. |
-| `packaging/obs/debian.changelog` | Minimal initial entry; `set_version` keeps it in sync. |
-| Makefile edits | Add `PREFIX`/`DESTDIR`/`bindir`/`libdir`/`datadir`; add `dist:`; rewrite `install:`/`uninstall:` to use `$(DESTDIR)$(bindir)` etc. |
-| Dispatcher script edit | Implement `version` subcommand via `VERSION` file or `__TOOL_VERSION__` placeholder; fall back to `git describe` in dev. |
-| `README.md` / `docs/INSTALL.md` edits | New "Install" section: curl one-liner → AUR → OBS-hosted `zypper`/`dnf`/`apt` repos → from source. Plus OBS build-status badge. |
+| Path                                  | Purpose                                                                                                                                                       |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `VERSION`                             | One line, e.g. `0.1.0`. Source of truth.                                                                                                                      |
+| `cliff.toml`                          | git-cliff config (Keep-a-Changelog preset).                                                                                                                   |
+| `CHANGELOG.md`                        | Generated by git-cliff at each release; committed.                                                                                                            |
+| `install.sh`                          | curl-piped installer: discover latest tag → download tarball + `.sha256` → verify → install to `~/.local` by default.                                         |
+| `.github/workflows/release.yml`       | Tag-triggered: test → `make dist` → git-cliff notes → attest-build-provenance → `gh release create` → trigger OBS service run. Needs `OBS_TOKEN` repo secret. |
+| `packaging/aur/<tool>/PKGBUILD`       | Stable-release PKGBUILD.                                                                                                                                      |
+| `packaging/aur/<tool>-git/PKGBUILD`   | VCS variant tracking `main`.                                                                                                                                  |
+| `packaging/obs/_meta.xml`             | OBS project `_meta` (repos enabled: Tumbleweed, Leap 15.6, Fedora_41, Debian_12, xUbuntu_24.04). Source of truth for `osc meta prj -e`.                       |
+| `packaging/obs/_service`              | `obs_scm` (`mode="manual"`) pulling `main` and deriving version from `@PARENT_TAG@`; `tar` + `recompress` + `set_version` at build time.                      |
+| `packaging/obs/<tool>.spec`           | RPM recipe — `BuildArch: noarch`, `%make_install PREFIX=%{_prefix} DESTDIR=%{buildroot}`.                                                                     |
+| `packaging/obs/<tool>.dsc`            | Debian source control header with `DEBTRANSFORM-TAR` + `DEBTRANSFORM-RELEASE`.                                                                                |
+| `packaging/obs/debian.control`        | Debian `Source:` + `Package:` blocks, `Architecture: all`.                                                                                                    |
+| `packaging/obs/debian.rules`          | `dh $@` form with `override_dh_auto_install` calling `$(MAKE) install DESTDIR=debian/<tool> PREFIX=/usr`.                                                     |
+| `packaging/obs/debian.changelog`      | Minimal initial entry; `set_version` keeps it in sync.                                                                                                        |
+| Makefile edits                        | Add `PREFIX`/`DESTDIR`/`bindir`/`libdir`/`datadir`; add `dist:`; rewrite `install:`/`uninstall:` to use `$(DESTDIR)$(bindir)` etc.                            |
+| Dispatcher script edit                | Implement `version` subcommand via `VERSION` file or `__TOOL_VERSION__` placeholder; fall back to `git describe` in dev.                                      |
+| `README.md` / `docs/INSTALL.md` edits | New "Install" section: curl one-liner → AUR → OBS-hosted `zypper`/`dnf`/`apt` repos → from source. Plus OBS build-status badge.                               |
 
 ## Alternatives — when to pick them
 

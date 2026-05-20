@@ -14,6 +14,7 @@ Primary: <https://github.com/containers/crun/issues/new> (the `--krun` handler l
 Mirror: <https://github.com/containers/libkrun/issues/new> (host→guest argv path runs through libkrun's vsock + init/agent)
 
 Reference once filed:
+
 - containers/libkrun#273 — argument-passing bug (`--` not forwarded correctly) — likely related root cause
 - containers/podman#28067 — TUI character handling broken under krun (Enter/newlines not handled correctly) — possibly same root cause
 - containers/crun#1098 — `podman exec` into a krun'd container does not enter the VM — different bug, same handler
@@ -21,7 +22,7 @@ Reference once filed:
 
 ## Body (paste into the issue)
 
----
+______________________________________________________________________
 
 ### Summary
 
@@ -32,7 +33,9 @@ The bug does not reproduce under the default `crun` runtime with the exact same 
 ### Environment
 
 - Host: Arch Linux, kernel `7.0.7-arch2-1`, rootless
+
 - `podman --version` → `podman version 5.8.2`
+
 - `crun --version` →
 
   ```
@@ -124,13 +127,13 @@ exit=127
 
 Every line after the first is prefixed with `n`:
 
-| Source line                 | Delivered to shell      |
-|-----------------------------|-------------------------|
-| `echo Container started`    | `echo Container started` (line 1 — clean) |
-| `trap "exit 0" 15`          | `ntrap "exit 0" 15`     |
-| `` (blank)                  | `n`                     |
-| `echo after-trap`           | `necho after-trap`      |
-| `exec sleep 2`              | `nexec sleep 2`         |
+| Source line              | Delivered to shell                        |
+| ------------------------ | ----------------------------------------- |
+| `echo Container started` | `echo Container started` (line 1 — clean) |
+| `trap "exit 0" 15`       | `ntrap "exit 0" 15`                       |
+| \`\` (blank)             | `n`                                       |
+| `echo after-trap`        | `necho after-trap`                        |
+| `exec sleep 2`           | `nexec sleep 2`                           |
 
 Under default `crun`, the same payload prints `Container started` then `after-trap` and exits 0 cleanly.
 
@@ -154,7 +157,7 @@ Pass commands as separate argv entries (no embedded newlines), or use `podman ex
 - I have not yet built `crun` / `libkrun` from source to bisect. Happy to do so if it would help — please point me at suspected files.
 - Original investigation context: tried to use `@devcontainers/cli` as the lifecycle interpreter on top of `podman --runtime krun` for a sandboxed dev-environment tool. Spike write-up with full failure timeline and prior-art survey is available on request.
 
----
+______________________________________________________________________
 
 ## Notes for me (gu) — do not include in the upstream issue
 

@@ -1,11 +1,11 @@
 # Linked-lists
 
-<!-- toc -->
+<!--TOC-->
 
 - [LeetCode Problems](#leetcode-problems)
 - [Traverse a linked list](#traverse-a-linked-list)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## LeetCode Problems
 

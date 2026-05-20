@@ -9,7 +9,6 @@ https://programminghistorian.org/en/lessons/json-and-jq
 
 Filter/select a subset of fields from an object: https://stackoverflow.com/a/68664471
 
-
 ```sh
 curl "https://api.airtable.com/v0/${airtable_base_id}/${airtable_table_variaveis}?maxRecords=3&view=Grid%20view" \
 -H "Authorization: Bearer ${AIRTABLE_API_KEY}" \

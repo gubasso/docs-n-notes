@@ -18,7 +18,7 @@ To connect to a Wi-Fi network in `wpa_cli`’s interactive mode, first run `wpa_
 
    This command opens a prompt bound to `wlan0`, where you can enter commands interactively ([sirlagz.net][1]).
 
-2. **Verify prompt**
+1. **Verify prompt**
    At the prompt, you should see something like:
 
    ```
@@ -36,9 +36,9 @@ To connect to a Wi-Fi network in `wpa_cli`’s interactive mode, first run `wpa_
    > scan
    ```
 
-   This requests wpa\_supplicant to scan for nearby access points ([mankier.com][2]).
+   This requests wpa_supplicant to scan for nearby access points ([mankier.com][2]).
 
-2. **List scan results**
+1. **List scan results**
 
    ```
    > scan_results
@@ -62,7 +62,7 @@ To connect to a Wi-Fi network in `wpa_cli`’s interactive mode, first run `wpa_
 
    The client returns a network ID (e.g., `0`) that you’ll use for subsequent commands ([rbftech.com][3]).
 
-2. **Set the SSID**
+1. **Set the SSID**
 
    ```
    > set_network 0 ssid "MyNetworkSSID"
@@ -70,7 +70,7 @@ To connect to a Wi-Fi network in `wpa_cli`’s interactive mode, first run `wpa_
 
    Wrap the SSID in quotes if it contains spaces or special characters ([cnblogs.com][4]).
 
-3. **Set the passphrase**
+1. **Set the passphrase**
 
    ```
    > set_network 0 psk "MySecretPass"
@@ -78,14 +78,15 @@ To connect to a Wi-Fi network in `wpa_cli`’s interactive mode, first run `wpa_
 
    This writes the pre-shared key for WPA/WPA2 networks ([cnblogs.com][4]).
 
-4. **Enable or select the network**
+1. **Enable or select the network**
 
-   * **Enable** (allows multiple profiles):
+   - **Enable** (allows multiple profiles):
 
      ```
      > enable_network 0
      ```
-   * **Select** (exclusively use this one):
+
+   - **Select** (exclusively use this one):
 
      ```
      > select_network 0
@@ -93,7 +94,7 @@ To connect to a Wi-Fi network in `wpa_cli`’s interactive mode, first run `wpa_
 
    Both commands trigger association with the chosen SSID ([cnblogs.com][4]).
 
-5. **Verify connection status**
+1. **Verify connection status**
 
    ```
    > status
@@ -111,7 +112,7 @@ To connect to a Wi-Fi network in `wpa_cli`’s interactive mode, first run `wpa_
 
    This writes your network block into `/etc/wpa_supplicant.conf` for automatic reconnection on reboot ([cnblogs.com][4]).
 
-2. **Exit interactive mode**
+1. **Exit interactive mode**
 
    ```
    > quit
@@ -119,7 +120,7 @@ To connect to a Wi-Fi network in `wpa_cli`’s interactive mode, first run `wpa_
 
    This closes `wpa_cli` and returns you to the shell ([mankier.com][2]).
 
----
+______________________________________________________________________
 
 By following these steps in interactive mode, you can scan, select, and connect to any WPA-protected Wi-Fi network using `wpa_cli` without editing configuration files by hand.
 

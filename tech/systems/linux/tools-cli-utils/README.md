@@ -1,6 +1,5 @@
 # CLI Tools
 
-
 - nice md to html (md2html, markdown2html, markdown to html)
 
 ```sh
@@ -10,16 +9,18 @@ ghmd README.md
 ```
 
 - axel
+
   - https://github.com/axel-download-accelerator/axel
   - wget alternative, curl alternative, download in parallel
   - cli download cli
+
   ```sh
   axel -n 10 http://example.com/file.zip
   ```
 
 - aria2: download metalink .meta4
-  - [[what-is-metalink]]
 
+  - \[[what-is-metalink]\]
 
 Basic Usage of aria2
 

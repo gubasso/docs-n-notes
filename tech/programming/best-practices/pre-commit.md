@@ -1,6 +1,5 @@
 # pre-commit hooks
 
-
 To run in just a subdir or selected files...
 
 ```yaml

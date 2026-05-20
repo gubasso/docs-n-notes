@@ -2,8 +2,12 @@
 
 > Main doc for security related topic
 
-<!--toc-->
+<!--TOC-->
 
+- [General](#general)
+- [References](#references)
+
+<!--TOC-->
 
 ## General
 
@@ -14,7 +18,6 @@ For example you can generate a 128 character password (must all be on one line) 
 ```sh
 openssl rand -base64 128 | tr -d '\n' > /etc/restic/pw.txt
 ```
-
 
 ## References
 

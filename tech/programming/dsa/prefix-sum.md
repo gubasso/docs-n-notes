@@ -1,5 +1,5 @@
 # Prefix Sum
 
-1732. Find the Highest Altitude
-724. Find Pivot Index
-303. Range Sum Query - Immutable
+1. Find the Highest Altitude
+1. Find Pivot Index
+1. Range Sum Query - Immutable

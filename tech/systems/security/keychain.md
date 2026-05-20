@@ -5,14 +5,14 @@
 > https://www.funtoo.org/Funtoo:Keychain
 > https://github.com/funtoo/keychain
 
-<!-- toc -->
+<!--TOC-->
 
 - [Basic commands](#basic-commands)
 - [gpg-agent](#gpg-agent)
 - [Use `keychain` inside a script](#use-keychain-inside-a-script)
 - [Clear / Remove](#clear--remove)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Basic commands
 
@@ -38,14 +38,18 @@ eval $(keychain --clear --nogui --quiet --eval --agents ssh,gpg \
 The `--clear` option:
 
 - every new login to your account should be considered a potential security breach until proven otherwise
+
 - flushes all your private keys from ssh-agent's cache when you log in
+
 - if you're an intruder, keychain will prompt you for passphrases rather than giving you access to your existing set of cached keys
 
 - `--nogui`
+
   - Disable the graphical prompt and always enter your passphrase on the terminal
   - allows to copy-paste long passphrases from a password manager for example
 
 - `--noask`
+
   - do not want to be immediately prompted for unlocking the keys but rather wait until they are needed
 
 - `--agents ssh,gpg`
@@ -59,6 +63,7 @@ The `--clear` option:
 In a `cron` job, for example:
 
 **`example-script.sh`**
+
 ```sh
 #!/bin/sh
 eval `keychain --noask --eval id_rsa`

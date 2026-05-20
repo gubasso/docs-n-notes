@@ -2,7 +2,7 @@
 
 > Dfinity.org
 
-<!-- toc -->
+<!--TOC-->
 
 - [General](#general)
   - [Create a new project](#create-a-new-project)
@@ -12,7 +12,7 @@
 - [Resources](#resources)
   - [Rust resources](#rust-resources)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## General
 
@@ -69,7 +69,6 @@ deposit cycles from the wallet into the canister
 ```sh
 dfx canister deposit-cycles [cycles amount] [canister-name]
 ```
-
 
 ## Testing
 

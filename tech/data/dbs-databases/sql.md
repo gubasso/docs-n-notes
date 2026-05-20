@@ -2,9 +2,9 @@
 
 <!-- vim-markdown-toc GFM -->
 
-* [Related Articles](#related-articles)
-* [General SQL](#general-sql)
-* [Organize SQL Project (files, directories)](#organize-sql-project-files-directories)
+- [Related Articles](#related-articles)
+- [General SQL](#general-sql)
+- [Organize SQL Project (files, directories)](#organize-sql-project-files-directories)
 
 <!-- vim-markdown-toc -->
 
@@ -15,9 +15,9 @@
 ## General SQL
 
 - `Sqitch`: Sqitch is a database change management application.
-    - http://sqitch.org/
-    - [Simple SQL Change Management with Sqitch](https://www.youtube.com/watch?v=LYevw5cYozw)
-    - [sqitch tutorial postgresql](https://github.com/sqitchers/sqitch/blob/develop/lib/sqitchtutorial.pod)
+  - http://sqitch.org/
+  - [Simple SQL Change Management with Sqitch](https://www.youtube.com/watch?v=LYevw5cYozw)
+  - [sqitch tutorial postgresql](https://github.com/sqitchers/sqitch/blob/develop/lib/sqitchtutorial.pod)
 
 ## Organize SQL Project (files, directories)
 
@@ -49,4 +49,3 @@
 
 - `build`: keep persistent (hard) objects[^sql1]
 - `set`: everything else is soft objects: views, functions sprocs, trigger functions, etc[^sql1]
-

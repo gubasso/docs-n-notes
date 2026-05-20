@@ -1,6 +1,13 @@
 # Linux: systemd
 
-<!--toc-->
+<!--TOC-->
+
+- [User](#user)
+- [General](#general)
+- [Time / Calendar](#time--calendar)
+  - [Examples](#examples)
+
+<!--TOC-->
 
 ## User
 
@@ -9,7 +16,6 @@ Place units at: `~/.config/systemd/user/` (equivalent to system wide: `/etc/syst
 ```sh
 systemctl --user enable unit
 ```
-
 
 ## General
 
@@ -25,7 +31,7 @@ best practice to edit a service
 
 - `Persistent=true`: This directive ensures that the missed timer events are run as soon as possible after the system is up. It effectively allows the timer to catch up on missed runs.
 
-#### Examples:
+#### Examples
 
 ```ini
 [Timer]

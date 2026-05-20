@@ -1,15 +1,16 @@
 # System Design Interview Crash Course - Leetcode
+
 > https://leetcode.com/explore/interview/card/system-design-for-interviews-and-beyond/
 
 <!-- toc GFM -->
 
-+ [How to define system requirements](#how-to-define-system-requirements)
+- [How to define system requirements](#how-to-define-system-requirements)
 
-<!-- toc -->
+<!--TOC-->
 
 - [How to define system requirements](#how-to-define-system-requirements)
 
-<!-- tocstop -->
+<!--TOC-->
 
 # How to define system requirements
 
@@ -19,4 +20,4 @@
 - works backwards
 
 1. WHO costumers are
-2. HOW they use the system
+1. HOW they use the system

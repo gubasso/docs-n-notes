@@ -29,10 +29,12 @@ print("Output from last process : " + (p2.communicate()[0]).decode())
 ## General
 
 - python types
+
   - [mypy: Type hints cheat sheet](https://mypy.readthedocs.io/en/latest/cheat_sheet_py3.html)
   - [fastapi: Python Types Intro](https://fastapi.tiangolo.com/python-types/)
 
 - library for CLI library
+
   - http://docopt.org/ Command-line interface description language
   - https://github.com/docopt/docopt
 
@@ -44,20 +46,19 @@ from pprint import pprint as pp
 
 - pretty print rich library color
   - https://rich.readthedocs.io/en/stable/introduction.html
+
 ```python
 from rich.pretty import pprint
 ```
 
-
-- pre-commit examle in a python project
+- pre-commit example in a python project
   - https://github.com/GitGuardian/ggshield/blob/main/.pre-commit-config.yaml
 
 **[Python – List Files in a Directory](https://www.geeksforgeeks.org/python-list-files-in-a-directory/)**
 
----
+______________________________________________________________________
 
-
----
+______________________________________________________________________
 
 [Convert Python Tuple to Dictionary](https://appdividend.com/2020/12/22/how-to-convert-python-tuple-to-dictionary/)
 
@@ -76,7 +77,7 @@ Output:
 {'eleven': 11, 'mike': 21, 'dustin': 19, 'caleb': 46}
 ```
 
----
+______________________________________________________________________
 
 Data validation with Cerberus:
 
@@ -84,10 +85,9 @@ Data validation with Cerberus:
 - https://zetcode.com/python/cerberus/
 - https://docs.python-cerberus.org/en/stable/usage.html
 
-
 ## Project Structure (files / directories)
 
-- Models for apps layouts/structures (excelent resource)[^5]
+- Models for apps layouts/structures (excellent resource)[^5]
 
 Example from "Application with Internal Packages"[^5]
 
@@ -131,20 +131,21 @@ helloworld/
 └── README.md
 ```
 
----
+______________________________________________________________________
 
-- `__init__.py`: is not required anymore (3.3+), but needed for compatibilty issues (as for correct use of `pytest`)[^3][^4]
+- `__init__.py`: is not required anymore (3.3+), but needed for compatibility issues (as for correct use of `pytest`)[^3][^4]
 
 ## Modules / Imports
 
 - About python modules/import[^2][^1]
-    - Absolute / Relative paths to imports: https://realpython.com/absolute-vs-relative-python-imports/
+  - Absolute / Relative paths to imports: https://realpython.com/absolute-vs-relative-python-imports/
 
 [How to load all modules in a folder?](https://stackoverflow.com/questions/1057431/how-to-load-all-modules-in-a-folder)
 
 Simple and working answer: https://stackoverflow.com/a/36231122
 
 **`__init__.py`** (inside module dir)
+
 ```
 import os, pkgutil
 __all__ = list(module for _, module, _ in pkgutil.iter_modules([os.path.dirname(__file__)]))
@@ -158,12 +159,12 @@ from yourpackage import *
 
 ## References
 
-[^1]: [What is the best project structure for a Python application?](https://stackoverflow.com/a/3419951)
-[^2]: [Python 3.10.5 Documentation » The Python Tutorial » 6. Modules](https://docs.python.org/3/tutorial/modules.html)
-[^3]: [Is __init__.py not required for packages in Python 3.3+](https://stackoverflow.com/questions/37139786/is-init-py-not-required-for-packages-in-python-3-3)
-[^4]: [Nick Coghlan's Python Notes >> Docs » Python Concepts » Traps for the Unwary in Python’s Import System](https://python-notes.curiousefficiency.org/en/latest/python_concepts/import_traps.html)
 [^5]: [Python Application Layouts: A Reference](https://realpython.com/python-application-layouts/)
-[^6]: [Poetry vs. Docker caching: Fight!](https://pythonspeed.com/articles/poetry-vs-docker-caching/)
-[^7]: [Execute command on host during docker build](https://stackoverflow.com/a/42754636)
-[^8]: [How to suppress pip upgrade warning?](https://stackoverflow.com/questions/46288847/how-to-suppress-pip-upgrade-warning)
-[^9]: [Faster Docker builds with pipenv, poetry, or pip-tools](https://pythonspeed.com/articles/pipenv-docker/)
+
+[^3]: [Is **init**.py not required for packages in Python 3.3+](https://stackoverflow.com/questions/37139786/is-init-py-not-required-for-packages-in-python-3-3)
+
+[^4]: [Nick Coghlan's Python Notes >> Docs » Python Concepts » Traps for the Unwary in Python’s Import System](https://python-notes.curiousefficiency.org/en/latest/python_concepts/import_traps.html)
+
+[^2]: [Python 3.10.5 Documentation » The Python Tutorial » 6. Modules](https://docs.python.org/3/tutorial/modules.html)
+
+[^1]: [What is the best project structure for a Python application?](https://stackoverflow.com/a/3419951)

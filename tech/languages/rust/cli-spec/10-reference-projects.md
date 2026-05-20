@@ -201,20 +201,20 @@ Copy: a separate `<app>-tile` (or `<app>-plugin-api`) crate when you support plu
 
 ## Quick comparison
 
-| Project | LOC | Shape | Key takeaway |
-|---------|-----|-------|--------------|
-| fd | ~10k | single crate | Per-feature subdirs. |
-| bat | ~15k | single crate, `src/lib.rs` + `src/bin/<name>/` | Reusable lib + thin bin. |
-| gitui | ~30k | single crate | TUI component layout. |
-| ouch | ~10k | single crate | `cli/` + `commands/` matches this spec. |
-| jj | ~80k | workspace, `cli/` subcrate | `command_error.rs`, focused `ui.rs`. |
-| eza | ~30k | single crate | `options/` + `output/` split. |
-| starship | ~40k | single crate | `context.rs` + `modules/`. |
-| cargo | ~200k | workspace, `bin/cargo/commands/` | Uniform `exec()` per subcommand. |
-| ripgrep | ~50k | workspace | Subsystems as published libs. |
-| helix | ~120k | workspace, ~8 crates | Dependency-direction boundaries. |
-| atuin | ~40k | workspace, 4 crates | Bin + client + server + common. |
-| zellij | ~80k | workspace | Plugin ABI crate. |
+| Project  | LOC   | Shape                                          | Key takeaway                            |
+| -------- | ----- | ---------------------------------------------- | --------------------------------------- |
+| fd       | ~10k  | single crate                                   | Per-feature subdirs.                    |
+| bat      | ~15k  | single crate, `src/lib.rs` + `src/bin/<name>/` | Reusable lib + thin bin.                |
+| gitui    | ~30k  | single crate                                   | TUI component layout.                   |
+| ouch     | ~10k  | single crate                                   | `cli/` + `commands/` matches this spec. |
+| jj       | ~80k  | workspace, `cli/` subcrate                     | `command_error.rs`, focused `ui.rs`.    |
+| eza      | ~30k  | single crate                                   | `options/` + `output/` split.           |
+| starship | ~40k  | single crate                                   | `context.rs` + `modules/`.              |
+| cargo    | ~200k | workspace, `bin/cargo/commands/`               | Uniform `exec()` per subcommand.        |
+| ripgrep  | ~50k  | workspace                                      | Subsystems as published libs.           |
+| helix    | ~120k | workspace, ~8 crates                           | Dependency-direction boundaries.        |
+| atuin    | ~40k  | workspace, 4 crates                            | Bin + client + server + common.         |
+| zellij   | ~80k  | workspace                                      | Plugin ABI crate.                       |
 
 ## What to copy from your own repos
 

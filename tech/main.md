@@ -1,49 +1,58 @@
 # Tech
+
 > Main and general notes
 
-<!-- toc -->
+<!--TOC-->
 
 - [General](#general)
 - [Unsorted Links (from README)](#unsorted-links-from-readme)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## General
 
 - online converter multiple:
+
   - https://tableconvert.com/html-to-markdown
   - pdf tables pdf to ...
     - https://pdftables.com/
 
 - email default plain text format convention
+
   - https://mailformat.dan.info/quoting/
 
 - [Github: dbohdan / automatic-api](https://github.com/dbohdan/automatic-api)
+
 - api generator
-    - Python-Eve
-    - PostgREST
-    - https://github.com/roapi/roapi
-      - ROAPI automatically spins up read-only APIs for static datasets without requiring you to write a single line of code. It builds on top of Apache Arrow and Datafusion. The core of its design can be boiled down to the following:
+
+  - Python-Eve
+  - PostgREST
+  - https://github.com/roapi/roapi
+    - ROAPI automatically spins up read-only APIs for static datasets without requiring you to write a single line of code. It builds on top of Apache Arrow and Datafusion. The core of its design can be boiled down to the following:
 
 - Fake API Data / Mock data:
-    - https://randomuser.me/
-    - https://www.mockaroo.com/
+
+  - https://randomuser.me/
+  - https://www.mockaroo.com/
 
 - airtable-like database:
-    - https://www.cloudron.io/store/com.nocodb.cloudronapp.html
-    - cloudron https://baserow.io/
 
-- toggl time tracker alernative:
-    - kimai https://www.cloudron.io/store/org.kimai.cloudronapp.html
+  - https://www.cloudron.io/store/com.nocodb.cloudronapp.html
+  - cloudron https://baserow.io/
+
+- toggl time tracker alternative:
+
+  - kimai https://www.cloudron.io/store/org.kimai.cloudronapp.html
 
 random password in terminal
 https://devdojo.com/alexg/bash-random-password-generator
 
 - vimux repl postgresql
-    - https://thegreata.pe/articles/2018/02/11/clojure-vim-and-tmux-using-your-editor-as-a-repl-scratchpad/
-    - https://github.com/preservim/vimux
+  - https://thegreata.pe/articles/2018/02/11/clojure-vim-and-tmux-using-your-editor-as-a-repl-scratchpad/
+  - https://github.com/preservim/vimux
 
 **note taking apps (privacy, open source)**
+
 - standard notes https://standardnotes.com/?s=09
 
 ## Unsorted Links (from README)
@@ -52,31 +61,50 @@ kindle tips
 https://calibre-ebook.com/
 
 - office suite like
+
   - https://cryptpad.org/
 
 - Cheap budget hosts / vps / servers
+
 - https://contabo.com/en/vps/?PID=100110903&SID
+
 - https://cloudfanatic.net/pricing.php
+
   - https://cloudfanatic.net/promos.php
+
 - compare a lot:
+
   - https://www.comfortvps.com/
+
 - ssdnodes.com
+
 - hostinger
+
 - https://us.ovhcloud.com/public-cloud/prices/#439
+
 - https://www.time4vps.com/linux-vps/
+
 - Buyvm
+
 - Hetzner
+
 - Netcup
+
 - Contabo
+
 - https://toys.lerdorf.com/low-cost-vps-testing
+
 - https://www.cheap-vps-hosting.co.uk/
+
 - https://my.racknerd.com/index.php?rp=/store/black-friday-2021
+
 - https://lowendstock.com/
+
   - cheap budget vps
   - [Cheap and Easy VPN in 5 Minutes!](https://www.youtube.com/watch?v=SMF301vQqJo&t=109s)
   - dedicated ipv4 address (ipv4 = 1)
   - virtualization = kvm
-  - bandwith = select the apropriate
+  - bandwidth = select the appropriate
   - location
     - no austria / no germany / no russia
 
@@ -85,7 +113,7 @@ https://calibre-ebook.com/
 bug tracker, issue tracker, project manager, command line cli, terminal
 
 - Bug: https://github.com/driusan/bug
-    - https://github.com/driusan/PoormanIssueTracker
+  - https://github.com/driusan/PoormanIssueTracker
 - Fossil: http://www.fossil-scm.org/
 - Git-bug: https://github.com/MichaelMure/git-bug
 - Git-dit: https://github.com/neithernut/git-dit
@@ -99,15 +127,20 @@ bug tracker, issue tracker, project manager, command line cli, terminal
 My selected Methods for managing projects, issue trackers:
 
 - Bug: https://github.com/driusan/bug
-    - https://github.com/driusan/PoormanIssueTracker
+
+  - https://github.com/driusan/PoormanIssueTracker
+
 - [The Erlang Ticket System - Minimal Viable Programs - Joe Armstrong - Erlang and other stuff](https://joearms.github.io/published/2014-06-25-minimal-viable-program.html)
 
 - 1 enterprise workspace directory (like group in gitlab)
+
 - each project has its own issues, tracked by each project needs
+
 - auxiliary scripts to build general reports, like
-    - `grep` for all issues in all projects
-    - all milestones in all projects
-    - others...
+
+  - `grep` for all issues in all projects
+  - all milestones in all projects
+  - others...
 
 cloud management options:
 
@@ -116,4 +149,3 @@ cloud management options:
 - https://www.keyhelp.de/en/
 - https://selfhosted.libhunt.com/compare-sandstorm-vs-cloudron
 - https://selfhosted.libhunt.com/compare-sandstorm-vs-sovereign
-

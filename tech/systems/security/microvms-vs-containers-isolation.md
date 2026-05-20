@@ -10,18 +10,20 @@ Containers share the host kernel (~40M lines of C, 450+ syscalls) — that is th
 
 ## Why now
 
-- **Performance objection is dead:** microVMs boot in ~125ms with <5 MiB overhead.
+- **Performance objection is dead:** microVMs boot in ~125ms with \<5 MiB overhead.
 - **AI workloads are the catalyst:** LLM agents executing untrusted code created urgent demand for stronger-than-container isolation. The microVM tech (battle-tested in AWS Lambda, Fly.io for years) was already mature.
 
 ## Key tech
 
 **VMMs (built on the rust-vmm ecosystem):**
+
 - **Firecracker** — ~83K LOC Rust, minimal, ephemeral workloads, AWS Lambda standard.
 - **Cloud Hypervisor** — ~106K LOC, richer features (nested KVM, GPU passthrough, Windows).
 
 **AI sandbox platforms using microVMs:** E2B, Vercel Sandbox, Fly.io Sprites, Docker Sandboxes, Ona. Modal uses gVisor (userspace kernel, Google) instead.
 
 **Kubernetes integrations bringing hardware isolation:**
+
 - **Kata Containers** — OCI runtime wrapping microVMs.
 - **Edera** — Type-1 hypervisor + Falco runtime security.
 - **KubeVirt** — full VMs as pods.

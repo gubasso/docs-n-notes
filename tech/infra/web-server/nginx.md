@@ -1,13 +1,13 @@
 # NEW Nginx
 
-<!-- toc -->
+<!--TOC-->
 
-  - [Utils](#utils)
-  - [Configutation](#configutation)
-- [Config examples:](#config-examples)
+- [Utils](#utils)
+- [Configuration](#configuration)
+- [Config examples](#config-examples)
   - [generic](#generic)
 - [Installation](#installation)
-  - [From Source:](#from-source)
+  - [From Source](#from-source)
 - [Running](#running)
 - [After](#after)
   - [certbot](#certbot)
@@ -16,34 +16,42 @@
 - [Resources](#resources)
 - [References](#references)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Utils
 
 - [NginX Proxy Manager](./nginx-nginx-proxy-manager.md)
 
-## Configutation
+## Configuration
 
 - config generators:
+
   - https://www.digitalocean.com/community/tools/nginx
 
 - configuration examples:
+
   - https://wiki.archlinux.org/title/nginx#Configuration_example
 
 Check these parameters at:
+
 - `/etc/nginx/nginx.conf`: keep default
+
 - `/etc/nginx/conf.d`: add general configs
+
 - `/etc/nginx/sites-available` / `/etc/nginx/sites-enabled`: add specific apps/server configs
 
 - `location` directive: filter by the URI
+
 - `server` directive: filter by domain/subdomain/ip and/or port
 
 `user <username> <groupname>;`
+
 ```
-- if group name is omited, username = groupname
+- if group name is omitted, username = groupname
 ```
 
 `server_tokens off;`
+
 ```
 - hide nginx version at response header
 ```
@@ -53,6 +61,7 @@ Check these parameters at:
 `http { add_header Strict-Transport-Security "max-age=15768000" always; }`[^2]
 
 - To activate whatever site is available, run the following command:
+
 ```
 ln -s /etc/nginx/sites-available/www.example.org.conf /etc/nginx/sites-enabled/
 ```
@@ -60,13 +69,14 @@ ln -s /etc/nginx/sites-available/www.example.org.conf /etc/nginx/sites-enabled/
 - to check if nginx configuration file is ok: `nginx -t`
 - after check, reload config: `systemctl reload nginx` (if not using systemd, `nginx -s reload`)
 
-# Config examples:
+# Config examples
 
 ## generic
 
 Default config:
 
 **`/etc/nginx/nginx.conf`**
+
 ```
 user <user_name>;
 worker_processes auto;
@@ -92,6 +102,7 @@ http {
 REST API / Specific config:
 
 **`/etc/nginx/sites-available/example.conf`**
+
 ```
 server {
   listen 80;
@@ -104,9 +115,11 @@ server {
 ```
 
 Static Site / Specific config:
-  - https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04#step-5-setting-up-server-blocks-(recommended)
+
+- https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04#step-5-setting-up-server-blocks-(recommended)
 
 **`/etc/nginx/sites-available/example.conf`**
+
 ```
 server {
   listen 80;
@@ -121,7 +134,7 @@ server {
 
 # Installation
 
-## From Source:
+## From Source
 
 - [Nginx: Installation / Build from Source](./nginx-installation-build-source.md)
 
@@ -141,6 +154,7 @@ if want to set it up with systemd
 - Save this file as `/lib/systemd/system/nginx.service`
 
 **`/etc/systemd/system/nginx.service`**
+
 ```
 [Unit]
 Description=The NGINX HTTP and reverse proxy server
@@ -161,6 +175,7 @@ WantedBy=multi-user.target
 ```
 
 - enable and start service, after check if its running and its ok
+
 ```
 systemctl enable nginx --now
 systemctl status nginx
@@ -192,7 +207,8 @@ Better to **NOT** use with docker/container...
 
 Simpler if it is installed directly on system.
 
-**difference between `systemctl reload nginx` and `systemctl restart nginx**
+**difference between `systemctl reload nginx` and \`systemctl restart nginx**
+
 ```
 - reload
     - does not stop service
@@ -205,8 +221,8 @@ Simpler if it is installed directly on system.
     - if that is an error, service will not start
 ```
 
-
 **default_server**
+
 ```
 server{
    listen 1.2.3.4:80 default_server;
@@ -221,6 +237,7 @@ server{
 # Resources
 
 [Understanding Nginx Server and Location Block Selection Algorithms](https://www.digitalocean.com/community/tutorials/understanding-nginx-server-and-location-block-selection-algorithms)
+
 ```
 - Amazing article about how redirects, location blocks and URL/URI matches works
 - Nginx Block Configurations
@@ -234,22 +251,23 @@ server{
     - When Does Location Block Evaluation Jump to Other Locations?
 ```
 
----
+______________________________________________________________________
 
 - nginx rate limiting, securing ddos attack
-    - [Rate Limiting with NGINX and NGINX Plus](https://www.nginx.com/blog/rate-limiting-nginx/)
-    - [Rate Limiting with Nginx](https://lincolnloop.com/blog/rate-limiting-nginx/)
-    - [NGINX rate-limiting in a nutshell](https://www.freecodecamp.org/news/nginx-rate-limiting-in-a-nutshell-128fe9e0126c/)
+  - [Rate Limiting with NGINX and NGINX Plus](https://www.nginx.com/blog/rate-limiting-nginx/)
+  - [Rate Limiting with Nginx](https://lincolnloop.com/blog/rate-limiting-nginx/)
+  - [NGINX rate-limiting in a nutshell](https://www.freecodecamp.org/news/nginx-rate-limiting-in-a-nutshell-128fe9e0126c/)
 
----
+______________________________________________________________________
 
 - How to get HTTPS working on your local development environment in 5 minutes `https://www.freecodecamp.org/news/how-to-get-https-working-on-your-local-development-environment-in-5-minutes-7af615770eec/amp/?__twitter_impression=true`
 
----
+______________________________________________________________________
 
 - How does HTTPS work? What's a CA? What's a self-signed Certificate? https://youtu.be/T4Df5_cojAs
 
 # References
 
 [^1]: [How To Install Nginx on Ubuntu 18.04](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-18-04)
+
 [^2]: [How To Set Up Nginx with HTTP/2 Support on Ubuntu 18.04](https://www.digitalocean.com/community/tutorials/how-to-set-up-nginx-with-http-2-support-on-ubuntu-18-04)

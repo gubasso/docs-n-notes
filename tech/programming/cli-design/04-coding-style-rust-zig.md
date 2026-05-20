@@ -150,14 +150,14 @@ The builder owns configuration accumulation; `.build()` owns final construction 
 
 Take the least-owning type that does the job. Return owned types when the caller will keep them.
 
-| Pattern | Take | Return |
-|---------|------|--------|
-| String input you only read | `&str` / `str` / `view` | — |
-| Path input you only read | borrowed-path | — |
-| Slice you only read | `&[T]` / view | — |
-| Optional context | `Option<&T>` / `Optional[T]` | — |
-| You'll consume / store the value | owned | — |
-| Returning a new value | — | owned |
+| Pattern                          | Take                         | Return |
+| -------------------------------- | ---------------------------- | ------ |
+| String input you only read       | `&str` / `str` / `view`      | —      |
+| Path input you only read         | borrowed-path                | —      |
+| Slice you only read              | `&[T]` / view                | —      |
+| Optional context                 | `Option<&T>` / `Optional[T]` | —      |
+| You'll consume / store the value | owned                        | —      |
+| Returning a new value            | —                            | owned  |
 
 Anti-pattern: taking an owned argument and then calling `.as_str()` on it. Take the borrowed form and let the caller decide ownership.
 
@@ -305,14 +305,14 @@ The "isn't" sentence is load-bearing: it lets a future reader see at a glance wh
 When in doubt about where new code belongs, ask in this order:
 
 1. **Does this touch the outside world?** → `adapters/`.
-2. **Is it pure orchestration shared across commands?** → `services/`.
-3. **Does it enforce an invariant on a value?** → `domain/`.
-4. **Is it specific to one subcommand?** → `commands/<name>.<ext>`.
-5. **Is it CLI parsing?** → `cli/<name>.<ext>`.
-6. **Is it cross-cutting setup?** → `main`, `context`, `logging`, `config`.
-7. **None of the above?** → probably doesn't belong in the crate yet.
+1. **Is it pure orchestration shared across commands?** → `services/`.
+1. **Does it enforce an invariant on a value?** → `domain/`.
+1. **Is it specific to one subcommand?** → `commands/<name>.<ext>`.
+1. **Is it CLI parsing?** → `cli/<name>.<ext>`.
+1. **Is it cross-cutting setup?** → `main`, `context`, `logging`, `config`.
+1. **None of the above?** → probably doesn't belong in the crate yet.
 
----
+______________________________________________________________________
 
 ## See also
 

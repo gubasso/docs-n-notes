@@ -1,6 +1,5 @@
 # Commands cmds functions
 
-
 ```lua
 -- Function for highlighting the visual selection upon pressing <CR> in Visual mode
 local highlight_selection = function()

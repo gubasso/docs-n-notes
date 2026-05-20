@@ -1,18 +1,18 @@
 # Binary Trees
 
-<!-- toc -->
+<!--TOC-->
 
 - [LeetCode Problems](#leetcode-problems)
 - [Depth-first search (DFS)](#depth-first-search-dfs)
   - [Traverse DFS Recursive](#traverse-dfs-recursive)
   - [Traverse DFS Iterative (Stack)](#traverse-dfs-iterative-stack)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## LeetCode Problems
 
-- 104. Maximum Depth of Binary Tree
-- 112. Path Sum
+- 1. Maximum Depth of Binary Tree
+- 1. Path Sum
 
 ## Depth-first search (DFS)
 
@@ -65,4 +65,3 @@ let maxDepth = node => {
   return ans
 }
 ```
-

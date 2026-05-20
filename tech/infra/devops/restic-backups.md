@@ -8,7 +8,6 @@
 
 ## General
 
-
 ```
       -r, --repo repository            repository to backup to or restore from (default: $RESTIC_REPOSITORY)
       --repository-file file       file to read the repository location from (default: $RESTIC_REPOSITORY_FILE)
@@ -25,5 +24,3 @@ gpg --decrypt blablabla | restic -r /path/to/repo snapshots
 ```
 
 [^1]: https://github.com/restic/restic/issues/533 "Support unattended encrypted backups without key disclosure #533"
-
-

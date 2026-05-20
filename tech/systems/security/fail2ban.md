@@ -1,21 +1,19 @@
 # Fail2Ban
 
-<!-- toc -->
+<!--TOC-->
 
-- [Instalation](#instalation)
-  - [On Ubuntu/Debian:](#on-ubuntudebian)
+- [Installation](#installation)
+  - [On Ubuntu/Debian](#on-ubuntudebian)
   - [Check status](#check-status)
 - [Basic configuration](#basic-configuration)
 - [(optional) Config to send email alerts](#optional-config-to-send-email-alerts)
 - [References / Guides](#references--guides)
 
-<!-- tocstop -->
+<!--TOC-->
 
-Use Fail2Ban for SSH Login Protection
+## Installation
 
-## Instalation
-
-### On Ubuntu/Debian:
+### On Ubuntu/Debian
 
 ```sh
 sudo apt-get update -y && sudo apt-get upgrade -y
@@ -40,6 +38,7 @@ sudo cp jail.conf jail.local
 If you changed the SSH default port (e.g. `Port 202`), edit the `[sshd]` section at `jail.local`[^1]:
 
 **`/etc/fail2ban/jail.local`**
+
 ```
 [sshd]
 port = ssh,202
@@ -52,7 +51,7 @@ sudo systemctl enable fail2ban --now
 sudo fail2ban-client status
 ```
 
----
+______________________________________________________________________
 
 ## (optional) Config to send email alerts
 
@@ -61,6 +60,7 @@ sudo fail2ban-client status
 - https://www.linode.com/docs/guides/running-a-mail-server/#sending-email-on-linode
 
 **`/etc/fail2ban/jail.local`**
+
 ```
 destemail = myuseremail@email.com
 sender = myuseremail@email.com

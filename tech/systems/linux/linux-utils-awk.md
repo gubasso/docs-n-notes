@@ -6,6 +6,5 @@ bug list 1 | awk -F ': ' '/Title/ {print $2}'
 ```
 
 - `-F`: column delimiter
-- `/Title/`: just line beggining with "Title"
+- `/Title/`: just line beginning with "Title"
 - `{print $2}`: print just the second column
-

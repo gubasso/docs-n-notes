@@ -2,14 +2,21 @@
 
 > library, crate
 
-<!-- toc -->
+<!--TOC-->
 
-- [Basic example[^1]](#basic-example1)
+- [Basic example\[^1\]](#basic-example1)
   - [Simple connection](#simple-connection)
   - [Connection pool](#connection-pool)
 - [Queries Examples](#queries-examples)
-  - [Writting Data: `INSERT` and `UPDATE`](#writting-data-insert-and-update)
+  - [Writing Data: `INSERT` and `UPDATE`](#writing-data-insert-and-update)
+    - [Example 1\[^1\]](#example-11)
+    - [Example 2\[^2\]](#example-22)
   - [Reading Data `SELECT`](#reading-data-select)
+    - [Example 1\[^1\]](#example-11-1)
+    - [Example 2\[^2\]](#example-22-1)
+    - [Example 3\[^2\]](#example-32)
+    - [Example 4: `query_as()`\[^1\]](#example-4-query_as1)
+    - [Example 5: `query_as()`\[^2\]](#example-5-query_as2)
 - [Transactions](#transactions)
 - [Json (Serde)](#json-serde)
 - [UUID](#uuid)
@@ -18,7 +25,7 @@
 - [Others](#others)
   - [Migrations](#migrations)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Basic example[^1]
 
@@ -52,7 +59,7 @@ println!("1 + 1 = {}", sum);
 
 > query
 
-### Writting Data: `INSERT` and `UPDATE`
+### Writing Data: `INSERT` and `UPDATE`
 
 #### Example 1[^1]
 
@@ -127,7 +134,7 @@ Methods to read data with a query:
   - vector
 - `fetch`
   - stream
-  - more "asynchonous" approach
+  - more "asynchronous" approach
   - better performance for large datasets
 
 ```rust
@@ -346,7 +353,6 @@ create table book (
 );
 ```
 
-
 ```toml
 # Cargo.toml
 sqlx = { version = "0.7.2", features = ["runtime-tokio", "tls-rustls", "json", "uuid"] }
@@ -503,16 +509,13 @@ At video [SQLx is my favorite PostgreSQL driver to use with Rust.](https://www.y
 
 - ipnetwork type
 - listen / notify
-  - use postgres as an asynchonous notification system
+  - use postgres as an asynchronous notification system
 
 ### Migrations
 
 - sqlx migration details: https://docs.rs/sqlx/latest/sqlx/macro.migrate.html
-- [[migrations#sqlx (rust)]]
-
-
+- \[[migrations#sqlx (rust)]\]
 
 [^1]: https://www.youtube.com/watch?v=TCERYbgvbq0 "SQLx is my favorite PostgreSQL driver to use with Rust."
+
 [^2]: https://www.youtube.com/watch?v=VuVOyUbFSI0 "Rust to Postgres Database with SQLX - Rust Lang Tutorial 2021 - Jeremy Chone"
-
-

@@ -20,7 +20,7 @@ gh issue create \
 
 > `gh issue create` supports `--title`, `--body`, `--assignee`, and `--label`. If you also use GitHub Projects, `--project` is available, but project operations require the `project` scope. GitHub Projects status can also be edited from CLI with `gh project item-edit`, though that is heavier than using labels as workflow proxies. ([GitHub CLI][2])
 
----
+______________________________________________________________________
 
 ## 02 — Create PR + Branch from Issue
 
@@ -45,13 +45,13 @@ gh pr create \
 
 Closest equivalent to GitLab’s “Create merge request” flow:
 
-* Branch → use `gh issue develop <issue-id> --name "<issue-id>-issue-title-slug"` to create and link a branch to the issue
-* PR title → set explicitly with `--title 'Draft: Resolve "<issue title>"'`
-* PR description → include `Closes #<issue-id>` in `--body` so the issue auto-closes on merge
+- Branch → use `gh issue develop <issue-id> --name "<issue-id>-issue-title-slug"` to create and link a branch to the issue
+- PR title → set explicitly with `--title 'Draft: Resolve "<issue title>"'`
+- PR description → include `Closes #<issue-id>` in `--body` so the issue auto-closes on merge
 
 > `gh issue develop` is the GitHub CLI command for linked issue branches and can check the branch out immediately. `gh pr create` supports `--draft`, `--base`, `--title`, and `--body`. GitHub closes linked issues automatically when the PR body contains a closing keyword like `Closes #123` or `Fixes #123`. Unlike `glab mr create --related-issue`, this is a two-command flow in `gh`. ([GitHub CLI][1])
 
----
+______________________________________________________________________
 
 ## 03 — Pull Branch Locally
 
@@ -61,7 +61,7 @@ gh pr checkout <pr-id>
 
 > `gh pr checkout` checks out a specific pull request locally; by default it uses the PR head branch name as the local branch name. ([GitHub CLI][3])
 
----
+______________________________________________________________________
 
 ## 04 — Work & Sync (Rebase Workflow)
 
@@ -78,7 +78,7 @@ gh run view     # summary/logs for a run
 
 > `gh pr checks` shows CI status for the PR and supports `--watch`. `gh run watch` watches a workflow run until completion, and `gh run view` shows a workflow run summary. ([GitHub CLI][4])
 
----
+______________________________________________________________________
 
 ## 05 — Mark Ready for Review
 
@@ -90,7 +90,7 @@ gh issue edit <issue-id> --remove-label "in-progress" --add-label "review"
 
 > `gh pr ready` marks a draft PR as ready for review. Reviewers are added with `gh pr edit --add-reviewer`. Issue labels can be updated with `gh issue edit --add-label` and `--remove-label`. ([GitHub CLI][5])
 
----
+______________________________________________________________________
 
 ## 06 — Merge into Master
 
@@ -103,7 +103,7 @@ gh issue close <issue-id>
 
 > `gh pr merge` supports `--rebase` and `--delete-branch`. The issue auto-closes if the PR body contains `Closes #<issue-id>` or `Fixes #<issue-id>`; otherwise `gh issue close` is the manual fallback. ([GitHub CLI][6])
 
----
+______________________________________________________________________
 
 ## Quick Reference
 

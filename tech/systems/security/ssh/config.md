@@ -14,6 +14,6 @@ This can prevent SSH from offering unwanted keys to a server, speed up authentic
 ssh -v -p 22 -F /dev/null -o IdentitiesOnly=yes -i ~/.ssh/<private_key>
 ```
 
----
+______________________________________________________________________
 
 [^4]: https://superuser.com/questions/772660/howto-force-ssh-to-use-a-specific-private-key "How to force ssh to use a specific private key?"

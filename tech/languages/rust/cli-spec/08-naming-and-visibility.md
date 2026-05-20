@@ -8,12 +8,12 @@ Boring is good. Predictability beats cleverness. Pick the convention once and ap
 
 **Default: `pub(crate)`.** Use `pub` only on items that form the deliberate library API surface (re-exported from `lib.rs`). Use private (no modifier) inside a module when no sibling module needs it.
 
-| Item lives in | Default visibility |
-|---------------|--------------------|
-| `lib.rs` re-export | `pub` |
-| Anywhere else in the crate, used by another module | `pub(crate)` |
-| Used only within its own module | private (no modifier) |
-| `mod tests` items | private |
+| Item lives in                                      | Default visibility    |
+| -------------------------------------------------- | --------------------- |
+| `lib.rs` re-export                                 | `pub`                 |
+| Anywhere else in the crate, used by another module | `pub(crate)`          |
+| Used only within its own module                    | private (no modifier) |
+| `mod tests` items                                  | private               |
 
 Why `pub(crate)` and not `pub`: it tells the next reader *"this is not an API"*, lets `cargo doc` skip it from the public docs, and lets you refactor freely without breaking external consumers.
 
@@ -77,15 +77,15 @@ Both projects in our reference set (`riptask`, `ripwork`) currently use `mod.rs`
 
 ## Subcommand / struct naming
 
-| Concept | Name pattern | Example |
-|---------|-------------|---------|
-| Clap arg struct (parse-shape) | `<Verb>Args` | `WidgetArgs`, `InitArgs` |
-| Service request (runtime-shape input) | `<Verb>Request` | `WidgetRequest` |
-| Service response | `<Verb>Report` or `<Verb>Outcome` | `WidgetReport` |
-| Domain newtype | the concept itself, no suffix | `WidgetId`, `BranchName`, `ProjectKey` |
-| Error enum | `<Layer>Error` | `DomainError`, `GitError`, `WidgetServiceError`, `AppError` |
-| Trait | a noun describing the role | `GitBackend`, `Clock`, `PromptBackend` |
-| Adapter implementation | `<System><Trait>` | `LocalClock`, `RealGitBackend`, `MockGitBackend` |
+| Concept                               | Name pattern                      | Example                                                     |
+| ------------------------------------- | --------------------------------- | ----------------------------------------------------------- |
+| Clap arg struct (parse-shape)         | `<Verb>Args`                      | `WidgetArgs`, `InitArgs`                                    |
+| Service request (runtime-shape input) | `<Verb>Request`                   | `WidgetRequest`                                             |
+| Service response                      | `<Verb>Report` or `<Verb>Outcome` | `WidgetReport`                                              |
+| Domain newtype                        | the concept itself, no suffix     | `WidgetId`, `BranchName`, `ProjectKey`                      |
+| Error enum                            | `<Layer>Error`                    | `DomainError`, `GitError`, `WidgetServiceError`, `AppError` |
+| Trait                                 | a noun describing the role        | `GitBackend`, `Clock`, `PromptBackend`                      |
+| Adapter implementation                | `<System><Trait>`                 | `LocalClock`, `RealGitBackend`, `MockGitBackend`            |
 
 Avoid:
 
@@ -124,8 +124,8 @@ The non-purpose sentence is load-bearing: it lets a future reader see at a glanc
 `src/lib.rs` (or `src/main.rs` if there's no lib) starts with a top-of-file `//!` that:
 
 1. Names the crate's purpose in one sentence.
-2. Lists the major modules with one-line summaries.
-3. Links to the spec doc that governs the architecture.
+1. Lists the major modules with one-line summaries.
+1. Links to the spec doc that governs the architecture.
 
 ```rust
 //! `app-template` CLI.

@@ -1,6 +1,5 @@
 # AWS ElasticCache
 
-
 Redis like Cache Layer
 
 - ElastiCache is a fully managed in-memory caching service
@@ -19,7 +18,7 @@ Here is a detailed explanation of AWS ElastiCache with Redis, including a practi
 
 Amazon ElastiCache for Redis is a fully managed, in-memory caching service that is protocol-compliant with Redis, an open-source key-value store. It provides sub-millisecond latency to power real-time applications[1][7].
 
-Key benefits of ElastiCache for Redis include[1][2]:
+Key benefits of ElastiCache for Redis include[1]\[2\]:
 
 - Fully managed service - eliminates complexity of deploying and managing Redis
 - High performance - enables microsecond response times and high throughput
@@ -29,7 +28,7 @@ Key benefits of ElastiCache for Redis include[1][2]:
 
 ## Common Use Cases
 
-ElastiCache for Redis is ideal for real-time use cases such as[3][7]:
+ElastiCache for Redis is ideal for real-time use cases such as[3]\[7\]:
 
 - Caching frequently accessed data
 - Session stores
@@ -48,22 +47,22 @@ Let's walk through an example of using ElastiCache for Redis to speed up a MySQL
 ### Step 1: Create an ElastiCache Redis Cluster
 
 1. Open the ElastiCache console and click "Create"
-2. Select Redis as the engine
-3. Specify a name like "app-cache-cluster"
-4. Choose the node type (e.g. cache.t2.micro) based on your performance needs
-5. Set number of replicas to 1 or more for high availability
-6. Enable Multi-AZ with automatic failover
-7. Select the VPC and subnet group
-8. Configure the security group to allow inbound traffic on port 6379
-9. Review settings and click "Create"
+1. Select Redis as the engine
+1. Specify a name like "app-cache-cluster"
+1. Choose the node type (e.g. cache.t2.micro) based on your performance needs
+1. Set number of replicas to 1 or more for high availability
+1. Enable Multi-AZ with automatic failover
+1. Select the VPC and subnet group
+1. Configure the security group to allow inbound traffic on port 6379
+1. Review settings and click "Create"
 
 ### Step 2: Update Application to Use Redis
 
 1. Install a Redis client library in your application
-2. When the application needs data, first check if it exists in Redis
-3. If found in Redis, return the cached data
-4. If not found, query MySQL, then store the result in Redis with an expiration
-5. Serve the MySQL data back to the user and it will be cached for subsequent requests
+1. When the application needs data, first check if it exists in Redis
+1. If found in Redis, return the cached data
+1. If not found, query MySQL, then store the result in Redis with an expiration
+1. Serve the MySQL data back to the user and it will be cached for subsequent requests
 
 ### Step 3: Monitor Performance
 

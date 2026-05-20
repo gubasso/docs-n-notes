@@ -1,13 +1,13 @@
 # DevOps: Ansible
 
-<!-- toc -->
+<!--TOC-->
 
 - [General](#general)
-  - [General top concepts[^4]](#general-top-concepts4)
+  - [General top concepts\[^4\]](#general-top-concepts4)
 - [Roles](#roles)
 - [Organization models](#organization-models)
   - [gubasso's (cwnt)](#gubassos-cwnt)
-- [Organization / Best Practices [^1]](#organization--best-practices-1)
+- [Organization / Best Practices \[^1\]](#organization--best-practices-1)
   - [Hosts](#hosts)
   - [Groups](#groups)
   - [Variables](#variables)
@@ -28,18 +28,7 @@
 - [Tips](#tips)
 - [References](#references)
 
-<!-- tocstop -->
-
-```
-    Server 1       Server 2       Server 3
-       |              |              |
-       v              v              v
-    +----------------------------------+
-    |              Laptop              |
-    +----------------------------------+
-```
-
-- Laptop = ansible host (can be anything)
+<!--TOC-->
 
 ## General
 
@@ -70,11 +59,9 @@ ansible all -m ping
   - if a role/playbook or set of tasks are too complex, consider writing a module
   - it's simple, can be written in any programming language
 
-
 ## Roles
 
 > https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html
-
 
 - Set/Group of tasks for specific setup
 - group your content into role
@@ -135,11 +122,13 @@ roles/
 ```
 
 - The `hostname1`, `hostname2`, etc can be aliases
+
   - at the `inventory` file (`production`, `staging`, etc...)
   - and as a dir name in `host_vars`
   - if it has set the variable `ansible_host` for this host, with the fqdn or IP
 
 - `hostname1`
+
   - vars: public
   - vault: private [^2]
 
@@ -182,7 +171,6 @@ db-[a:f].example.com
 - Group By Roles
   - e.g.: webservers, dbservers, etc...
 
-
 Dynamic groups:
 
 ```yml
@@ -203,7 +191,6 @@ Dynamic groups:
      - # tasks that only happen on CentOS go here
 ```
 
-
 ```yml
 ---
 # file: group_vars/all
@@ -213,7 +200,6 @@ asdf: 10
 # file: group_vars/os_CentOS
 asdf: 42
 ```
-
 
 Alternatively, if only variables are needed:
 
@@ -369,8 +355,8 @@ vault_ssh_key_git: ~/path/to/private/key
 ## Ansible Vault
 
 > [Protecting sensitive data with Ansible vault](https://docs.ansible.com/ansible/latest/vault_guide/index.html)
-  > [Managing vault passwords](https://docs.ansible.com/ansible/latest/vault_guide/vault_managing_passwords.html)
-  > [Encrypting content with Ansible Vault](https://docs.ansible.com/ansible/latest/vault_guide/vault_encrypting_content.html)
+> [Managing vault passwords](https://docs.ansible.com/ansible/latest/vault_guide/vault_managing_passwords.html)
+> [Encrypting content with Ansible Vault](https://docs.ansible.com/ansible/latest/vault_guide/vault_encrypting_content.html)
 
 ### Run playbook
 
@@ -552,8 +538,12 @@ Conditional arm clause that can be put as a first task to run and test before ex
 - [ArchWiki: Ansible](https://wiki.archlinux.org/title/Ansible)
 - Full Ansible Tutorial [^3]
 
-[^1]:https://docs.ansible.com/ansible/2.9/user_guide/playbooks_best_practices.html "Best Practices"
-[^2]: https://docs.ansible.com/ansible/2.9/user_guide/vault.html#file-level-encryption "File-level encryption: Creating Encrypted Files"
-[^3]: https://www.youtube.com/playlist?list=PLT98CRl2KxKEUHie1m24-wkyHpEsa4Y70 "Getting started with Ansible - Playlist - Learn Linux TV"
-[^3.services]: https://youtu.be/soeBHGAMkoQ?list=PLT98CRl2KxKEUHie1m24-wkyHpEsa4Y70&t=580 "Getting started with Ansible 12 - Managing Services"
 [^4]: https://www.youtube.com/watch?v=mXlzVpMUNzU "Things I wish I knew about Ansible from day 1 - Michael Crilly"
+
+[^1]: https://docs.ansible.com/ansible/2.9/user_guide/playbooks_best_practices.html "Best Practices"
+
+[^2]: https://docs.ansible.com/ansible/2.9/user_guide/vault.html#file-level-encryption "File-level encryption: Creating Encrypted Files"
+
+[^3.services]: https://youtu.be/soeBHGAMkoQ?list=PLT98CRl2KxKEUHie1m24-wkyHpEsa4Y70&t=580 "Getting started with Ansible 12 - Managing Services"
+
+[^3]: https://www.youtube.com/playlist?list=PLT98CRl2KxKEUHie1m24-wkyHpEsa4Y70 "Getting started with Ansible - Playlist - Learn Linux TV"

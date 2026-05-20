@@ -4,14 +4,14 @@
 
 ## Crate stack
 
-| Concern | Crate |
-|---------|-------|
-| Process-level CLI tests | `assert_cmd` |
-| Assertion helpers | `predicates` |
-| Snapshots | `insta` (`yaml` feature) |
-| Temp dirs | `tempfile` |
-| Compile-fail / typestate | `trybuild` |
-| Test runner | `cargo nextest` |
+| Concern                  | Crate                    |
+| ------------------------ | ------------------------ |
+| Process-level CLI tests  | `assert_cmd`             |
+| Assertion helpers        | `predicates`             |
+| Snapshots                | `insta` (`yaml` feature) |
+| Temp dirs                | `tempfile`               |
+| Compile-fail / typestate | `trybuild`               |
+| Test runner              | `cargo nextest`          |
 
 ## Pyramid layout in the tree
 
@@ -125,12 +125,12 @@ cargo nextest run --profile ci             # CI workflow — retries, quiet outp
 
 The four general output axes in the cli-design doc map to these nextest keys (refs: [config reference](https://nexte.st/docs/configuration/reference/), [running tests](https://nexte.st/docs/running/)):
 
-| General axis | nextest key | Token-efficient value |
-|---|---|---|
-| Per-test status during execution | `status-level` | `"fail"` in CI / hooks; `"pass"` only for ad-hoc interactive runs |
-| End-of-run summary | `final-status-level` | `"fail"` |
-| Captured stdout/stderr of passing tests | `success-output` | `"never"` |
-| Captured stdout/stderr of failing tests | `failure-output` | `"immediate-final"` (inline AND in final summary) |
+| General axis                            | nextest key          | Token-efficient value                                             |
+| --------------------------------------- | -------------------- | ----------------------------------------------------------------- |
+| Per-test status during execution        | `status-level`       | `"fail"` in CI / hooks; `"pass"` only for ad-hoc interactive runs |
+| End-of-run summary                      | `final-status-level` | `"fail"`                                                          |
+| Captured stdout/stderr of passing tests | `success-output`     | `"never"`                                                         |
+| Captured stdout/stderr of failing tests | `failure-output`     | `"immediate-final"` (inline AND in final summary)                 |
 
 Reference shape for a layered `.config/nextest.toml`:
 

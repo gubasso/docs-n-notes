@@ -1,13 +1,13 @@
 # Solana
 
-<!-- toc -->
+<!--TOC-->
 
 - [Resources](#resources)
-  - [Development:](#development)
+  - [Development](#development)
 - [General](#general)
 - [Solana CLI](#solana-cli)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Resources
 
@@ -15,27 +15,39 @@
 - [Solana Development Tutorial - Josh's DevBox](https://www.youtube.com/watch?v=-AAtfPHEMbA&list=PL53JxaGwWUqCr3xm4qvqbgpJ4Xbs4lCs7)
 - [Tutorial: Building Games on Solana - Solana](https://www.youtube.com/watch?v=KT9anz_V9ns)
 
-### Development:
+### Development
 
 - https://solana.com/developers
+
 - https://solanacookbook.com/
+
 - https://www.anchor-lang.com/
+
 - https://book.anchor-lang.com/
+
 - https://openquest.xyz/tracks/build-on-solana
+
 - https://dev.to/edge-and-node/the-complete-guide-to-full-stack-solana-development-with-react-anchor-rust-and-phantom-3291
+
 - https://www.brianfriel.xyz/learning-how-to-build-on-solana/
+
 - https://github.com/ironaddicteddog/anchor-escrow
+
 - https://lorisleiva.com/create-a-solana-dapp-from-scratch
+
 - https://www.soldev.app/
 
 - https://docs.solanalabs.com/cli/usage#deploy-program
+
 - https://docs.rs/solana-program/latest/solana_program/
+
 - https://github.com/solana-labs/rbpf
 
 [Developing on-chain programs](https://solana.com/docs/programs)
-  - https://solana.com/docs/programs/faq#berkeley-packet-filter-bpf
-  - programId = pubkey of programs account
-  - https://solana.com/docs/programs/limitations
+
+- https://solana.com/docs/programs/faq#berkeley-packet-filter-bpf
+- programId = pubkey of programs account
+- https://solana.com/docs/programs/limitations
 
 [Developing with Rust](https://solana.com/docs/programs/lang-rust#project-layout)
 
@@ -44,11 +56,15 @@
 ## General
 
 - https://backpack.app/ (solana wallet)
+
   - open source
+
 - https://phantom.app/
+
   - closed source
 
 - schedule transactions:
+
   - https://www.clockwork.xyz/
     - automation engine
     - sequence of executions

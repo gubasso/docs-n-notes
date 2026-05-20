@@ -4,7 +4,7 @@
 
 ```
 - Ordered Arrays or Sequences    +
-| Sliding Window Problems        +-->  Two Poiters
+| Sliding Window Problems        +-->  Two Pointers
 | Palindromes or Symmetry        |      O(n)
 - Merging / Comparing Two Arrays +
 - subsequences
@@ -29,11 +29,12 @@
 - sums of subarray -> Prefix sum
 
 - subsequences -> dynamic programming
-               -> two pointers
-
+  -> two pointers
 
 - counting / frequency -> hashmap
 
 - subsets -> backtracking
+
 - combinations
+
   - backtracking

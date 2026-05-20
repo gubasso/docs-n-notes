@@ -2,8 +2,8 @@
 
 <!-- vim-markdown-toc GFM -->
 
-* [Basics[^1]](#basics1)
-* [References:](#references)
+- \[Basics[^1]\](#basics1)
+- [References:](#references)
 
 <!-- vim-markdown-toc -->
 
@@ -36,6 +36,6 @@ As a result, `.*` means "any number (including zero) of any character".
 The previous token need not be a single character; you can use parens to make it longer.
 `(foo)+` matches one or more "foo", (like "foo", "foofoo", "foofoofoo", etc.)
 
-## References:
+## References
 
 [^1]: [Gitolite: extremely brief regex overview](https://gitolite.com/gitolite/regex)

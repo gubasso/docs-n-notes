@@ -29,9 +29,7 @@ def check_ltss_activated(host):
     return f
 ```
 
-
 At the test file:
-
 
 ```python
 # check_something fixture will be passed as an argument to the test function

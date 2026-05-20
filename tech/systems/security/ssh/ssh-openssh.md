@@ -1,22 +1,22 @@
 # SSH / Openssh
 
-<!-- toc -->
+<!--TOC-->
 
 - [Basic access](#basic-access)
-- [Resources:](#resources)
+- [Resources](#resources)
 - [Copying the public key to the remote server](#copying-the-public-key-to-the-remote-server)
 - [Config Server](#config-server)
 - [Config Client](#config-client)
-  - [Managing multiple keys/identities[^2]](#managing-multiple-keysidentities2)
+  - [Managing multiple keys/identities\[^2\]](#managing-multiple-keysidentities2)
   - [Naming Conventions](#naming-conventions)
   - [Unorganized](#unorganized)
 - [Generate new ssh key](#generate-new-ssh-key)
-- [Generate public SSH key from private SSH key[^1]](#generate-public-ssh-key-from-private-ssh-key1)
+- [Generate public SSH key from private SSH key\[^1\]](#generate-public-ssh-key-from-private-ssh-key1)
 - [ssh-agent](#ssh-agent)
   - [Agent forwarding](#agent-forwarding)
   - [Tools for ssh-agent](#tools-for-ssh-agent)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Basic access
 
@@ -33,8 +33,7 @@ ssh -p 202 root@<ip-address>
 ssh -v -F /dev/null -o PreferredAuthentications=password <user>@<server>
 ```
 
-
-## Resources:
+## Resources
 
 - [Secure Secure Shell](https://stribika.github.io/2015/01/04/secure-secure-shell.html)
   - awesome article about security ssh
@@ -78,6 +77,7 @@ systemctl restart sshd
 ### Managing multiple keys/identities[^2]
 
 **`~/.ssh/config`**
+
 ```
 Match host=SERVER1
    IdentitiesOnly yes
@@ -93,17 +93,17 @@ Match host=SERVER2,SERVER3
 `[service]-[role]-[tier]-[opt.location]-[sysadmin]`
 
 1. **Project/Service**: The name of the project or service the server is associated with.
-2. **Role/Purpose**: The role or primary function of the server (e.g., web, db, git).
-3. **Tier**: The environment or stage (e.g., prod, staging, dev).
-4. **Location**: If applicable, the geographical location or data center.
-5. **User/Sysadmin**: The primary user or role accessing the server.
-6. **Uniqueness**:
-7. **opt**: optional fields
-
+1. **Role/Purpose**: The role or primary function of the server (e.g., web, db, git).
+1. **Tier**: The environment or stage (e.g., prod, staging, dev).
+1. **Location**: If applicable, the geographical location or data center.
+1. **User/Sysadmin**: The primary user or role accessing the server.
+1. **Uniqueness**:
+1. **opt**: optional fields
 
 ### Unorganized
 
 **`~/.ssh/config`**
+
 ```
 host gitolite
     user git
@@ -119,6 +119,7 @@ host gitolite
 Or to manage multiple keys access:
 
 **`~/.ssh/config`**
+
 ```
 host gitolite
     user git
@@ -133,7 +134,7 @@ host gitolite-sh
     identityfile ~/.ssh/id_rsa
 ```
 
----
+______________________________________________________________________
 
 Example of sending a command through ssh:
 
@@ -142,8 +143,8 @@ ssh gubasso@projects.cwnt.io 'mkdir -p cadelab-api-backend'
 ```
 
 - Persistent ssh connection:
-    - https://eternalterminal.dev/
-    - https://www.tomshardware.com/amp/how-to/persistent-ssh-connections-linux-eternal-terminal
+  - https://eternalterminal.dev/
+  - https://www.tomshardware.com/amp/how-to/persistent-ssh-connections-linux-eternal-terminal
 
 OpenSSH Full Guide - Everything you need to get started! [https://youtu.be/YS5Zh7KExvE]
 
@@ -175,7 +176,6 @@ ssh-keygen -f ~/.ssh/<myname>-ed25519 -t ed25519 -a 100 -C ''
 ssh-keygen -t rsa -b 4096 -a 100 -C ''
 ```
 
-
 ## Generate public SSH key from private SSH key[^1]
 
 **Check for pub key:**
@@ -186,16 +186,17 @@ With the public key missing, the following command will show you that there is n
 $ ssh-keygen -l -f ~/.ssh/id_rsa
 test is not a public key file.
 ```
+
 - `-l` option instructs to show the fingerprint in the public key while the
 - `-f` option specifies the file of the key to list the fingerprint for.
 
 **generate the missing public key again from the private key:**
 
-
 ```
 ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub
 Enter passphrase:
 ```
+
 - `-y` option will read a private SSH key file and prints an SSH public key to stdout.
 
 ## ssh-agent
@@ -230,13 +231,12 @@ ForwardAgent yes
   ...
 ```
 
-
-
 ### Tools for ssh-agent
 
 ssh-agent and gpg-agent: https://github.com/funtoo/keychain
 
+[^3]: `local`: your local machine, notebook, computer...
+
+[^2]: [SSH keys (ArchWiki)](https://wiki.archlinux.org/title/SSH_keys)
 
 [^1]: [Generate public SSH key from private SSH key](https://blog.tinned-software.net/generate-public-ssh-key-from-private-ssh-key/)
-[^2]: [SSH keys (ArchWiki)](https://wiki.archlinux.org/title/SSH_keys)
-[^3]: `local`: your local machine, notebook, computer...

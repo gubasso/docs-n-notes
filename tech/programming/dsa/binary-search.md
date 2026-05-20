@@ -1,17 +1,17 @@
 # Binary Search
 
-<!-- toc -->
+<!--TOC-->
 
-- [One binary search template model:](#one-binary-search-template-model)
+- [One binary search template model](#one-binary-search-template-model)
 - [Solution: Binary Search 101](#solution-binary-search-101)
 - [What is binary search?](#what-is-binary-search)
 - [The fundamental idea](#the-fundamental-idea)
 - [The pattern](#the-pattern)
 - [TD;DR](#tddr)
 
-<!-- tocstop -->
+<!--TOC-->
 
-## One binary search template model:
+## One binary search template model
 
 - https://leetcode.com/problems/time-based-key-value-store/
 
@@ -88,11 +88,11 @@ Binary search is often a topic that's easy to be explained on the abstract level
 
 Some of the most common problems include:
 
-1.  Infinity loop
-2.  Can't decide where to shrink
-3.  Do I use lo or hi
-4.  When to exit the loop
-5.  ...
+1. Infinity loop
+1. Can't decide where to shrink
+1. Do I use lo or hi
+1. When to exit the loop
+1. ...
 
 In this article, I will be sharing my insights on how to write bug free binary search with just a little pattern.
 
@@ -127,7 +127,7 @@ var search = function(nums, target) {
 
 ## The fundamental idea
 
-**1\. `lo` & `hi`**
+**1. `lo` & `hi`**
 We define two variables, let's call them `lo` and `hi` . They will store array indexes and they work like a boundary such that we will only be looking at elements inside the boundary.
 Normally, we would want initialize the boundary to be the entire array.
 
@@ -135,7 +135,7 @@ Normally, we would want initialize the boundary to be the entire array.
 let lo = 0, hi = nums.length-1;
 ```
 
-**2\. `mid`**
+**2. `mid`**
 The `mid` variable indicates the middle element within the boundary. It separates our boundary into 2 parts. Remember how I said binary search works by keep cutting the elements in half, the `mid` element works like a traffic police, it indicates us which side do we want to cut our boundary to.
 
 Note when an array has even number of elements, it's your decision to use either the left `mid` (lower `mid`) or the right `mid` (upper mid)
@@ -144,7 +144,7 @@ Note when an array has even number of elements, it's your decision to use either
 let mid = lo + Math.floor((hi - lo) / 2); // left/lower mid let mid = lo + Math.floor((hi - lo + 1) / 2); // right/upper mid
 ```
 
-**3\. Comparing the target to `mid`**
+**3. Comparing the target to `mid`**
 By comparing our target to `mid`, we can identify which side of the boundary does the target belong. For example, If our target is greater than `mid`, this means it must exist in the right of `mid` . In this case, there is no reason to even keep a record of all the numbers to its left. And this is the fundamental mechanics of binary search - keep shrinking the boundary.
 
 ```javascript
@@ -155,7 +155,7 @@ if (target < nums[mid]) {
 }
 ```
 
-**4\. Keep the loop going**
+**4. Keep the loop going**
 Lastly, we use a while loop to keep the search going:
 
 The while loop only exits when `lo == hi`, which means there's only one element left. And if we implemented everything correctly, that only element should be our answer(assume if the target is in the array).
@@ -165,15 +165,15 @@ The while loop only exits when `lo == hi`, which means there's only one element 
 It may seem like binary search is such a simple idea, but when you look closely in the code, we are making some serious decisions that can completely change the behavior of our code.
 These decisions include:
 
-1.  Do I use left or right `mid`?
-2.  Do I use `<` or `<=` , `>` or `>=`?
-3.  How much do I shrink the boundary? is it `mid` or `mid - 1` or even `mid + 1` ?
-4.  ...
+1. Do I use left or right `mid`?
+1. Do I use `<` or `<=` , `>` or `>=`?
+1. How much do I shrink the boundary? is it `mid` or `mid - 1` or even `mid + 1` ?
+1. ...
 
 And just by messing up one of these decisions, either because you don't understand it completely or by mistake, it's going to break your code.
 To solve these decision problems, I use the following set of rules to always keep me away from trouble, most importantly, it makes my code more consistent and predictable in all edge cases.
 
-**1\. Choice of `lo` and `hi`, aka the boundary**
+**1. Choice of `lo` and `hi`, aka the boundary**
 Normally, we set the initial boundary to the number of elements in the array
 
 ```javascript
@@ -191,7 +191,7 @@ It is possible that we insert after the last element of the array, thus the comp
 let lo = 0, hi = nums.length;
 ```
 
-**2\. Calculate `mid`**
+**2. Calculate `mid`**
 Calculating mid can result in overflow when the numbers are extremely big. I ll demonstrate a few ways of calculating `mid` from the worst to the best.
 
 ```javascript
@@ -205,7 +205,7 @@ let mid = lo + Math.floor((hi - lo) / 2) // left/lower mid
 let mid = lo + Math.floor((hi - lo + 1) / 2) // right/upper mid
 ```
 
-**3\. How do we shrink boundary**
+**3. How do we shrink boundary**
 I always try to keep the logic as simple as possible, that is a single pair of `if...else`. But what kind of logic are we using here? My rule of thumb is always use a logic that you can **exclude** `mid`.
 Let's see an example:
 
@@ -227,7 +227,7 @@ if (target > nums[mid]) {
 }
 ```
 
-**4\. while loop**
+**4. while loop**
 To keep the logic simple, I always use
 
 ```js
@@ -236,7 +236,7 @@ while(lo < hi) { ... }
 
 Why? Because this way, the only condition the loop exits is `lo == hi`. I know they will be pointing to the same element, and I know that element always exists.
 
-**5\. Avoid infinity loop**
+**5. Avoid infinity loop**
 Remember I said a bad choice of left or right `mid` will lead to an infinity loop? Let's tackle this down.
 Example:
 
@@ -244,9 +244,9 @@ Example:
 let mid = lo + ((hi - lo) / 2); // Bad! We should use right/upper mid!
 
 if (target < nums[mid]) {
-	hi = mid - 1
+ hi = mid - 1
 } else {
-	lo = mid;
+ lo = mid;
 }
 ```
 
@@ -257,9 +257,9 @@ We have to keep in mind that, the choice of `mid` and our shrinking logic has to
 let mid = lo + ((hi - lo + 1) / 2); // Bad! We should use left/lower mid!
 
 if (target > nums[mid]) {
-	lo = mid + 1; // mid is excluded
+ lo = mid + 1; // mid is excluded
 } else {
-	hi = mid; // mid is included
+ hi = mid; // mid is included
 }
 ```
 
@@ -269,10 +269,10 @@ So when your binary search is stuck, think of the situation when there are only 
 
 My rule of thumb when it comes to binary search:
 
-1.  Include **ALL** possible answers when initialize `lo` & `hi`
-2.  Don't overflow the `mid` calculation
-3.  Shrink boundary using a logic that will **exclude** mid
-4.  Avoid infinity loop by picking the correct `mid` and shrinking logic
-5.  Always think of the case when there are 2 elements left
+1. Include **ALL** possible answers when initialize `lo` & `hi`
+1. Don't overflow the `mid` calculation
+1. Shrink boundary using a logic that will **exclude** mid
+1. Avoid infinity loop by picking the correct `mid` and shrinking logic
+1. Always think of the case when there are 2 elements left
 
-_Because this problem is a failrly easy, the implementions may be pretty straight forward and you may wonder why do I need so many rules. However, binary search problems can get much much more complex, and without consistent rules, it's very hard to write predictable code. In the end, I would say everybody has their own style of binary serach, find the style that works for you!_
+_Because this problem is a failrly easy, the implementations may be pretty straight forward and you may wonder why do I need so many rules. However, binary search problems can get much much more complex, and without consistent rules, it's very hard to write predictable code. In the end, I would say everybody has their own style of binary search, find the style that works for you!_

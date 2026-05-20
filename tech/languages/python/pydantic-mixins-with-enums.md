@@ -3,6 +3,7 @@
 - Python, pydantic v2, enum
 
 - In the example bellow the mixin only works because the class attribute names are between two underscores `__attribute_name__`.
+
 - If not, python would interpret `match_strings` and `default` as enum variants
 
 ```python

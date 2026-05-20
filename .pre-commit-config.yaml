@@ -1,35 +1,123 @@
+# Pre-commit hooks for this knowledge-base repo.
+# Template: ~/.dotfiles/pre-commit/markdown.pre-commit-config.yaml
+#
+# First-time setup after this change:
+#   1. Migrate TOC markers (one-time):
+#        find . -name '*.md' -not -path './.git/*' -print0 \
+#          | xargs -0 sed -i 's/<!-- *toc *-->/<!--TOC-->/Ig'
+#   2. Install hooks:
+#        pre-commit install --install-hooks
+#   3. Baseline mdformat (expect a large diff across all .md files):
+#        pre-commit run --all-files
+#        git add -A && git commit -m 'chore: mdformat baseline'
+
+default_install_hook_types: [pre-commit, commit-msg, pre-push]
+
 repos:
-  # https://docs.franco.net.eu.org/md-toc/pre_commit_hook.html
+  # --- Housekeeping (auto-fix where possible) ---
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: 'v5.0.0'
+    rev: v6.0.0
     hooks:
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: end-of-file-fixer
+      - id: mixed-line-ending
+        args: [--fix=lf]
       - id: check-added-large-files
         args: ['--maxkb=16384']
       - id: check-case-conflict
       - id: check-merge-conflict
         args: ['--assume-in-merge']
-        # This file documents merge-conflict markers as educational reference.
+        # Documents merge-conflict markers as educational reference.
         exclude: '^tech/workflows/git-rebase-workflow-complete-reference\.md$'
-      - id: check-symlinks
-      - id: check-yaml
       - id: destroyed-symlinks
+      - id: check-yaml
+      - id: check-toml
       - id: detect-private-key
-      - id: trailing-whitespace
-        args: ['--markdown-linebreak-ext=md']
-  - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
-    rev: '3.2.1'
+
+  # --- EditorConfig ---
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker
+    rev: v3.6.1
     hooks:
       - id: editorconfig-checker
         alias: ec
         args: [-disable-insert-final-newline, -disable-indentation]
-        # exclude: '^ripi/(.*)$'
-  - repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
-    rev: 'v1.1.2'
+
+  # --- Markdown formatter (canonical CommonMark + GFM) ---
+  # Pinned to 0.7.x: mdformat 1.0.0 isn't yet supported by the plugin
+  # ecosystem (mdformat-gfm/footnote/tables still require mdformat<0.8).
+  - repo: https://github.com/executablebooks/mdformat
+    rev: 0.7.22
     hooks:
-      # https://github.com/jonschlinkert/markdown-toc
-      - id: markdown-toc
-        args: [--maxdepth, '3', --bullets, '-', -i]
+      - id: mdformat
+        additional_dependencies:
+          - mdformat-gfm
+          - mdformat-frontmatter
+          - mdformat-footnote
+          - mdformat-tables
+        # Files with constructs the current plugin set can't round-trip.
+        # Remove from this list once mdformat-gfm / -tables fix the bugs.
+        exclude: |
+          (?x)^(
+            tech/infra/containers/docker\.md|
+            tech/infra/devops/ansible\.md|
+            tech/languages/rust/rust\.md|
+            tech/languages/rust/sqlx\.md|
+            tech/systems/security/ssh/ssh-openssh\.md|
+            tech/tools/git/gitolite\.md
+          )$
+
+  # --- Table of contents (looks for `<!--TOC-->` markers) ---
+  - repo: https://github.com/frnmst/md-toc
+    rev: 9.0.0
+    hooks:
+      - id: md-toc
+        # -c: don't gate on TOC list coherence (free-form notes may diverge).
+        args: [-p, -c, --skip-lines, '1', github]
+
+  # --- Markdown lint (style gate, autofix what it can) ---
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.22.1
+    hooks:
+      - id: markdownlint-cli2
+        args: ['--fix']
+
+  # --- Spelling ---
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.46.2
+    hooks:
+      - id: typos
+        args: ['--write-changes']
+
+  # --- Secrets ---
   - repo: https://github.com/sirwart/ripsecrets
-    rev: 'v0.1.9' # Use latest tag on GitHub
+    rev: v0.1.11
     hooks:
       - id: ripsecrets
+
+  # --- Link checker (pre-push only) ---
+  - repo: https://github.com/lycheeverse/lychee
+    rev: lychee-v0.24.2
+    hooks:
+      - id: lychee
+        stages: [pre-push]
+        args:
+          - --no-progress
+          - --max-concurrency=4
+          - --cache
+          - --max-cache-age=1d
+
+  # --- Commit messages: Conventional Commits ---
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v4.16.2
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+      - id: commitizen-branch
+        stages: [pre-push]
+
+  # --- Meta ---
+  - repo: meta
+    hooks:
+      - id: check-hooks-apply
+      - id: check-useless-excludes

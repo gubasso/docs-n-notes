@@ -1,12 +1,12 @@
 # Migrations
 
-<!-- toc -->
+<!--TOC-->
 
 - [sqlx (rust)](#sqlx-rust)
   - [Create new migration script](#create-new-migration-script)
-  - [Simple run the migrations:](#simple-run-the-migrations)
+  - [Simple run the migrations](#simple-run-the-migrations)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## sqlx (rust)
 
@@ -24,6 +24,7 @@ cargo install sqlx-cli
 Example:
 
 **`./migrations/<version>_<description>.sql`**
+
 ```sql
 -- 0001_books_table.sql
 create table book (
@@ -49,7 +50,7 @@ Creating migrations/20211001154420_<name>.up.sql
 Creating migrations/20211001154420_<name>.down.sql
 ```
 
-### Simple run the migrations:
+### Simple run the migrations
 
 - Once you have files at `migrations`
 - Will execute each file in `migrations` dir, in order.
@@ -86,10 +87,4 @@ sqlx migrate build-script
 # build.sh will be generated
 ```
 
-
-
-
-
-[^1]: https://www.youtube.com/watch?v=TCERYbgvbq0 "SQLx is my favorite PostgreSQL driver to use with Rust."
-[^2]: https://www.youtube.com/watch?v=TyiSn1guKhs "Introducing Rust Into Your Company: Automate Database Migrations - Ardan Labs"
 [^3]: https://github.com/launchbadge/sqlx/blob/main/sqlx-cli/README.md "SQLx CLI - sqlx-cli/README.md"

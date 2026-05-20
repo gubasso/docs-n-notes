@@ -53,9 +53,9 @@ vim.opt.spelllang = { 'pt_br' }
 
 Abra qualquer arquivo de texto e veja se a verificação ortográfica está funcionando:
 
-
 ```vim
 :echo &spelllang
 ```
+
 Se a saída for `pt_br`, está tudo certo! 🚀
-Caso continue com erro, me avise que podemos tentar outra abordagem!
+Caso continue com error, me avise que podemos tentar outra abordagem!

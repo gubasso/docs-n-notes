@@ -35,7 +35,6 @@ Validate path existence and type at parse time:
     ),
 ```
 
-
 ```python
 def parse_valid_email(value: Optional[str]) -> Optional[EmailStr]:
     if value is None:
@@ -48,7 +47,7 @@ def parse_valid_email(value: Optional[str]) -> Optional[EmailStr]:
         raise typer.BadParameter(f"Invalid email address: {value}")
 ```
 
----
+______________________________________________________________________
 
 Multiple "tags" with pydantic special type/model
 

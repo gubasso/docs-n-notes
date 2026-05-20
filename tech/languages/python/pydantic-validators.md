@@ -1,10 +1,9 @@
 # Pydantic: model validators
 
-
 In **Pydantic v2** , when you use `@model_validator(mode="after")`, the validator’s signature varies depending on whether it’s defined as:
 
-- An **instance method**  (the first parameter is `self` → the *model instance*), or
-- A **class method**  (the first parameter is `cls`, the second is the model instance).
+- An **instance method** (the first parameter is `self` → the *model instance*), or
+- A **class method** (the first parameter is `cls`, the second is the model instance).
 
 **class method**
 
@@ -15,6 +14,7 @@ def validator_name(cls, instance: T) -> T:
     ...
     return instance
 ```
+
 Or, if it’s an **instance method** :
 
 ```python
@@ -24,11 +24,11 @@ def validator_name(self: T) -> T:
     return self
 ```
 
-Below are **two**  valid approaches with correct type hints—pick whichever style you prefer.
+Below are **two** valid approaches with correct type hints—pick whichever style you prefer.
 
----
+______________________________________________________________________
 
-1) Instance method example
+1. Instance method example
 
 ```python
 
@@ -49,9 +49,9 @@ class MyModel(BaseModel):
 - May return some error, raise a `ValueError`.
 - Returning `self` is required for a “mode=after” validator.
 
----
+______________________________________________________________________
 
-2) Class Method  Example
+1. Class Method Example
 
 ```python
 

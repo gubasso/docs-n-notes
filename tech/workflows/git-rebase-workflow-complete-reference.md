@@ -2,7 +2,7 @@
 
 A step-by-step guide for teams using rebase to maintain clean, linear history.
 
----
+______________________________________________________________________
 
 ## Branch Structure
 
@@ -21,7 +21,7 @@ master          ← stable releases, version tags (v1.0, v1.1, ...)
 - Every commit on `devel` should compile and pass tests.
 - `master` only receives merges from `devel` at release time.
 
----
+______________________________________________________________________
 
 ## The Workflow
 
@@ -270,7 +270,7 @@ git branch -d feature/auth               # delete local
 git push origin --delete feature/auth     # delete remote
 ```
 
----
+______________________________________________________________________
 
 ## Release Flow
 
@@ -294,7 +294,7 @@ feature/auth:     F-H┘   \   |
 fix/login-bug:              X-Y┘
 ```
 
----
+______________________________________________________________________
 
 ## Conflict Scenario — Full Example
 
@@ -344,7 +344,7 @@ Push and open PR:
 git push origin feature/auth --force-with-lease
 ```
 
----
+______________________________________________________________________
 
 ## Multiple Rebases
 
@@ -359,7 +359,7 @@ git push origin feature/auth --force-with-lease
 
 Some teams rebase daily to avoid large conflict pileups at the end.
 
----
+______________________________________________________________________
 
 ## Quick Reference
 
@@ -398,7 +398,7 @@ RELEASE:
   git push origin master --tags
 ```
 
----
+______________________________________________________________________
 
 ## Common Mistakes
 

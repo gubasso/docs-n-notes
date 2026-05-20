@@ -19,4 +19,3 @@ list = df.to_dict('records')
 
 randomusers_col.insert_many(list)
 ```
-

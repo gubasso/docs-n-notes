@@ -1,12 +1,12 @@
 # Rust leetcode
 
-<!-- toc -->
+<!--TOC-->
 
 - [Related](#related)
 - [General](#general)
-  - [Important and Useful links from all over the LeetCode](#important-and-useful-links-from-all-over-the-leetcode)
+  - [\[Important and Useful links from all over the LeetCode\](https://leetcode.com/discuss/general-discussion/665604/Important-and-Useful-links-from-all-over-the-LeetCode)](#important-and-useful-links-from-all-over-the-leetcodehttpsleetcodecomdiscussgeneral-discussion665604important-and-useful-links-from-all-over-the-leetcode)
 
-<!-- tocstop -->
+<!--TOC-->
 
 # Related
 
@@ -21,7 +21,6 @@ bucket sort: why is time complexity to O(1)?
 **study guide:**
 
 - https://leetcode.com/discuss/study-guide?currentPage=1&orderBy=hot&query=
-
 
 ## [Important and Useful links from all over the LeetCode](https://leetcode.com/discuss/general-discussion/665604/Important-and-Useful-links-from-all-over-the-LeetCode)
 
@@ -54,7 +53,7 @@ General Strategies and advice :
 
 Comprehensive Data Structure and Algorithm Study Guide by @xrssa
 Interview prep tips by @topcat
-How to answer some beahvioural questions by Anonymous user
+How to answer some behavioural questions by Anonymous user
 Amazon leadership principles guide by Anonymous user
 The Only Lists You Need For Your Interview Preparation by @sachin_ak
 System Design

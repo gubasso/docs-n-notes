@@ -1,6 +1,6 @@
 # SSH Issue: ssh multiplexing denied fallthru
 
-<!-- toc -->
+<!--TOC-->
 
 - [Issue description](#issue-description)
   - [Basic issue explanation and possible solutions](#basic-issue-explanation-and-possible-solutions)
@@ -10,7 +10,7 @@
   - [0) Disable SSH multiplexing by unsetting core.sshcommand](#0-disable-ssh-multiplexing-by-unsetting-coresshcommand)
   - [1) Disable SSH Multiplexing Temporarily (for each repo locally)](#1-disable-ssh-multiplexing-temporarily-for-each-repo-locally)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Issue description
 
@@ -63,6 +63,7 @@ Your `.ssh/config` file is likely being used when you run `GIT_SSH_COMMAND="ssh 
 ```arduino
 debug1: /home/gbasso/.ssh/config line 66: Applying options for gitcwnt-gbasso-suse
 ```
+
 This suggests that your `.ssh/config` has a section specifically for `gitcwnt-gbasso-suse`. However, when you run `git push` without `GIT_SSH_COMMAND`, it might not be using the same configurations.
 
 This is the default git configuration for each repo (local config):
@@ -73,12 +74,11 @@ git config core.sshCommand "ssh -o ControlMaster=auto -o ControlPersist=600 -o C
 
 Alternatively, you can globally set this configuration:
 
-
 ```bash
 git config --global core.sshCommand "ssh -o ControlMaster=auto -o ControlPersist=600 -o ControlPath=/tmp/.ssh-%C"
 ```
 
-2. **SSH Control Path Issues:**
+1. **SSH Control Path Issues:**
 
 Your SSH configuration uses a control path option (`ControlPath=/tmp/.ssh-%C`), which means that SSH connection multiplexing is enabled. This can sometimes cause issues if there are leftover control master sockets or if the paths are not accessible or too long.
 
@@ -89,6 +89,7 @@ Clean up any existing SSH control sockets:
 ```bash
 sudo find /tmp -type s -name '.ssh-*' -delete
 ```
+
 Ensure that the control path is accessible and not too long. You could also change the `ControlPath` to a simpler one, such as:
 
 ```bash
@@ -110,12 +111,14 @@ both ids are correctly loaded at the ssh agent:
 ```
 
 at the repository "root"
+
 ```
 ❯ git push
 Everything up-to-date
 ```
 
-at the reposiroty suse
+at the repository suse
+
 ```
 suse on  master
 ❯ git push
@@ -163,20 +166,22 @@ ChatGPT:
 It appears that your issue is related to SSH multiplexing and possibly some caching problems with your SSH agent or the SSH control socket files. When you delete the SSH control socket files, the push works temporarily, but it fails again when switching between repositories.
 
 1. **SSH Control Socket and Multiplexing:**
-  - You have SSH multiplexing enabled, which reuses a single SSH connection for multiple git operations. This setup is controlled by the `ControlMaster`, `ControlPath`, and `ControlPersist` options in your SSH configuration.
 
-  - When you delete the control socket files (`/tmp/.ssh-*`), you're effectively resetting any existing SSH sessions, forcing new connections to be established.
+- You have SSH multiplexing enabled, which reuses a single SSH connection for multiple git operations. This setup is controlled by the `ControlMaster`, `ControlPath`, and `ControlPersist` options in your SSH configuration.
 
-2. **Different Repository Configurations:**
-  - Each repository might be connecting to a different remote, which could require different SSH keys or different configurations. The error messages you see (`DENIED by fallthru`) suggest that the server-side access control is denying access due to incorrect identification or authorization.
+- When you delete the control socket files (`/tmp/.ssh-*`), you're effectively resetting any existing SSH sessions, forcing new connections to be established.
 
-3. **SSH Agent and Identity Issues:**
-  - Both SSH keys are loaded into the SSH agent, but it's possible that the wrong key is being used when switching between repositories due to the multiplexed connection.
+1. **Different Repository Configurations:**
+
+- Each repository might be connecting to a different remote, which could require different SSH keys or different configurations. The error messages you see (`DENIED by fallthru`) suggest that the server-side access control is denying access due to incorrect identification or authorization.
+
+1. **SSH Agent and Identity Issues:**
+
+- Both SSH keys are loaded into the SSH agent, but it's possible that the wrong key is being used when switching between repositories due to the multiplexed connection.
 
 ## Solutions
 
 The problem was related to SSH multiplexing, which reuses existing SSH connections for multiple operations, potentially causing conflicts when switching between repositories.
-
 
 ### 0) Disable SSH multiplexing by unsetting core.sshcommand
 
@@ -193,6 +198,7 @@ To confirm that SSH multiplexing is the issue, you can temporarily disable it fo
 ```bash
 git config core.sshCommand "ssh -o ControlMaster=no"
 ```
+
 For the `suse` repository:
 
 ```bash

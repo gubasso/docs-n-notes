@@ -2,7 +2,7 @@
 
 > node, nodejs, node.js, npm
 
-<!-- toc -->
+<!--TOC-->
 
 - [General](#general)
 - [Releases](#releases)
@@ -10,11 +10,12 @@
   - [Bump the prerelease version](#bump-the-prerelease-version)
   - [Promote the prerelease to a release](#promote-the-prerelease-to-a-release)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## General
 
 [How to Update NPM Dependencies](https://www.freecodecamp.org/news/how-to-update-npm-dependencies/)
+
 - How to Keep Dependencies Up-To-Date
 - How to Use the npm outdated Command
 - How to Use npm-check-updates (ncu)
@@ -63,4 +64,3 @@ npm version minor
 # from 1.0.1-alpha.0 to 1.0.1
 npm version patch
 ```
-

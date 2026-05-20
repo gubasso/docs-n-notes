@@ -1,0 +1,32 @@
+// markdownlint-cli2 config — tuned for a personal knowledge base.
+// Rule reference: https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+{
+  "config": {
+    // mdformat owns canonical formatting; we only gate on issues it
+    // can't normalize. Disable rules that fight the formatter or that
+    // are noise for free-form notes.
+    "default": true,
+
+    "MD013": false,  // line length — notes wrap naturally
+    "MD024": false, // duplicate headings — notes use repeated "Explanation" etc.
+    "MD033": false,  // inline HTML — needed for <!--TOC-->, <details>, <kbd>
+    "MD034": false,  // bare URLs — common in notes
+    "MD041": false,  // first-line H1 — some files start with frontmatter
+    "MD036": false,  // emphasis-as-heading — used for callouts
+    "MD025": false,  // multiple top-level H1 — sub-note files do this often
+    "MD040": false,  // language on fenced blocks — too strict for free-form notes
+    "MD051": false,  // link fragments — many internal anchors are intentional
+    "MD012": false,  // multiple blank lines — used for visual breathing room
+    "MD028": false,  // blank lines inside blockquotes — common in notes
+    "MD052": false,  // reference labels — many notes use ad-hoc footnote refs
+    "MD042": false,  // empty links — placeholder links common in WIP notes
+    "MD001": false,  // heading-increment — notes skip levels intentionally
+    "MD046": { "style": "fenced" }   // require fenced code blocks
+  },
+  "ignores": [
+    "node_modules/",
+    ".obsidian/",
+    ".trash/",
+    "draft*"
+  ]
+}

@@ -1,5 +1,5 @@
 # Sliding Window
 
-209. Minimum Size Subarray Sum
-1456. Maximum Number of Vowels in a Substring of Given Length
-1208. Get Equal Substrings Within Budget
+1. Minimum Size Subarray Sum
+1. Maximum Number of Vowels in a Substring of Given Length
+1. Get Equal Substrings Within Budget

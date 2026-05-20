@@ -69,13 +69,15 @@ Void sources `/etc/rc.local` in runit stage 2, making it perfect for boot-time c
    ```bash
    sudo vi /etc/rc.local
    ```
-2. Add:
+
+1. Add:
 
    ```sh
    #!/bin/sh
    loadkeys /usr/local/share/kbd/keymaps/us-caps-esc-swap.map
    ```
-3. Make it executable:
+
+1. Make it executable:
 
    ```bash
    sudo chmod +x /etc/rc.local
@@ -95,7 +97,8 @@ Void’s `/etc/rc.conf` supports a `KEYMAP` variable pointing to a keymap under 
    ```
 
    ([linuxquestions.org][4])
-2. Edit `/etc/rc.conf` and set:
+
+1. Edit `/etc/rc.conf` and set:
 
    ```ini
    KEYMAP="personal/swapCapsEsc"
@@ -105,8 +108,8 @@ Void’s `/etc/rc.conf` supports a `KEYMAP` variable pointing to a keymap under 
 
 ## 3. Notes and alternatives
 
-* Some systemd-based distros let you add a `KEYMAP_CORRECTIONS="swapCapsEsc"` line to `/etc/vconsole.conf` and have udev apply it at boot ([wiki.archlinux.org][5]), but Void relies on `rc.conf` and `loadkeys` instead.
-* On Debian/Ubuntu you can also use `localectl set-keymap --no-convert us` (and rebuild initramfs) to persist console layouts ([unix.stackexchange.com][6]).
+- Some systemd-based distros let you add a `KEYMAP_CORRECTIONS="swapCapsEsc"` line to `/etc/vconsole.conf` and have udev apply it at boot ([wiki.archlinux.org][5]), but Void relies on `rc.conf` and `loadkeys` instead.
+- On Debian/Ubuntu you can also use `localectl set-keymap --no-convert us` (and rebuild initramfs) to persist console layouts ([unix.stackexchange.com][6]).
 
 With either `/etc/rc.local` or the `KEYMAP` method in `/etc/rc.conf`, your Caps Lock and Esc keys will remain swapped every time you boot into a TTY.
 

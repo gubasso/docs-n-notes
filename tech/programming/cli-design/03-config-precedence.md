@@ -16,13 +16,13 @@ This is the standard followed by AWS CLI, OCI CLI, kubectl, terraform, gcloud, a
 
 ### Why this order
 
-| Source | Why this position |
-|--------|-------------------|
-| **Defaults** (lowest) | Hard-coded in the binary. Always present. Cannot be edited at runtime. |
-| **User file** (`$XDG_CONFIG_HOME/<app>/config.toml`) | Personal preferences. Persists across sessions. |
-| **Project file** (`./.<app>/config.toml` or similar) | Per-repo / per-directory overrides. Project beats user because you opted into the project. |
-| **Env vars** | Set for one shell session or one process invocation. More specific than the persistent file. |
-| **CLI flags** (highest) | A one-off override for this single invocation. Always wins. |
+| Source                                               | Why this position                                                                            |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| **Defaults** (lowest)                                | Hard-coded in the binary. Always present. Cannot be edited at runtime.                       |
+| **User file** (`$XDG_CONFIG_HOME/<app>/config.toml`) | Personal preferences. Persists across sessions.                                              |
+| **Project file** (`./.<app>/config.toml` or similar) | Per-repo / per-directory overrides. Project beats user because you opted into the project.   |
+| **Env vars**                                         | Set for one shell session or one process invocation. More specific than the persistent file. |
+| **CLI flags** (highest)                              | A one-off override for this single invocation. Always wins.                                  |
 
 ## Implementation pattern (language-agnostic)
 
@@ -45,13 +45,13 @@ The merge must:
 
 Use the XDG Base Directory spec everywhere; do not hand-roll `$HOME/.<app>/`.
 
-| Concern | XDG var | Default |
-|---------|---------|---------|
-| Config | `XDG_CONFIG_HOME` | `~/.config/<app>/` |
-| Data | `XDG_DATA_HOME` | `~/.local/share/<app>/` |
-| State (logs, history) | `XDG_STATE_HOME` | `~/.local/state/<app>/` |
-| Cache | `XDG_CACHE_HOME` | `~/.cache/<app>/` |
-| Runtime sockets | `XDG_RUNTIME_DIR` | `/run/user/$UID/` |
+| Concern               | XDG var           | Default                 |
+| --------------------- | ----------------- | ----------------------- |
+| Config                | `XDG_CONFIG_HOME` | `~/.config/<app>/`      |
+| Data                  | `XDG_DATA_HOME`   | `~/.local/share/<app>/` |
+| State (logs, history) | `XDG_STATE_HOME`  | `~/.local/state/<app>/` |
+| Cache                 | `XDG_CACHE_HOME`  | `~/.cache/<app>/`       |
+| Runtime sockets       | `XDG_RUNTIME_DIR` | `/run/user/$UID/`       |
 
 Use your language's XDG library (`directories` in Rust, `platformdirs` in Python, `xdg` in Go, `XDG_*` env-var probes in Bash). Don't reimplement the lookup.
 
@@ -75,12 +75,12 @@ The resolved `Config` is **immutable after construction**. It is built in `main`
 
 ## Loader-library choices
 
-| Language | Recommended | Why |
-|----------|-------------|-----|
-| Rust | [`figment`](https://docs.rs/figment/) | Per-key provenance; clean provider model matching the 5-layer chain. |
-| Python | [`pydantic-settings`](https://docs.pydantic.dev/latest/concepts/pydantic_settings/) | Layered loading + validation in one. Or: hand-roll with `lru_cache` (small CLIs). |
-| Go | [`viper`](https://github.com/spf13/viper) | Mature, but verbose. Lightweight: stdlib `flag` + `os.Getenv` + `encoding/toml`. |
-| Bash | Sourced env-file + `${VAR:-default}` fallback ladder | Keep it simple. |
+| Language | Recommended                                                                         | Why                                                                               |
+| -------- | ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Rust     | [`figment`](https://docs.rs/figment/)                                               | Per-key provenance; clean provider model matching the 5-layer chain.              |
+| Python   | [`pydantic-settings`](https://docs.pydantic.dev/latest/concepts/pydantic_settings/) | Layered loading + validation in one. Or: hand-roll with `lru_cache` (small CLIs). |
+| Go       | [`viper`](https://github.com/spf13/viper)                                           | Mature, but verbose. Lightweight: stdlib `flag` + `os.Getenv` + `encoding/toml`.  |
+| Bash     | Sourced env-file + `${VAR:-default}` fallback ladder                                | Keep it simple.                                                                   |
 
 Skip:
 

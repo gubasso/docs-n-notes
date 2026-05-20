@@ -19,21 +19,21 @@ and serialize into command arguments only at the execution boundary.
 ## Design Rules
 
 1. **Type the domain, not the strings.** Flags become bools/enums, not scattered `.arg("--flag")` calls.
-2. **Separate build from execution.** Builder produces a `Command` / `list[str]`; caller decides how to run it.
-3. **Make invalid states unrepresentable.** Mutually exclusive flags = enum, not two bools.
-4. **Error handling at the boundary.** Parse stdout/stderr into your own result types.
-5. **Common execution interface.** A trait/protocol shared across all wrapped CLIs.
+1. **Separate build from execution.** Builder produces a `Command` / `list[str]`; caller decides how to run it.
+1. **Make invalid states unrepresentable.** Mutually exclusive flags = enum, not two bools.
+1. **Error handling at the boundary.** Parse stdout/stderr into your own result types.
+1. **Common execution interface.** A trait/protocol shared across all wrapped CLIs.
 
 ## Complexity Ladder
 
-| Complexity       | Approach                                    | When to use                          |
-| ---------------- | ------------------------------------------- | ------------------------------------ |
-| One-off calls    | Raw `Command` / `subprocess.run`            | Quick scripts, single invocations    |
-| Light scripting  | `xshell` / `duct` / `plumbum`              | Build scripts, CI pipelines          |
-| Serious wrapper  | Typed structs + `Executable` trait/protocol | Wrapping a specific CLI with many subcommands |
-| Full SDK         | Typed models + API client + error types     | Public library, multi-CLI orchestration |
+| Complexity      | Approach                                    | When to use                                   |
+| --------------- | ------------------------------------------- | --------------------------------------------- |
+| One-off calls   | Raw `Command` / `subprocess.run`            | Quick scripts, single invocations             |
+| Light scripting | `xshell` / `duct` / `plumbum`               | Build scripts, CI pipelines                   |
+| Serious wrapper | Typed structs + `Executable` trait/protocol | Wrapping a specific CLI with many subcommands |
+| Full SDK        | Typed models + API client + error types     | Public library, multi-CLI orchestration       |
 
----
+______________________________________________________________________
 
 ## Rust Implementation
 
@@ -191,16 +191,16 @@ Exhaustive matching ensures all subcommands are handled.
 
 ### Crates Worth Studying
 
-| Crate            | What it does                                              | Why study it                                              |
-| ---------------- | --------------------------------------------------------- | --------------------------------------------------------- |
-| `duct`           | Composable command pipelines (piping, redirection)        | Builder composition, error-by-default, `cmd!` macro       |
-| `xshell`         | Ergonomic shell scripting with compile-time parsed `cmd!` | Shell-as-stateful-object, injection-safe by construction  |
-| `docker-wrapper` | 80+ Docker commands as typed builder structs              | Real-world `Executable` trait pattern at scale             |
-| `assert_cmd`     | Testing CLI programs                                      | Builder for constructing + asserting on command outputs   |
-| `typed-builder`  | Derive macro for compile-time checked builders            | Builder state encoded in generics                         |
-| cargo internals  | `ProcessBuilder` in `cargo-util`                          | How Rust's own tooling wraps `Command`                    |
+| Crate            | What it does                                              | Why study it                                             |
+| ---------------- | --------------------------------------------------------- | -------------------------------------------------------- |
+| `duct`           | Composable command pipelines (piping, redirection)        | Builder composition, error-by-default, `cmd!` macro      |
+| `xshell`         | Ergonomic shell scripting with compile-time parsed `cmd!` | Shell-as-stateful-object, injection-safe by construction |
+| `docker-wrapper` | 80+ Docker commands as typed builder structs              | Real-world `Executable` trait pattern at scale           |
+| `assert_cmd`     | Testing CLI programs                                      | Builder for constructing + asserting on command outputs  |
+| `typed-builder`  | Derive macro for compile-time checked builders            | Builder state encoded in generics                        |
+| cargo internals  | `ProcessBuilder` in `cargo-util`                          | How Rust's own tooling wraps `Command`                   |
 
----
+______________________________________________________________________
 
 ## Python Implementation
 
@@ -307,28 +307,28 @@ Works fine, but you lose automatic validation. Use `__post_init__` for constrain
 
 ### Pydantic vs Dataclass Decision
 
-| Criteria                        | Pydantic                  | Dataclass            |
-| ------------------------------- | ------------------------- | -------------------- |
-| Validation on construction      | Built-in (`@field_validator`, `@model_validator`) | Manual (`__post_init__`) |
-| Runtime cost                    | Higher (validation runs every time) | Minimal              |
-| Serialization / debugging       | `.model_dump()` for free  | Manual                |
-| Immutability                    | `ConfigDict(frozen=True)` | `frozen=True`         |
-| Best for                        | External data boundaries, complex constraints | Internal state, simple grouping |
-| Adding methods                  | Totally fine              | Totally fine          |
+| Criteria                   | Pydantic                                          | Dataclass                       |
+| -------------------------- | ------------------------------------------------- | ------------------------------- |
+| Validation on construction | Built-in (`@field_validator`, `@model_validator`) | Manual (`__post_init__`)        |
+| Runtime cost               | Higher (validation runs every time)               | Minimal                         |
+| Serialization / debugging  | `.model_dump()` for free                          | Manual                          |
+| Immutability               | `ConfigDict(frozen=True)`                         | `frozen=True`                   |
+| Best for                   | External data boundaries, complex constraints     | Internal state, simple grouping |
+| Adding methods             | Totally fine                                      | Totally fine                    |
 
 **For CLI wrappers:** Pydantic is the better fit — you're modeling external constraints (mutually exclusive flags, required combinations), and validators express that cleanly.
 
 ### Python Projects Using These Patterns
 
-| Project          | Pattern                                                    |
-| ---------------- | ---------------------------------------------------------- |
-| GitPython        | `__getattr__` magic translates method calls + kwargs to git CLI args |
-| docker-py        | Typed Python classes modeling Docker domain, serialized to API/CLI calls |
-| Ansible modules  | Each module = typed struct serialized into shell commands on remote hosts |
-| Plumbum          | Shell commands as composable objects with operator overloading (`\|`, `>`) |
-| Invoke / Fabric  | Task execution with typed context objects + connection management |
+| Project         | Pattern                                                                    |
+| --------------- | -------------------------------------------------------------------------- |
+| GitPython       | `__getattr__` magic translates method calls + kwargs to git CLI args       |
+| docker-py       | Typed Python classes modeling Docker domain, serialized to API/CLI calls   |
+| Ansible modules | Each module = typed struct serialized into shell commands on remote hosts  |
+| Plumbum         | Shell commands as composable objects with operator overloading (`\|`, `>`) |
+| Invoke / Fabric | Task execution with typed context objects + connection management          |
 
----
+______________________________________________________________________
 
 ## Anti-Patterns to Avoid
 
@@ -374,7 +374,7 @@ def git_log() -> subprocess.CompletedProcess: ...
 def git_log() -> list[Commit]: ...
 ```
 
----
+______________________________________________________________________
 
 ## Testing Strategy
 

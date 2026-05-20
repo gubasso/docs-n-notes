@@ -10,3 +10,6 @@ draft*
 
 
 .trash/
+
+# pre-commit / link checker
+.lycheecache

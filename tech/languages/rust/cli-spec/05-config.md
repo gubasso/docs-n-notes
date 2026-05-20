@@ -4,13 +4,13 @@
 
 ## Crate stack
 
-| Concern | Crate |
-|---------|-------|
-| Layered config loader | `figment` (`env`, `toml`) |
-| Serialization | `serde` + `serde_derive` |
-| TOML format | `toml` (transitive via figment) |
-| XDG path resolution | `directories` |
-| UTF-8 paths | `camino` |
+| Concern               | Crate                           |
+| --------------------- | ------------------------------- |
+| Layered config loader | `figment` (`env`, `toml`)       |
+| Serialization         | `serde` + `serde_derive`        |
+| TOML format           | `toml` (transitive via figment) |
+| XDG path resolution   | `directories`                   |
+| UTF-8 paths           | `camino`                        |
 
 ## Rust-specific rules
 
@@ -90,13 +90,13 @@ fn user_config_path() -> Option<PathBuf> {
 
 ## Canonical-layer → Rust mapping
 
-| Canonical layer (general chapter) | Rust source |
-|-----------------------------------|-------------|
-| Defaults | `Config::default()` |
-| User file | `directories::ProjectDirs::config_dir().join("config.toml")` |
-| Project file | `./.<app>/config.toml` (or your convention) |
-| Env vars | `Env::prefixed("APP_").split("__")` (double-underscore = nested) |
-| CLI flags | `clap` `GlobalArgs` serialized into `figment` |
+| Canonical layer (general chapter) | Rust source                                                      |
+| --------------------------------- | ---------------------------------------------------------------- |
+| Defaults                          | `Config::default()`                                              |
+| User file                         | `directories::ProjectDirs::config_dir().join("config.toml")`     |
+| Project file                      | `./.<app>/config.toml` (or your convention)                      |
+| Env vars                          | `Env::prefixed("APP_").split("__")` (double-underscore = nested) |
+| CLI flags                         | `clap` `GlobalArgs` serialized into `figment`                    |
 
 ## XDG path resolution
 

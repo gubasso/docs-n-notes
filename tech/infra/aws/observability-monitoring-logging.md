@@ -1,6 +1,5 @@
 # Monitoring / Observability / Logging
 
-
 ## CloudTrail-CloudWatch Integration
 
 - You can configure CloudTrail to deliver logs to a CloudWatch Logs log group in addition to S3
@@ -12,8 +11,8 @@
   - Visualize event occurrences on CloudWatch dashboards
 - To set up the integration:
   1. Create a trail in CloudTrail
-  2. Choose a CloudWatch Logs log group as a delivery endpoint
-  3. Specify an IAM role for CloudTrail to assume for delivering logs to CloudWatch
+  1. Choose a CloudWatch Logs log group as a delivery endpoint
+  1. Specify an IAM role for CloudTrail to assume for delivering logs to CloudWatch
 - CloudTrail will then stream events to CloudWatch Logs in addition to S3
 - You can view the events in the CloudWatch console and create metrics/alarms
 
@@ -24,6 +23,7 @@ So in summary, CloudTrail records API activity and account events, acting as the
 Here is a summary comparing AWS CloudWatch and Prometheus/Grafana for monitoring:
 
 Key similarities:
+
 - Both are used for monitoring, logging, and alerting on application and infrastructure metrics
 - Both can collect metrics from various AWS services and custom applications
 - Both support graphing, dashboarding, and setting up alerts based on metrics
@@ -31,27 +31,33 @@ Key similarities:
 Key differences:
 
 Data storage and querying:
+
 - CloudWatch stores metrics within AWS. You query metrics directly from CloudWatch.
 - Prometheus pulls metrics from monitored targets and stores them in its own time-series database. Grafana queries this Prometheus database.
 - Prometheus has a more powerful query language (PromQL) compared to CloudWatch.
 
 Monitoring scope:
+
 - CloudWatch is AWS-native and designed primarily for monitoring AWS services and resources.
 - Prometheus is platform-agnostic and commonly used for Kubernetes and cloud-native stack monitoring. It can monitor AWS resources using exporters.
 
 Dashboarding and visualization:
+
 - Grafana provides richer dashboarding and visualization capabilities compared to CloudWatch dashboards.
 - CloudWatch charges for each additional dashboard, while Grafana dashboards are free.
 
 Cross-account, cross-region monitoring:
+
 - Prometheus enables easier querying across accounts, regions, and services using PromQL.
 - CloudWatch requires setting up multiple data sources to achieve this.
 
 Pricing:
+
 - CloudWatch has a pay-per-metric model that can get expensive at scale.
 - Prometheus is open-source and free, but you pay for the infrastructure to run it.
 
 Operational overhead:
+
 - CloudWatch is fully managed by AWS, requiring less operational work.
 - Running your own Prometheus/Grafana stack requires more setup and maintenance.
 

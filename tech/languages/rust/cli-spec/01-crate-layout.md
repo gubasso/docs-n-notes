@@ -21,7 +21,7 @@ my-cli/
 Only when one of these is true:
 
 1. **Another crate consumes the logic.** A daemon, a Tauri app, a build tool, or a sibling crate in your workspace needs to call into the same code. `bat` does this — `src/lib.rs` exposes the rendering engine; `src/bin/bat/main.rs` is a thin CLI on top.
-2. **Integration tests need internals.** `tests/*.rs` files can't reach `pub(crate)` items in a binary-only crate. If you want to integration-test a parser or a service directly, you need a library.
+1. **Integration tests need internals.** `tests/*.rs` files can't reach `pub(crate)` items in a binary-only crate. If you want to integration-test a parser or a service directly, you need a library.
 
 If neither is true, don't create `lib.rs`. A no-op `lib.rs` that only declares private modules (e.g. `ripwork/src/lib.rs:1-13`) is dead weight — it shows up in `cargo doc`, adds an extra compile unit, and confuses readers about what the public API is.
 
@@ -46,9 +46,9 @@ fn main() -> std::process::ExitCode {
 Stay single-crate until **any one** of these triggers fires. Don't migrate proactively.
 
 1. **Second binary sharing ≥30% of code.** A daemon, a helper, an `xtask`, a TUI variant. Split into `app-core` (library) + `app-cli` (binary) + the new consumer.
-2. **A subsystem is publishable on its own.** Ripgrep extracted `grep-matcher`, `grep-regex`, `grep-searcher`, `grep-printer` precisely because each is reusable. If a subsystem has zero dependencies on app-specific concerns, it earns its own crate.
-3. **Compile time exceeds tolerance.** `cargo check` on a warm cache over ~10s **and** the slow code is structurally separable. Splitting moves slow code into its own compilation unit that doesn't get rebuilt on every iteration.
-4. **Plugins/adapters need independent dep trees.** Helix splits `helix-lsp` so the LSP client's deps don't bloat the core.
+1. **A subsystem is publishable on its own.** Ripgrep extracted `grep-matcher`, `grep-regex`, `grep-searcher`, `grep-printer` precisely because each is reusable. If a subsystem has zero dependencies on app-specific concerns, it earns its own crate.
+1. **Compile time exceeds tolerance.** `cargo check` on a warm cache over ~10s **and** the slow code is structurally separable. Splitting moves slow code into its own compilation unit that doesn't get rebuilt on every iteration.
+1. **Plugins/adapters need independent dep trees.** Helix splits `helix-lsp` so the LSP client's deps don't bloat the core.
 
 **Hard threshold**: at ~8k LOC, take a serious look. Below that, the cost of workspace navigation (multiple `Cargo.toml`s, multiple `target/` outputs in your IDE, cross-crate refactor friction) outweighs the wins.
 

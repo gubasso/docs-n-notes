@@ -5,7 +5,7 @@
 This chapter shows two Python implementations of the canonical 5-layer ladder:
 
 1. A **manual implementation** with `platformdirs`, suitable for small CLIs (≤ ~3 knobs) or when you cannot pull in `pydantic-settings`.
-2. A **`pydantic-settings` implementation** for anything larger, with the mapping back to the canonical ladder spelled out.
+1. A **`pydantic-settings` implementation** for anything larger, with the mapping back to the canonical ladder spelled out.
 
 Both implementations:
 
@@ -226,12 +226,12 @@ class Config(BaseSettings):
 
 ### Mapping back to the canonical ladder
 
-| Canonical layer (low → high) | `pydantic-settings` source                                  |
-|------------------------------|-------------------------------------------------------------|
-| 1. Defaults                  | Field default values on the `Config` class                  |
-| 2. User file                 | `TomlConfigSettingsSource(..., USER_CONFIG)`                |
-| 3. Project file              | `TomlConfigSettingsSource(..., PROJECT_CONFIG)`             |
-| 4. Env vars                  | `env_settings` (uses `env_prefix="MYAPP_"`)                 |
+| Canonical layer (low → high) | `pydantic-settings` source                                   |
+| ---------------------------- | ------------------------------------------------------------ |
+| 1. Defaults                  | Field default values on the `Config` class                   |
+| 2. User file                 | `TomlConfigSettingsSource(..., USER_CONFIG)`                 |
+| 3. Project file              | `TomlConfigSettingsSource(..., PROJECT_CONFIG)`              |
+| 4. Env vars                  | `env_settings` (uses `env_prefix="MYAPP_"`)                  |
 | 5. CLI flags                 | `init_settings` — pass CLI flag values as `Config(**kwargs)` |
 
 The tuple returned by `settings_customise_sources` is **high-precedence-first**, which is opposite to the canonical "low to high" reading order. Keep that inversion in mind when reviewing the code; the underlying contract is unchanged.

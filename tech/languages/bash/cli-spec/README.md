@@ -6,8 +6,8 @@ For the language-agnostic principles, see [`tech/programming/cli-design/`](../..
 
 ## Files
 
-| File | Hook |
-|------|------|
+| File                                                   | Hook                                                                                                                                                                         |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [bash-cli-project-specs.md](bash-cli-project-specs.md) | Full reference: directory layout, strict mode, modules, loader, ShellCheck discipline, error handling, signals, tempfiles, `bats-core` testing, install + XDG, distribution. |
 
 ## TL;DR

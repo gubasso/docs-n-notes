@@ -1,4 +1,5 @@
 # Vim / Neovim
+
 > nvim
 
 ## General
@@ -9,9 +10,11 @@
 python environment: https://www.reddit.com/r/neovim/comments/14316t9/help_me_to_get_the_best_python_neovim_environment/
 
 - https://github.com/stevearc/conform.nvim
+
   - Lightweight yet powerful formatter plugin for Neovim
 
 - https://github.com/mfussenegger/nvim-lint
+
   - An asynchronous linter plugin for Neovim complementary to the built-in Language Server Protocol support.
 
 fold / unfold
@@ -19,6 +22,7 @@ https://neovim.io/doc/user/fold.html
 https://neovim.io/doc/user/fold.html
 
 [How to generate a number sequence in file using vi or Vim?](https://stackoverflow.com/questions/9903660/how-to-generate-a-number-sequence-in-file-using-vi-or-vim)
+
 > column sum sequence numbers column numbered list
 
 ```
@@ -29,8 +33,8 @@ https://neovim.io/doc/user/fold.html
 ```
 
 Formatter / prettier for neovim in lua:
-- [Neovim - Null-ls: a quick explanation](https://www.youtube.com/watch?v=e3xxkEbhG0o)
 
+- [Neovim - Null-ls: a quick explanation](https://www.youtube.com/watch?v=e3xxkEbhG0o)
 
 vimwiki:
 
@@ -58,7 +62,6 @@ map("n", "<leader><tab>", "<cmd>b#<CR>", default_opts)
 map("n", "<leader>h", ":nohlsearch<CR>", default_opts)
 ```
 
-
 ```
 " Redir output to empty buffer [^5]
 command! -nargs=+ -complete=command Redir let s:reg = @@ | redir @"> | silent execute <q-args> | redir END | new | pu | 1,2d_ | let @@ = s:reg
@@ -78,38 +81,56 @@ augroup mdhelpers
     au!
     "" reference structure with a sequence number
     au FileType markdown nnoremap <leader>ri o[^1]: []()"+pT)
-    au FileType markdown nnoremap <leader>rs :norm 0ll:let @n=0"nyiwo[^=n+1]: []()"+pT)
+    au FileType markdown nnoremap <leader>rs :norm 0ll:let @n=0
+"nyiwo[^=n+1
+]: []()"+pT)
     "" code block: simple
-    au FileType markdown nnoremap <leader>cc o``````kk
-    au FileType markdown nnoremap <leader>cp o``````kk"+p
+    au FileType markdown nnoremap <leader>cc o
+```
+
+```
+kk
+    au FileType markdown nnoremap <leader>cp o
+```
+
+```
+kk"+p
     "" code block: with file name
-    au FileType markdown nnoremap <leader>ff o**``**``````kkkklll
-    au FileType markdown nnoremap <leader>fp o**``**``````kk"+p
+    au FileType markdown nnoremap <leader>ff o
+**``**
+```
+
+```
+kkkklll
+    au FileType markdown nnoremap <leader>fp o
+**``**
+```
+
+```
+kk"+p
     "" link and paste at end
     au FileType markdown nnoremap <leader>i i[]()"+pT)
 augroup END
 ```
-
 
 associate different file types with extensions
 
 ```
 augroup mdfiletypes
     " associate *.foo with bar filetype
-    " do not override previouslly setted filetypes
+    " do not override previouslly set filetypes
     au!
     au BufNewFile,BufRead *.rmd setfiletype markdown
     au BufNewFile,BufRead Description setfiletype markdown
 augroup END
 ```
 
-
----
+______________________________________________________________________
 
 Vim Snippets: https://github.com/honza/vim-snippets
 
 - set a registry value: `:let @q=<any value>`
-    - `q` is the registry
+  - `q` is the registry
 
 [how do I use a variable content as an argument for vim command?](https://superuser.com/questions/320395/how-do-i-use-a-variable-content-as-an-argument-for-vim-command)
 
@@ -129,24 +150,28 @@ Vim Snippets: https://github.com/honza/vim-snippets
 ### From Macro to Commands (with keybinding)[^2]
 
 - ctrl + R ctrl-r <C-R> ^r in insert mode
+
 - Insert the contents of a register
+
 - edit a macro
 
 - To paste the content of a macro saved in `q` reg, for example:
-    - `i^R^Rq`: Press “i” to enter insert mode, then press CTRL-R twice, then press “q” to insert the contents of the “q” register. What ought to come out looks like this:
-        - `^[`: literal escape
-        - CTRL-R twice: insert that escape character code literally
-    - or...
-    - `"qp`: same result, but not in insert mode
-    - `:put q` same result
+
+  - `i^R^Rq`: Press “i” to enter insert mode, then press CTRL-R twice, then press “q” to insert the contents of the “q” register. What ought to come out looks like this:
+    - `^[`: literal escape
+    - CTRL-R twice: insert that escape character code literally
+  - or...
+  - `"qp`: same result, but not in insert mode
+  - `:put q` same result
 
 - To save the characters back to `q` macro registry:
-    - cursor at beginning
-    - `"qy$`
+
+  - cursor at beginning
+  - `"qy$`
 
 - create a mapping from a macro:
-    - `nnoremap <Leader>a ^R^Rq`
 
+  - `nnoremap <Leader>a ^R^Rq`
 
 ### Search / Replace
 
@@ -156,11 +181,11 @@ Say I want to substitute "define" with "describe" everywhere:
 
 - :grep "define"
 - :cfdo %s/define/describe/g | update
-(see more in: https://twitter.com/learnvim/status/1277635983153008641?s=09)
+  (see more in: https://twitter.com/learnvim/status/1277635983153008641?s=09)
 
 We can reassign Vim's `:grep` with other tool. I am a fan of ripgrep (https://github.com/BurntSushi/ripgrep). In my vimrc, do this:
 
-set grepprg=rg\ --vimgrep\ --smart-case\ --follow
+set grepprg=rg\\ --vimgrep\\ --smart-case\\ --follow
 
 Run:
 
@@ -178,7 +203,6 @@ When in command line mode, copy the word under the cursor and insert into the co
 
 ### Tools / mergetool / diff tool
 
-
 #### 2) git-conflict.nvim
 
 https://github.com/akinsho/git-conflict.nvim
@@ -189,14 +213,15 @@ https://github.com/yorickpeterse/nvim-pqf
 [The ULTIMATE Git workflow using Neovim's Fugitive, Telescope & Git-Signs!](https://www.youtube.com/watch?v=IyBAuDPzdFY)
 
 vim-fugitive
+
 - `:Git`: status/staging area
-    - `Git help`: list of options
-    - select a file (pointer on top or visual area) and `-`: add a file
-    - `=` show file changes
-    - `<cr>` opens file
+  - `Git help`: list of options
+  - select a file (pointer on top or visual area) and `-`: add a file
+  - `=` show file changes
+  - `<cr>` opens file
 - `Gvdiff` over a file / open its diffs
-    - `Gvdiff origin/master`
-    - e.g. mapping `]c` `[c` next/prev changes
+  - `Gvdiff origin/master`
+  - e.g. mapping `]c` `[c` next/prev changes
 
 ## Plugins
 
@@ -209,12 +234,12 @@ https://github.com/tpope/vim-unimpaired : unimpaired.vim: Pairs of handy bracket
 ### Programs in shell
 
 - (!) `moreutils` package: `vidir`
--  thameera / vimv
+- thameera / vimv
 - https://github.com/laurent22/massren
 
 ### Pure Vim
 
-[Bulk rename files with Vim ](https://vim.fandom.com/wiki/Bulk_rename_files_with_Vim)
+[Bulk rename files with Vim](https://vim.fandom.com/wiki/Bulk_rename_files_with_Vim)
 
 ```
 :%s/.*/mv -i & &/g
@@ -228,7 +253,6 @@ Explanation[^3]:
 ```
 
 - Replaces every line in the document (say, "line"), and replaces it by "mv -i line line". `.*` is a regex saying "any character, repeated any number of times". & means "what has been found".
-
 
 ```
 :%s/.JPEG$/.jpg/g
@@ -247,7 +271,7 @@ Explanation[^3]:
 #### vim-dirvish
 
 - https://github.com/justinmk/vim-dirvish/
-    - vim dir tree (better than netwr)
+  - vim dir tree (better than netwr)
 
 bulk rename workflow with vim-dirvish
 
@@ -268,6 +292,7 @@ Workflow with dirvish:
 ## tmux integration
 
 **`tmux.conf`**
+
 ```
 # Smart pane switching with awareness of Vim splits.
 # See: https://github.com/christoomey/vim-tmux-navigator
@@ -321,6 +346,7 @@ end
 ```
 
 other opts
+
 ```lua
 vim.opt.hidden = true -- " allow [^13] 'E37: No write since last change (add ! to override)'. switch to a different buffer for referencing some code and switch back
 ```
@@ -336,7 +362,8 @@ If you just need a quick side-by-side comparison of any two files (tracked or un
    ```vim
    :edit file1.txt
    ```
-2. Run:
+
+1. Run:
 
    ```vim
    :vert diffsplit file2.txt
@@ -346,7 +373,7 @@ If you just need a quick side-by-side comparison of any two files (tracked or un
 
 ### From the terminal
 
-* Launch Neovim in diff mode for two files:
+- Launch Neovim in diff mode for two files:
 
   ```bash
   nvim -d file1.txt file2.txt
@@ -354,11 +381,8 @@ If you just need a quick side-by-side comparison of any two files (tracked or un
 
   to get a synchronized, side-by-side view .
 
-[1]: https://github.com/sindrets/diffview.nvim/issues/420 "How can I just compare 2 buffers ? (non-git files) #420 - GitHub"
-
-
 ## References
 
-[^1]: [Vim: Tutorial on Customization and Configuration (2020)](https://youtu.be/JFr28K65-5E)
 [^2]: [Master Vim Registers With Ctrl R](https://blog.aaronbieber.com/2013/12/03/master-vim-registers-with-ctrl-r.html)
+
 [^3]: [Vim Batch Rename](https://stackoverflow.com/questions/30378569/vim-batch-rename)

@@ -13,22 +13,22 @@ you only need to run:
 systemctl --user enable --now keepassxc.service
 ```
 
-* `enable` installs the symlink into `graphical-session.target.wants/` as specified by your `WantedBy=` line
-* `WantedBy=graphical-session.target` – install-time “reverse” dependency
-* `graphical-session.target` is a special user target that is active for any Wayland or X11 session; services that are only useful in a GUI are typically attached here .
-* The `--now` flag tells systemd to **also start** the service immediately, combining what would otherwise be separate `enable` + `start` commands
-* After that, KeePassXC will be pulled in and started automatically whenever your graphical session (i.e. `graphical-session.target`) is activated.
+- `enable` installs the symlink into `graphical-session.target.wants/` as specified by your `WantedBy=` line
+- `WantedBy=graphical-session.target` – install-time “reverse” dependency
+- `graphical-session.target` is a special user target that is active for any Wayland or X11 session; services that are only useful in a GUI are typically attached here .
+- The `--now` flag tells systemd to **also start** the service immediately, combining what would otherwise be separate `enable` + `start` commands
+- After that, KeePassXC will be pulled in and started automatically whenever your graphical session (i.e. `graphical-session.target`) is activated.
 
 `After=waybar.service` – runtime ordering only
 
-* `After=` (and its twin `Before=`) tell systemd **when** to start one unit *relative to* another, but they do **not** create any dependency by themselves – if no one asks for *both* units, nothing happens
-* In your KeePassXC unit this makes the service wait until Waybar has reached the “started” state before it launches, preventing the classic tray-icon race
+- `After=` (and its twin `Before=`) tell systemd **when** to start one unit *relative to* another, but they do **not** create any dependency by themselves – if no one asks for *both* units, nothing happens
+- In your KeePassXC unit this makes the service wait until Waybar has reached the “started” state before it launches, preventing the classic tray-icon race
 
----
+______________________________________________________________________
 
 *Need automatic start at login?*
 → Keep `WantedBy=graphical-session.target` **or** `add-wants niri.service …`.
-  → Use **one** of the two wiring methods (WantedBy *or* add-wants) and avoid duplicating links.
+→ Use **one** of the two wiring methods (WantedBy *or* add-wants) and avoid duplicating links.
 *Need to guarantee the tray is present first?*
 → Keep `After=waybar.service`.
 
@@ -45,16 +45,16 @@ WantedBy=graphical-session.target
 
 serve the **same underlying mechanism**—they create a *Wants=* dependency via symlinks—yet they differ only in **which unit** becomes the “puller.” You can choose either approach interchangeably **if** you’re happy with the same parent unit wanting your KeePassXC service.
 
----
+______________________________________________________________________
 
 ## How they work under the hood
 
-* **`Wants=` vs. `WantedBy=`**
+- **`Wants=` vs. `WantedBy=`**
   In systemd, a `Wants=` line in a unit’s `[Unit]` section defines a soft dependency, while `WantedBy=` in `[Install]` tells `systemctl enable` where to drop the symlink so that activating that target will pull in your service ([Unix & Linux Stack Exchange][1]).
-* **`systemctl --user add-wants`**
+- **`systemctl --user add-wants`**
   This CLI command programmatically creates the identical kind of symlink (in `~/.config/systemd/user/<target>.wants/`), without you having to edit unit files or run `enable` ([Debian Manpages][2]).
 
----
+______________________________________________________________________
 
 ## What’s the only real difference?
 
@@ -63,11 +63,11 @@ serve the **same underlying mechanism**—they create a *Wants=* dependency via 
 | `add-wants niri.service keepassxc.service` | `niri.service`             | `~/.config/systemd/user/niri.service.wants/keepassxc.service` ([Debian Manpages][2])                         |
 | `WantedBy=graphical-session.target`        | `graphical-session.target` | `~/.config/systemd/user/graphical-session.target.wants/keepassxc.service` ([Unix & Linux Stack Exchange][1]) |
 
----
+______________________________________________________________________
 
 ## When to pick which
 
-* **Tie to Niri only**
+- **Tie to Niri only**
   If you want KeePassXC to follow the lifecycle of **just** your Niri compositor (start/stop/restart), use:
 
   ```bash
@@ -76,7 +76,7 @@ serve the **same underlying mechanism**—they create a *Wants=* dependency via 
 
   ([Debian Manpages][2])
 
-* **Tie to any graphical session**
+- **Tie to any graphical session**
   If you prefer KeePassXC to launch whenever **any** graphical session is active (not just Niri), include in your unit:
 
   ```ini
@@ -86,7 +86,7 @@ serve the **same underlying mechanism**—they create a *Wants=* dependency via 
 
   ([Arch Linux Forums][3])
 
----
+______________________________________________________________________
 
 ## Key takeaway
 

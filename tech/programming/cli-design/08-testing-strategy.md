@@ -7,12 +7,12 @@ For concrete per-language tooling (runners, snapshot libraries, property-based l
 ## Non-negotiable principles
 
 1. **Best practices first.** Clean, maintainable tests, written in the idioms the language community considers standard.
-2. **Test major public APIs and core interfaces** — the behavior that defines the product, not incidental helpers.
-3. **Test behavior and contracts, not implementation details.** Don't overfit to private internals; if you can refactor without changing the public contract, the test should still pass.
-4. **Don't test third-party libraries.** Assume they're correct. Mock or fake them at their boundary (see [What to mock, what not to mock](#what-to-mock-what-not-to-mock) and [Detecting "testing the third-party library"](#detecting-testing-the-third-party-library)).
-5. **Deterministic and fast.** Isolate side effects with fixtures; no shared state, no real clock, no network, no order dependence.
-6. **Meaningful coverage driven by risk and impact**, not line-count. 100% coverage of trivial getters is wasteful; cover what breaks production.
-7. **Clear names, minimal mocking, readable assertions.** A test reads as documentation of the contract it locks down.
+1. **Test major public APIs and core interfaces** — the behavior that defines the product, not incidental helpers.
+1. **Test behavior and contracts, not implementation details.** Don't overfit to private internals; if you can refactor without changing the public contract, the test should still pass.
+1. **Don't test third-party libraries.** Assume they're correct. Mock or fake them at their boundary (see [What to mock, what not to mock](#what-to-mock-what-not-to-mock) and [Detecting "testing the third-party library"](#detecting-testing-the-third-party-library)).
+1. **Deterministic and fast.** Isolate side effects with fixtures; no shared state, no real clock, no network, no order dependence.
+1. **Meaningful coverage driven by risk and impact**, not line-count. 100% coverage of trivial getters is wasteful; cover what breaks production.
+1. **Clear names, minimal mocking, readable assertions.** A test reads as documentation of the contract it locks down.
 
 Every rule below is an application of one of these.
 
@@ -20,11 +20,11 @@ Every rule below is an application of one of these.
 
 The pyramid is the default. Two well-known alternatives exist for codebases shaped differently from a CLI; know when to reach for them.
 
-| Shape | Coined by | Where the weight sits | Best fit |
-|---|---|---|---|
-| **Pyramid** | Mike Cohn (2009) | Wide base of unit tests, narrowing toward integration, thin E2E apex. | CLIs, libraries, monoliths with rich domain logic. **Default for everything in this guide.** |
-| **Trophy** | Kent C. Dodds (2018) | Wide middle of integration tests on top of a static-analysis base; thin unit and E2E tiers. | UIs and apps whose logic is mostly orchestrating I/O across libraries — a unit test that mocks every collaborator tests nothing. |
-| **Honeycomb** | Spotify (2018) | Equal weight on intra-service unit, contract / integration, and inter-service E2E. | Microservice fleets where complexity lives at the seams between services. |
+| Shape         | Coined by            | Where the weight sits                                                                       | Best fit                                                                                                                         |
+| ------------- | -------------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **Pyramid**   | Mike Cohn (2009)     | Wide base of unit tests, narrowing toward integration, thin E2E apex.                       | CLIs, libraries, monoliths with rich domain logic. **Default for everything in this guide.**                                     |
+| **Trophy**    | Kent C. Dodds (2018) | Wide middle of integration tests on top of a static-analysis base; thin unit and E2E tiers. | UIs and apps whose logic is mostly orchestrating I/O across libraries — a unit test that mocks every collaborator tests nothing. |
+| **Honeycomb** | Spotify (2018)       | Equal weight on intra-service unit, contract / integration, and inter-service E2E.          | Microservice fleets where complexity lives at the seams between services.                                                        |
 
 **Decision rule:**
 
@@ -59,11 +59,11 @@ End-to-end black-box tests sit above this pyramid and run in a separate CI pipel
 
 ## Tiers at a glance
 
-| Tier         | What it tests                                                              | External deps                                                       | Speed          | Runs in     |
-|--------------|----------------------------------------------------------------------------|---------------------------------------------------------------------|----------------|-------------|
-| Unit         | One function/module in isolation                                           | None (or fully faked)                                               | ms             | pre-commit  |
-| Integration  | Two-or-more components together, OR your code's seam to one external dep   | Stubs/fakes of the boundary, or a real contained dep                | tens of ms – s | pre-push    |
-| E2E (system) | The whole product through its user-facing entry point, against real state  | The actual real things (live binary, real network, real container)  | s – min        | CI only     |
+| Tier         | What it tests                                                             | External deps                                                      | Speed          | Runs in    |
+| ------------ | ------------------------------------------------------------------------- | ------------------------------------------------------------------ | -------------- | ---------- |
+| Unit         | One function/module in isolation                                          | None (or fully faked)                                              | ms             | pre-commit |
+| Integration  | Two-or-more components together, OR your code's seam to one external dep  | Stubs/fakes of the boundary, or a real contained dep               | tens of ms – s | pre-push   |
+| E2E (system) | The whole product through its user-facing entry point, against real state | The actual real things (live binary, real network, real container) | s – min        | CI only    |
 
 **The framing that trips people up: integration ≠ "touches real things." Integration = "tests the interaction between things."**
 
@@ -108,13 +108,13 @@ def test_widget_id_rejects_empty():
 
 When this chapter or your code review says "stub" or "fake", mean these:
 
-| Term | What it does |
-|---|---|
-| **Dummy** | Filler that's never actually used (passed to satisfy a signature). |
-| **Stub** | Returns canned answers. No verification. |
-| **Spy** | Stub that also records how it was called, so the test can assert on the calls. |
-| **Mock** | Stub with built-in expectations — verifies the call shape was as expected; fails the test if not. |
-| **Fake** | A working but simplified implementation (in-memory database, recording HTTP server). Behaves correctly; just not production-grade. |
+| Term      | What it does                                                                                                                       |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| **Dummy** | Filler that's never actually used (passed to satisfy a signature).                                                                 |
+| **Stub**  | Returns canned answers. No verification.                                                                                           |
+| **Spy**   | Stub that also records how it was called, so the test can assert on the calls.                                                     |
+| **Mock**  | Stub with built-in expectations — verifies the call shape was as expected; fails the test if not.                                  |
+| **Fake**  | A working but simplified implementation (in-memory database, recording HTTP server). Behaves correctly; just not production-grade. |
 
 Source: Gerard Meszaros, *xUnit Test Patterns*; popularized by [Martin Fowler — Mocks Aren't Stubs](https://martinfowler.com/articles/mocksArentStubs.html).
 
@@ -518,23 +518,23 @@ If **yes**, the test isn't covering the boundary between your code and the libra
 
 This is the most useful heuristic for review: it forces you to identify what the test is *actually* asserting about.
 
----
+______________________________________________________________________
 
 These heuristics drive the lint rules in the [`test-review` skill](../../../.../dotfiles/claude/.claude/skills/test-review/) (Claude planner + Codex implementer, ships with the dotfiles). Invoke the skill on any project to audit the suite against this principles file and produce a refactor plan.
 
 ## What to mock, what not to mock
 
-| Subject | Default |
-|---------|---------|
-| Filesystem | Real, sandboxed in tempdir. Don't mock. |
-| Network HTTP | Fake at the adapter trait. Or use a recording library (vcr-style). See [08a — Recording / HTTP fakes](08a-testing-tools.md#recording--http-fakes). |
-| Clock / time | Mock via the `Clock` trait on `AppContext`. |
-| Subprocess invocations (wrapped CLIs) | Fake at the `Process` adapter trait. |
-| Database | Use a sqlite tempfile in-process; don't run a real server in tests. |
-| Random | Inject a seeded RNG into `AppContext`. |
-| Environment variables | Use `env_clear` + curated env in fixtures (never modify global env in a test). |
-| CLI subprocess argv contract | Replace the child with a recording stub; assert on argv. This is an integration test, not a unit test. |
-| Third-party library symbols | Never assert on them directly — see [Detecting "testing the third-party library"](#detecting-testing-the-third-party-library). |
+| Subject                               | Default                                                                                                                                            |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Filesystem                            | Real, sandboxed in tempdir. Don't mock.                                                                                                            |
+| Network HTTP                          | Fake at the adapter trait. Or use a recording library (vcr-style). See [08a — Recording / HTTP fakes](08a-testing-tools.md#recording--http-fakes). |
+| Clock / time                          | Mock via the `Clock` trait on `AppContext`.                                                                                                        |
+| Subprocess invocations (wrapped CLIs) | Fake at the `Process` adapter trait.                                                                                                               |
+| Database                              | Use a sqlite tempfile in-process; don't run a real server in tests.                                                                                |
+| Random                                | Inject a seeded RNG into `AppContext`.                                                                                                             |
+| Environment variables                 | Use `env_clear` + curated env in fixtures (never modify global env in a test).                                                                     |
+| CLI subprocess argv contract          | Replace the child with a recording stub; assert on argv. This is an integration test, not a unit test.                                             |
+| Third-party library symbols           | Never assert on them directly — see [Detecting "testing the third-party library"](#detecting-testing-the-third-party-library).                     |
 
 Test pollution from a live process modifying global state is the #1 source of flaky CI. Treat `os.environ`, `chdir`, and global singletons as radioactive in tests.
 
@@ -542,13 +542,13 @@ Test pollution from a live process modifying global state is the #1 source of fl
 
 Use a parallel-by-default runner with fail-fast and a flat summary. The complete per-language list with rationale lives in [08a — Unit/integration runner](08a-testing-tools.md#unit--integration-runner); short version:
 
-| Language | Runner |
-|----------|--------|
-| Rust | `cargo nextest` |
-| Python | `pytest` with `-n auto` (`pytest-xdist`) |
-| Go | `go test ./...` with `-parallel N` |
-| TypeScript/JS | `vitest`, `jest`, or `node:test` |
-| Bash | `bats-core` |
+| Language      | Runner                                   |
+| ------------- | ---------------------------------------- |
+| Rust          | `cargo nextest`                          |
+| Python        | `pytest` with `-n auto` (`pytest-xdist`) |
+| Go            | `go test ./...` with `-parallel N`       |
+| TypeScript/JS | `vitest`, `jest`, or `node:test`         |
+| Bash          | `bats-core`                              |
 
 Wire it through a one-liner (`just test`, `make test`, `task test`). New contributors find it immediately.
 

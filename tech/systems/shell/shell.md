@@ -1,21 +1,22 @@
 # Shell
+
 > $shell $zsh $bash $terminal
 
-<!-- toc -->
+<!--TOC-->
 
 - [Parallel](#parallel)
 - [Processes](#processes)
 - [General](#general)
-- [read stdin in function in bash script](#read-stdin-in-function-in-bash-script-)
+- [\[read stdin in function in bash script\](https://stackoverflow.com/questions/14004756/read-stdin-in-function-in-bash-script)](#read-stdin-in-function-in-bash-scripthttpsstackoverflowcomquestions14004756read-stdin-in-function-in-bash-script)
 - [Key-value pair](#key-value-pair)
-- [Files maching list of files](#files-maching-list-of-files)
+- [Files matching list of files](#files-matching-list-of-files)
 - [Case statement](#case-statement)
 - [Loop](#loop)
 - [Parameter Expansion](#parameter-expansion)
 - [Flags](#flags)
   - [shflags](#shflags)
 
-<!-- tocstop -->
+<!--TOC-->
 
 ## Parallel
 
@@ -65,7 +66,7 @@ Edit files as root but keeping the editor configuration:
 SUDO_EDITOR=vim sudoedit /etc/file
 ```
 
----
+______________________________________________________________________
 
 Functions to work with issues (bug issue tracker) and git:
 
@@ -109,8 +110,8 @@ function bcc() {
 }
 ```
 
-
 [Linux Run Command As Another User](https://www.cyberciti.biz/open-source/command-line-hacks/linux-run-command-as-different-user/)
+
 ```
 runuser -u www-data -- command
 ## Run commands as www-data user ##
@@ -118,9 +119,9 @@ runuser -u www-data -- composer update --no-dev
 runuser -u www-data -- php7 /app/maintenance/update.php
 ```
 
----
+______________________________________________________________________
 
----
+______________________________________________________________________
 
 `!!` command
 
@@ -129,7 +130,7 @@ sudo systemctl status sshd
 !!:s/status/start/ #substitutes
 ```
 
----
+______________________________________________________________________
 
 https://explainshell.com/ : write down a command-line to see the help text that matches each argument
 
@@ -141,10 +142,9 @@ set -C
 set noclobber
 ```
 
-- Prevent output redirection using ‘>’, ‘>&’, and ‘<>’ from overwriting existing files. [^6](gubasso/references)
+- Prevent output redirection using ‘>’, ‘>&’, and ‘\<>’ from overwriting existing files. [^6](gubasso/references)
 
-
-## [read stdin in function in bash script ](https://stackoverflow.com/questions/14004756/read-stdin-in-function-in-bash-script)
+## [read stdin in function in bash script](https://stackoverflow.com/questions/14004756/read-stdin-in-function-in-bash-script)
 
 ```
 function myeggs() {
@@ -157,16 +157,14 @@ ls | myeggs
 ```
 
 ## Key-value pair
+
 > key value variable
 
 [How to Use Key-Value Dictionary in Shell Script](https://fedingo.com/how-to-use-key-value-dictionary-in-shell-script/)
 
 - `declare` inside function is local variable
 
-
-
-
-## Files maching list of files
+## Files matching list of files
 
 [find files not in a list](https://stackoverflow.com/questions/7306971/find-files-not-in-a-list)
 
@@ -211,6 +209,7 @@ function list_csvs() {
 
 - For each yaml file
 - echo its content, separated by its filename
+
 ```sh
 find . -name "*.yaml" -print0 | xargs -0 -I {} sh -c 'echo "# ==> {} <=="; cat {}; echo' | toxclip
 ```
@@ -226,7 +225,6 @@ find . -type f -exec sh -c 'file "{}" | grep -q "text"' \; -print0 | xargs -0 -I
 - `-type f` ensures that only files (not directories) are considered.
 - `-print0` outputs the file names followed by a null character instead of a newline. This is useful to handle filenames with spaces or newlines correctly.
 - `xargs -0 cat` takes the null-terminated file names from `find` and uses `cat` to output their contents. The `-0` option tells `xargs` to expect input items terminated by a null character, matching `-print0` from `find`.
-
 
 ## Loop
 
@@ -258,6 +256,7 @@ find ${datapath} -name "${csv_fileext}.part*" | sort | \
 ## Parameter Expansion
 
 [How to Get Filename from Path in Shell Script](https://fedingo.com/how-to-get-filename-from-path-in-shell-script/)
+
 - has simple examples
 
 ```
@@ -266,11 +265,11 @@ file_with_ext="${full##*/}"
 file_no_ext="${file_with_ext%.*}"
 ```
 
-Nice tutorial: [Introduction to Bash Shell Parameter Expansions](https://linuxconfig.org/introduction-to-bash-shell-parameter-expansions )
+Nice tutorial: [Introduction to Bash Shell Parameter Expansions](https://linuxconfig.org/introduction-to-bash-shell-parameter-expansions)
 
-Nice summary table:[Bash Parameter Expansion](https://linuxhint.com/bash_parameter_expansion/ )
+Nice summary table:[Bash Parameter Expansion](https://linuxhint.com/bash_parameter_expansion/)
 
-Other nice ways to [Extract filename and extension in Bash ](https://stackoverflow.com/questions/965053/extract-filename-and-extension-in-bash)
+Other nice ways to [Extract filename and extension in Bash](https://stackoverflow.com/questions/965053/extract-filename-and-extension-in-bash)
 
 ```
 variable_to_be_expanded="/my/eggs/lala.txt"
@@ -279,14 +278,14 @@ echo "${variable_to_be_expanded}"
 
 Bash includes the POSIX pattern removal ‘%’, ‘#’, ‘%%’ and ‘##’ expansions to remove leading or trailing substrings from variable values (see [Shell Parameter Expansion](https://www.gnu.org/software/bash/manual/html_node/Shell-Parameter-Expansion.html)).
 
-
 ## Flags
 
 ### shflags
 
-[ kward / shflags ](https://github.com/kward/shflags)
+[kward / shflags](https://github.com/kward/shflags)
 
----
+______________________________________________________________________
 
-[Taking command line arguments using flags in bash ](https://dev.to/shriaas2898/taking-command-line-arguments-using-flags-in-bash-121)
+[Taking command line arguments using flags in bash](https://dev.to/shriaas2898/taking-command-line-arguments-using-flags-in-bash-121)
+
 - pure `getopts`
