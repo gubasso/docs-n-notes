@@ -87,4 +87,5 @@ dfx canister deposit-cycles [cycles amount] [canister-name]
 
 - [Introduction to developing canisters in Rust](https://internetcomputer.org/docs/current/developer-docs/backend/rust/)
 - rust cdk https://github.com/dfinity/cdk-rs
-  - examples: https://github.com/dfinity/cdk-rs/tree/main/examples
+  - examples: see `examples/` in <https://github.com/dfinity/cdk-rs> (former `tree/main/examples`
+    path 404s; layout reorganized)

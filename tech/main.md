@@ -68,9 +68,7 @@ kindle tips https://calibre-ebook.com/
 
 - https://contabo.com/en/vps/?PID=100110903&SID
 
-- https://cloudfanatic.net/pricing.php
-
-  - https://cloudfanatic.net/promos.php
+- cloudfanatic.net (pricing & promos pages — host appears dead)
 
 - compare a lot:
 

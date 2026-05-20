@@ -11,4 +11,5 @@ nice dev tools : https://youtu.be/qXUl3VsbA6o
 
 tool for test server requests, multiple requests, parallel requests
 
-- cli `siege` (https://www.joedog.org/siege-home/)
+- cli `siege` (legacy upstream `https://www.joedog.org/siege-home/` 404s; package still ships in
+  most distros)

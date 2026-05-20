@@ -31,7 +31,9 @@ continue from here after working with internet https://www.debian.org/releases/s
 
 - "amd64" i.e. 64-bit PC-compatible
 
-- https://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/current/multi-arch/iso-cd/
+- <https://cdimage.debian.org/cdimage/unofficial/> (former
+  `non-free/cd-including-firmware/current/multi-arch/iso-cd/` path is gone — non-free firmware is
+  now bundled in mainline installers as of Bookworm)
 
   - firmware-11.3.0-amd64-i386-netinst.iso
 

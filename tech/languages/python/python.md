@@ -60,7 +60,7 @@ from rich.pretty import pprint
 
 ---
 
-[Convert Python Tuple to Dictionary](https://appdividend.com/2020/12/22/how-to-convert-python-tuple-to-dictionary/)
+Convert Python Tuple to Dictionary (legacy: AppDividend 2020-12-22, since removed)
 
 ```
 tup = ((11, "eleven"), (21, "mike"), (19, "dustin"), (46, "caleb"))
@@ -83,7 +83,7 @@ Data validation with Cerberus:
 
 - https://github.com/pyeve/cerberus
 - https://zetcode.com/python/cerberus/
-- https://docs.python-cerberus.org/en/stable/usage.html
+- <https://docs.python-cerberus.org/> (usage guide moved; navigate from index)
 
 ## Project Structure (files / directories)
 

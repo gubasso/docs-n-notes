@@ -6,7 +6,8 @@ cache implementation: https://explore-flask.readthedocs.io/en/latest/views.html#
 
 # General
 
-- http://www.compjour.org/lessons/flask-single-page/multiple-dynamic-routes-in-flask/
+- Compjour: multiple dynamic routes in Flask (legacy link, site offline:
+  `http://www.compjour.org/lessons/flask-single-page/multiple-dynamic-routes-in-flask/`)
 
 ## return a json
 

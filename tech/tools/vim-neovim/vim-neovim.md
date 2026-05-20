@@ -5,8 +5,9 @@
 ## General
 
 - https://mason-registry.dev/registry/list
-- mason -> mason-lspconfig:
-  https://github.com/williamboman/mason-lspconfig.nvim/blob/main/doc/server-mapping.md
+- mason -> mason-lspconfig: see provider mappings in
+  <https://github.com/mason-org/mason-lspconfig.nvim> (the old `doc/server-mapping.md` was removed;
+  mappings now live in `lua/mason-lspconfig/mappings/`)
 
 python environment:
 https://www.reddit.com/r/neovim/comments/14316t9/help_me_to_get_the_best_python_neovim_environment/

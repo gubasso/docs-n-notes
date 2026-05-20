@@ -291,15 +291,17 @@ https://stackoverflow.com/questions/37296351/is-there-any-trait-that-specifies-n
 
 **https://github.com/mre/idiomatic-rust**
 
-https://cfsamson.github.io/books-futures-explained/
-https://web.archive.org/web/20200808120044/https://stjepang.github.io/ read in sequence and then:
+<https://cfsamson.gitbook.io/books-futures-explained> (`cfsamson.github.io/books-futures-explained/`
+is dead) https://web.archive.org/web/20200808120044/https://stjepang.github.io/ read in sequence and
+then:
 https://web.archive.org/web/20200511234503/https://stjepang.github.io/2020/01/25/build-your-own-block-on.html
 https://web.archive.org/web/20200207092849/https://stjepang.github.io/2020/01/31/build-your-own-executor.html
 https://rust-lang.github.io/async-book/ parei:
 https://rust-lang.github.io/async-book/02_execution/04_executor.html depois que ler (tentar
 implementar esse capitol), voltar no anterior que ele explica o futures, antes de mostrar o executor
 https://cfsamson.gitbook.io/green-threads-explained-in-200-lines-of-rust/
-https://cfsamson.github.io/book-exploring-async-basics/
+<https://cfsamson.gitbook.io/book-exploring-async-basics>
+(`cfsamson.github.io/book-exploring-async-basics/` is dead)
 https://cfsamsonbooks.gitbook.io/epoll-kqueue-iocp-explained/
 
 - [Awesome Rust Streaming](https://github.com/jamesmunns/awesome-rust-streaming/blob/master/README.md)

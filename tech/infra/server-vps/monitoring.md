@@ -18,7 +18,7 @@ how you can approach it and the steps you can take to study and master these ski
 - **Netdata** : Provides real-time performance monitoring. Install using
   `sudo apt-get install netdata`.
 - **Prometheus and Grafana** : For more advanced monitoring and visualization. Prometheus collects
-  metrics, and Grafana displays them. Follow [Prometheus]() and [Grafana]() installation guides.
+  metrics, and Grafana displays them. Follow the Prometheus and Grafana installation guides.
 
 1. **Set Up Alerts** : Configure alerts in Prometheus or use tools like Nagios to notify you of any
    critical issues.
@@ -32,9 +32,9 @@ how you can approach it and the steps you can take to study and master these ski
 1. **Explore Monitoring Tools** :
 
 - **Netdata** : Start with Netdata for an easy-to-set-up real-time monitoring tool. Follow the
-  [Netdata installation guide]() .
+  Netdata installation guide.
 - **Prometheus & Grafana** : Learn how to set up Prometheus for collecting metrics and Grafana for
-  visualization. Follow tutorials like this [Prometheus and Grafana setup guide]() .
+  visualization. Follow a Prometheus and Grafana setup guide.
 
 1. **Set Up a Test Environment** : Create a virtual machine or use a cloud instance to practice
    installing and configuring these tools.

@@ -45,7 +45,7 @@ cd ~/Downloads
 wget https://download.opensuse.org/tumbleweed/iso/openSUSE-Tumbleweed-DVD-x86_64-Current.iso
 ```
 
-Alternatively, you can visit the [openSUSE Tumbleweed download page]() to get the latest ISO.
+Alternatively, you can visit the openSUSE Tumbleweed download page to get the latest ISO.
 
 **2. Create a Virtual Disk Image** Create a virtual disk for your VM using `qemu-img`.
 
@@ -367,13 +367,13 @@ isolated environment that closely mimics a physical machine.
 
 - **openSUSE Documentation:**
 
-  - [Virtualization Guide]()
+  - openSUSE Virtualization Guide
 
 - **Libvirt and KVM Resources:**
 
-  - [Libvirt Documentation]()
+  - Libvirt Documentation
 
-  - [KVM Documentation]()
+  - KVM Documentation
 
 - **Useful Commands:**
 

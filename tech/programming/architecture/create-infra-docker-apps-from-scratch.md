@@ -16,8 +16,8 @@
 - Reverse Proxy: [Traefik](../../infra/networking/traefik.md)
 - Containers Manager: [Portainer](../../infra/containers/docker-portainer.md)
 - Security:
-  - [CrowdSec]()
-  - [Authelia]()
+  - CrowdSec
+  - Authelia
 
 # References
 

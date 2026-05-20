@@ -52,6 +52,9 @@ repos:
         language: system
         types: [markdown]
         pass_filenames: true
+        # System binary (~/.cargo/bin/dprint); git push hooks may strip PATH.
+        # dprint already runs at commit time, so skip pre-push re-run.
+        stages: [pre-commit]
 
   # --- Table of contents (looks for `<!--TOC-->` markers) ---
   - repo: https://github.com/frnmst/md-toc
@@ -86,11 +89,12 @@ repos:
     hooks:
       - id: lychee
         stages: [pre-push]
+        # Knowledge base is markdown — don't crawl template/config files.
+        types: [markdown]
+        # Tunables (concurrency, retries, accept/exclude) live in ./lychee.toml;
+        # CLI args here are intentionally minimal so toml stays the source of truth.
         args:
           - --no-progress
-          - --max-concurrency=4
-          - --cache
-          - --max-cache-age=1d
 
   # --- Commit messages: Conventional Commits ---
   - repo: https://github.com/commitizen-tools/commitizen
@@ -98,8 +102,6 @@ repos:
     hooks:
       - id: commitizen
         stages: [commit-msg]
-      - id: commitizen-branch
-        stages: [pre-push]
 
   # --- Meta ---
   - repo: meta

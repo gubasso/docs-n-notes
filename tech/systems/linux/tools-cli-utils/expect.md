@@ -115,8 +115,8 @@ chmod +x ssh_login.expect
 
 #### Additional Resources
 
-- [Expect Man Page]()
-- [Expect Official Documentation]()
+- Expect Man Page
+- Expect Official Documentation
 
 By using Expect, you can automate and test applications that require user interaction, making it a
 powerful tool for managing and testing interactive scripts.

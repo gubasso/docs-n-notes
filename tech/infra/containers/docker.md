@@ -827,8 +827,7 @@ like this, I don't think this is an issue at all for these "Utility Containers"
 - [Docker Playground](https://labs.play-with-docker.com/)
 - [Docker hub](https://hub.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
-- [](https://yacht.sh/)
-  - web ui for managing containers, available at linode
+- Yacht (yacht.sh, project appears dead) — web UI for managing containers, available at Linode
 - Udemy Course Academind:
   [Docker & Kubernetes: The Practical Guide [2022 Edition]](https://www.udemy.com/share/103Ia03@_LG5LvM93j_prIuRNO6TDsc6YuhwqudbXhJirjmPbdAU7lSzxDsoTeCwzbGUXkS6/)
 

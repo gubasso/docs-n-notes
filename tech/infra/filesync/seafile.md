@@ -10,11 +10,12 @@
     - is not open source
   - easy to update
 
-- pro: https://www.seafile.com/en/product/private_server/
+- pro: <https://www.seafile.com/> (private server / pro edition)
 
 - take notes:
   [Get rid of Google and Dropbox - Use Seafile sync and drive self hosted, open source options instead. t:awesome_open_source](https://www.youtube.com/watch?v=-LPaWq1_GF0)\](https://www.youtube.com/watch?v=gQ1WYgy6Z8s)
 
 - setup basic server: read docs and follow steps (update notes)
 
-- https://manual.seafile.com/deploy_pro/multiple_storage_backends/
+- Multiple storage backends: see Seafile Pro manual at <https://manual.seafile.com/> (legacy path
+  `/deploy_pro/multiple_storage_backends/` returns 404; navigate from the index)
