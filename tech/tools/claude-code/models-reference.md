@@ -108,8 +108,11 @@ get explicit frontmatter — the powerful default (opus/high) is implicit.
 **Haiku** (model: haiku): `commit`, `project-classification`, `xq-add-task`, `xq-add-spec`,
 `xq-add-plan`, `xq-add-prex-resume`, `xq-list`, `xq-status`, `xq-retry`, `xq-stop`
 
-**Sonnet/medium** (model: sonnet, effort: medium): `ask`, `ast-grep`, `claudemd`,
-`project-preflight`, `xq-init`, `xq-start`
+**Sonnet/medium** (model: sonnet, effort: medium — documentation-only, `disable-model-invocation`
+skills where model is not enforced by harness): `xq-init`, `xq-start`
+
+**Default with effort: medium** (inherits session Opus at reduced effort — workaround for Sonnet 1M
+routing bug, see [Known Issues](#known-issues)): `ask`, `ast-grep`, `claudemd`, `project-preflight`
 
 **Default (opus/high, no frontmatter)**: `merge-queue`, `plan-exec`, `plan-reviewer`, `plan-writer`,
 `pre-commit`, `prex`, `prex-resume`, `refactor-migration-plan`, `review-code-deep`,
@@ -131,6 +134,37 @@ get explicit frontmatter — the powerful default (opus/high) is implicit.
 | Opus 4.7   | Jan 2026           | Jan 2026        |
 | Sonnet 4.6 | Aug 2025           | Jan 2026        |
 | Haiku 4.5  | Feb 2025           | Jul 2025        |
+
+## Known Issues
+
+### Sonnet 1M context routing bug
+
+> **Status:** open as of 2026-05-27. **Workaround applied:** removed `model: sonnet` from enforced
+> skills; they inherit session Opus with `effort: medium`.
+
+Claude Code routes ALL Sonnet 4.6 requests to the 1M billing tier regardless of which alias is used
+(`sonnet` vs `sonnet[1m]`). The client sets `effectiveWindow=980000` for Sonnet by default, pushing
+every request into the long-context tier — even on fresh sessions with ~46K tokens.
+
+On Max/Team/Enterprise plans, Opus 1M is included but Sonnet 1M requires usage credits. This makes
+`model: sonnet` in skill frontmatter unusable without paying API rates.
+
+`CLAUDE_CODE_DISABLE_1M_CONTEXT=1` is not viable as a workaround — it removes ALL 1M variants
+globally, including Opus.
+
+**Upstream issues:**
+
+- [#62314](https://github.com/anthropics/claude-code/issues/62314) — Sonnet routes every request to
+  long-context tier (primary, still open)
+- [#45847](https://github.com/anthropics/claude-code/issues/45847) — skill `model:` frontmatter
+  inherits 1M from parent session (closed as dup of #34296)
+- [#61692](https://github.com/anthropics/claude-code/issues/61692) — Sonnet blocked by false "usage
+  credits required" error
+- [#34296](https://github.com/anthropics/claude-code/issues/34296) — root duplicate
+
+**Restore action:** when upstream fixes Sonnet to correctly use 200K tier for the `sonnet` alias,
+re-add `model: sonnet` and `effort: medium` to `ask`, `ast-grep`, `claudemd`, `project-preflight`.
+Also tracked in `_docs/TRACKING.md` in the dotfiles repo.
 
 ## Sources
 
