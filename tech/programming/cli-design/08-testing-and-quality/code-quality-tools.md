@@ -169,7 +169,7 @@ then refactors the solution to not need it, but forgets to remove the dependency
 | Rust     | [`cargo-machete`](https://github.com/bnjbvr/cargo-machete) | Grep for crate names  | Fast   | Stable Rust. Occasional false positives on macros. |
 | Rust     | [`cargo-udeps`](https://github.com/est31/cargo-udeps)      | Compiler analysis     | Medium | Requires nightly. More precise.                    |
 | Python   | [`deptry`](https://github.com/fpgmaas/deptry)              | AST + import analysis | Fast   | Modern replacement for `pipdeptree`.               |
-| TS/JS    | [`depcheck`](https://github.com/nicedoc/depcheck)          | Import analysis       | Fast   | Handles CJS + ESM.                                 |
+| TS/JS    | [`depcheck`](https://github.com/depcheck/depcheck)         | Import analysis       | Fast   | Handles CJS + ESM.                                 |
 | Go       | `go mod tidy` (built-in)                                   | Compiler analysis     | Fast   | Part of the standard toolchain.                    |
 
 **Tier placement:** `cargo-machete` / `deptry` / `depcheck` in pre-commit (fast enough).

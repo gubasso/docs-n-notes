@@ -79,6 +79,8 @@ exclude = [
   "^https?://(www\\.)?openquest\\.xyz",
   "^https?://(www\\.)?clockwork\\.xyz",
   "^https?://(www\\.)?milvus\\.io",
+  # martinfowler.com — times out under bot-style requests (pre-push context).
+  "^https?://(www\\.)?martinfowler\\.com",
   # Twitter card thumbnails: ephemeral by design.
   "^https?://pbs\\.twimg\\.com",
   # mail-tester opens a fresh inbox per visit and rate-limits scrapers.
