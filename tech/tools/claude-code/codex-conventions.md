@@ -200,7 +200,7 @@ codex-session --account auto exec resume "$THREAD_ID" --profile fast --full-auto
 Use this pattern when Codex should resume an existing session for read-only review:
 
 ```bash
-codex-session --account auto exec resume "$THREAD_ID" \
+codex-session --account auto exec resume "$THREAD_ID" --profile fast \
   -c 'sandbox_permissions=["disk-full-read-access"]' \
   --json --output-last-message "$RUN_DIR/round-N-review.txt" \
   "<review prompt>" \
