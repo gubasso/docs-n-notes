@@ -367,11 +367,12 @@ Bake the seams in from day one:
 test stubs out `std::process::Command` (Rust), `subprocess.run` (Python), or `exec.Command` (Go) and
 only asserts on the recorded calls, never on the wrapper's argv-translation behavior. Apply the
 **import-removal test**
-([08 § The import-removal test](../08-testing-strategy.md#5-the-import-removal-test)): mentally
-delete the subprocess import the test sets up. Would the test still pass? If yes, you're testing the
-mock, not the wrapper — convert it to an integration test that runs the wrapper with a recording
-stub on `PATH` and asserts on the recorded argv. The full catalog of detection heuristics lives in
-[08 § Detecting "testing the third-party library"](../08-testing-strategy.md#detecting-testing-the-third-party-library).
+([08 § The import-removal test](../08-testing-and-quality/testing-strategy.md#5-the-import-removal-test)):
+mentally delete the subprocess import the test sets up. Would the test still pass? If yes, you're
+testing the mock, not the wrapper — convert it to an integration test that runs the wrapper with a
+recording stub on `PATH` and asserts on the recorded argv. The full catalog of detection heuristics
+lives in
+[08 § Detecting "testing the third-party library"](../08-testing-and-quality/testing-strategy.md#detecting-testing-the-third-party-library).
 
 ---
 

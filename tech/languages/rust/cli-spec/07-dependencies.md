@@ -7,9 +7,9 @@
 > [`02-error-messages`](../../../programming/cli-design/02-error-messages.md) (`thiserror`,
 > `anyhow`), [`03-config-precedence`](../../../programming/cli-design/03-config-precedence.md)
 > (`figment`, `directories`), and
-> [`08-testing-strategy`](../../../programming/cli-design/08-testing-strategy.md) (`assert_cmd`,
-> `insta`, `tempfile`, `nextest`). This chapter is the curated default crate list with one-line
-> justifications.
+> [`08-testing-and-quality`](../../../programming/cli-design/08-testing-and-quality/testing-strategy.md)
+> (`assert_cmd`, `insta`, `tempfile`, `nextest`). This chapter is the curated default crate list
+> with one-line justifications.
 
 Opinionated default dependency list. Each entry has a one-line justification and a "skip if"
 condition. Pick deliberately; resist the urge to add "useful-looking" crates without a concrete

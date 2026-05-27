@@ -342,6 +342,7 @@ consumer, **don't** create the public surface — keep modules internal.
   composition, no globals.
 - [07 — Naming & Documentation](07-naming-and-docs.md) — verb/noun discipline, module headers ("what
   it is, what it isn't").
-- [08 — Testing Strategy](08-testing-strategy.md) — what tests live where in the tree.
+- [08 — Testing Strategy](08-testing-and-quality/testing-strategy.md) — what tests live where in the
+  tree.
 - Language-specific spec:
   [`rust/cli-spec/00-directory-tree.md`](../../languages/rust/cli-spec/00-directory-tree.md).

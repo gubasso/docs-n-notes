@@ -219,7 +219,7 @@ see [mariozechner.at](https://mariozechner.at/posts/2025-08-15-mcp-vs-cli/).
   progress bars, and full stdout dumps for passing tests are pure noise in a captured CI log. The
   four output axes (per-test status, end-of-run summary, captured stdout of passing/failing tests)
   plus the "explicit-profile" foot-gun are written up in
-  [08a § Tuning test-runner output for CI + AI agents](08a-testing-tools.md#tuning-test-runner-output-for-ci--ai-agents).
+  [08a § Tuning test-runner output for CI + AI agents](08-testing-and-quality/testing-tools.md#tuning-test-runner-output-for-ci--ai-agents).
 
 ### 2.7 Deterministic and idempotent operations
 
@@ -480,19 +480,20 @@ collapses; the regression you were trying to catch slips straight through.
 The five concrete heuristics for detecting this — assertion subject is a non-project import,
 mock-is-the-only-subject, doc-mirroring, mocking your own pure function, the import-removal test —
 are documented in
-[08 — Testing Strategy § Detecting "testing the third-party library"](08-testing-strategy.md#detecting-testing-the-third-party-library).
+[08 — Testing Strategy § Detecting "testing the third-party library"](08-testing-and-quality/testing-strategy.md#detecting-testing-the-third-party-library).
 
 Mitigations to bake into your agent's instructions (AGENTS.md, CLAUDE.md, or the project's
 test-writing skill):
 
 - **Load the project's testing principles before writing tests.** Point the agent at
-  [08 — Testing Strategy](08-testing-strategy.md) and [08a — Testing Tools](08a-testing-tools.md).
-  The five heuristics are non-negotiable.
+  [08 — Testing Strategy](08-testing-and-quality/testing-strategy.md) and
+  [08a — Testing Tools](08-testing-and-quality/testing-tools.md). The five heuristics are
+  non-negotiable.
 - **Refuse mock-only assertions.** If the only thing a test asserts on is a mock's call shape, the
   test is rejected at review.
 - **Surface coverage AND mutation score.** Coverage alone is the wrong signal; a `make mutate` (or
   equivalent) target keeps mutation testing one keystroke away. See
-  [08a § Mutation testing](08a-testing-tools.md#mutation-testing).
+  [08a § Mutation testing](08-testing-and-quality/testing-tools.md#mutation-testing).
 - **Audit existing tests with the `test-review` skill.** The skill ships with the dotfiles (Claude
   planner + Codex implementer) and lints any project's test suite against the principles file,
   producing a refactor plan tied to the specific heuristic each finding violates.

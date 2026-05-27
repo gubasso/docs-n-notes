@@ -123,12 +123,33 @@ waive it in an ADR — don't ship with silent gaps.
 - [ ] Mutation score (≥ 60% on critical modules) tracked nightly, even if not gated (`cargo-mutants`
       / `mutmut` / `stryker`).
 - [ ] LLM-generated tests reviewed against the third-party-API heuristics in
-      [08 § Detecting "testing the third-party library"](08-testing-strategy.md#detecting-testing-the-third-party-library).
+      [08 § Detecting "testing the third-party library"](08-testing-and-quality/testing-strategy.md#detecting-testing-the-third-party-library).
 - [ ] Every test survives the "import-removal test": deleting a third-party import would break the
       test (proving it tests the boundary, not the library).
 
-→ Detail: [08 — Testing Strategy](08-testing-strategy.md) → Tooling:
-[08a — Testing Tools](08a-testing-tools.md)
+→ Detail: [08 — Testing Strategy](08-testing-and-quality/testing-strategy.md) → Tooling:
+[08a — Testing Tools](08-testing-and-quality/testing-tools.md)
+
+## Regression safeguards
+
+- [ ] Property-based tests cover parsers, codecs, newtypes, and state machines (`proptest` /
+      `hypothesis` / `fast-check`).
+- [ ] Mutation score (>= 60%) tracked on critical modules; nightly CI (`cargo-mutants` / `mutmut` /
+      `stryker`).
+- [ ] Complexity thresholds enforced in CI: cognitive complexity <= 25, function length <= 100 LOC,
+      NARGS <= 7.
+- [ ] Restriction lints enabled: `todo`, `dbg_macro`, `unwrap_used`, `panic`, `unimplemented`.
+- [ ] Unused dependency detection in pre-commit (`cargo-machete` / `deptry` / `depcheck`).
+- [ ] Binary size baseline tracked; CI flags growth > 5%.
+- [ ] Snapshot updates require explicit review; never auto-updated in CI.
+- [ ] Architectural boundary rules enforced via grep-based lints (domain must not import adapters,
+      no print outside ui/).
+- [ ] TDD-for-agents workflow documented in CLAUDE.md / AGENTS.md: write tests first, agent
+      implements, human reviews.
+- [ ] Eval harness exists for agent-consumed CLI skills (10+ samples per prompt, tracked over time).
+
+→ Detail: [10 — Regression Safeguards](08-testing-and-quality/regression-safeguards.md) → Tooling:
+[10a — Code Quality Tools](08-testing-and-quality/code-quality-tools.md)
 
 ## CI / shipping
 
