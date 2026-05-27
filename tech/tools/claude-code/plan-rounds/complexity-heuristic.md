@@ -1,0 +1,74 @@
+# Complexity Heuristic & Round-Splitting Rules
+
+Shared classification system for implementation plans. Determines the complexity grade and how to
+split work into rounds.
+
+## Five scoring axes
+
+Evaluate the implementation surface along each axis (score 1–4):
+
+| Axis                   | 1 (Low)           | 2 (Medium)        | 3 (High)            | 4 (Very High)     |
+| ---------------------- | ----------------- | ----------------- | ------------------- | ----------------- |
+| Files to change        | 1–3               | 4–8               | 9–15                | 16+               |
+| Cross-cutting concerns | None              | 1 (e.g., logging) | 2–3                 | 4+                |
+| Dependency chains      | Independent steps | Linear chain      | Diamond deps        | Complex DAG       |
+| Pattern novelty        | All existing      | 1 new pattern     | 2–3 new patterns    | New architecture  |
+| Risk / blast radius    | Isolated module   | Single subsystem  | Multiple subsystems | Core/shared infra |
+
+## Grade mapping
+
+Sum the five axis scores (range 5–20) and map to a grade:
+
+| Grade  | Score | Rounds | Notes                                                    |
+| ------ | ----- | ------ | -------------------------------------------------------- |
+| **S**  | 5–7   | 1      | Simple, focused change. One prex run handles it easily.  |
+| **M**  | 8–11  | 1      | Meaty but cohesive. One prex run, possibly a longer one. |
+| **L**  | 12–15 | 2–4    | Multi-round. Needs thoughtful splitting.                 |
+| **XL** | 16–20 | 4–8    | Complex. `STRATEGY.md` generated. Careful orchestration. |
+
+## Override guidance
+
+The axes are structured judgment aids, not a rigid formula. Override when:
+
+- **Bump up**: Few files but each requires 500+ lines of new code. Or the change is
+  security-sensitive regardless of size. Or the implementation requires unfamiliar technology.
+- **Bump down**: Many files but the change is mechanical (e.g., rename across 20 files). Or the
+  codebase has strong test coverage that de-risks the change.
+
+When overriding, note the reason in the plan's README.md under Decisions & Constraints.
+
+## Round-splitting rules
+
+When the grade is L or XL, split the implementation into rounds. Apply these rules in priority
+order:
+
+1. **Module/subsystem boundaries** — group changes by the module they touch. Changes to the auth
+   module go in one round; changes to the API layer go in another.
+
+2. **Layer boundaries** — if the change spans layers, split bottom-up: data layer before business
+   logic before API before UI. Each layer round produces a stable foundation for the next.
+
+3. **Dependency order** — if round 2 depends on artifacts from round 1 (new types, new modules),
+   they must be separate rounds. Never create circular dependencies between rounds.
+
+4. **Size cap** — each round should describe work achievable in one Codex 600s session. Practical
+   guideline: 3–8 file changes, or one cohesive feature/refactor per round.
+
+5. **Atomic changes** — never split an atomic change across rounds. A type definition and all its
+   consumers belong in the same round. A migration and the code that uses the new schema belong
+   together.
+
+6. **Foundations first** — shared foundations (types, interfaces, utilities, configuration) go in
+   round 01. Consumer code goes in subsequent rounds.
+
+7. **Tests with code** — tests go in the same round as the code they test. Exception: a dedicated
+   integration/e2e testing round at the end, when the test suite exercises cross-round interactions.
+
+## Reporting the classification
+
+After classification, report to the user:
+
+- The grade (S/M/L/XL) with a one-sentence rationale.
+- The per-axis scores (brief, not a full table — e.g., "files:2 cross-cut:1 deps:2 novelty:3 risk:2
+  → total 10 → M").
+- For L/XL: the proposed round split with topic summaries. Get user confirmation before generating.
