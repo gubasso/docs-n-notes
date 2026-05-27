@@ -7,7 +7,8 @@ patterns for future Claude-side orchestration work.
 
 - **SoT:** `codex-session --version` (prints wrapper version, child binary path + version, active
   account).
-- Model + effort inherited from the composed profile; **SoT:**
+- Default stock Codex profile is `deep` (gpt-5.5, high effort). Execution/review calls override with
+  `--profile fast` (gpt-5.4-mini, medium effort). **SoT:**
   `~/.config/codex-session/settings/base.toml`.
 
 ## Wrapper: `codex-session`
@@ -41,8 +42,26 @@ the wrapper. Codex writes refresh rotations in place. No write-back to `~/.codex
 `--config`, `--format`, `--verbose`/`--quiet`/`--silent`, `--log-stderr`, `--log-format`.
 
 **Argv pattern:** `codex-session --account auto exec ...` and
-`codex-session --account auto exec resume <thread-id> ...`. Model and effort are inherited from the
-composed profile — no `-m`/`-c` flags needed at the call site.
+`codex-session --account auto exec resume <thread-id> ...`. Planning calls omit `--profile` and
+inherit the `deep` default. Execution and review calls pass `--profile fast` explicitly:
+
+```text
+codex-session --account auto exec --profile fast ...
+codex-session --account auto exec resume <thread-id> --profile fast ...
+```
+
+## Profile Strategy
+
+Two stock Codex profiles are defined in `base.toml`:
+
+- **`deep`** (default) — no model override (inherits current catalog default), `high` effort. Used
+  for planning and new-thread reasoning tasks. Calls omit `--profile`.
+- **`fast`** — `gpt-5.4-mini`, `medium` effort. Used for execution (implementation resume, code
+  review rounds). Calls pass `--profile fast` after `exec` or `exec resume`.
+
+The wrapper renamed its own profile flag to `--config-recipe` (commit 3117d8e), so `--profile`
+passes through to stock Codex for selecting `[profiles.*]` tables. `ping` remains a
+health-probe-only profile.
 
 ## Pre-flight: Account Health
 
@@ -110,7 +129,7 @@ instead of `--full-auto`. This is the documented Codex approach for externally-s
 environments (devcontainers, CI runners):
 
 ```bash
-codex-session --account auto exec \
+codex-session --account auto exec --profile fast \
   --dangerously-bypass-approvals-and-sandbox --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
@@ -120,7 +139,7 @@ codex-session --account auto exec \
 **Session resumption** (stage 3 resume, review rounds): the same flag applies to `exec resume`:
 
 ```bash
-codex-session --account auto exec resume "$THREAD_ID" \
+codex-session --account auto exec resume "$THREAD_ID" --profile fast \
   --dangerously-bypass-approvals-and-sandbox --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
@@ -155,7 +174,7 @@ Contract:
 Use this pattern when Codex should implement:
 
 ```bash
-codex-session --account auto exec --full-auto --json \
+codex-session --account auto exec --profile fast --full-auto --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
   < /dev/null > "$RUN_DIR/stage3-events.jsonl"
@@ -172,7 +191,7 @@ Contract:
 Use this pattern when Codex should resume an existing session for implementation:
 
 ```bash
-codex-session --account auto exec resume "$THREAD_ID" --full-auto --json \
+codex-session --account auto exec resume "$THREAD_ID" --profile fast --full-auto --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
   < /dev/null > "$RUN_DIR/stage3-events.jsonl"
@@ -281,6 +300,8 @@ all exceed the default.
 - All `codex-session exec` invocations must include `< /dev/null` to prevent blocking on inherited
   stdin. Without this, Codex prints `Reading additional input from stdin...` and hangs until timeout
   when called from TUI sessions or background agents.
+- Planning and new-thread calls inherit the default `deep` profile (no `--profile` flag). Execution
+  and review calls must pass `--profile fast` after `exec` or `exec resume`.
 - Codex must never run git commands. All git operations belong to the Claude Code orchestrator.
 
 ## Wrapper Exit Codes
