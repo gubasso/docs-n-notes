@@ -61,8 +61,11 @@ Rounds are sized against the capabilities of a single `/prex` run:
 
 1. **Generation**: The planning skill writes the plan directory into `.plan/01-todo/<slug>/`. It
    never executes rounds or moves directories.
-2. **Execution**: The user runs `/prex -ar <round-file>` or `/prex -ar @<plan-dir>/` to execute
-   rounds. The executor updates the README.md checklist as rounds complete.
+2. **Execution**: Rounds are executed **one at a time**, each in its own `/prex -ar` session. After
+   completing a round, the executor updates the README.md execution order table (marking the round
+   `done` with today's date), then picks the next round with status `todo`. Never batch multiple
+   rounds into a single session — each round is a self-contained unit of work sized for one `/prex`
+   run.
 3. **Completion**: After all rounds are done, the user (or a lifecycle skill) moves the directory:
    `mv .plan/01-todo/<slug> .plan/02-done/<slug>` and updates the README.md status to `done`.
 

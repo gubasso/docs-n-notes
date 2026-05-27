@@ -148,6 +148,18 @@ plans, this is 2–3 sentences. For L/XL, summarize and point to STRATEGY.md.}}
 /prex -ar @.plan/01-todo/{{SLUG}}/
 ```
 
+## Execution Discipline
+
+**Rounds must be executed one at a time.** Each round is a self-contained unit of work designed for
+a single `/prex` session. Do not attempt to implement multiple rounds in one session.
+
+After completing a round:
+
+1. Consult the **Execution Order** table above.
+2. Find the next round with status `todo`.
+3. Execute it in a **fresh** `/prex` session.
+4. Repeat until all rounds show status `done`.
+
 ## Decisions & Constraints
 
 {{Architectural decisions made during the interview. Include the reasoning behind each. Constraints
