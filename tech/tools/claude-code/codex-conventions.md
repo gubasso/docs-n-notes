@@ -22,8 +22,9 @@ directory, and passes through to the stock `codex` binary.
 **Per-call lifecycle:** the wrapper resolves account + group-id, then sets
 `CODEX_HOME=<state>/accounts/<account>/groups/<group-id>/`. Group-id resolution follows a 5-step
 chain: `--group` flag > `CODEX_SESSION_GROUP` env > stable TTY id > PPID+starttime composite >
-warned `pid-N` fallback. The `pid-N` fallback emits a stderr warning because resume will not persist
-across invocations.
+warned `pid-N` fallback. On resume, the wrapper restores the original group-id from the thread
+index, so `exec resume <ID>` works across terminals and PIDs. The `pid-N` fallback emits a stderr
+warning because the derived group is ephemeral and will differ on the next invocation.
 
 **Account resolution:** `--account <name>` flag > `CODEX_SESSION_ACCOUNT` env > LRU pointer (from
 `account use`, stored in `state/last-account`) > `config.account.pinned` > `NoneResolved` error.
