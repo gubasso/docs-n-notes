@@ -7,18 +7,17 @@ patterns for future Claude-side orchestration work.
 
 - **SoT:** `codex-session --version` (prints wrapper version, child binary path + version, active
   account).
-- Stock skill workflow uses two Codex profiles: planning/new-thread calls omit `--profile`, so codex
-  uses the base `config.toml` alone (high effort, full sandbox; no model override — inherits the
-  catalog default). Execution/review calls pass `--profile fast` (gpt-5.4-mini, medium effort). If
-  the user wants to run planning with a different profile, they can pass `--profile <name>`
-  explicitly on the CLI, but it's not typical. Codex v0.134+ has no in-file default-profile
-  selector. **SoT:** `~/.config/codex-session/configs/profiles/<name>.config.toml` (one file per
-  profile, bare top-level keys, no `[profiles.<name>]` header).
+- Stock skill workflow uses base config by default: planning/new-thread calls omit `--profile`, so
+  codex uses only the base `config.toml` (no profile overlay). Profile files are available via
+  explicit `--profile <name>` and none is auto-activated. Execution/review calls pass
+  `--profile fast` (gpt-5.4-mini, medium effort). Codex v0.134+ has no in-file default-profile
+  selector. **SoT:** `~/.config/codex-session/profiles/<name>.config.toml` (one file per profile,
+  bare top-level keys, no `[profiles.<name>]` header).
 
 ## Wrapper: `codex-session`
 
 Every Codex invocation in this document and in skill files uses `codex-session`, which composes a
-profile, resolves the active account, sets `CODEX_HOME` to the per-account per-group session
+config recipe, resolves the active account, sets `CODEX_HOME` to the per-account per-group session
 directory, and passes through to the stock `codex` binary.
 
 **Install:** `codex-session` must be on `PATH`. Verify with `codex-session --version`.
@@ -60,17 +59,15 @@ codex-session --account auto exec --profile fast resume <thread-id> ...
 
 ## Profile Strategy
 
-Profile overrides live as separate files under
-`~/.config/codex-session/configs/profiles/<name>.config.toml` (codex v0.134+ contract). Each file
-contains bare top-level keys, no `[profiles.<name>]` header. codex-session emits these 1:1 as
-siblings of the base `config.toml` in the session's `$CODEX_HOME/`.
+Profile overrides live as separate files under `~/.config/codex-session/profiles/<name>.config.toml`
+(codex v0.134+ contract). Each file contains bare top-level keys, no `[profiles.<name>]` header.
+codex-session emits these 1:1 as siblings of the base `config.toml` in the session's `$CODEX_HOME/`.
 
 Stock profiles used by skills:
 
-- **`deep`** — high reasoning effort, full sandbox. Used for planning and new-thread reasoning.
-  Calls omit `--profile`; codex uses the base `config.toml` alone. If the user wants `deep` as a
-  personal default, they must pass `--profile deep` explicitly on the CLI — codex itself no longer
-  supports an in-file default selector.
+- **`deep`** — high reasoning effort, full sandbox. Available for explicit planning/new-thread runs
+  that pass `--profile deep`; omitting `--profile` uses base config only. codex itself no longer
+  supports an in-file default selector, and codex-session does not auto-activate any profile.
 - **`fast`** — `gpt-5.4-mini`, `medium` effort. Used for execution (implementation resume, code
   review rounds). Calls pass `--profile fast` on `exec` (before the `resume` subcommand if
   resuming).
