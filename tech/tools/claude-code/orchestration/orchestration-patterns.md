@@ -1,7 +1,7 @@
 # Orchestration Patterns
 
 Reusable patterns for multi-stage workflows that orchestrate Codex via `codex-session`. These
-patterns appear across `prex`, `prex-resume`, `plan-exec`, `review-loop`, and `spec-impl`.
+patterns appear across `prex`, `review-loop`, and `merge-queue`.
 
 Skills implement these patterns using their own variable names and stage numbers. This file defines
 the **contracts and shapes** — not the orchestration logic itself.

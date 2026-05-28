@@ -19,14 +19,14 @@ argument-hint: "<short format hint>"
 
 **Add only when the skill genuinely needs it:**
 
-| Field                            | When to add                                                                   | Example in repo                               |
-| -------------------------------- | ----------------------------------------------------------------------------- | --------------------------------------------- |
-| `disable-model-invocation: true` | Skill has side effects users should opt into (git ops, deploys, queue writes) | `prex`, `plan-exec`, all `xq-*`               |
-| `allowed-tools`                  | Narrow bash whitelist gives a real safety story                               | `commit` (git verbs only)                     |
-| `context: fork` + `agent`        | Skill runs as a forked subagent with no conversation history                  | `plan-exec`, `review-loop`, `xq-*` delegators |
-| `model: haiku`                   | Skill is mechanical/templated enough to run on haiku                          | `commit`                                      |
-| `effort: high`                   | Skill is orchestration-heavy and must not be downgraded                       | `merge-queue`                                 |
-| `user-invocable: false`          | Skill is internal-only, called by other skills                                | `xq-add-prex-resume`                          |
+| Field                            | When to add                                                                   | Example in repo           |
+| -------------------------------- | ----------------------------------------------------------------------------- | ------------------------- |
+| `disable-model-invocation: true` | Skill has side effects users should opt into (git ops, deploys, queue writes) | `prex`                    |
+| `allowed-tools`                  | Narrow bash whitelist gives a real safety story                               | `commit` (git verbs only) |
+| `context: fork` + `agent`        | Skill runs as a forked subagent with no conversation history                  | `review-loop` delegators  |
+| `model: haiku`                   | Skill is mechanical/templated enough to run on haiku                          | `commit`                  |
+| `effort: high`                   | Skill is orchestration-heavy and must not be downgraded                       | `merge-queue`             |
+| `user-invocable: false`          | Skill is internal-only, called by other skills                                | (internal helpers)        |
 
 **Do not invent fields** outside `references/spec.md`.
 

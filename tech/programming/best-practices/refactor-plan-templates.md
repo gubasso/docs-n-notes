@@ -329,8 +329,7 @@ implementation-log:
 
 ## Step 6 — Stop or continue
 
-- If the user invoked you with `one-task` (or you are in plan-exec single-step mode), stop here and
-  report status.
+- If the user invoked you with `one-task` (single-step mode), stop here and report status.
 - If the user invoked you with `phase`, continue executing tasks in the current phase until all are
   checked, then stop at the phase boundary.
 - If the user invoked you with `full`, advance through phases. Pause at every phase boundary and ask

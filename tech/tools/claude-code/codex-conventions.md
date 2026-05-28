@@ -212,8 +212,8 @@ change between original and resumed calls. See `docs/upstream-codex.md` §F15. G
 [#19661](https://github.com/openai/codex/issues/19661),
 [#23875](https://github.com/openai/codex/issues/23875).
 
-This pattern applies to: `prex`, `prex-resume`, and any future skill that resumes threads across
-access mode boundaries.
+This pattern applies to: `prex` and any future skill that resumes threads across access mode
+boundaries.
 
 ## Non-Interactive Plan Call
 

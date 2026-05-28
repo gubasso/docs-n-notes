@@ -105,19 +105,14 @@ get explicit frontmatter — the powerful default (opus/high) is implicit.
 
 ### Skill Inventory
 
-**Haiku** (model: haiku): `commit`, `project-classification`, `xq-add-task`, `xq-add-spec`,
-`xq-add-plan`, `xq-add-prex-resume`, `xq-list`, `xq-status`, `xq-retry`, `xq-stop`
-
-**Sonnet/medium** (model: sonnet, effort: medium — documentation-only, `disable-model-invocation`
-skills where model is not enforced by harness): `xq-init`, `xq-start`
+**Haiku** (model: haiku): `commit`, `project-classification`
 
 **Default with effort: medium** (inherits session Opus at reduced effort — workaround for Sonnet 1M
 routing bug, see [Known Issues](#known-issues)): `ask`, `ast-grep`, `claudemd`, `project-preflight`
 
-**Default (opus/high, no frontmatter)**: `merge-queue`, `plan-exec`, `plan-reviewer`, `plan-writer`,
-`pre-commit`, `prex`, `prex-resume`, `refactor-migration-plan`, `review-code-deep`,
-`review-findings`, `review-loop`, `skill-builder`, `spec-impl`, `suckless-patcher`, `test-review`,
-`tsk-impl`, `tsk-new`
+**Default (opus/high, no frontmatter)**: `merge-queue`, `plan-reviewer`, `plan-writer`,
+`pre-commit`, `prex`, `refactor-migration-plan`, `review-code-deep`, `review-findings`,
+`review-loop`, `skill-builder`, `suckless-patcher`, `test-review`, `tsk-impl`, `tsk-new`
 
 ## Benchmarks
 
