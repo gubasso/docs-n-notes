@@ -18,12 +18,13 @@ orchestration, planning rounds, skill authoring, merge queue, and implementation
 
 - **Codex wrapper**: All Codex invocations use `codex-session` (not raw `codex`). Always
   `--account auto` for quota-aware selection.
-- **Sandbox**: Run a detection probe first; fallback uses `-c 'sandbox_permissions=...'` or
-  `--dangerously-bypass-approvals-and-sandbox`.
+- **Sandbox**: Resume-compatible workflows use `--dangerously-bypass-approvals-and-sandbox` for all
+  calls. One-shot workflows may use native sandbox flags. See `codex-conventions.md` §Unified
+  Sandbox for Resume Workflows.
 - **Safety rules**: Stages 1-2 read-only, stage 3 is the only write stage. Always `< /dev/null` to
   prevent stdin blocking. 600s Bash timeout for all Codex calls.
-- **Session resumption**: `exec resume <thread-id>` preserves context; read-only resumed calls use
-  `-c` config, not `--sandbox read-only`.
+- **Session resumption**: `exec resume <thread-id>` preserves context. Original and resumed calls
+  must use the same sandbox flags (see Resume Constraint in `codex-conventions.md`).
 - **Behavioral orientation**: Every prompt starts with READ-ONLY or WRITE orientation block.
 - **Git**: Codex must never run git commands; all git operations belong to the Claude Code
   orchestrator.

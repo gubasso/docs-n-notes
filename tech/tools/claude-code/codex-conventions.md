@@ -43,12 +43,13 @@ the wrapper. Codex writes refresh rotations in place. No write-back to `~/.codex
 `--config`, `--format`, `--verbose`/`--quiet`/`--silent`, `--log-stderr`, `--log-format`.
 
 **Argv pattern:** `codex-session --account auto exec ...` and
-`codex-session --account auto exec resume <thread-id> ...`. Planning calls omit `--profile` and
-inherit the `deep` default. Execution and review calls pass `--profile fast` explicitly:
+`codex-session --account auto exec [--profile fast] resume <thread-id> ...`. Planning calls omit
+`--profile` and inherit the `deep` default. Execution and review calls pass `--profile fast` on
+`exec` (before the `resume` subcommand, since `--profile` is an `exec`-level flag):
 
 ```text
 codex-session --account auto exec --profile fast ...
-codex-session --account auto exec resume <thread-id> --profile fast ...
+codex-session --account auto exec --profile fast resume <thread-id> ...
 ```
 
 ## Profile Strategy
@@ -58,7 +59,8 @@ Two stock Codex profiles are defined in `base.toml`:
 - **`deep`** (default) — no model override (inherits current catalog default), `high` effort. Used
   for planning and new-thread reasoning tasks. Calls omit `--profile`.
 - **`fast`** — `gpt-5.4-mini`, `medium` effort. Used for execution (implementation resume, code
-  review rounds). Calls pass `--profile fast` after `exec` or `exec resume`.
+  review rounds). Calls pass `--profile fast` on `exec` (before the `resume` subcommand if
+  resuming).
 
 The wrapper renamed its own profile flag to `--config-recipe` (commit 3117d8e), so `--profile`
 passes through to stock Codex for selecting `[profiles.*]` tables. `ping` remains a
@@ -137,18 +139,63 @@ codex-session --account auto exec --profile fast \
   < /dev/null > "$RUN_DIR/stage3-events.jsonl"
 ```
 
-**Session resumption** (stage 3 resume, review rounds): the same flag applies to `exec resume`:
+**Session resumption** (stage 3 resume, review rounds): `--profile` is an `exec`-level flag, so it
+must appear before the `resume` subcommand:
 
 ```bash
-codex-session --account auto exec resume "$THREAD_ID" --profile fast \
+codex-session --account auto exec --profile fast resume "$THREAD_ID" \
   --dangerously-bypass-approvals-and-sandbox --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
   < /dev/null > "$RUN_DIR/stage3-events.jsonl"
 ```
 
-For resumed read-only calls, the existing `-c` config override pattern works in both native and
-fallback modes — no change needed.
+For resumed read-only calls in non-resume-compatible workflows, the existing `-c` config override
+pattern works in both native and fallback modes. For resume-compatible workflows, see §Unified
+Sandbox for Resume Workflows below.
+
+### Unified Sandbox for Resume Workflows
+
+Workflows that use `exec resume` across stages with different access needs (e.g., read-only planning
+then write implementation) must use the same sandbox flags on every call. Use
+`--dangerously-bypass-approvals-and-sandbox` for all stages and enforce read-only/write behavior via
+prompt orientation blocks (see §Behavioral Orientation below).
+
+This is acceptable because these workflows always run inside a container environment where the
+external boundary provides OS-level isolation. The orientation blocks are the primary behavioral
+control; the CLI flag merely avoids the backend sandbox-parameter-mismatch rejection on resume.
+
+Planning call (resume-compatible):
+
+```bash
+codex-session --account auto exec \
+  --dangerously-bypass-approvals-and-sandbox --json \
+  --output-last-message "$RUN_DIR/stage1-plan.txt" \
+  "<planning prompt with read-only orientation>" \
+  < /dev/null > "$RUN_DIR/stage1-events.jsonl"
+```
+
+Implementation call (resuming planning session):
+
+```bash
+codex-session --account auto exec --profile fast resume "$THREAD_ID" \
+  --dangerously-bypass-approvals-and-sandbox --json \
+  --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
+  "<implementation prompt with write orientation>" \
+  < /dev/null > "$RUN_DIR/stage3-events.jsonl"
+```
+
+Rationale: `exec resume` fails with JSON-RPC -32600 ("no rollout found") when sandbox parameters
+change between original and resumed calls. See `docs/upstream-codex.md` §F15. GitHub issues:
+[#3947](https://github.com/openai/codex/issues/3947),
+[#5322](https://github.com/openai/codex/issues/5322),
+[#16994](https://github.com/openai/codex/issues/16994),
+[#18676](https://github.com/openai/codex/issues/18676),
+[#19661](https://github.com/openai/codex/issues/19661),
+[#23875](https://github.com/openai/codex/issues/23875).
+
+This pattern applies to: `prex`, `prex-resume`, and any future skill that resumes threads across
+access mode boundaries.
 
 ## Non-Interactive Plan Call
 
@@ -172,10 +219,14 @@ Contract:
 
 ## Non-Interactive Implementation Call
 
+> **Deprecation:** `--full-auto` is deprecated since Codex v0.128.0. The upstream replacement is
+> `--sandbox workspace-write`. For resume-compatible workflows, use
+> `--dangerously-bypass-approvals-and-sandbox` instead (see §Unified Sandbox for Resume Workflows).
+
 Use this pattern when Codex should implement:
 
 ```bash
-codex-session --account auto exec --profile fast --full-auto --json \
+codex-session --account auto exec --profile fast --sandbox workspace-write --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
   < /dev/null > "$RUN_DIR/stage3-events.jsonl"
@@ -183,7 +234,9 @@ codex-session --account auto exec --profile fast --full-auto --json \
 
 Contract:
 
-- `--full-auto` is the v1 implementation default and the only write-capable mode for a fresh `exec`.
+- `--sandbox workspace-write` is the current write-capable mode for a fresh `exec` in environments
+  where bubblewrap works. In container environments or resume-compatible workflows, use
+  `--dangerously-bypass-approvals-and-sandbox` (see §Unified Sandbox for Resume Workflows).
 - Implementation is the only stage permitted to mutate the repo.
 - To continue a prior planning session, use Session Resumption below instead of a fresh `exec`.
 
@@ -192,7 +245,8 @@ Contract:
 Use this pattern when Codex should resume an existing session for implementation:
 
 ```bash
-codex-session --account auto exec resume "$THREAD_ID" --profile fast --full-auto --json \
+codex-session --account auto exec --profile fast resume "$THREAD_ID" \
+  --dangerously-bypass-approvals-and-sandbox --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
   < /dev/null > "$RUN_DIR/stage3-events.jsonl"
@@ -201,8 +255,8 @@ codex-session --account auto exec resume "$THREAD_ID" --profile fast --full-auto
 Use this pattern when Codex should resume an existing session for read-only review:
 
 ```bash
-codex-session --account auto exec resume "$THREAD_ID" --profile fast \
-  -c 'sandbox_permissions=["disk-full-read-access"]' \
+codex-session --account auto exec --profile fast resume "$THREAD_ID" \
+  --dangerously-bypass-approvals-and-sandbox \
   --json --output-last-message "$RUN_DIR/round-N-review.txt" \
   "<review prompt>" \
   < /dev/null > "$RUN_DIR/round-N-events.jsonl"
@@ -211,32 +265,68 @@ codex-session --account auto exec resume "$THREAD_ID" --profile fast \
 Contract:
 
 - `exec resume` preserves transcript and thread context across calls.
-- `--sandbox read-only` is NOT accepted by `exec resume`; for read-only resumed calls use
-  `-c 'sandbox_permissions=["disk-full-read-access"]'`.
-- `--full-auto` is the write-capable mode for resumed implementation.
+- All calls (write and read-only) use `--dangerously-bypass-approvals-and-sandbox`. Behavioral
+  enforcement comes from the orientation block injected in the prompt.
 - Re-validate these patterns when upgrading the `codex` CLI.
+
+### Resume Constraint
+
+`exec resume` fails with JSON-RPC -32600 ("no rollout found") when the sandbox mode changes between
+the original session and the resumed call. The Codex backend validates session parameter consistency
+and rejects mismatches. See `docs/upstream-codex.md` §F15.
+
+For workflows that resume threads across sandbox mode transitions (e.g., read-only planning → write
+implementation), use `--dangerously-bypass-approvals-and-sandbox` uniformly across all stages. This
+bypasses bubblewrap entirely and sends no sandbox parameters to the backend.
+
+The old pattern (stage 1 `--sandbox read-only` → stage 3 `--full-auto`) triggers this failure.
+`codex-session` thread resolution is not the failing component — the error is server-side parameter
+validation. Use one sandbox flag consistently across fresh and resumed calls within the same thread.
 
 ## Behavioral Orientation
 
 Every Codex prompt in this workflow, whether fresh or resumed, must begin with an orientation block.
+When using the unified sandbox approach (`--dangerously-bypass-approvals-and-sandbox`), these blocks
+are the **primary behavioral control** — not merely defense-in-depth.
 
 Read-only orientation:
 
 ```text
-You are in READ-ONLY mode. Do not create, modify, or delete any files. Only read and analyze. Do not run any git commands.
+=== STRICT READ-ONLY MODE ===
+You are operating in READ-ONLY mode. This is a hard constraint.
+PROHIBITED actions — any of these is a critical violation:
+- Creating, modifying, or deleting any file
+- Writing to any path on disk
+- Running git commands (commit, add, push, reset, checkout, etc.)
+- Executing any command that mutates system state
+PERMITTED actions:
+- Reading files, analyzing code, producing text output
+- Running read-only shell commands (cat, grep, find, ls, etc.)
+Produce your plan as text output only.
+===
 ```
 
 Write orientation:
 
 ```text
-The prior READ-ONLY restriction no longer applies. You now have WRITE access. Implement the plan below. Report all files changed and any deviations. Do not run any git commands.
+=== WRITE MODE ACTIVE ===
+The prior READ-ONLY restriction no longer applies. You now have WRITE access.
+PERMITTED actions:
+- Creating, modifying, and deleting files within the workspace
+- Running build/lint/test commands
+STILL PROHIBITED:
+- Running any git commands (commit, add, push, reset, checkout, etc.)
+- Writing outside the workspace directory
+Implement the plan below exactly. Report all files changed and any deviations.
+===
 ```
 
 Contract:
 
-- Inject the orientation block on every Codex call (fresh and resumed), even when the CLI sandbox is
-  enforced. It is defense-in-depth.
+- Inject the appropriate orientation block on every Codex call (fresh and resumed).
 - Resumed review rounds must restate the read-only orientation.
+- These blocks are behavioral controls enforced by the model, not OS-level sandboxing. OS-level
+  isolation is provided by the container environment.
 
 ## Deep Review
 
@@ -244,8 +334,9 @@ Stage 5 delegates to the `/review-loop` skill — never call `codex review` dire
 
 - `codex review` does not support `--json` or `--output-last-message`.
 - `--uncommitted` combined with a positional `[PROMPT]` errors out.
-- `/review-loop` uses `codex-session --account auto exec --sandbox read-only` for round 1, then
-  `codex-session --account auto exec resume` with `-c` config-enforced read-only for later rounds.
+- `/review-loop` uses `codex-session --account auto exec --sandbox read-only` for every round. Each
+  round is an independent one-shot invocation (no `exec resume`); round 1 inherits the `deep`
+  profile, rounds 2+ pass `--profile fast`.
 
 ## Thread ID Extraction
 
@@ -282,28 +373,55 @@ cat "$RUN_DIR/stage3-impl-report.txt"
 Use a Bash-tool timeout of `600000ms` for every Codex call. Planning, implementation, and review can
 all exceed the default.
 
+## Skill Run Directories
+
+Skills that create temporary run directories must use the XDG-compliant base path:
+
+```bash
+_SKILL_RUNS="${XDG_STATE_HOME:-$HOME/.local/state}/claude-session/skill-runs"
+mkdir -p "$_SKILL_RUNS"
+RUN_DIR="$_SKILL_RUNS/<skill>-$(date -u +%Y%m%dT%H%M%S)-$$"
+mkdir -p "$RUN_DIR"
+```
+
+This produces paths like `~/.local/state/claude-session/skill-runs/prex-20260527T200809-12345/`.
+
+Do NOT use `/tmp` for run directories. `/tmp` is excluded by Codex's `workspace-write` sandbox mode
+(`sandbox_workspace_write.exclude_slash_tmp`) and may not be shared between host and container.
+
+Lock files follow the same convention:
+
+```bash
+LOCK_DIR="${XDG_RUNTIME_DIR:-${XDG_STATE_HOME:-$HOME/.local/state}/claude-session/skill-runs}"
+```
+
+New and updated skills must not hardcode `/tmp` for run directories or lock files.
+
 ## Safety Rules
 
-- Stages 1 and 2 must keep Codex read-only.
-- Stage 3 is the only write-capable stage; use `--full-auto` (or
-  `--dangerously-bypass-approvals-and-sandbox` in fallback mode) on either a fresh `exec` or an
-  `exec resume`.
+- Stages 1 and 2 must keep Codex read-only (enforced via orientation block).
+- Stage 3 is the only write-capable stage (enforced via orientation block).
 - Stage 5 must go through `/review-loop`, never `codex review` directly.
-- Native sandbox flag matrix:
+- Unified sandbox flag matrix (for resume-compatible workflows):
+  - fresh read-only → `--dangerously-bypass-approvals-and-sandbox` + strict read-only orientation
+  - resumed read-only → `--dangerously-bypass-approvals-and-sandbox` + strict read-only orientation
+  - fresh write → `--dangerously-bypass-approvals-and-sandbox` + write orientation
+  - resumed write → `--dangerously-bypass-approvals-and-sandbox` + write orientation
+- For one-shot workflows that never resume, the native sandbox flags are still valid:
   - fresh read-only → `--sandbox read-only`
-  - resumed read-only → `-c 'sandbox_permissions=["disk-full-read-access"]'`
-  - write → `--full-auto`
-- Fallback sandbox flag matrix (`SANDBOX_MODE=fallback`):
-  - read-only (fresh or resumed) → `-c 'sandbox_permissions=["disk-full-read-access"]'`
-  - write → `--dangerously-bypass-approvals-and-sandbox`
+  - write → `--sandbox workspace-write`
+- `--full-auto` is deprecated since Codex v0.128.0. Do not use it in new code.
 - `--approval-policy` and `-a` are NOT supported by `codex-session --account auto exec`.
 - All invocations must pass `--account auto` for quota-aware account selection.
 - All `codex-session exec` invocations must include `< /dev/null` to prevent blocking on inherited
   stdin. Without this, Codex prints `Reading additional input from stdin...` and hangs until timeout
   when called from TUI sessions or background agents.
 - Planning and new-thread calls inherit the default `deep` profile (no `--profile` flag). Execution
-  and review calls must pass `--profile fast` after `exec` or `exec resume`.
+  and review calls must pass `--profile fast` on `exec` (before the `resume` subcommand if
+  resuming).
 - Codex must never run git commands. All git operations belong to the Claude Code orchestrator.
+- Do NOT use `/tmp` for skill run directories or lock files. Use the XDG base path from §Skill Run
+  Directories.
 
 ## Wrapper Exit Codes
 
