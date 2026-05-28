@@ -54,8 +54,9 @@ Rounds are sized against the capabilities of a single `/prex` run:
 - **Quality threshold**: Quality degrades when a single prex run handles multiple loosely-related
   changes. Each round should address one cohesive chunk of work (one feature, one module refactor,
   one layer of the stack).
-- **Practical sizing**: A well-scoped round typically touches 3–8 files, introduces or modifies one
-  coherent feature or subsystem, and can be described in under 300 lines of plan text.
+- **Practical sizing**: A well-scoped round delivers one coherent feature or architectural layer.
+  File count is incidental — mechanically-coupled changes belong together regardless of count. A
+  round description usually fits in under 300 lines of plan text.
 
 ## Lifecycle rules
 

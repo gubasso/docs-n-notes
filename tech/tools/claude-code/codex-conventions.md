@@ -7,9 +7,13 @@ patterns for future Claude-side orchestration work.
 
 - **SoT:** `codex-session --version` (prints wrapper version, child binary path + version, active
   account).
-- Default stock Codex profile is `deep` (gpt-5.5, high effort). Execution/review calls override with
-  `--profile fast` (gpt-5.4-mini, medium effort). **SoT:**
-  `~/.config/codex-session/settings/base.toml`.
+- Stock skill workflow uses two Codex profiles: planning/new-thread calls omit `--profile`, so codex
+  uses the base `config.toml` alone (high effort, full sandbox; no model override — inherits the
+  catalog default). Execution/review calls pass `--profile fast` (gpt-5.4-mini, medium effort). If
+  the user wants to run planning with a different profile, they can pass `--profile <name>`
+  explicitly on the CLI, but it's not typical. Codex v0.134+ has no in-file default-profile
+  selector. **SoT:** `~/.config/codex-session/configs/profiles/<name>.config.toml` (one file per
+  profile, bare top-level keys, no `[profiles.<name>]` header).
 
 ## Wrapper: `codex-session`
 
@@ -33,7 +37,8 @@ There is no implicit `"default"` fallback. `--account auto` triggers the R3 quot
 workflow invocations must pass `--account auto` so account selection is always quota-aware.
 
 **Auth:** `auth.json` lives per-account at `<state>/accounts/<account>/auth.json` and is owned by
-the wrapper. Codex writes refresh rotations in place. No write-back to `~/.codex/`.
+the wrapper. Codex writes refresh rotations in place. No write-back to the user's default codex
+home.
 
 **Wrapper-owned verbs:** `version`, `completion`, `config status`,
 `config-recipe list|show|compose`, `doctor`, `account add|list|current|use|remove|refresh`,
@@ -43,9 +48,10 @@ the wrapper. Codex writes refresh rotations in place. No write-back to `~/.codex
 `--config`, `--format`, `--verbose`/`--quiet`/`--silent`, `--log-stderr`, `--log-format`.
 
 **Argv pattern:** `codex-session --account auto exec ...` and
-`codex-session --account auto exec [--profile fast] resume <thread-id> ...`. Planning calls omit
-`--profile` and inherit the `deep` default. Execution and review calls pass `--profile fast` on
-`exec` (before the `resume` subcommand, since `--profile` is an `exec`-level flag):
+`codex-session --account auto exec [--profile fast] resume <thread-id> ...`. Planning/new-thread
+calls omit `--profile`, so codex uses only the base `config.toml` (no profile overlay). Execution
+and review calls pass `--profile fast` on `exec` (before the `resume` subcommand if resuming, since
+`--profile` is an `exec`-level flag). codex-session itself never injects `--profile`:
 
 ```text
 codex-session --account auto exec --profile fast ...
@@ -54,17 +60,29 @@ codex-session --account auto exec --profile fast resume <thread-id> ...
 
 ## Profile Strategy
 
-Two stock Codex profiles are defined in `base.toml`:
+Profile overrides live as separate files under
+`~/.config/codex-session/configs/profiles/<name>.config.toml` (codex v0.134+ contract). Each file
+contains bare top-level keys, no `[profiles.<name>]` header. codex-session emits these 1:1 as
+siblings of the base `config.toml` in the session's `$CODEX_HOME/`.
 
-- **`deep`** (default) — no model override (inherits current catalog default), `high` effort. Used
-  for planning and new-thread reasoning tasks. Calls omit `--profile`.
+Stock profiles used by skills:
+
+- **`deep`** — high reasoning effort, full sandbox. Used for planning and new-thread reasoning.
+  Calls omit `--profile`; codex uses the base `config.toml` alone. If the user wants `deep` as a
+  personal default, they must pass `--profile deep` explicitly on the CLI — codex itself no longer
+  supports an in-file default selector.
 - **`fast`** — `gpt-5.4-mini`, `medium` effort. Used for execution (implementation resume, code
   review rounds). Calls pass `--profile fast` on `exec` (before the `resume` subcommand if
   resuming).
+- **`ping`** — health-probe-only profile, used internally by `account health`.
 
-The wrapper renamed its own profile flag to `--config-recipe` (commit 3117d8e), so `--profile`
-passes through to stock Codex for selecting `[profiles.*]` tables. `ping` remains a
-health-probe-only profile.
+The wrapper's own composability lever is `--config-recipe` (commit 3117d8e). The `--profile` flag
+passes through to stock codex unchanged. codex-session never injects `--profile` for user-facing
+pass-through calls; wrapper-owned health probes (e.g. the heartbeat check in `account health`) may
+pass `--profile ping` internally.
+
+References: `docs/upstream-codex.md` §F6b–§F6c (codex-session repo);
+<https://developers.openai.com/codex/config-advanced#profiles>.
 
 ## Pre-flight: Account Health
 
@@ -335,8 +353,8 @@ Stage 5 delegates to the `/review-loop` skill — never call `codex review` dire
 - `codex review` does not support `--json` or `--output-last-message`.
 - `--uncommitted` combined with a positional `[PROMPT]` errors out.
 - `/review-loop` uses `codex-session --account auto exec --sandbox read-only` for every round. Each
-  round is an independent one-shot invocation (no `exec resume`); round 1 inherits the `deep`
-  profile, rounds 2+ pass `--profile fast`.
+  round is an independent one-shot invocation (no `exec resume`); round 1 uses only the base
+  `config.toml` (no profile overlay), rounds 2+ pass `--profile fast`.
 
 ## Thread ID Extraction
 
@@ -416,9 +434,10 @@ New and updated skills must not hardcode `/tmp` for run directories or lock file
 - All `codex-session exec` invocations must include `< /dev/null` to prevent blocking on inherited
   stdin. Without this, Codex prints `Reading additional input from stdin...` and hangs until timeout
   when called from TUI sessions or background agents.
-- Planning and new-thread calls inherit the default `deep` profile (no `--profile` flag). Execution
-  and review calls must pass `--profile fast` on `exec` (before the `resume` subcommand if
-  resuming).
+- Planning and new-thread calls omit `--profile`, so codex uses only the base `config.toml` (no
+  profile overlay). Execution and review calls must pass `--profile fast` on `exec` (before the
+  `resume` subcommand if resuming). Codex v0.134+ has no in-file default-profile selector — the
+  wrapper never injects one.
 - Codex must never run git commands. All git operations belong to the Claude Code orchestrator.
 - Do NOT use `/tmp` for skill run directories or lock files. Use the XDG base path from §Skill Run
   Directories.

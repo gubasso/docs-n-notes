@@ -15,16 +15,41 @@ Evaluate the implementation surface along each axis (score 1–4):
 | Pattern novelty        | All existing      | 1 new pattern     | 2–3 new patterns    | New architecture  |
 | Risk / blast radius    | Isolated module   | Single subsystem  | Multiple subsystems | Core/shared infra |
 
+## Executor profile
+
+The grade thresholds below are calibrated against an **Executor Factor (EF)** that reflects what the
+round-runner can absorb in one session. The default executor is `prex`, which runs four model passes
+per round (Codex plan → Claude review → Codex implement → Claude review-loop with fixes). Because
+the review-loop catches and fixes mid-round, a `prex` round can absorb meaningfully more raw
+complexity than a single-shot model.
+
+| Executor profile | EF  | When it applies                                                           |
+| ---------------- | --- | ------------------------------------------------------------------------- |
+| `prex` (default) | 1.5 | Codex plan + Codex implement + Claude review-loop. Default for this repo. |
+| `single-pass`    | 1.0 | One capable model, no in-round review gate. Raw score stands.             |
+| `limited`        | 0.8 | Weaker model or constrained context. Bumps complexity up.                 |
+
+See `plan-lifecycle.md` § "Executor capacity model" for the prex pipeline details.
+
 ## Grade mapping
 
-Sum the five axis scores (range 5–20) and map to a grade:
+1. Sum the five axis scores → **raw score** (range 5–20).
+2. Divide by the EF for the selected executor → **adjusted score**.
+3. Map the adjusted score to a grade:
 
-| Grade  | Score | Rounds | Notes                                                    |
-| ------ | ----- | ------ | -------------------------------------------------------- |
-| **S**  | 5–7   | 1      | Simple, focused change. One prex run handles it easily.  |
-| **M**  | 8–11  | 1      | Meaty but cohesive. One prex run, possibly a longer one. |
-| **L**  | 12–15 | 2–4    | Multi-round. Needs thoughtful splitting.                 |
-| **XL** | 16–20 | 4–8    | Complex. `STRATEGY.md` generated. Careful orchestration. |
+| Grade  | Adjusted  | Rounds | Notes                                                    |
+| ------ | --------- | ------ | -------------------------------------------------------- |
+| **S**  | ≤ 7.0     | 1      | Simple, focused change. One prex run handles it easily.  |
+| **M**  | 7.1–11.0  | 1      | Meaty but cohesive. One prex run, possibly a longer one. |
+| **L**  | 11.1–15.0 | 2–3    | Multi-round. Needs thoughtful splitting.                 |
+| **XL** | ≥ 15.1    | 4–8    | Complex. `STRATEGY.md` generated. Careful orchestration. |
+
+The adjusted-score thresholds are exactly the historical raw thresholds (5–7 / 8–11 / 12–15 / 16+),
+so a `single-pass` executor (EF=1.0) recovers the old behavior precisely. Under `prex` (EF=1.5) a
+borderline raw 8 → adjusted 5.33 → S (was M), borderline raw 12 → adjusted 8.0 → M (was L), and raw
+20 → adjusted 13.33 → L (was XL): borderline tasks demote one grade, which is the intended effect of
+the in-round review-loop. Under `limited` (EF=0.8) the same boundaries promote borderline tasks by
+one grade.
 
 ## Override guidance
 
@@ -51,8 +76,11 @@ order:
 3. **Dependency order** — if round 2 depends on artifacts from round 1 (new types, new modules),
    they must be separate rounds. Never create circular dependencies between rounds.
 
-4. **Size cap** — each round should describe work achievable in one Codex 600s session. Practical
-   guideline: 3–8 file changes, or one cohesive feature/refactor per round.
+4. **Cohesion over file count** — each round should deliver one coherent user-visible feature or one
+   architectural layer. File count is incidental; mechanically-coupled changes belong together
+   regardless of count. When the executor is `prex`, prefer fewer, larger, cohesive rounds — the
+   in-round review-loop already de-risks size. When the executor is `limited`, prefer smaller
+   rounds. The hard ceiling in all cases is work completable in one Codex 600s session.
 
 5. **Atomic changes** — never split an atomic change across rounds. A type definition and all its
    consumers belong in the same round. A migration and the code that uses the new schema belong
@@ -69,6 +97,6 @@ order:
 After classification, report to the user:
 
 - The grade (S/M/L/XL) with a one-sentence rationale.
-- The per-axis scores (brief, not a full table — e.g., "files:2 cross-cut:1 deps:2 novelty:3 risk:2
-  → total 10 → M").
+- The per-axis scores plus the executor factor (brief, not a full table — e.g., "files:2 cross-cut:1
+  deps:2 novelty:3 risk:2 → raw 10 ÷ EF 1.5 (prex) → 6.7 → M").
 - For L/XL: the proposed round split with topic summaries. Get user confirmation before generating.
