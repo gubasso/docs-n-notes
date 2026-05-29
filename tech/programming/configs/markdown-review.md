@@ -50,4 +50,6 @@
 ## See also
 
 - Canonical: <https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md>.
-- Per-project lint config: `.markdownlint.{yaml,json}` / pre-commit `markdownlint-cli2`.
+- Per-project lint config: `.markdownlint-cli2.jsonc` (single SoT) + pre-commit
+  `markdownlint-cli2` + dprint. Toolchain rationale and options:
+  [markdown-formatting-toolchain.md](./markdown-formatting-toolchain.md).
