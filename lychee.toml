@@ -81,6 +81,12 @@ exclude = [
   "^https?://(www\\.)?milvus\\.io",
   # martinfowler.com — times out under bot-style requests (pre-push context).
   "^https?://(www\\.)?martinfowler\\.com",
+  # argyllcms.com — chronic timeouts on pre-push (slow origin).
+  "^https?://(www\\.)?argyllcms\\.com",
+  # 2daygeek.com — intermittent 500s on pre-push.
+  "^https?://(www\\.)?2daygeek\\.com",
+  # forums.linuxmint.com — 307 redirect loop on tracked URLs.
+  "^https?://forums\\.linuxmint\\.com",
   # Twitter card thumbnails: ephemeral by design.
   "^https?://pbs\\.twimg\\.com",
   # mail-tester opens a fresh inbox per visit and rate-limits scrapers.
