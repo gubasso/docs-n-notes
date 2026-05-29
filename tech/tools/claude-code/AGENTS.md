@@ -1,10 +1,13 @@
 ---
 digest-of: tech/tools/claude-code
-last-synced: 2026-05-27
+last-synced: 2026-05-28
 source-files:
   - README.md
   - codex-conventions.md
-token-estimate: 600
+  - invocation-cheatsheet.md
+  - models-reference.md
+  - skills-and-orchestration.md
+token-estimate: 10400
 ---
 
 # AGENTS
@@ -12,7 +15,7 @@ token-estimate: 600
 ## Scope
 
 Top-level index for Claude Code and Codex CLI operational guidance. Subdirectories cover
-orchestration, planning rounds, skill authoring, merge queue, and implementation review.
+orchestration, plan rounds, skill authoring, and implementation review practices.
 
 ## Key Points
 
@@ -31,16 +34,19 @@ orchestration, planning rounds, skill authoring, merge queue, and implementation
 
 ## Source Map
 
-| Topic                                                            | Path                     |
-| ---------------------------------------------------------------- | ------------------------ |
-| Codex CLI conventions, sandbox, safety rules                     | `codex-conventions.md`   |
-| Orchestration patterns (proof-of-delegation, locks, review-loop) | `orchestration/`         |
-| Plan lifecycle, round templates, complexity heuristic            | `plan-rounds/`           |
-| Skill specification, house style                                 | `skill-authoring/`       |
-| Merge protocol, usage examples                                   | `merge-queue/`           |
-| Review report template, severity levels                          | `implementation-review/` |
+| Topic                                                 | File                          |
+| ----------------------------------------------------- | ----------------------------- |
+| Claude Code operational index                         | `README.md`                   |
+| Codex CLI conventions, sandbox, safety rules          | `codex-conventions.md`        |
+| Invocation patterns and command cheat sheet           | `invocation-cheatsheet.md`    |
+| Model aliases, effort, knowledge cutoffs              | `models-reference.md`         |
+| Skills/orchestration integration                      | `skills-and-orchestration.md` |
+| Orchestration contracts and patterns                  | `orchestration/`              |
+| Plan lifecycle, round templates, complexity heuristic | `plan-rounds/`                |
+| Skill specification and house style                   | `skill-authoring/`            |
+| Review report template, severity levels               | `implementation-review/`      |
 
 ## Maintenance Notes
 
 - Each subdirectory has its own AGENTS.md for detailed digests.
-- Codex CLI conventions should be re-verified when `codex-session` major version changes.
+- Claude Code conventions should be re-verified when major upstream behavior changes.

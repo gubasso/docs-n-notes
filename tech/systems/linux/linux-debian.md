@@ -47,4 +47,4 @@ cwnt network domain name: cwnt.arpa
 
 ## Packaging
 
-- \[[debian-packaging]\]
+- [debian packaging](packaging/packaging-debian.md)

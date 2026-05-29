@@ -5,6 +5,7 @@
 <!--TOC-->
 
 - [Related](#related)
+- [Notes in this directory](#notes-in-this-directory)
 - [CI / CD](#ci--cd)
 - [Proxy / Reverse Proxy](#proxy--reverse-proxy)
 - [Network / DNS](#network--dns)
@@ -17,10 +18,21 @@
 
 ## Related
 
-- \[[server-vps]\]
-- \[[home-server]\]
-- \[[dns]\]
-- \[[backups]\]
+- [server-vps](../server-vps/server-vps.md)
+- [home server](../server-vps/server-vps-home_server.md)
+- [dns](../networking/dns.md)
+- [backups](backups.md)
+
+## Notes in this directory
+
+- [ansible](./ansible.md)
+- [backups](./backups.md)
+- [restic-backups](./restic-backups.md)
+- [storage-wasabi](./storage-wasabi.md)
+- [iac-infra-as-code](./iac-infra-as-code.md)
+- [terraform](./terraform.md)
+- [github-actions-ci-cd](./github-actions-ci-cd.md)
+- [selfhosted-gateway-fractal-gateway](./selfhosted-gateway-fractal-gateway.md)
 
 ## CI / CD
 

@@ -274,8 +274,8 @@ Reference: [bats-core tutorial](https://bats-core.readthedocs.io/en/stable/tutor
 
 ## Linting / Formatting
 
-All checks run through **pre-commit** (see root \[[CLAUDE]\] § "Linting & Validation" for the
-repo-wide policy):
+All checks run through **pre-commit** (see root [CLAUDE](../../../../CLAUDE.md) § "Linting &
+Validation" for the repo-wide policy):
 
 - [shellcheck](https://www.shellcheck.net/) — static analysis.
 - [shfmt](https://github.com/mvdan/sh) — formatter. Canonical flags: `shfmt -i 2 -ci -bn -s`.

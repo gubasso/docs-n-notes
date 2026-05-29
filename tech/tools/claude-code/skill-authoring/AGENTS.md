@@ -1,10 +1,11 @@
 ---
 digest-of: tech/tools/claude-code/skill-authoring
-last-synced: 2026-05-27
+last-synced: 2026-05-28
 source-files:
+  - README.md
   - skill-spec.md
   - skill-style.md
-token-estimate: 900
+token-estimate: 2600
 ---
 
 # AGENTS
@@ -48,6 +49,7 @@ authoring skills.
 
 | Topic                                                         | File             |
 | ------------------------------------------------------------- | ---------------- |
+| Directory overview / index                                    | `README.md`      |
 | Official frontmatter fields, substitutions, token budgets     | `skill-spec.md`  |
 | House style, description pattern, body conventions, templates | `skill-style.md` |
 

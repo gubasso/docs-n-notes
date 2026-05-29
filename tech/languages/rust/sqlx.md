@@ -515,7 +515,7 @@ there are more explanations about:
 ### Migrations
 
 - sqlx migration details: https://docs.rs/sqlx/latest/sqlx/macro.migrate.html
-- \[[migrations#sqlx (rust)]\]
+- [migrations](../../data/dbs-databases/migrations.md#sqlx-rust)
 
 [^1]: https://www.youtube.com/watch?v=TCERYbgvbq0 "SQLx is my favorite PostgreSQL driver to use with
     Rust."

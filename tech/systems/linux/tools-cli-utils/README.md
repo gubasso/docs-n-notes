@@ -20,7 +20,7 @@ ghmd README.md
 
 - aria2: download metalink .meta4
 
-  - \[[what-is-metalink]\]
+  - [what is Metalink](../../../infra/networking/metalink.md)
 
 Basic Usage of aria2
 

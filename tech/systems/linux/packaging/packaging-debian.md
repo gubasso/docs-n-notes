@@ -44,9 +44,10 @@ apt-get update -y && apt-get upgrade -y
 apt-get install -y neovim sudo debconf locales
 ```
 
-Follow the steps to setup users and groups from \[[server-vps]\].
+Follow the steps to setup users and groups from
+[server-vps](../../../infra/server-vps/server-vps.md).
 
-Follow the steps to setup hostname and hosts \[[server-vps]\].
+Follow the steps to setup hostname and hosts [server-vps](../../../infra/server-vps/server-vps.md).
 
 Boot into the container / login in the machine:
 

@@ -2,9 +2,10 @@
 digest-of: tech/tools/claude-code/orchestration
 last-synced: 2026-05-28
 source-files:
+  - README.md
   - orchestration-patterns.md
   - verdict-model.md
-token-estimate: 800
+token-estimate: 1350
 ---
 
 # AGENTS
@@ -43,9 +44,10 @@ proof-of-delegation, lock files, review-loop handoff, and verdict/severity model
 
 | Topic                                                 | File                        |
 | ----------------------------------------------------- | --------------------------- |
+| Directory overview / index                            | `README.md`                 |
 | Sandbox probe, delegation, locks, review-loop handoff | `orchestration-patterns.md` |
 | Verdict enum, severity levels, finding categories     | `verdict-model.md`          |
 
 ## Maintenance Notes
 
-- Patterns here are contracts used by multiple skills (prex, review-loop, merge-queue).
+- Patterns here are contracts used by multiple skills (prex, review-loop).

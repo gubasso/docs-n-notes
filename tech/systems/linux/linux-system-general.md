@@ -128,7 +128,8 @@ sudo zypper ref && sudo zypper dup -y
 
 ## Set Hostname
 
-See \[[dns#Fully qualified domain name (FQDN)]\].
+See
+[dns fully qualified domain name](../../infra/networking/dns.md#fully-qualified-domain-name-fqdn).
 
 - command: `hostnamectl set-hostname example-hostname`
 - edit `/etc/hosts`

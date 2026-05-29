@@ -70,7 +70,7 @@
 - Make sure server has `UsePAM yes`
 - SSH server can not be configured with `AllowGroup` option.
 
-See \[[server-vps#Security steps]\]
+See [server-vps security steps](../../infra/server-vps/server-vps.md#security-steps)
 
 ### Gitolite user
 

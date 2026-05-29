@@ -308,7 +308,7 @@ Or, to cleanup branches from project, see[^clear-branches].
 
 ## Related
 
-- [Gitolite](./it/git-gitolite.md)
+- [Gitolite](./gitolite.md)
   - manage git users and repositories
 
 ## Development Docs
@@ -323,6 +323,18 @@ Or, to cleanup branches from project, see[^clear-branches].
   - configuring the glab HTTPS credential helper
 - [branch-protection/](./branch-protection/)
   - GitHub/GitLab branch-protection rulesets, scripts, and workflows
+- [workflows/](./workflows/)
+  - end-to-end git workflow guides
+- [cmds-examples.md](./cmds-examples.md)
+  - assorted git command examples
+- [diffs.md](./diffs.md)
+  - diffing recipes
+- [github.md](./github.md)
+  - GitHub-specific notes
+- [git-qa.md](./git-qa.md)
+  - git questions and answers
+- [git-commit-signing-with-ssh-git-commit-s-cheatsheet.md](./git-commit-signing-with-ssh-git-commit-s-cheatsheet.md)
+  - SSH commit-signing cheatsheet
 
 ## Resources
 

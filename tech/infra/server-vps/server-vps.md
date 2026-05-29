@@ -26,10 +26,10 @@
 
 ## Initial setup
 
-- \[[linux-general#Update System]\]
-- \[[dns#Setup a DNS]\]
-- (optional) \[[linux-general#Set Timezone]\]
-- \[[linux-general#Set Hostname]\]
+- [linux-general update system](../../systems/linux/linux-system-general.md#update-system)
+- [dns setup a DNS](../../infra/networking/dns.md#setup-a-dns)
+- (optional) [linux-general set timezone](../../systems/linux/linux-system-general.md#set-timezone)
+- [linux-general set hostname](../../systems/linux/linux-system-general.md#set-hostname)
 - test: Access server with FQDN[^2]
 
 ## Setup users and groups
@@ -40,8 +40,10 @@
 passwd root
 ```
 
-- Add new `super_user` and set a password: \[[linux-general#Users management]\]
-- Create groups and add the `super_user` to them: \[[linux-general#Group management]\]
+- Add new `super_user` and set a password:
+  [linux-general users management](../../systems/linux/linux-system-general.md#users-management)
+- Create groups and add the `super_user` to them:
+  [linux-general group management](../../systems/linux/linux-system-general.md#group-management)
 
 ```
 groupadd wheel
@@ -50,7 +52,8 @@ groupadd ssh-user
 usermod -aG wheel,sudo,ssh-user super_user
 ```
 
-- Grant `super_user` root/sudo privileges: \[[linux-general#sudo]\]
+- Grant `super_user` root/sudo privileges:
+  [linux-general sudo](../../systems/linux/linux-system-general.md#sudo)
 
 ```
 EDITOR=vim visudo
@@ -99,9 +102,11 @@ Steps to setup a more secure way to access the server.
 
 **At `local`[^3]:**
 
-- setup agent forwarding: \[[ssh-openssh#ssh-agent]\]
+- setup agent forwarding:
+  [ssh-openssh ssh-agent](../../systems/security/ssh/ssh-openssh.md#ssh-agent)
 - Select a `local` ssh identity (key pair) or create a new one[^4]
-- Copy this identity to server: \[[ssh-openssh#Copying the public key to the remote server]\]
+- Copy this identity to server:
+  [ssh-openssh copy public key](../../systems/security/ssh/ssh-openssh.md#copying-the-public-key-to-the-remote-server)
 - test if login works: `ssh super_user@<fqdn>`
   - it should not ask for the password
 
@@ -136,9 +141,12 @@ Port 202
 AllowGroups ssh-user
 ```
 
-- if will be a \[[gitolite]\] server (see \[[gitolite#Setup]\]):
+- if will be a [gitolite](../../tools/git/gitolite.md) server (see
+  [gitolite setup](../../tools/git/gitolite.md#setup)):
   - `usepam yes`
-- check applied configs (\[[ssh-openssh#Config Server]\]), run command:
+- check applied configs
+  ([ssh-openssh config server](../../systems/security/ssh/ssh-openssh.md#config-server)), run
+  command:
 
 ```sh
 # as root
@@ -155,11 +163,11 @@ Change user to `super_user`:
 su super_user
 ```
 
-Install and config \[[fail2ban]\].
+Install and config [fail2ban](../../systems/security/fail2ban.md).
 
 ### Setup a firewall
 
-See \[[firewall]\].
+See [firewall](../../infra/networking/firewall.md).
 
 - Install `ufw`
 - Run commands to config `ufw` to SSH access at port 202
@@ -208,10 +216,11 @@ changes worked correctly, so you don't get locked out of your system."
 
 - proxmox: OS for bare metal manage VMs
 
-[^2]: Access server with ssh \[[ssh-openssh#Basic access]\]
+[^2]: Access server with ssh
+    [ssh-openssh basic access](../../systems/security/ssh/ssh-openssh.md#basic-access)
 
 [^3]: `local`: your local machine, notebook, computer...
 
-[^4]: \[[ssh-openssh#Generate new ssh key]\]
+[^4]: [ssh-openssh generate new ssh key](../../systems/security/ssh/ssh-openssh.md#generate-new-ssh-key)
 
 [^5]: `server`: remote machine, host, vps...

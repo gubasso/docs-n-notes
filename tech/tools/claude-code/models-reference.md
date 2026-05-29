@@ -110,9 +110,9 @@ get explicit frontmatter — the powerful default (opus/high) is implicit.
 **Default with effort: medium** (inherits session Opus at reduced effort — workaround for Sonnet 1M
 routing bug, see [Known Issues](#known-issues)): `ask`, `ast-grep`, `claudemd`, `project-preflight`
 
-**Default (opus/high, no frontmatter)**: `merge-queue`, `plan-reviewer`, `plan-writer`,
-`pre-commit`, `prex`, `refactor-migration-plan`, `review-code-deep`, `review-findings`,
-`review-loop`, `skill-builder`, `suckless-patcher`, `test-review`, `tsk-impl`, `tsk-new`
+**Default (opus/high, no frontmatter)**: `plan-reviewer`, `plan-writer`, `pre-commit`, `prex`,
+`refactor-migration-plan`, `review-code-deep`, `review-findings`, `review-loop`, `skill-builder`,
+`suckless-patcher`, `test-review`, `tsk-impl`, `tsk-new`
 
 ## Benchmarks
 

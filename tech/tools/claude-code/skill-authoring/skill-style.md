@@ -25,7 +25,7 @@ argument-hint: "<short format hint>"
 | `allowed-tools`                  | Narrow bash whitelist gives a real safety story                               | `commit` (git verbs only) |
 | `context: fork` + `agent`        | Skill runs as a forked subagent with no conversation history                  | `review-loop` delegators  |
 | `model: haiku`                   | Skill is mechanical/templated enough to run on haiku                          | `commit`                  |
-| `effort: high`                   | Skill is orchestration-heavy and must not be downgraded                       | `merge-queue`             |
+| `effort: high`                   | Skill is orchestration-heavy and must not be downgraded                       | `plan-writer`             |
 | `user-invocable: false`          | Skill is internal-only, called by other skills                                | (internal helpers)        |
 
 **Do not invent fields** outside `references/spec.md`.
@@ -44,10 +44,9 @@ description: >
   Triggers: "exact phrase 1", "exact phrase 2", "exact phrase 3".
 ```
 
-The `Triggers: "..."` trailer is a local convention (see `claudemd`, `merge-queue`,
-`plan-reviewer`). It pushes against Claude's tendency to under-invoke skills — spell out the phrases
-users actually say. Keep the total `description + when_to_use` text under 1,536 chars (official cap
-— see spec.md).
+The `Triggers: "..."` trailer is a local convention (see `claudemd`, `prex`, `plan-reviewer`). It
+pushes against Claude's tendency to under-invoke skills — spell out the phrases users actually say.
+Keep the total `description + when_to_use` text under 1,536 chars (official cap — see spec.md).
 
 Follow Anthropic's guidance to be **"pushy"** about when to trigger, and Obra's guidance that
 triggers should be **symptoms/contexts, not workflow summaries** (otherwise Claude may follow the
