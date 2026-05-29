@@ -22,6 +22,7 @@
     - [C) Close PR: Merge/Publish feature](#c-close-pr-mergepublish-feature)
     - [References](#references)
 - [Related](#related)
+- [Development Docs](#development-docs)
 - [Resources](#resources)
 - [General](#general)
 - [References](#references-1)
@@ -309,6 +310,19 @@ Or, to cleanup branches from project, see[^clear-branches].
 
 - [Gitolite](./it/git-gitolite.md)
   - manage git users and repositories
+
+## Development Docs
+
+- [feature-lifecycle.md](./feature-lifecycle.md)
+  - feature-branch lifecycle from creation to merge
+- [feature-lifecycle-git-commands.md](./feature-lifecycle-git-commands.md)
+  - companion git commands for each lifecycle phase
+- [rebase-workflow.md](./rebase-workflow.md)
+  - rebasing feature branches onto upstream
+- [glab-https-git-credential-helper-setup.md](./glab-https-git-credential-helper-setup.md)
+  - configuring the glab HTTPS credential helper
+- [branch-protection/](./branch-protection/)
+  - GitHub/GitLab branch-protection rulesets, scripts, and workflows
 
 ## Resources
 

@@ -1,0 +1,38 @@
+name: release-promote
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref }}
+
+      - name: Verify tag is on develop
+        run: |
+          git fetch origin develop
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/develop; then
+            echo "Tag $GITHUB_REF_NAME is not on develop. Refusing to promote." >&2
+            exit 1
+          fi
+
+      - name: Fast-forward main to tag
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git checkout -B main origin/main
+          git merge --ff-only "$GITHUB_SHA"
+          git push origin main
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release create "$GITHUB_REF_NAME" --generate-notes
