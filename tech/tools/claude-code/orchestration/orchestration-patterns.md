@@ -33,7 +33,7 @@ the delegation in a snapshot/diff/validate pattern to confirm the subagent actua
    ```
 
 2. **Delegate** — invoke the Agent tool (never the Skill tool for nested delegation; see
-   `_docs/development/claude-code/skills-and-orchestration.md` §Dispatch vs Delegation).
+   [Skills and Orchestration §Dispatch vs Delegation](../skills-and-orchestration.md#dispatch-vs-delegation).
 
 3. **Post-snapshot and diff** — capture the state after delegation returns:
 
