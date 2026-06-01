@@ -29,32 +29,35 @@ warned `pid-N` fallback. On resume, the wrapper restores the original group-id f
 index, so `exec resume <ID>` works across terminals and PIDs. The `pid-N` fallback emits a stderr
 warning because the derived group is ephemeral and will differ on the next invocation.
 
-**Account resolution:** `--account <name>` flag > `CODEX_SESSION_ACCOUNT` env > LRU pointer (from
-`account use`, stored in `state/last-account`) > `config.account.pinned` > `NoneResolved` error.
-There is no implicit `"default"` fallback. `--account auto` triggers the R3 quota-aware selector
-(non-interactive). See `docs/auth-gate-spec.md` §3.2 for the full specification. All skill and
-workflow invocations must pass `--account auto` so account selection is always quota-aware.
+**Account resolution:** `--account <name>` or `CODEX_SESSION_ACCOUNT=<name>` pins that account for
+one invocation. With no flag/env, or with the value `auto`, codex-session uses quota-aware
+auto-selection with automatic failover and no account cycling within a retry run. Exhaustion
+surfaces as an explanatory `AutoExhausted` error. See `docs/auth-gate-spec.md` §3.2 for the full
+specification. Omit `--account` for quota-aware selection, or pass `--account auto` explicitly as
+the default alias.
 
 **Auth:** `auth.json` lives per-account at `<state>/accounts/<account>/auth.json` and is owned by
 the wrapper. Codex writes refresh rotations in place. No write-back to the user's default codex
 home.
 
 **Wrapper-owned verbs:** `version`, `completion`, `config status`,
-`config-recipe list|show|compose`, `doctor`, `account add|list|current|use|remove|refresh`,
+`config-recipe list|show|compose`, `doctor`, `account add|list|current|remove|refresh`,
 `account quota`, `account cooldown show|clear`.
 
 **Wrapper-owned global flags:** `--group`, `--account`, `--max-retries`, `--config-recipe`,
 `--config`, `--format`, `--verbose`/`--quiet`/`--silent`, `--log-stderr`, `--log-format`.
 
-**Argv pattern:** `codex-session --account auto exec ...` and
-`codex-session --account auto exec [--profile fast] resume <thread-id> ...`. Planning/new-thread
-calls omit `--profile`, so codex uses only the base `config.toml` (no profile overlay). Execution
-and review calls pass `--profile fast` on `exec` (before the `resume` subcommand if resuming, since
-`--profile` is an `exec`-level flag). codex-session itself never injects `--profile`:
+**Argv pattern:** `codex-session exec ...` and
+`codex-session exec [--profile fast] resume <thread-id> ...`. The no-arg account form is the
+quota-aware default; `--account auto` is the explicit alias, and `--account <name>` pins one
+account. Planning/new-thread calls omit `--profile`, so codex uses only the base `config.toml` (no
+profile overlay). Execution and review calls pass `--profile fast` on `exec` (before the `resume`
+subcommand if resuming, since `--profile` is an `exec`-level flag). codex-session itself never
+injects `--profile`:
 
 ```text
-codex-session --account auto exec --profile fast ...
-codex-session --account auto exec --profile fast resume <thread-id> ...
+codex-session exec --profile fast ...
+codex-session exec --profile fast resume <thread-id> ...
 ```
 
 ## Profile Strategy
@@ -121,7 +124,7 @@ sandbox works:
 
 ```bash
 SANDBOX_MODE="native"
-if codex-session --account auto exec --sandbox read-only --json "echo probe" < /dev/null 2>&1 \
+if codex-session exec --sandbox read-only --json "echo probe" < /dev/null 2>&1 \
     | grep -q "No permissions to create a new namespace"; then
   SANDBOX_MODE="fallback"
 fi
@@ -135,7 +138,7 @@ When `SANDBOX_MODE=fallback`, use these alternatives:
 `--sandbox read-only`:
 
 ```bash
-codex-session --account auto exec \
+codex-session exec \
   -c 'sandbox_permissions=["disk-full-read-access"]' --json \
   --output-last-message "$RUN_DIR/stage1-plan.txt" \
   "<planning prompt>" \
@@ -147,7 +150,7 @@ instead of `--full-auto`. This is the documented Codex approach for externally-s
 environments (devcontainers, CI runners):
 
 ```bash
-codex-session --account auto exec --profile fast \
+codex-session exec --profile fast \
   --dangerously-bypass-approvals-and-sandbox --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
@@ -158,7 +161,7 @@ codex-session --account auto exec --profile fast \
 must appear before the `resume` subcommand:
 
 ```bash
-codex-session --account auto exec --profile fast resume "$THREAD_ID" \
+codex-session exec --profile fast resume "$THREAD_ID" \
   --dangerously-bypass-approvals-and-sandbox --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
@@ -183,7 +186,7 @@ control; the CLI flag merely avoids the backend sandbox-parameter-mismatch rejec
 Planning call (resume-compatible):
 
 ```bash
-codex-session --account auto exec \
+codex-session exec \
   --dangerously-bypass-approvals-and-sandbox --json \
   --output-last-message "$RUN_DIR/stage1-plan.txt" \
   "<planning prompt with read-only orientation>" \
@@ -193,7 +196,7 @@ codex-session --account auto exec \
 Implementation call (resuming planning session):
 
 ```bash
-codex-session --account auto exec --profile fast resume "$THREAD_ID" \
+codex-session exec --profile fast resume "$THREAD_ID" \
   --dangerously-bypass-approvals-and-sandbox --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt with write orientation>" \
@@ -217,7 +220,7 @@ boundaries.
 Use this pattern when Codex should plan without modifying the repo:
 
 ```bash
-codex-session --account auto exec --sandbox read-only --json \
+codex-session exec --sandbox read-only --json \
   --output-last-message "$RUN_DIR/stage1-plan.txt" \
   "<planning prompt>" \
   < /dev/null > "$RUN_DIR/stage1-events.jsonl"
@@ -241,7 +244,7 @@ Contract:
 Use this pattern when Codex should implement:
 
 ```bash
-codex-session --account auto exec --profile fast --sandbox workspace-write --json \
+codex-session exec --profile fast --sandbox workspace-write --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
   < /dev/null > "$RUN_DIR/stage3-events.jsonl"
@@ -260,7 +263,7 @@ Contract:
 Use this pattern when Codex should resume an existing session for implementation:
 
 ```bash
-codex-session --account auto exec --profile fast resume "$THREAD_ID" \
+codex-session exec --profile fast resume "$THREAD_ID" \
   --dangerously-bypass-approvals-and-sandbox --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
@@ -270,7 +273,7 @@ codex-session --account auto exec --profile fast resume "$THREAD_ID" \
 Use this pattern when Codex should resume an existing session for read-only review:
 
 ```bash
-codex-session --account auto exec --profile fast resume "$THREAD_ID" \
+codex-session exec --profile fast resume "$THREAD_ID" \
   --dangerously-bypass-approvals-and-sandbox \
   --json --output-last-message "$RUN_DIR/round-N-review.txt" \
   "<review prompt>" \
@@ -349,9 +352,9 @@ Stage 5 delegates to the `/review-loop` skill — never call `codex review` dire
 
 - `codex review` does not support `--json` or `--output-last-message`.
 - `--uncommitted` combined with a positional `[PROMPT]` errors out.
-- `/review-loop` uses `codex-session --account auto exec --sandbox read-only` for every round. Each
-  round is an independent one-shot invocation (no `exec resume`); round 1 uses only the base
-  `config.toml` (no profile overlay), rounds 2+ pass `--profile fast`.
+- `/review-loop` uses `codex-session exec --sandbox read-only` for every round. Each round is an
+  independent one-shot invocation (no `exec resume`); round 1 uses only the base `config.toml` (no
+  profile overlay), rounds 2+ pass `--profile fast`.
 
 ## Thread ID Extraction
 
@@ -426,8 +429,9 @@ New and updated skills must not hardcode `/tmp` for run directories or lock file
   - fresh read-only → `--sandbox read-only`
   - write → `--sandbox workspace-write`
 - `--full-auto` is deprecated since Codex v0.128.0. Do not use it in new code.
-- `--approval-policy` and `-a` are NOT supported by `codex-session --account auto exec`.
-- All invocations must pass `--account auto` for quota-aware account selection.
+- `--approval-policy` and `-a` are NOT supported by `codex-session exec`.
+- Account auto-selection is the default. Omit `--account` for quota-aware selection, or pass
+  `--account auto` explicitly.
 - All `codex-session exec` invocations must include `< /dev/null` to prevent blocking on inherited
   stdin. Without this, Codex prints `Reading additional input from stdin...` and hangs until timeout
   when called from TUI sessions or background agents.

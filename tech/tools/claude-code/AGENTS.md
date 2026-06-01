@@ -19,8 +19,8 @@ orchestration, plan rounds, skill authoring, and implementation review practices
 
 ## Key Points
 
-- **Codex wrapper**: All Codex invocations use `codex-session` (not raw `codex`). Always
-  `--account auto` for quota-aware selection.
+- **Codex wrapper**: All Codex invocations use `codex-session` (not raw `codex`). Auto-selection is
+  the default; omit `--account` for quota-aware selection or pass `--account auto` explicitly.
 - **Sandbox**: Resume-compatible workflows use `--dangerously-bypass-approvals-and-sandbox` for all
   calls. One-shot workflows may use native sandbox flags. See `codex-conventions.md` §Unified
   Sandbox for Resume Workflows.
