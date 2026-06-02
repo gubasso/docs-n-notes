@@ -243,6 +243,44 @@ You should see `user=…`, `pass=…` (an opaque base64+bz2 blob), and
 > see the [Troubleshooting entry below](#typeerror-object-of-type-nonetype-has-no-len-during-seed).
 > The Python pre-seed above bypasses the broken interactive path.
 
+### Step 3b. Pre-create `~/.config/osc/` in the container image (uid-owned)
+
+Skip this step **only** if you already know the container image
+pre-creates `~/.config/osc/` owned by your uid. If you're not sure,
+do it anyway — it's idempotent.
+
+When a bind-mount target path does not exist inside the image, Docker
+auto-creates the parent directory at `docker create` time. That
+auto-creation runs as **root** and produces a `root:root 0755`
+directory. On the first HTTPS call, `osc`'s
+[`TrustedCertStore.__init__`](https://github.com/openSUSE/osc/blob/master/osc/oscssl.py)
+runs `os.makedirs("~/.config/osc/trusted-certs", mode=0o700)` as the
+container user — which fails with `PermissionError: [Errno 13]` on
+the now-root-owned parent.
+
+Fix: have your image's Dockerfile pre-create the directory as the
+container user, so Docker's bind-mount auto-create has nothing to do:
+
+```dockerfile
+# In your devcontainer / agents image Dockerfile, before any USER swap
+# back to root (i.e. while $USERNAME is the target uid):
+RUN install -d -m 0755 -o $USERNAME -g $USERNAME \
+        /home/$USERNAME/.config/osc
+```
+
+This must happen at **image build time**. A live-running container
+cannot fix it: `dctl ws reup` / `docker compose up --force-recreate`
+only recreates the container against the existing image and will hit
+the same Docker auto-mkdir-as-root path. After editing the
+Dockerfile, do a no-cache rebuild (e.g.
+`dctl image build --full-rebuild`) and then recreate the container.
+
+Diagnostic for "is the running image actually built with the
+pre-create?": `stat -c 'Birth=%w' ~/.config/osc` inside the
+container. Birth time at image-build timestamp → baked in correctly.
+Birth time at container-start timestamp → still missing from the
+image; rebuild.
+
 ### Step 4. Wire it into the dctl leaf layer
 
 Edit your project's devcontainer leaf layer (path varies — typical
@@ -291,14 +329,28 @@ echo "$OSC_CONFIG"
 # 2. The file is visible and has the expected backend.
 grep -E 'credentials_mgr_class|user|pass' ~/.config/osc/oscrc
 
-# 3. Auth round-trips to OBS.
+# 3. The bind-mount parent dir is owned by your uid (not root).
+#    If it is root-owned, osc's first HTTPS call will crash trying to
+#    create `trusted-certs/` — see the matching Troubleshooting entry.
+stat -c '%U:%G %a' ~/.config/osc
+# → <your-user>:<your-group> 755
+
+# 4. Auth round-trips to OBS.
 osc -A <obs-api-url> api /person/<obs-username> >/dev/null && echo OK
+
+# 5. The first successful HTTPS call created `trusted-certs/` under
+#    your uid. Empty contents are NORMAL — it only fills up when you
+#    answer `2` to an interactive trust prompt for a self-signed /
+#    non-CA-signed cert. CA-signed endpoints (e.g. api.opensuse.org)
+#    legitimately leave it empty forever.
+ls -ld ~/.config/osc/trusted-certs
+# → drwx------ ... <your-user> <your-group> ...
 ```
 
-The third command is the canonical scripted auth check: it's
-read-only, fully non-interactive, requires authentication (unlike
-`/about` or `/configuration` which are often public on OBS), exits 0
-on success, and 401s cleanly on bad creds.
+The auth check (`api /person/<user>`) is the canonical scripted
+verifier: it's read-only, fully non-interactive, requires
+authentication (unlike `/about` or `/configuration` which are often
+public on OBS), exits 0 on success, and 401s cleanly on bad creds.
 
 ---
 
@@ -476,6 +528,73 @@ read-only-mounted oscrc, osc couldn't write the obfuscated `pass =`
 line back, so it re-prompted every run. Re-do Tier 1 Step 3 with the
 Python pre-seed against a writable oscrc, then re-mount read-only.
 
+### `PermissionError: [Errno 13] Permission denied: '.../osc/trusted-certs'`
+
+Symptom: the first `osc … api /person/<user>` call (or any other
+HTTPS-against-OBS call) crashes before sending the request:
+
+```
+File ".../osc/oscssl.py", line 56, in __init__
+    os.makedirs(self.dir_path, mode=0o700)
+PermissionError: [Errno 13] Permission denied: '/home/<user>/.config/osc/trusted-certs'
+```
+
+Root cause: `~/.config/osc/` is owned by `root:root` (mode 0755).
+Inside a bind-mount-based devcontainer this almost always means
+Docker auto-created the parent for your bind-mounted `oscrc` at
+`docker create` time, because the image didn't already have it.
+`osc` then can't `mkdir` `trusted-certs/` underneath as your uid.
+
+Diagnostic:
+```bash
+stat -c '%U:%G %a  Birth=%w' ~/.config/osc
+# Birth = container-start time → image is missing the pre-create.
+# Birth = (older) image-build time → image is fine, look elsewhere.
+```
+
+Fix: do **Step 3b** above. The `trusted-certs/` path is hard-coded
+in osc (only `XDG_CONFIG_HOME` can relocate it), so the only durable
+fix is making the parent uid-owned in the image. Live-container
+workarounds:
+
+- `sudo chown -R $USER:$USER ~/.config/osc` — only works if your
+  container actually has unrestricted sudo. Most hardened devcontainer
+  bases (incl. dctl's `agents`) limit `NOPASSWD` to specific binaries
+  like `zypper`, so this typically fails.
+- `XDG_CONFIG_HOME=$HOME/.local/state/osc-xdg osc …` — relocates the
+  cert store outside the bind-mount parent. Unblocks one-off work,
+  but leaks XDG redirection onto every other XDG-aware tool in that
+  shell. Treat as triage only.
+
+Both workarounds are temporary. Ship the Step 3b Dockerfile pre-create
+and rebuild.
+
+### `~/.config/osc/trusted-certs/` is empty — is something wrong?
+
+No. The directory is osc's **trust-on-first-use store for non-CA-
+signed certs**, not a CA bundle:
+
+- `TrustedCertStore.__init__` creates the directory unconditionally on
+  the first HTTPS call (`os.makedirs(..., mode=0o700)`).
+- `trust_permanently()` is the **only writer**, and it only runs when
+  you interactively answer `2` ("trust permanently") to a certificate
+  validation prompt — which osc only shows when standard CA
+  verification fails (self-signed cert, unknown CA, hostname
+  mismatch, etc.).
+
+`api.opensuse.org` presents a publicly CA-signed cert that the system
+CA bundle validates on the first call. No prompt fires, no PEM is
+written, and `trusted-certs/` correctly stays empty forever. You'd
+only see `{host}_{port}.pem` files in there if you pointed `osc` at a
+self-hosted OBS / private IBS mirror / staging server with an
+untrusted cert and chose to trust it permanently.
+
+`trusted-certs/` is **not documented in `oscrc(5)`** because it isn't a
+configurable path — it's an internal cache, behaviorally defined by
+the source. References:
+[`osc/oscssl.py`](https://github.com/openSUSE/osc/blob/master/osc/oscssl.py),
+[`osc/util/xdg.py`](https://github.com/openSUSE/osc/blob/master/osc/util/xdg.py).
+
 ### `HTTP Error 401: authentication required`
 
 The credentials in the oscrc are wrong or expired. Re-run the seeding
@@ -536,6 +655,8 @@ troubleshooting list above.
 - [osc/credentials.py — credentials manager classes (Obfuscated{en,de}code_password)](https://github.com/openSUSE/osc/blob/master/osc/credentials.py)
 - [osc/conf.py — `Password` (UserString subclass, lacks `__bool__`)](https://github.com/openSUSE/osc/blob/master/osc/conf.py)
 - [osc/connection.py — `SignatureAuthHandler.__init__` (the `bool(basic_auth_password)` site)](https://github.com/openSUSE/osc/blob/master/osc/connection.py)
+- [osc/oscssl.py — `TrustedCertStore` (unconditional `makedirs` in `__init__` vs PEM writes in `trust_permanently()`)](https://github.com/openSUSE/osc/blob/master/osc/oscssl.py)
+- [osc/util/xdg.py — XDG path resolution (`trusted-certs/` is only relocatable via `XDG_CONFIG_HOME`)](https://github.com/openSUSE/osc/blob/master/osc/util/xdg.py)
 - [oscrc(5) man page](https://manpages.opensuse.org/Tumbleweed/osc/oscrc.5.en.html)
 - [osc(1) man page](https://linux.die.net/man/1/osc)
 - [osc#785 — `--no-keyring` doesn't actually disable keyring import](https://github.com/openSUSE/osc/issues/785)
