@@ -310,7 +310,7 @@ stat -c '%U:%G %a  Birth=%w' ~/.config/<dir>
 ```
 
 Detailed worked example for `~/.config/osc`: see
-[`osc-obs-auth-in-devcontainers.md`](osc-obs-auth-in-devcontainers.md).
+[`osc-obs/auth-in-devcontainers.md`](osc-obs/auth-in-devcontainers.md).
 
 For a real, deployed example of these patterns (KWallet-free oscrc, obfuscated host-side seeding,
 `OSC_CONFIG`-pinned bind mount), see

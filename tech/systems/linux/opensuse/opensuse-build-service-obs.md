@@ -16,6 +16,21 @@
       - keyring
       - hello example: `So looking at GNU Hello (RPM package "hello"):`
 
+## Companion subtree (canonical OBS/osc notes)
+
+- [`~/DocsNNotes/tech/tools/osc-obs/`](../../tools/osc-obs/README.md) — dedicated OBS/osc subtree:
+  - [`setup-home-project-from-upstream.md`](../../tools/osc-obs/setup-home-project-from-upstream.md)
+    — from-scratch home-project walkthrough (project meta, base import vs branch, satellite
+    `_link` + `<apply>`, branched providers, verification sequence).
+  - [`broken-state-link-drift.md`](../../tools/osc-obs/broken-state-link-drift.md) — the `broken`
+    lane state (pre-build link-expansion failure), diagnostic recipe, and
+    `osc add`/`osc rm`/`osc ci` recovery.
+  - [`auth-in-devcontainers.md`](../../tools/osc-obs/auth-in-devcontainers.md) — auth / `oscrc` /
+    KWallet-free credential setup in devcontainers.
+  - [`common-mistakes-and-pitfalls.md`](../../tools/osc-obs/common-mistakes-and-pitfalls.md) —
+    distilled lessons from real incidents (auth, workspace, CLI foot-guns, patch/link evolution,
+    diagnostic discipline).
+
 ## General
 
 ```text
