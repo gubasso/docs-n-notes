@@ -36,6 +36,12 @@ surfaces as an explanatory `AutoExhausted` error. See `docs/auth-gate-spec.md` �
 specification. Omit `--account` for quota-aware selection, or pass `--account auto` explicitly as
 the default alias.
 
+The quota thresholds (50% five-hour / 10% weekly) are **soft penalty knees, not eligibility floors**
+(changed 2026-06-02). An account below a knee is not blocked — it is heavily deprioritized in
+scoring but still selectable, so the pool is used down to 0%. True exhaustion is API-driven: HTTP
+429 → cooldown → rotate → `AutoExhausted`. See the "Quota knees & out-of-quota errors" section
+below.
+
 **Auth:** `auth.json` lives per-account at `<state>/accounts/<account>/auth.json` and is owned by
 the wrapper. Codex writes refresh rotations in place. No write-back to the user's default codex
 home.
@@ -59,6 +65,48 @@ injects `--profile`:
 codex-session exec --profile fast ...
 codex-session exec --profile fast resume <thread-id> ...
 ```
+
+## Quota knees & out-of-quota errors
+
+(Behavior as of 2026-06-02; codex-session repo plan `03-quota-soft-gate-and-messaging`.)
+
+- **Soft knees, not floors.** `five_hour_threshold` (50%) and `weekly_floor` (10%) are _penalty
+  knees_. Below-knee accounts get a dominant scoring penalty (`BELOW_KNEE_PENALTY`) so any
+  above-knee account outranks any below-knee account, but below-knee accounts stay selectable and
+  order among themselves by remaining quota. Accounts are used to 0%; selection no longer
+  pre-emptively drops them.
+- **`percent_left` means "% left".** All quota percentages are quota _remaining_, never quota
+  _used_. A window at `0.0% left` is exhausted.
+- **`NoEligible`** = no _usable_ account at all (no auth, all in active cooldown, or token expired).
+  It is no longer raised merely because every account is below a knee.
+- **`AutoExhausted`** = accounts were actually tried and all failed with 401/429 — true depletion.
+  Its stderr block lists each account with a stable, parseable line shape:
+
+  ```text
+  • <id>  <state-phrase>  back in <dur> (<HH:MM UTC>)
+  earliest available: <dur> (<HH:MM UTC>)
+  ```
+
+  The hint is **cause-aware**: `cooldown clear --all` is suggested only when cooldowns are the
+  block, not for pure quota-window exhaustion (for that it gives the reset ETA). A machine channel
+  mirrors per-account `state` / `five_hour_left` / `weekly_left` / `available_at_unix` plus a
+  top-level `earliest_available_at_unix` via structured `tracing` fields.
+
+### Resume is account-bound
+
+`exec resume <thread-id>` can run **only** on the account that owns the thread — the rollout exists
+only in that account's `CODEX_HOME`. The wrapper cannot rotate a resume to another account. When the
+owner is quota-limited, the resume yields `ResumeBlocked` (exit 75), which:
+
+- names the owning account, its blocking state, and its reset ETA;
+- lists which _other_ accounts have quota now (with the caveat that they cannot continue _this_
+  thread), or — if none are ready — every account's reset ETA.
+
+Recovery for a `ResumeBlocked`: **wait** until the owner's reset time shown in the message and
+re-run the resume, **or** start a fresh `exec` on an available account (new thread, no continuity).
+Do not treat `ResumeBlocked` like a transient `"no rollout found"` error — it is a quota state, not
+a missing-thread error, so the fresh-exec fallback is a deliberate continuity-losing choice, not an
+automatic retry.
 
 ## Profile Strategy
 
