@@ -26,9 +26,11 @@ future research.
 1. **Reasoning effort is the biggest cost lever.** Reasoning tokens bill at the **output** rate (the
    most expensive line), and higher effort multiplies token count several-fold (community estimate:
    `medium`→`xhigh` ≈ 8–15×). Drop effort before downgrading the model when you need savings.
-2. **Model choice is the second lever.** `gpt-5.3-codex` is coding-specialized, ~85% SWE-bench
-   (within a few points of the flagship), and ~3× cheaper per output token than `gpt-5.5` — strong
-   cost/quality for code work.
+2. **Model choice is the second lever.** Under **ChatGPT-subscription auth** the coding workhorse is
+   **`gpt-5.4`** ("strong everyday coding", ~½ the per-token credit cost of `gpt-5.5`) —
+   `gpt-5.3-codex` is coding-specialized and ~85% SWE-bench but **API-key-only** (it 400s on ChatGPT
+   accounts), so it is not an option on subscription. See
+   [Auth & subscription availability](#auth--subscription-availability).
 3. **Caching only discounts input** (the cheapest line), so it is the _smallest_ lever for
    output-heavy agentic coding, though still worth structuring prompts for.
 4. **Benchmark gaps ≤ ~3 pts are run-to-run noise**, not real quality differences. The real cliff is
@@ -55,15 +57,37 @@ From the Codex models page and per-model API pages (PRIMARY), as of 2026-06-02:
 
 **Notes & corrections:**
 
-- `gpt-5.5`, `gpt-5.4`, `gpt-5.4-mini`, `gpt-5.3-codex` — all **confirmed** (PRIMARY).
+- `gpt-5.5`, `gpt-5.4`, `gpt-5.4-mini`, `gpt-5.3-codex` — all **confirmed** model IDs (PRIMARY).
 - `gpt-5.4-nano` — has API **pricing** (PRIMARY) but is **not listed as a selectable Codex model**;
   treat as API-only.
-- Legacy `*-codex` still billable per the rate card: `gpt-5.2-codex`, `gpt-5.1-codex-max`,
-  `gpt-5.1-codex-mini`.
+- Legacy `*-codex` still billable per the API rate card: `gpt-5.2-codex`, `gpt-5.1-codex-max`,
+  `gpt-5.1-codex-mini` — **API-key auth only** (see below).
 - **Default model:** ChatGPT-authenticated Codex → **`gpt-5.5`** ("for most tasks in Codex, start
-  with gpt-5.5", PRIMARY). API-key auth → SECONDARY reports `gpt-5.5` not yet exposed;
-  `gpt-5.2-codex` recommended, `gpt-5.4` fallback (unconfirmed on PRIMARY).
+  with gpt-5.5", PRIMARY).
 - No PRIMARY retirement table was found; `gpt-5.2` is demoted to "Alternative".
+
+### Auth & subscription availability
+
+Model availability differs by **auth mode**, not just by model ID. This is the single most important
+fact for our `codex-session` profiles (we authenticate via **ChatGPT subscription, never API key**).
+
+- **ChatGPT-subscription auth (our mode).** The Codex CLI v0.135.0 "Select Model and Effort" picker
+  exposes exactly three models (confirmed live in-app, ChatGPT subscription): **`gpt-5.5`**
+  (frontier / complex coding), **`gpt-5.4`** (strong everyday coding), **`gpt-5.4-mini`**
+  (small/fast). Legacy general **`gpt-5.2`** is reachable via `-m <model>` / config but not the
+  picker. The **entire `-codex` family is unavailable**: selecting `gpt-5.3-codex` (or
+  `gpt-5.2-codex`, `gpt-5.3-codex-spark`, etc.) returns
+  `400 invalid_request_error: The '<model>' model is not supported when using Codex with
+  a ChatGPT account`.
+  Plan tier (Plus / Pro / Team / Business / Enterprise) changes **quotas/rate limits only**, not
+  which models are selectable.
+- **API-key auth.** The `-codex` family (`gpt-5.3-codex`, `gpt-5.2-codex`, `gpt-5.1-codex-*`) is
+  selectable here; SECONDARY reports `gpt-5.5` may not yet be exposed under API-key auth. We do not
+  use this mode.
+
+⚠️ Consequence: a profile that pins `gpt-5.3-codex` **fails on our accounts**. All `codex-session`
+profiles must pin `gpt-5.5` / `gpt-5.4` / `gpt-5.4-mini`. (Confidence: HIGH for the subscription
+picker — verified in the live TUI; MEDIUM for the API-key lineup — SECONDARY.)
 
 ## 2. Reasoning effort
 
@@ -106,18 +130,23 @@ line (≈8× for `gpt-5.3-codex`).
 - **Structure:** usage draws against a **5-hour rolling window** _and_ a **weekly limit**
   simultaneously (a request counts against both). Credits extend usage after included limits.
 - **Token→credit rate card** (SECONDARY — citing the official card dated 2026-04-15; the PRIMARY
-  help-center page 403'd):
+  help-center page 403'd). **Subscription-selectable models first; `-codex` rows are API-key-only
+  and shown only for reference — they are NOT chargeable on ChatGPT-subscription auth (they 400, see
+  [Auth & subscription availability](#auth--subscription-availability)):**
 
-  | Model                | Credits/1M input | Cached | Output |
-  | -------------------- | ---------------- | ------ | ------ |
-  | `gpt-5.4`            | 62.50            | 6.25   | 375    |
-  | `gpt-5.4-mini`       | 18.75            | 1.875  | 113    |
-  | `gpt-5.3-codex`      | 43.75            | 4.375  | 350    |
-  | `gpt-5.2-codex`      | 43.75            | 4.375  | 350    |
-  | `gpt-5.1-codex-max`  | 31.25            | 3.125  | 250    |
-  | `gpt-5.1-codex-mini` | 6.25             | 0.625  | 50     |
+  | Model                        | Credits/1M input | Cached | Output | Subscription? |
+  | ---------------------------- | ---------------- | ------ | ------ | ------------- |
+  | `gpt-5.5`                    | 125              | 12.5   | 750    | ✅ picker     |
+  | `gpt-5.4`                    | 62.50            | 6.25   | 375    | ✅ picker     |
+  | `gpt-5.4-mini`               | 18.75            | 1.875  | 113    | ✅ picker     |
+  | `gpt-5.3-codex` _(ref)_      | 43.75            | 4.375  | 350    | ❌ API-key    |
+  | `gpt-5.2-codex` _(ref)_      | 43.75            | 4.375  | 350    | ❌ API-key    |
+  | `gpt-5.1-codex-max` _(ref)_  | 31.25            | 3.125  | 250    | ❌ API-key    |
+  | `gpt-5.1-codex-mini` _(ref)_ | 6.25             | 0.625  | 50     | ❌ API-key    |
 
-  Implied rate ≈ **1 credit ≈ $0.04**. `gpt-5.5` credit rate was not in the captured card.
+  Implied rate ≈ **1 credit ≈ $0.04**. `gpt-5.5` / `gpt-5.4` credit rates are SECONDARY (research
+  sweep, 2026-06-02). On subscription, `gpt-5.5` output ≈ **2×** `gpt-5.4` per token, so model
+  choice between them is a real lever — but reasoning effort still dominates (§3c).
 - **Reasoning tokens billed as output?** Not stated on the Codex primary pricing pages, but OpenAI's
   reasoning models generally bill internal reasoning tokens at the **output** rate (established with
   o1/o3/o4-mini). High-confidence inference for gpt-5.x → **output is the dominant cost line**.
@@ -162,14 +191,17 @@ discounts input.
 
 The [profile strategy](./codex-conventions.md#profile-strategy) applies the levers above:
 
-| Profile           | Model           | Effort  | Why                                            |
-| ----------------- | --------------- | ------- | ---------------------------------------------- |
-| `planning`        | `gpt-5.5`       | high    | design benefits most from flagship reasoning   |
-| `review-deep`     | `gpt-5.5`       | high    | full first-pass diff review                    |
-| `implementation`  | `gpt-5.3-codex` | high    | near-flagship coding, ~3× cheaper output/token |
-| `review-followup` | `gpt-5.3-codex` | medium  | incremental re-checks; effort dialed down      |
-| `quick`           | `gpt-5.4-mini`  | medium  | trivial Q&A / commit messages                  |
-| `ping`            | `gpt-5.4-mini`  | minimal | health/sandbox probes                          |
+All models are **subscription-selectable** (`gpt-5.5` / `gpt-5.4` / `gpt-5.4-mini`); no `-codex`
+pins (API-key-only — see [Auth & subscription availability](#auth--subscription-availability)).
+
+| Profile           | Model          | Effort  | Why                                                         |
+| ----------------- | -------------- | ------- | ----------------------------------------------------------- |
+| `planning`        | `gpt-5.5`      | high    | design benefits most from flagship reasoning                |
+| `review-deep`     | `gpt-5.5`      | high    | full first-pass diff review                                 |
+| `implementation`  | `gpt-5.4`      | medium  | subscription coding workhorse; `medium` caps reasoning-time |
+| `review-followup` | `gpt-5.4`      | low     | incremental re-checks after review-deep's heavy pass        |
+| `quick`           | `gpt-5.4-mini` | medium  | trivial Q&A / commit messages                               |
+| `ping`            | `gpt-5.4-mini` | minimal | health/sandbox probes                                       |
 
 ## Sources
 
@@ -209,6 +241,9 @@ The [profile strategy](./codex-conventions.md#profile-strategy) applies the leve
 
 - **§1 Catalog — HIGH** for 5.5/5.4/5.4-mini/5.3-codex (PRIMARY); **MEDIUM** for 5.4-nano (priced
   but not confirmed selectable) and the API-key default; no PRIMARY retirement list.
+- **Auth & subscription availability — HIGH** for the subscription picker lineup (5.5/5.4/5.4-mini,
+  verified live in Codex CLI v0.135.0 TUI + the `gpt-5.3-codex` 400 error); **MEDIUM** for the
+  API-key-only `-codex` lineup (SECONDARY / GitHub issues).
 - **§2 Reasoning — HIGH** for accepted values/per-model support; **LOW** for the token-multiplier
   table (community-measured); plan-mode default is SECONDARY.
 - **§3 Pricing — HIGH** for API per-token rates; **MEDIUM** for the credit rate card (PRIMARY page
@@ -223,3 +258,9 @@ The [profile strategy](./codex-conventions.md#profile-strategy) applies the leve
 - **2026-06-02** — Initial version. Researched the model catalog, reasoning-effort levels, API +
   ChatGPT-credit pricing, SWE-bench, and prompt caching to ground the `codex-session` profile
   refactor (planning/implementation/review-deep/review-followup/quick/ping).
+- **2026-06-02** — Subscription-only correction. Added the **Auth & subscription availability**
+  section after a `gpt-5.3-codex` 400 on ChatGPT-subscription auth: the `-codex` family is
+  API-key-only; the subscription picker (Codex CLI v0.135.0) is `gpt-5.5`/`gpt-5.4`/`gpt-5.4-mini`.
+  Repointed `implementation` → `gpt-5.4 @ medium` and `review-followup` → `gpt-5.4 @ low`, annotated
+  the credit rate card (`-codex` rows are reference-only / not chargeable on subscription), and
+  added the `gpt-5.5`/`gpt-5.4`/`gpt-5.4-mini` credit rows.

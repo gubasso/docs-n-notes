@@ -313,7 +313,7 @@ to:
 ```
 
 Use the actual UTC timestamp at the moment you finish (not when you started). `<agent-name>` is your
-model+harness identifier, e.g. `claude-code/opus-4.7` or `codex-cli/gpt-5.3-codex`.
+model+harness identifier, e.g. `claude-code/opus-4.7` or `codex-cli/gpt-5.4`.
 
 ## Step 5 — Append to `MANIFEST.yaml: implementation-log`
 

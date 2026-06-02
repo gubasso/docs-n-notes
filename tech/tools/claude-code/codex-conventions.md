@@ -120,15 +120,25 @@ profile). The skill-owned profiles:
 
 - **`planning`** — `gpt-5.5`, `high` effort, full sandbox. Architecture/design planning (`prex`
   stage 1).
-- **`implementation`** — `gpt-5.3-codex`, `high` effort, full sandbox. Writing code from a reviewed
-  plan (`prex` stage 3, fresh `exec` or `resume`).
+- **`implementation`** — `gpt-5.4`, `medium` effort, full sandbox. Writing code from a reviewed plan
+  (`prex` stage 3, fresh `exec` or `resume`). `gpt-5.4` is the subscription "everyday coding"
+  workhorse; `medium` keeps reasoning-token burn (the quota lever) low.
 - **`review-deep`** — `gpt-5.5`, `high` effort. Full first-pass review of a diff (`review-loop`
   round 1).
-- **`review-followup`** — `gpt-5.3-codex`, `medium` effort. Re-checks incremental, already-triaged
-  fixes (`review-loop` rounds 2+) and read-only cross-check Q&A (claude `ask -c`).
+- **`review-followup`** — `gpt-5.4`, `low` effort. Re-checks incremental, already-triaged fixes
+  (`review-loop` rounds 2+) and read-only cross-check Q&A (claude `ask -c`). Round 1 (`review-deep`)
+  already did the heavy pass, so rounds 2+ run light.
 - **`quick`** — `gpt-5.4-mini`, `medium` effort. Cheap fast Q&A and trivial text gen (codex-session
   `ask -f`, `gc`).
 - **`ping`** — health-probe-only profile, used internally by `account health`.
+
+> **Subscription-only policy.** These accounts authenticate via ChatGPT subscription (never API
+> key). Every profile MUST pin a model selectable under ChatGPT-subscription auth — as of Codex CLI
+> v0.135.0 that is **`gpt-5.5` / `gpt-5.4` / `gpt-5.4-mini`** (legacy general `gpt-5.2` reachable
+> via `-m` only). The **`-codex` family is API-key-only**: pinning `gpt-5.3-codex` (or any
+> `*-codex`) 400s with
+> `The '<model>' model is not supported when using Codex with a ChatGPT account`. Never pin a
+> `-codex` model. Model/pricing rationale: [`codex-models-pricing.md`](./codex-models-pricing.md).
 
 `planning` and `review-deep` start with identical values (`gpt-5.5 @ high`) but are kept as separate
 profiles so planning and review can be tuned independently.
