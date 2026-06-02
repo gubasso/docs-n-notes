@@ -1,19 +1,24 @@
 # Round Plan Templates
 
-Templates for the files generated in a `.plan/01-todo/<slug>/` directory. Use `{{PLACEHOLDER}}`
-markers — the generating skill substitutes them with actual values.
+Templates for the files generated in a `.plan/<slug>/` directory. Use `{{PLACEHOLDER}}` markers —
+the generating skill substitutes them with actual values.
+
+A plan directory contains: `_README.md` (Template B), one round file per round (Template A, **no
+number prefix**), an inner `_QUEUE.yaml` (Template D), and — for XL plans only — `STRATEGY.md`
+(Template C). The plan is also registered in the repo-wide `.plan/_QUEUE.yaml` (Template D).
 
 All templates follow the repo's markdown rules: fenced code blocks must have language specifiers
 (MD040). Use `text` when no specific syntax applies.
 
-## Template A — Round file (`NN-<topic>.md`)
+## Template A — Round file (`<topic>.md`)
 
-Each round file is a self-contained task description for `/prex -ar`.
+Each round file is a self-contained task description for `/prex -ar`. The filename is the round's
+`<topic>` slug with no number prefix; round order lives in `_QUEUE.yaml`.
 
-````markdown
-# Round {{NN}}: {{Title}}
+```markdown
+# {{Title}}
 
-> Plan: {{SLUG}} | Round: {{NN}} of {{TOTAL}} | Complexity: {{GRADE}} Generated: {{ISO_8601}} |
+> Plan: {{SLUG}} | Round: {{N}} of {{TOTAL}} | Complexity: {{GRADE}} | Generated: {{ISO_8601}} |
 > Repo: {{REPO_ROOT}}
 
 ## Context
@@ -24,9 +29,10 @@ Each round file is a self-contained task description for `/prex -ar`.
 
 ## Previous Rounds
 
-{{If NN > 01: describe what prior rounds produced — specific files created/modified, patterns
-established, types introduced. Describe the EXPECTED state, not actual (the executor adapts to what
-it finds). If NN == 01: "This is the first round — no prior rounds."}}
+{{If this is not the first round: describe what prior rounds produced — specific files
+created/modified, patterns established, types introduced. Describe the EXPECTED state, not actual
+(the executor adapts to what it finds). If this is the first round: "This is the first round — no
+prior rounds."}}
 
 ## Scope of This Round
 
@@ -57,22 +63,16 @@ to implement. Why this step is needed. Ordering dependencies on other steps with
 
 {{details}}
 
-### Final Step: Update plan index
+### Final Step: Update the queue
 
-Update the plan's `README.md` (in the same directory as this round file) to record completion:
+Record completion in the queue — status lives in YAML; nothing moves on disk:
 
-1. In the `## Execution Order` table, find the row for round {{NN}}.
-2. Change `Status` from `todo` to `done`.
-3. Change `Completed` from `--` to today's date (`YYYY-MM-DD`).
+1. In this plan's `_QUEUE.yaml`, set this round's (`item: {{TOPIC}}`) `status` to `done`.
 
 {{If this is the final round, also:}}
 
-4. In the README.md header blockquote, change `Status: todo` to `Status: done`.
-5. Move the plan directory to done:
-
-```bash
-mkdir -p .plan/02-done && mv .plan/01-todo/{{SLUG}} .plan/02-done/{{SLUG}}
-```
+2. All rounds are now done, so in the top-level `.plan/_QUEUE.yaml` set this plan's
+   (`item: {{SLUG}}`) `status` to `done`. Leave the plan directory in place.
 
 ## Acceptance Criteria
 
@@ -80,16 +80,14 @@ mkdir -p .plan/02-done && mv .plan/01-todo/{{SLUG}} .plan/02-done/{{SLUG}}
 
 - [ ] {{criterion 1}}
 - [ ] {{criterion 2}}
-- [ ] Plan `README.md` execution order table shows round {{NN}} as `done` with today's date {{If
-      this is the final round:}}
-- [ ] Plan `README.md` header status is `done`
-- [ ] Plan directory moved from `.plan/01-todo/{{SLUG}}` to `.plan/02-done/{{SLUG}}`
+- [ ] This plan's `_QUEUE.yaml` shows round `{{TOPIC}}` as `done`. {{If this is the final round:}}
+- [ ] The top-level `.plan/_QUEUE.yaml` shows this plan as `done`.
 
 ## Next Round
 
 {{If not the last round: brief preview of what comes next and what this round enables for it. If the
 last round: "This is the final round."}}
-````
+```
 
 ### Round file guidelines
 
@@ -101,22 +99,24 @@ last round: "This is the final round."}}
 - `## Next Round` gives the executor awareness of the bigger picture without requiring it to read
   ahead.
 - Implementation steps are in dependency order within the round.
-- Every round file must end with a "Final Step: Update plan index" that instructs the executor to
-  mark the round as `done` with today's date in the README.md execution order table.
-- The **final round** must additionally instruct the executor to set the README.md header status to
-  `done` and move the plan directory from `.plan/01-todo/` to `.plan/02-done/`.
+- Every round file must end with a "Final Step: Update the queue" that instructs the executor to set
+  the round's `status` to `done` in the plan's `_QUEUE.yaml`.
+- The **final round** must additionally instruct the executor to set the plan's `status` to `done`
+  in the top-level `.plan/_QUEUE.yaml`. **Nothing moves on disk** — there are no `01-todo`/`02-done`
+  directories.
 - Include enough code context (quoted lines, signatures) for the executor to locate exact insertion
   points. Do not just cite line numbers — they shift.
 
-## Template B — `README.md`
+## Template B — `_README.md`
 
-The plan's index, progress tracker, and decision record.
+The plan's human-facing index and decision record. `_QUEUE.yaml` (Template D) is the source of truth
+for round order and status; `_README.md` mirrors it for readers but must not become a competing
+status source.
 
 ````markdown
 # {{Plan Title}}
 
-> Complexity: {{GRADE}} | Rounds: {{TOTAL}} | Generated: {{ISO_8601}} Repo: {{REPO_ROOT}} Status:
-> todo
+> Complexity: {{GRADE}} | Rounds: {{TOTAL}} | Generated: {{ISO_8601}} | Repo: {{REPO_ROOT}}
 
 ## Problem Statement
 
@@ -127,43 +127,40 @@ The plan's index, progress tracker, and decision record.
 {{High-level approach. How the work is split into rounds and why this splitting was chosen. For S/M
 plans, this is 2–3 sentences. For L/XL, summarize and point to STRATEGY.md.}}
 
-## Execution Order
+## Rounds
 
-| Round | File              | Topic     | Status | Completed |
-| ----- | ----------------- | --------- | ------ | --------- |
-| 01    | `01-{{topic}}.md` | {{topic}} | todo   | --        |
-| 02    | `02-{{topic}}.md` | {{topic}} | todo   | --        |
+{{A readable overview of the rounds, in order. The authoritative order and status live in
+`_QUEUE.yaml` — keep this list in sync but do not duplicate per-round status here.}}
+
+1. `{{topic-1}}.md` — {{one-line topic summary}}
+2. `{{topic-2}}.md` — {{one-line topic summary}}
 
 ## Execution Commands
 
 ```bash
-# Execute a single round:
-/prex -ar .plan/01-todo/{{SLUG}}/01-{{topic}}.md
+# Execute the next todo round (executor reads _QUEUE.yaml, runs the first `todo` round, then stops):
+/prex -ar @.plan/{{SLUG}}/
 
-# Execute rounds sequentially (run each after the previous completes):
-/prex -ar .plan/01-todo/{{SLUG}}/01-{{topic}}.md
-/prex -ar .plan/01-todo/{{SLUG}}/02-{{topic}}.md
-
-# Execute with full directory context:
-/prex -ar @.plan/01-todo/{{SLUG}}/
+# Or target a specific round file directly:
+/prex -ar .plan/{{SLUG}}/{{topic-1}}.md
 ```
 
 ## Execution Discipline
 
 **Rounds must be executed one at a time.** Each round is a self-contained unit of work designed for
-a single `/prex` session. Do not attempt to implement multiple rounds in one session.
+a single `/prex` session. Do not implement multiple rounds in one session.
 
-After completing a round:
+When `/prex` is pointed at this directory or this `_README.md`, it MUST:
 
-1. Consult the **Execution Order** table above.
-2. Find the next round with status `todo`.
-3. Execute it in a **fresh** `/prex` session.
-4. Repeat until all rounds show status `done`.
+1. Read this plan's `_QUEUE.yaml`.
+2. Find the first round with status `todo`.
+3. Execute ONLY that round, then stop.
+4. End the session — a fresh `/prex` session is launched for any subsequent round.
 
 ## Decisions & Constraints
 
 {{Architectural decisions made during the interview. Include the reasoning behind each. Constraints
-that apply across all rounds.}}
+that apply across all rounds. Always include an `Executor: {{EXECUTOR}} (EF {{FACTOR}})` line.}}
 
 ## Rejected Alternatives
 
@@ -176,13 +173,8 @@ accepted.}}
 
 ## Completion
 
-When all rounds are done:
-
-```bash
-# Update status in this file to "done"
-# Fill in completion timestamps in the execution order table
-mv .plan/01-todo/{{SLUG}} .plan/02-done/{{SLUG}}
-```
+When all rounds are done, set each round `done` in this plan's `_QUEUE.yaml` and set this plan
+`done` in the top-level `.plan/_QUEUE.yaml`. Nothing moves on disk.
 ````
 
 ## Template C — `STRATEGY.md` (XL plans only)
@@ -203,8 +195,8 @@ structured this way.}}
 {{Which rounds depend on which. Why this ordering was chosen. Identify the critical path.}}
 
 ```text
-Round 01 (foundations) ──→ Round 02 (core logic)
-                      └──→ Round 03 (API layer) ──→ Round 04 (integration tests)
+{{round-a}} (foundations) ──→ {{round-b}} (core logic)
+                         └──→ {{round-c}} (API layer) ──→ {{round-d}} (integration tests)
 ```
 
 ## Risk Mitigation
@@ -216,5 +208,45 @@ considerations. Which rounds are independently revertable.}}
 
 {{Concerns that span multiple rounds. Each round file references this document for shared decisions.
 Examples: error handling patterns, logging conventions, configuration approach, naming conventions
-introduced in round 01 that later rounds must follow.}}
+introduced in the first round that later rounds must follow.}}
 ````
+
+## Template D — `_QUEUE.yaml`
+
+Two flavors, same schema. `status` is one of `backlog | todo | doing | done`. Every entry carries a
+`prompt`.
+
+### Inner queue — `.plan/<slug>/_QUEUE.yaml`
+
+Lists the plan's rounds in execution order.
+
+```yaml
+# Rounds for this plan, in execution order. status: backlog | todo | doing | done
+rounds:
+  - item: {{topic-1}}
+    status: todo
+    depends_on: []
+    prompt: /prex -ar .plan/{{SLUG}}/{{topic-1}}.md
+    notes: "{{one-line context}}"
+  - item: {{topic-2}}
+    status: todo
+    depends_on: [{{topic-1}}]
+    prompt: /prex -ar .plan/{{SLUG}}/{{topic-2}}.md
+    notes: ""
+```
+
+### Top-level ledger — `.plan/_QUEUE.yaml`
+
+The repo-wide queue. Append the new plan among the active items by priority; never reorder or
+rewrite existing entries. `item` is the `<slug>` dir (or `<slug>.md` for a single-file plan).
+
+```yaml
+# Source of truth for the .plan/ queue. Status & order live HERE, not in paths.
+# status: backlog | todo | doing | done
+plans:
+  - item: {{SLUG}}
+    status: todo
+    depends_on: []
+    prompt: /prex -ar @.plan/{{SLUG}}/
+    notes: "{{one-line context}}"
+```

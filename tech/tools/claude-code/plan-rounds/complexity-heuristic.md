@@ -60,7 +60,7 @@ The axes are structured judgment aids, not a rigid formula. Override when:
 - **Bump down**: Many files but the change is mechanical (e.g., rename across 20 files). Or the
   codebase has strong test coverage that de-risks the change.
 
-When overriding, note the reason in the plan's README.md under Decisions & Constraints.
+When overriding, note the reason in the plan's `_README.md` under Decisions & Constraints.
 
 ## Round-splitting rules
 

@@ -1,6 +1,6 @@
 ---
 digest-of: tech/tools/claude-code/plan-rounds
-last-synced: 2026-05-28
+last-synced: 2026-06-02
 source-files:
   - complexity-heuristic.md
   - plan-lifecycle.md
@@ -31,12 +31,19 @@ file contracts, and templates for README.md, round files, and STRATEGY.md.
 
 ### Plan Lifecycle
 
-- Plans live in `.plan/01-todo/<slug>/`. Completed plans move to `.plan/02-done/<slug>/`.
-- Each round file (`NN-<topic>.md`) is self-contained: full context, previous round summary, scope,
+- `.plan/` is flat and queue-driven: status/order/deps/command live in YAML, not in paths. No
+  `01-todo`/`02-done` kanban dirs, no `NN-` prefixes.
+- Plans live in `.plan/<slug>/` (`_README.md` + `_QUEUE.yaml` + de-numbered `<topic>.md` round
+  files); single-file plans are `.plan/<slug>.md`.
+- `.plan/_QUEUE.yaml` is the repo-wide ledger (all plans, full history). `<slug>/_QUEUE.yaml` lists
+  that plan's rounds in execution order. `status: backlog|todo|doing|done`. Every entry carries a
+  `prompt`.
+- Each round file (`<topic>.md`) is self-contained: full context, previous round summary, scope,
   implementation steps, acceptance criteria.
 - Rounds sized for one Codex 600s session, delivering one cohesive feature/layer. File count is
   incidental — mechanically-coupled changes belong together regardless of count.
-- Execution: `/prex -ar <round-file>`. README.md tracks progress via execution-order table.
+- Execution: `/prex -ar @.plan/<slug>/` reads `_QUEUE.yaml`, runs the first `todo` round, stops.
+  Completion = flip `status` to `done` in the queue files; nothing moves on disk.
 
 ### Round Splitting Rules (priority order)
 
@@ -52,12 +59,15 @@ file contracts, and templates for README.md, round files, and STRATEGY.md.
 
 ### Templates
 
-- **Round file**: Context, Previous Rounds, Scope, Current State (key files + patterns),
-  Implementation Steps, final step updates plan index, Acceptance Criteria, Next Round preview.
-- **README.md**: Problem statement, strategy, execution order table, execution commands, decisions,
-  rejected alternatives, risks.
-- **STRATEGY.md** (XL only): Architectural overview, round dependency graph, risk mitigation,
-  cross-cutting concerns.
+- **Round file** (Template A): Context, Previous Rounds, Scope, Current State (key files +
+  patterns), Implementation Steps, final step flips the round to `done` in `_QUEUE.yaml`, Acceptance
+  Criteria, Next Round preview.
+- **`_README.md`** (Template B): Problem statement, strategy, rounds overview, execution commands,
+  decisions, rejected alternatives, risks.
+- **STRATEGY.md** (Template C, XL only): Architectural overview, round dependency graph, risk
+  mitigation, cross-cutting concerns.
+- **`_QUEUE.yaml`** (Template D): top-level ledger + inner per-plan rounds list; fields
+  `item/status/depends_on/prompt/notes`.
 
 ## Source Map
 
@@ -65,7 +75,7 @@ file contracts, and templates for README.md, round files, and STRATEGY.md.
 | --------------------------------------------------------------- | ------------------------- |
 | Five-axis scoring, grade mapping, override guidance             | `complexity-heuristic.md` |
 | Directory structure, slug rules, round file contract, lifecycle | `plan-lifecycle.md`       |
-| Template A (round), Template B (README), Template C (STRATEGY)  | `round-templates.md`      |
+| Templates A (round), B (_README), C (STRATEGY), D (_QUEUE.yaml) | `round-templates.md`      |
 
 ## Maintenance Notes
 

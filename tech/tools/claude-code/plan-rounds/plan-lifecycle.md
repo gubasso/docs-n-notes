@@ -3,33 +3,55 @@
 Shared specification for skills that produce implementation plans as directories of self-contained
 round files. Each round is sized for execution by a single `/prex` run.
 
+The `.plan/` tree is **flat and queue-driven**: a plan's status, order, dependencies, and execution
+command live in YAML queue files — never in directory or file names. There are no kanban
+state-directories and no numeric prefixes.
+
 ## Directory structure
 
 ```text
 <repo-root>/.plan/
-├── 01-todo/                     plans awaiting execution
-│   └── <slug>/                  one directory per plan
-│       ├── README.md            overview, strategy, execution order, checklist
-│       ├── STRATEGY.md          (XL plans only) architecture, dep graph, cross-cutting concerns
-│       ├── 01-<topic>.md        round 1 — self-contained task description
-│       ├── 02-<topic>.md        round 2
-│       └── ...
-└── 02-done/                     completed plans (moved from 01-todo after all rounds finish)
-    └── <slug>/
+├── _README.md                   AI-friendly explanation of the queue system
+├── _QUEUE.yaml                  top-level source of truth: every plan + status
+├── <slug>/                      one directory per multi-round plan
+│   ├── _README.md               overview, strategy, decisions, rejected alternatives
+│   ├── STRATEGY.md              (XL plans only) architecture, dep graph, cross-cutting concerns
+│   ├── _QUEUE.yaml              this plan's rounds, in execution order
+│   ├── <topic>.md               a round — self-contained task description (no number prefix)
+│   └── <topic>.md               another round
+└── <slug>.md                    a single-file plan (a loose note, not yet round-split)
 ```
 
-`.plan/` must be listed in the repo's `.gitignore`. If it is not, the generating skill should
-suggest adding it (but must not auto-modify `.gitignore`).
+Whether `.plan/` is committed or gitignored is the **host repo's** choice — some repos track plans
+as part of their history, others ignore them. The generating skill must not assume one or modify
+`.gitignore`.
 
 ## Slug conventions
 
 - 3–5 word lowercase slug derived from the plan orientation/goal.
 - Characters: `[a-z0-9-]` only. Maximum 60 characters.
 - Example: `refactor-auth-middleware`, `add-batch-export-api`.
+- Round files use the same convention for their `<topic>` slug. **No `NN-` number prefix** — round
+  order is defined by the order of entries in the plan's `_QUEUE.yaml`.
+
+## The queues are the source of truth
+
+`status` is one of: `backlog | todo | doing | done`.
+
+- **`.plan/_QUEUE.yaml`** is the repo-wide ledger. It lists _every_ plan (full ledger — completed
+  plans stay, as `status: done`). Each entry: `item` (a `<slug>` dir, or `<slug>.md` for a
+  single-file plan), `status`, `depends_on` (list of other `item`s), `prompt` (exact execution
+  command), `notes` (free-form). Entry order reflects execution priority: active items first, then
+  backlog, then done.
+- **`<slug>/_QUEUE.yaml`** lists that plan's `rounds:` in execution order. Each round entry has the
+  same fields, with `item` = the round's `<topic>` and `prompt` =
+  `/prex -ar .plan/<slug>/<topic>.md`.
+
+**Every queue entry — both levels — carries a `prompt` field.**
 
 ## Round file contract
 
-Each round file (`NN-<topic>.md`) is a **self-contained task description** designed to be consumed
+Each round file (`<topic>.md`) is a **self-contained task description** designed to be consumed
 directly by `/prex -ar <path>` or included via `@` in `/prex -ar @<plan-dir>/`.
 
 Self-containment rules:
@@ -40,8 +62,6 @@ Self-containment rules:
   those round files.
 - Specifies what is in scope and out of scope for this round.
 - Has its own acceptance criteria, independently verifiable.
-
-Round numbering: two-digit zero-padded prefix (`01-`, `02-`, ..., `99-`).
 
 ## Executor capacity model
 
@@ -60,21 +80,22 @@ Rounds are sized against the capabilities of a single `/prex` run:
 
 ## Lifecycle rules
 
-1. **Generation**: The planning skill writes the plan directory into `.plan/01-todo/<slug>/`. It
-   never executes rounds or moves directories.
-2. **Execution**: Rounds are executed **one at a time**, each in its own `/prex -ar` session. After
-   completing a round, the executor updates the README.md execution order table (marking the round
-   `done` with today's date), then picks the next round with status `todo`. Never batch multiple
-   rounds into a single session — each round is a self-contained unit of work sized for one `/prex`
-   run.
-3. **Completion**: After all rounds are done, the user (or a lifecycle skill) moves the directory:
-   `mv .plan/01-todo/<slug> .plan/02-done/<slug>` and updates the README.md status to `done`.
+1. **Generation**: The planning skill writes the plan directory into `.plan/<slug>/` (`_README.md`,
+   round files, inner `_QUEUE.yaml`) and registers the plan in the top-level `.plan/_QUEUE.yaml`. It
+   never executes rounds.
+2. **Execution**: Rounds are executed **one at a time**, each in its own `/prex -ar` session. When
+   handed the plan directory or `_README.md`, the executor reads the plan's `_QUEUE.yaml`, runs the
+   first round whose status is `todo`, then stops. After completing a round, it sets that round's
+   `status: done` in the inner `_QUEUE.yaml`. Never batch multiple rounds into a single session —
+   each round is a self-contained unit sized for one `/prex` run.
+3. **Completion**: After all rounds are done, set the plan's `status: done` in the top-level
+   `.plan/_QUEUE.yaml`. **Nothing moves on disk** — the plan directory stays where it is. Status,
+   not path, records the lifecycle state.
 
-## README.md role
+## `_README.md` and `_QUEUE.yaml` roles
 
-The README.md serves as the plan's index and progress tracker:
-
-- Links to all round files with their topics and status.
-- Contains the execution commands (exact `/prex` invocations).
-- Records architectural decisions and rejected alternatives that span the full plan.
-- Tracks completion timestamps per round in the execution order table.
+- **`<slug>/_QUEUE.yaml`** is the machine-readable source of truth for round order and status.
+- **`<slug>/_README.md`** is the human-facing index and decision record: problem statement,
+  strategy, execution commands (exact `/prex` invocations), architectural decisions, and rejected
+  alternatives. It mirrors the queue for readers but must not become a competing source of truth for
+  status — when in doubt, the `_QUEUE.yaml` wins.
