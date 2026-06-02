@@ -186,17 +186,22 @@ chmod 600 ~/.config/osc-container/oscrc
 
 ### Step 3. Seed the obfuscated password once, on the host
 
-You need a single interactive `osc` run that has **write access** to
-the oscrc, so it can write back the `pass =` line. Do this on the
-host, **before** adding the read-only bind mount:
+Compute the obfuscated `pass =` line in pure Python and append it to
+the oscrc. The format (`base64(bz2(password.encode("ascii")))`,
+stored under the `pass` key) matches what
+`ObfuscatedConfigFileCredentialsManager` writes itself — verified
+against
+[`osc/credentials.py`](https://github.com/openSUSE/osc/blob/master/osc/credentials.py).
 
 ```bash
-OSC_CONFIG=~/.config/osc-container/oscrc \
-  osc -A <obs-api-url> api /person/<obs-username>
-```
+python3 -c '
+import base64, bz2, getpass
+p = getpass.getpass("OBS password: ")
+print("pass =", base64.b64encode(bz2.compress(p.encode("ascii"))).decode("ascii"))
+' >> ~/.config/osc-container/oscrc
 
-Enter the OBS password at the prompt. `osc` makes the API request,
-gets a 200, and writes the obfuscated `pass =` line back to the file.
+chmod 600 ~/.config/osc-container/oscrc
+```
 
 Verify the file now has all three relevant lines:
 
@@ -206,6 +211,13 @@ grep -E '^(user|pass|credentials_mgr_class)' ~/.config/osc-container/oscrc
 
 You should see `user=…`, `pass=…` (an opaque base64+bz2 blob), and
 `credentials_mgr_class=…`.
+
+> **Why not the interactive `osc … api /person/<user>` seed?** That
+> flow is documented in older copies of this doc but crashes on
+> current `osc` with
+> `TypeError: object of type 'NoneType' has no len()` —
+> see the [Troubleshooting entry below](#typeerror-object-of-type-nonetype-has-no-len-during-seed).
+> The Python pre-seed above bypasses the broken interactive path.
 
 ### Step 4. Wire it into the dctl leaf layer
 
@@ -404,15 +416,41 @@ If the wrong file is being read, suspect:
 - The bind mount target path doesn't match where `osc` looks (i.e. the
   file in `~/.config/osc/oscrc` is still an old image-baked copy).
 
-### Obfuscated `pass =` line is missing after seeding
+### `TypeError: object of type 'NoneType' has no len()` during seed
 
-The seeding step (Tier 1 Step 3) needs **write access** to the oscrc.
-If the file is already mounted read-only, the obfuscated value can't
-be written back and `osc` will re-prompt every run.
+Symptom: running `osc -A <apiurl> api /person/<user>` against a
+pass-less oscrc (the "let osc prompt and write back" flow that older
+versions of this doc described) crashes before reaching the prompt:
 
-Fix: do the seeding step on the host **before** wiring up the
-read-only bind mount in the dctl leaf layer, or temporarily edit the
-mount to be rw, seed, then flip back to readonly.
+```
+File ".../osc/connection.py", line 652, in __init__
+    self.basic_auth_password = bool(basic_auth_password)
+  File ".../collections/__init__.py", line 1413, in __len__
+    return len(self.data)
+TypeError: object of type 'NoneType' has no len()
+```
+
+Root cause (current osc, e.g. Tumbleweed / python3.13):
+
+1. `ObfuscatedConfigFileCredentialsManager.get_password()` finds no
+   stored `pass`/`passx` and returns a `conf.Password(None)` wrapper.
+2. `connection.py:652` calls `bool()` on that wrapper.
+3. `conf.Password` is a `UserString` subclass with no `__bool__`, so
+   Python falls back to `__len__` → `len(self.data)` → `len(None)` →
+   `TypeError`.
+
+This is distinct from the earlier fix in
+[osc#1083](https://github.com/openSUSE/osc/pull/1083) and is not yet
+patched upstream. The fix is to **not run the interactive osc seed**
+— use the Python pre-seed in Tier 1 Step 3, which writes the
+obfuscated `pass =` line directly and bypasses the broken code path.
+
+### `osc` re-prompts every run after seeding
+
+If you previously used the (now-removed) interactive seed flow with a
+read-only-mounted oscrc, osc couldn't write the obfuscated `pass =`
+line back, so it re-prompted every run. Re-do Tier 1 Step 3 with the
+Python pre-seed against a writable oscrc, then re-mount read-only.
 
 ### `HTTP Error 401: authentication required`
 
@@ -471,12 +509,14 @@ troubleshooting list above.
 ## References
 
 - [openSUSE/osc — source](https://github.com/openSUSE/osc)
-- [osc/credentials.py — credentials manager classes](https://github.com/openSUSE/osc/blob/master/osc/credentials.py)
+- [osc/credentials.py — credentials manager classes (Obfuscated{en,de}code_password)](https://github.com/openSUSE/osc/blob/master/osc/credentials.py)
+- [osc/conf.py — `Password` (UserString subclass, lacks `__bool__`)](https://github.com/openSUSE/osc/blob/master/osc/conf.py)
+- [osc/connection.py — `SignatureAuthHandler.__init__` (the `bool(basic_auth_password)` site)](https://github.com/openSUSE/osc/blob/master/osc/connection.py)
 - [oscrc(5) man page](https://manpages.opensuse.org/Tumbleweed/osc/oscrc.5.en.html)
 - [osc(1) man page](https://linux.die.net/man/1/osc)
 - [osc#785 — `--no-keyring` doesn't actually disable keyring import](https://github.com/openSUSE/osc/issues/785)
 - [osc#441 — keyring init failure modes](https://github.com/openSUSE/osc/issues/441)
-- [osc#1083 — `sshkey` crash fix when `pass` is unset](https://github.com/openSUSE/osc/pull/1083)
+- [osc#1083 — `sshkey` crash fix when `pass` is unset (related but distinct from the current `bool()` regression)](https://github.com/openSUSE/osc/pull/1083)
 - [openSUSE/open-build-service#7842 — Authentication with SSH key (open since 2019)](https://github.com/openSUSE/open-build-service/issues/7842)
 - [SUSE Communities — Multi-factor authentication on SUSE's Build Service (June 2025)](https://www.suse.com/c/multi-factor-authentication-on-suses-build-service/)
 - [OBS Authorization / Tokens — user guide](https://openbuildservice.org/help/manuals/obs-user-guide/cha-obs-authorization-token)
