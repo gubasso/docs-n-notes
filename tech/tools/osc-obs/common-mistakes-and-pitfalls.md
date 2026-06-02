@@ -108,6 +108,121 @@ dir is in the image correctly.
 
 ## 2. Workspace & converger discipline
 
+### Background: How `_link` and patches work together
+
+Before diving into the mistakes, here's how the pieces fit:
+
+**The `_link` file** is an XML instruction document that tells OBS how to construct your package's
+source tree. When you create a satellite package derived from an upstream package, the `_link` file
+points to that upstream and optionally lists patches to apply:
+
+```xml
+<link project="SUSE:SLE-15-SP6:Update" package="python-foo">
+  <patches>
+    <apply name="satellite-overlay.patch"/>
+  </patches>
+</link>
+```
+
+**The patch file** is a unified diff (standard `patch -p1` format) that modifies the upstream spec
+_after_ the link is expanded. For example, your `satellite-overlay.patch` might change `%build`
+flags, modify `%files`, or add dependencies.
+
+**How OBS applies them:**
+
+1. Source service expands the `_link` → pulls the upstream source tree
+2. Source service applies the patches listed in `<apply name="..."/>` → modifies the expanded spec
+3. The resolver and build use the patched result
+
+**The critical constraint:** Both the `_link` _reference_
+(`<apply name="satellite-overlay.patch"/>`) and the _patch file itself_ (`satellite-overlay.patch`)
+must exist in your source tree for this to work. If your `_link` says `<apply name="new.patch"/>`
+but only the old patch file is tracked on the server, OBS reports
+`broken: patch 'new.patch' does not exist`.
+
+This is why the mistakes in §2.1 and §2.2 are so insidious: they create drift between what `_link`
+references and what files are actually tracked server-side.
+
+### What is "the converger"?
+
+**The converger** is a project-specific automation script that synchronizes state between your
+source-code repository and the OBS workspace.
+
+Most home-project repos follow this pattern:
+
+- **Source-code repo** (`~/Projects/my-project/`) — stores templates for `_link`, patches, and other
+  OBS source files under `scripts/obs-overlay/`. This is your version-controlled source of truth.
+- **OBS workspace** (`~/Projects/_obs-work/<project>/<pkg>/`) — the actual OBS checkout created by
+  `osc co`. This is the authoritative copy the OBS server reads from.
+
+The converger script bridges these two workspaces by:
+
+1. Reading templates from the source-code repo
+2. Writing them into the OBS workspace
+3. Running `osc add` / `osc rm` to stage changes
+4. Committing changes back to OBS with `osc ci`
+
+Here's a minimal example converger script:
+
+```bash
+#!/usr/bin/env bash
+# Example converger: synchronize obs-overlay/ templates to OBS workspace
+
+set -euo pipefail
+
+PROJECT="home:me:satellites"
+PKG="python-foo-satellite"
+OBS_WORKSPACE="$HOME/Projects/_obs-work/${PROJECT}/${PKG}"
+TEMPLATE_DIR="$(cd "$(dirname "$0")" && pwd)/../obs-overlay"
+
+# Ensure OBS workspace is checked out
+if [[ ! -d "${OBS_WORKSPACE}" ]]; then
+  mkdir -p "$(dirname "${OBS_WORKSPACE}")"
+  osc co "${PROJECT}" "${PKG}"
+fi
+
+cd "${OBS_WORKSPACE}"
+
+# Update _link from template
+cp "${TEMPLATE_DIR}/_link.tmpl" _link
+osc add _link
+
+# Update patch from template
+CURRENT_PATCH="satellite-overlay.patch"
+cp "${TEMPLATE_DIR}/${CURRENT_PATCH}" .
+osc add "${CURRENT_PATCH}"
+
+# Critical: Remove any obsolete patches still tracked server-side
+# This is what §2.2 is about — if you skip this step, you create drift
+while IFS= read -r tracked; do
+  [[ -z "${tracked}" ]] && continue
+  [[ "${tracked}" == "${CURRENT_PATCH}" ]] && continue
+  case "${tracked}" in
+    *.patch)
+      echo "Removing obsolete patch: ${tracked}"
+      osc rm "${tracked}" 2>/dev/null || osc rm --force "${tracked}"
+      ;;
+  esac
+done < <(osc ls "${PROJECT}" "${PKG}" 2>/dev/null || true)
+
+# Commit everything in one atomic operation
+MSG="sync: update _link and ${CURRENT_PATCH}"
+if command -v /usr/lib/build/vc &>/dev/null; then
+  osc vc -m "${MSG}"
+fi
+osc ci -m "${MSG}"
+
+echo "Converger complete: ${PROJECT}/${PKG}"
+```
+
+The key insight: when your patch filename changes (e.g., from `old.patch` to `new.patch`), the
+converger must **both** add the new file **and** remove the old file in the same commit. If it only
+does `osc add new.patch`, the old patch stays tracked server-side, and `_link` now references a file
+that doesn't exist from OBS's perspective → `broken` state.
+
+**Why it's called a "converger":** The script converges the OBS workspace to match the current state
+of your source-code repo's templates, ensuring consistency between the two workspaces.
+
 ### 2.1. Renaming a satellite patch without `osc rm`'ing the old one
 
 **What.** Bumping the `_link.apply` filename from `<old>.patch` to `<new>.patch`, committing the
@@ -127,27 +242,38 @@ diagnosis + recovery: [`broken-state-link-drift.md`](broken-state-link-drift.md)
 
 ### 2.2. Converger script that `osc add`s but never `osc rm`s
 
-**What.** A bootstrap / converger script that copies the new patch into the workspace, runs
-`osc add _link <new-patch>.patch`, then `osc ci` — without enumerating server-tracked files and
-`osc rm`ing any obsolete `*.patch`. Symmetric to §2.1, just baked into automation: every run
+**What.** A converger script (see the example above) that copies the new patch into the workspace,
+runs `osc add _link <new-patch>.patch`, then `osc ci` — but **never enumerates server-tracked files
+and `osc rm`s any obsolete `*.patch`**. Symmetric to §2.1, just baked into automation: every run
 converges the source tree forward, never prunes.
 
-**Why it bit.** As soon as `_link` references a new filename, the script _thinks_ it's converging
-(the new file is added, the commit lands), but the old patch stays tracked and the source tree is
-left inconsistent with `_link`. The script reports success; the next `osc
-results` reports `broken`
-on every lane.
+**Why it bit.** The converger script works perfectly the first time you run it. But as soon as you
+rename a patch (e.g., from `old-v1.patch` to `new-v2.patch`), here's what happens:
+
+1. The script copies `new-v2.patch` from your template dir to the OBS workspace ✓
+2. The script runs `osc add new-v2.patch` ✓
+3. The script updates `_link` to reference `<apply name="new-v2.patch"/>` ✓
+4. The script runs `osc ci` ✓
+5. **BUT:** `old-v1.patch` is still tracked server-side (because nothing ever ran
+   `osc rm old-v1.patch`)
+
+Now OBS sees a source tree containing `_link` + `old-v1.patch`, with `_link` referencing
+`new-v2.patch` that doesn't exist from OBS's perspective. Source-service expansion fails with
+`broken: patch 'new-v2.patch' does not exist`. Every lane reports `broken`. The script reports
+success because `osc ci` exited zero — but the package is broken.
 
 **Avoid by.** Any converger that mutates patches must enumerate the server's tracked files filtered
 to the relevant glob (`*.patch`, `*.tar.gz`, whatever), and `osc rm` anything that isn't the current
-intended file:
+intended file. This is the critical loop shown in the example converger above:
 
 ```bash
+# Critical: Remove any obsolete patches still tracked server-side
 while IFS= read -r tracked; do
   [[ -z "${tracked}" ]] && continue
   [[ "${tracked}" == "${current_patch_name}" ]] && continue
   case "${tracked}" in
     *.patch)
+      echo "Removing obsolete patch: ${tracked}"
       osc rm "${tracked}" 2>/dev/null || osc rm --force "${tracked}"
       ;;
   esac
@@ -155,28 +281,51 @@ done < <(osc ls "${PROJECT}" "${PKG}" 2>/dev/null || true)
 ```
 
 The `osc add` / `osc rm` / `osc ci` sequence must be **all in the same commit** so the source tree
-is consistent at every revision — not partway through.
+is consistent at every revision — not partway through. This is why the example converger script runs
+the cleanup loop before `osc ci`, ensuring every commit is atomic and consistent.
 
 ### 2.3. Editing `_link` / patches in the wrong workspace
 
-**What.** Editing the satellite's `_link` file inside the source-code repository (e.g.
-`scripts/obs-overlay/_link.tmpl`) expecting OBS to pick up the change — without running the
-converger or `osc co`ing the actual OBS package, modifying its `_link`, and `osc ci`ing.
+**What.** Editing the satellite's `_link` file inside the **source-code repository** (e.g.
+`~/Projects/my-project/scripts/obs-overlay/_link.tmpl`) expecting OBS to pick up the change — then
+running `osc results` and being surprised that nothing changed.
 
-**Why it bit.** The OBS workspace (`~/Projects/_obs-work/<project>/<pkg>/`) is the authoritative
-copy the OBS server reads from. The source-code repo's `_link.tmpl` is only a template the converger
-writes from. Editing the template without running the converger leaves OBS unchanged.
+**Why it bit.** There are **two separate workspaces**:
 
-**Avoid by.** Either:
+1. **Source-code repo** (`~/Projects/my-project/scripts/obs-overlay/`) — stores `_link.tmpl`,
+   `*.patch.tmpl`, etc. This is your version-controlled source of truth, but **OBS never reads
+   this**.
+2. **OBS workspace** (`~/Projects/_obs-work/<project>/<pkg>/`) — created by `osc co`. This is the
+   authoritative copy the OBS server reads from. Only changes committed here with `osc ci` affect
+   OBS.
 
-- run the converger after any template / patch edit in the source-code repo, OR
-- edit directly in the OBS workspace (`~/Projects/_obs-work/<project>/<pkg>/`), commit there with
-  `osc
-  ci`, then back-port the change to the source-code template afterwards so the next converger
-  run reproduces the same state.
+The converger is what **bridges** these two workspaces — it reads templates from (1) and writes them
+into (2), then runs `osc ci` to push to OBS.
 
-The "right" answer depends on what the change is for. For tracked, reproducible state: source-code
-template + converger. For one-off debugging: OBS workspace directly.
+If you edit `_link.tmpl` in the source-code repo without running the converger, you've only changed
+the template. OBS still sees the old `_link` in the OBS workspace. The template change is "staged"
+but not "deployed."
+
+**Avoid by.** Choose the right workspace for your intent:
+
+**For tracked, reproducible changes:**
+
+1. Edit the template in the source-code repo (`scripts/obs-overlay/_link.tmpl`)
+2. **Run the converger** to synchronize the change to the OBS workspace
+3. Commit the template change to git
+
+This ensures the next time someone clones the repo or the converger runs, the change is reproduced.
+
+**For one-off debugging / experiments:**
+
+1. `cd ~/Projects/_obs-work/<project>/<pkg>/`
+2. Edit `_link` directly in the OBS workspace
+3. `osc ci -m "debug: testing something"`
+4. _Optionally_ back-port the change to the source-code template if it worked
+
+The "right" answer depends on what the change is for. For permanent state: source-code template +
+converger. For quick iteration: OBS workspace directly. Just remember: only the OBS workspace
+affects what OBS builds.
 
 ### 2.4. Running the converger from a container missing `obs-build`
 
