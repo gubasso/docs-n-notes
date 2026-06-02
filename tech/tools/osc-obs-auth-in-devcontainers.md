@@ -177,8 +177,10 @@ Placeholders:
 - `<obs-username>` — your OBS account (or dedicated sub-account)
   username.
 
-Note: `pass =` is intentionally absent at this stage. `osc` will write
-it back in obfuscated form on first interactive use (Step 3).
+Note: `pass =` is intentionally absent at this stage. Step 3 appends
+it in obfuscated form. (Older copies of this doc said "`osc` will
+write it back on first interactive use" — that interactive flow no
+longer works on current osc; see Troubleshooting.)
 
 ```bash
 chmod 600 ~/.config/osc-container/oscrc
@@ -203,6 +205,21 @@ print("pass =", base64.b64encode(bz2.compress(p.encode("ascii"))).decode("ascii"
 chmod 600 ~/.config/osc-container/oscrc
 ```
 
+The one-liner is stdlib-only and intentionally inline so this doc
+stays portable — no external script or repo required. If you prefer
+a named tool, lift the body of the one-liner into
+`~/.local/bin/obfuscate-osc-password`, `chmod +x`, then:
+
+```bash
+obfuscate-osc-password >> ~/.config/osc-container/oscrc
+chmod 600 ~/.config/osc-container/oscrc
+```
+
+Either way, the helper / one-liner never touches the oscrc itself —
+it just prints the `pass = <blob>` line for you to redirect. This
+keeps the secret out of any script's process memory beyond the
+duration of one stdout write.
+
 Verify the file now has all three relevant lines:
 
 ```bash
@@ -211,6 +228,13 @@ grep -E '^(user|pass|credentials_mgr_class)' ~/.config/osc-container/oscrc
 
 You should see `user=…`, `pass=…` (an opaque base64+bz2 blob), and
 `credentials_mgr_class=…`.
+
+> **Never commit the seeded oscrc to any repo (dotfiles included).**
+> The obfuscation is reversible by anyone with read access to the
+> file. Treat the seeded oscrc the same way you treat a plaintext
+> password file: live only on the host, mode `600`, owner-only dir,
+> rotated on a calendar, and explicitly out of every version-control
+> tree.
 
 > **Why not the interactive `osc … api /person/<user>` seed?** That
 > flow is documented in older copies of this doc but crashes on
