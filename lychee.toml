@@ -105,6 +105,10 @@ exclude = [
   "^https?://git-annex\\.branchable\\.com",
   # GitHub repo paths in own dotfiles that have since been reorganized.
   "^https?://github\\.com/gubasso/(dotfiles|docs-n-notes)/blob/master",
+  # Private repos — 404 is expected for external link checkers.
+  "^https?://github\\.com/gbasso/cloud-regionsrv-integration-tester",
+  # devcontainerctl — repo appears to be removed or relocated.
+  "^https?://github\\.com/devcontainerctl",
 ]
 
 # Don't try to verify localhost / loopback URLs from notes.
