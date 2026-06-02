@@ -7,12 +7,12 @@ patterns for future Claude-side orchestration work.
 
 - **SoT:** `codex-session --version` (prints wrapper version, child binary path + version, active
   account).
-- Stock skill workflow uses base config by default: planning/new-thread calls omit `--profile`, so
-  codex uses only the base `config.toml` (no profile overlay). Profile files are available via
-  explicit `--profile <name>` and none is auto-activated. Execution/review calls pass
-  `--profile fast` (gpt-5.4-mini, medium effort). Codex v0.134+ has no in-file default-profile
-  selector. **SoT:** `~/.config/codex-session/profiles/<name>.config.toml` (one file per profile,
-  bare top-level keys, no `[profiles.<name>]` header).
+- Skill workflows wire a profile per use case: each call site passes an explicit `--profile`
+  (`planning`, `implementation`, `review-deep`, `review-followup`, `quick`; see §Profile Strategy).
+  No profile is auto-activated — a call that omits `--profile` runs on codex's stock built-in
+  default. Codex v0.134+ has no in-file default-profile selector. **SoT:**
+  `~/.config/codex-session/profiles/<name>.config.toml` (one file per profile, bare top-level keys,
+  no `[profiles.<name>]` header).
 
 ## Wrapper: `codex-session`
 
@@ -54,16 +54,15 @@ home.
 `--config`, `--format`, `--verbose`/`--quiet`/`--silent`, `--log-stderr`, `--log-format`.
 
 **Argv pattern:** `codex-session exec ...` and
-`codex-session exec [--profile fast] resume <thread-id> ...`. The no-arg account form is the
+`codex-session exec [--profile <name>] resume <thread-id> ...`. The no-arg account form is the
 quota-aware default; `--account auto` is the explicit alias, and `--account <name>` pins one
-account. Planning/new-thread calls omit `--profile`, so codex uses only the base `config.toml` (no
-profile overlay). Execution and review calls pass `--profile fast` on `exec` (before the `resume`
-subcommand if resuming, since `--profile` is an `exec`-level flag). codex-session itself never
-injects `--profile`:
+account. Each call site passes an explicit `--profile` for its use case (see §Profile Strategy);
+`--profile` is an `exec`-level flag, so on a resume it goes before the `resume` subcommand.
+codex-session itself never injects `--profile`:
 
 ```text
-codex-session exec --profile fast ...
-codex-session exec --profile fast resume <thread-id> ...
+codex-session exec --profile implementation ...
+codex-session exec --profile implementation resume <thread-id> ...
 ```
 
 ## Quota knees & out-of-quota errors
@@ -114,23 +113,34 @@ Profile overrides live as separate files under `~/.config/codex-session/profiles
 (codex v0.134+ contract). Each file contains bare top-level keys, no `[profiles.<name>]` header.
 codex-session emits these 1:1 as siblings of the base `config.toml` in the session's `$CODEX_HOME/`.
 
-Stock profiles used by skills:
+Profiles are wired per use case — each skill call site passes an explicit `--profile`. codex itself
+no longer supports an in-file default selector, and codex-session does not auto-activate any
+profile, so a call that omits `--profile` runs on codex's stock built-in default (not a project
+profile). The skill-owned profiles:
 
-- **`deep`** — high reasoning effort, full sandbox. Available for explicit planning/new-thread runs
-  that pass `--profile deep`; omitting `--profile` uses base config only. codex itself no longer
-  supports an in-file default selector, and codex-session does not auto-activate any profile.
-- **`fast`** — `gpt-5.4-mini`, `medium` effort. Used for execution (implementation resume, code
-  review rounds). Calls pass `--profile fast` on `exec` (before the `resume` subcommand if
-  resuming).
+- **`planning`** — `gpt-5.5`, `high` effort, full sandbox. Architecture/design planning (`prex`
+  stage 1).
+- **`implementation`** — `gpt-5.3-codex`, `high` effort, full sandbox. Writing code from a reviewed
+  plan (`prex` stage 3, fresh `exec` or `resume`).
+- **`review-deep`** — `gpt-5.5`, `high` effort. Full first-pass review of a diff (`review-loop`
+  round 1).
+- **`review-followup`** — `gpt-5.3-codex`, `medium` effort. Re-checks incremental, already-triaged
+  fixes (`review-loop` rounds 2+) and read-only cross-check Q&A (claude `ask -c`).
+- **`quick`** — `gpt-5.4-mini`, `medium` effort. Cheap fast Q&A and trivial text gen (codex-session
+  `ask -f`, `gc`).
 - **`ping`** — health-probe-only profile, used internally by `account health`.
+
+`planning` and `review-deep` start with identical values (`gpt-5.5 @ high`) but are kept as separate
+profiles so planning and review can be tuned independently.
 
 The wrapper's own composability lever is `--config-recipe` (commit 3117d8e). The `--profile` flag
 passes through to stock codex unchanged. codex-session never injects `--profile` for user-facing
-pass-through calls; wrapper-owned health probes (e.g. the heartbeat check in `account health`) may
-pass `--profile ping` internally.
+pass-through calls; wrapper-owned health probes (e.g. the heartbeat check in `account health`) pass
+`--profile ping` internally.
 
 References: `docs/upstream-codex.md` §F6b–§F6c (codex-session repo);
-<https://developers.openai.com/codex/config-advanced#profiles>.
+<https://developers.openai.com/codex/config-advanced#profiles>. Model/pricing/benchmark rationale
+behind these profile choices: [`codex-models-pricing.md`](./codex-models-pricing.md).
 
 ## Pre-flight: Account Health
 
@@ -198,7 +208,7 @@ instead of `--full-auto`. This is the documented Codex approach for externally-s
 environments (devcontainers, CI runners):
 
 ```bash
-codex-session exec --profile fast \
+codex-session exec --profile implementation \
   --dangerously-bypass-approvals-and-sandbox --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
@@ -209,7 +219,7 @@ codex-session exec --profile fast \
 must appear before the `resume` subcommand:
 
 ```bash
-codex-session exec --profile fast resume "$THREAD_ID" \
+codex-session exec --profile implementation resume "$THREAD_ID" \
   --dangerously-bypass-approvals-and-sandbox --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
@@ -244,7 +254,7 @@ codex-session exec \
 Implementation call (resuming planning session):
 
 ```bash
-codex-session exec --profile fast resume "$THREAD_ID" \
+codex-session exec --profile implementation resume "$THREAD_ID" \
   --dangerously-bypass-approvals-and-sandbox --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt with write orientation>" \
@@ -292,7 +302,7 @@ Contract:
 Use this pattern when Codex should implement:
 
 ```bash
-codex-session exec --profile fast --sandbox workspace-write --json \
+codex-session exec --profile implementation --sandbox workspace-write --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
   < /dev/null > "$RUN_DIR/stage3-events.jsonl"
@@ -311,7 +321,7 @@ Contract:
 Use this pattern when Codex should resume an existing session for implementation:
 
 ```bash
-codex-session exec --profile fast resume "$THREAD_ID" \
+codex-session exec --profile implementation resume "$THREAD_ID" \
   --dangerously-bypass-approvals-and-sandbox --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
@@ -321,7 +331,7 @@ codex-session exec --profile fast resume "$THREAD_ID" \
 Use this pattern when Codex should resume an existing session for read-only review:
 
 ```bash
-codex-session exec --profile fast resume "$THREAD_ID" \
+codex-session exec --profile review-followup resume "$THREAD_ID" \
   --dangerously-bypass-approvals-and-sandbox \
   --json --output-last-message "$RUN_DIR/round-N-review.txt" \
   "<review prompt>" \
@@ -401,8 +411,8 @@ Stage 5 delegates to the `/review-loop` skill — never call `codex review` dire
 - `codex review` does not support `--json` or `--output-last-message`.
 - `--uncommitted` combined with a positional `[PROMPT]` errors out.
 - `/review-loop` uses `codex-session exec --sandbox read-only` for every round. Each round is an
-  independent one-shot invocation (no `exec resume`); round 1 uses only the base `config.toml` (no
-  profile overlay), rounds 2+ pass `--profile fast`.
+  independent one-shot invocation (no `exec resume`); round 1 passes `--profile review-deep`, rounds
+  2+ pass `--profile review-followup`.
 
 ## Thread ID Extraction
 
@@ -483,10 +493,10 @@ New and updated skills must not hardcode `/tmp` for run directories or lock file
 - All `codex-session exec` invocations must include `< /dev/null` to prevent blocking on inherited
   stdin. Without this, Codex prints `Reading additional input from stdin...` and hangs until timeout
   when called from TUI sessions or background agents.
-- Planning and new-thread calls omit `--profile`, so codex uses only the base `config.toml` (no
-  profile overlay). Execution and review calls must pass `--profile fast` on `exec` (before the
-  `resume` subcommand if resuming). Codex v0.134+ has no in-file default-profile selector — the
-  wrapper never injects one.
+- Each call site passes an explicit `--profile` for its use case (`planning`, `implementation`,
+  `review-deep`, `review-followup`, `quick`; see §Profile Strategy). `--profile` is an `exec`-level
+  flag, so on a resume it goes before the `resume` subcommand. Codex v0.134+ has no in-file
+  default-profile selector — the wrapper never injects one.
 - Codex must never run git commands. All git operations belong to the Claude Code orchestrator.
 - Do NOT use `/tmp` for skill run directories or lock files. Use the XDG base path from §Skill Run
   Directories.
