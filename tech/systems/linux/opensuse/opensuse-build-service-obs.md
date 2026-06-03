@@ -30,6 +30,10 @@
   - [`common-mistakes-and-pitfalls.md`](../../tools/osc-obs/common-mistakes-and-pitfalls.md) —
     distilled lessons from real incidents (auth, workspace, CLI foot-guns, patch/link evolution,
     diagnostic discipline).
+  - [`libexpat-source-naming.md`](../../tools/osc-obs/libexpat-source-naming.md) — the `libexpat1`
+    binary RPM ships from source pkg `expat`; `osc branch` with target-rename trick; cross-project
+    version / CVE-2025-59375 patch matrix; why `SUSE:SLE-15-SP<n>:Update` beats `openSUSE:Factory`
+    for SLES overlay work.
 
 ## General
 

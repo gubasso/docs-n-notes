@@ -25,6 +25,12 @@ build-system errors that can't be inferred from prior context.
   companion to the setup guide. Five categories (auth, workspace, CLI foot-guns, patch/link
   evolution, diagnostic discipline) with one entry per real incident: what happened, why it bit, the
   rule that prevents recurrence. Read end-to-end the first time; cheat-sheet thereafter.
+- [libexpat-source-naming.md](libexpat-source-naming.md) — concrete instance of the binary-vs-source
+  naming convention: the `libexpat1` RPM ships from source pkg `expat`, not `libexpat`.
+  Authoritative probe (`/search/published/binary/id`), the
+  `osc branch <src-prj> <src-pkg> <tgt-prj> <tgt-pkg>` rename trick that keeps downstream consumers
+  referring to `libexpat`, cross-project version + CVE patch matrix, and why
+  `SUSE:SLE-15-SP<n>:Update` beats `openSUSE:Factory` as a branch source for SLES overlay work.
 
 ## Companion files
 
