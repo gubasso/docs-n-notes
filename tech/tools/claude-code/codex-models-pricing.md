@@ -157,6 +157,59 @@ line (≈8× for `gpt-5.3-codex`).
 choice scales the per-token rate (5.5 ≈ 2× 5.4 input/output, ≈3× 5.3-codex output); caching only
 discounts input.
 
+### 3d. Measuring actual usage (subscription)
+
+How to observe what a run really consumed — use these to validate the ESTIMATE figures in
+[`codex-models-comparison.md`](./codex-models-comparison.md) against reality (all wrapper/event
+mechanics below verified live on 2026-06-03):
+
+1. **Live window state — `codex-session account quota`.** Per-account **5-hour** and **weekly** bars
+   with `% left` and reset ETAs, fetched from the official wham/usage endpoint (spec:
+   `docs/wham-usage-api-spec.md` in the codex-session repo). `--format json` for scripting,
+   `--detail` for scoring fields. Distinction: `account health` is the _selection_ view
+   (scores/cooldowns for failover); `account quota` is the _measurement_ view.
+2. **Exact per-call tokens — the `--json` event stream.** Every `codex-session exec --json` call the
+   skills make already persists `*-events.jsonl` in the skill run dir; each agentic turn emits a
+   `turn.completed` event with a `usage` object:
+
+   ```json
+   {
+     "type": "turn.completed",
+     "usage": {
+       "input_tokens": 904519,
+       "cached_input_tokens": 811392,
+       "output_tokens": 6535,
+       "reasoning_output_tokens": 853
+     }
+   }
+   ```
+
+   Sum a whole call (calls are multi-turn — do not read just the last event):
+
+   ```bash
+   jq -s '[.[] | select(.type == "turn.completed").usage]
+     | { input: (map(.input_tokens) | add),
+         cached: (map(.cached_input_tokens) | add),
+         output: (map(.output_tokens) | add),
+         reasoning: (map(.reasoning_output_tokens) | add) }' \
+     "$RUN_DIR/stage1-events.jsonl"
+   ```
+
+   Convert to credits with the §3b rate card:
+   `credits ≈ (input − cached)·rate_in + cached·rate_cached + output·rate_out` (rates per 1M tokens;
+   `reasoning_output_tokens` is reported as a subset of `output_tokens` — MEDIUM confidence,
+   OpenAI's usual usage-object convention). Worked example from a real `gpt-5.5` planning turn (the
+   JSON above): `93,127×125 + 811,392×12.5 + 6,535×750` per 1M ≈ **26.7 credits ≈ $1.07** — note how
+   caching absorbed ~90% of the input line, leaving output (incl. reasoning) as the lever that
+   effort controls.
+3. **Per-workflow cost — before/after delta.** Snapshot `account quota --format json` before and
+   after a workflow (or sum every `*-events.jsonl` in the run dir) to get the true cost of one prex
+   / review-loop cycle on the account that served it. This is the procedure for validating (or
+   correcting) the comparison doc's effective-cost column after a profile change.
+4. **In-app cross-check (SECONDARY/operational):** the ChatGPT usage settings page (Codex section)
+   and the Codex CLI `/status` view show the same 5-hour/weekly state for the logged-in account —
+   useful as the official-UI confirmation of what the wham endpoint reports.
+
 ## 4. Benchmarks — SWE-bench Verified
 
 | Model           | SWE-bench Verified                       | Notes                                             |
@@ -189,19 +242,20 @@ discounts input.
 
 ## Mapping to our `codex-session` profiles
 
-The [profile strategy](./codex-conventions.md#profile-strategy) applies the levers above:
+The [profile strategy](./codex-conventions.md#profile-strategy) applies the levers above; the
+derived cost × quality tradeoffs behind these choices live in
+[`codex-models-comparison.md`](./codex-models-comparison.md).
 
 All models are **subscription-selectable** (`gpt-5.5` / `gpt-5.4` / `gpt-5.4-mini`); no `-codex`
 pins (API-key-only — see [Auth & subscription availability](#auth--subscription-availability)).
 
-| Profile           | Model          | Effort  | Why                                                         |
-| ----------------- | -------------- | ------- | ----------------------------------------------------------- |
-| `planning`        | `gpt-5.5`      | high    | design benefits most from flagship reasoning                |
-| `review-deep`     | `gpt-5.5`      | high    | full first-pass diff review                                 |
-| `implementation`  | `gpt-5.4`      | medium  | subscription coding workhorse; `medium` caps reasoning-time |
-| `review-followup` | `gpt-5.4`      | low     | incremental re-checks after review-deep's heavy pass        |
-| `quick`           | `gpt-5.4-mini` | medium  | trivial Q&A / commit messages                               |
-| `ping`            | `gpt-5.4-mini` | minimal | health/sandbox probes                                       |
+| Profile  | Model          | Effort  | Why                                                              |
+| -------- | -------------- | ------- | ---------------------------------------------------------------- |
+| `deep`   | `gpt-5.5`      | high    | human-judged escalation only — `high` burns 3–5× tokens          |
+| `medium` | `gpt-5.5`      | medium  | quality default (plan / implement / first review); ≈ parity cost |
+| `low`    | `gpt-5.5`      | low     | follow-up rounds + cross-check Q&A; 5.5 stays coherent at `low`  |
+| `quick`  | `gpt-5.4-mini` | medium  | trivial Q&A / commit messages                                    |
+| `ping`   | `gpt-5.4-mini` | minimal | health/sandbox probes                                            |
 
 ## Sources
 
@@ -249,6 +303,10 @@ pins (API-key-only — see [Auth & subscription availability](#auth--subscriptio
 - **§3 Pricing — HIGH** for API per-token rates; **MEDIUM** for the credit rate card (PRIMARY page
   403'd; values SECONDARY, `gpt-5.5` credit rate missing); "reasoning billed as output" is
   inference.
+- **§3d Measuring — HIGH** for `account quota` output and the `turn.completed` usage events (both
+  verified live 2026-06-03); **MEDIUM** for "reasoning is a subset of output_tokens" (convention,
+  not stated for the Codex CLI) and the credit-conversion arithmetic (inherits §3b's MEDIUM rate
+  card).
 - **§4 Benchmarks — MEDIUM/LOW** — all SECONDARY, possibly mixed methodology versions; `gpt-5.4` has
   no clean figure.
 - **§5 Caching — HIGH** for mechanics/TTL/discount; **MEDIUM** for Codex-resume reuse (best-effort).
@@ -264,3 +322,12 @@ pins (API-key-only — see [Auth & subscription availability](#auth--subscriptio
   Repointed `implementation` → `gpt-5.4 @ medium` and `review-followup` → `gpt-5.4 @ low`, annotated
   the credit rate card (`-codex` rows are reference-only / not chargeable on subscription), and
   added the `gpt-5.5`/`gpt-5.4`/`gpt-5.4-mini` credit rows.
+- **2026-06-03** — Tier-based profile redesign. Replaced the per-stage profiles
+  (`planning`/`implementation`/`review-deep`/`review-followup`) with three `gpt-5.5` tiers (`deep` @
+  high, `medium`, `low`) in the mapping table; cross-linked the new
+  [`codex-models-comparison.md`](./codex-models-comparison.md) (derived cost × quality matrix behind
+  the tiers).
+- **2026-06-03** — Added §3d "Measuring actual usage": `codex-session account quota` (live 5h/weekly
+  windows), per-call token extraction from `turn.completed` events in the persisted `--json` streams
+  (with a worked credit-conversion example), the before/after per-workflow delta procedure, and the
+  in-app/`/status` cross-check.

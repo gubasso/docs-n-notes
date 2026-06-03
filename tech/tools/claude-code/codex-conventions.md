@@ -8,11 +8,10 @@ patterns for future Claude-side orchestration work.
 - **SoT:** `codex-session --version` (prints wrapper version, child binary path + version, active
   account).
 - Skill workflows wire a profile per use case: each call site passes an explicit `--profile`
-  (`planning`, `implementation`, `review-deep`, `review-followup`, `quick`; see §Profile Strategy).
-  No profile is auto-activated — a call that omits `--profile` runs on codex's stock built-in
-  default. Codex v0.134+ has no in-file default-profile selector. **SoT:**
-  `~/.config/codex-session/profiles/<name>.config.toml` (one file per profile, bare top-level keys,
-  no `[profiles.<name>]` header).
+  (`deep`, `medium`, `low`, `quick`; see §Profile Strategy). No profile is auto-activated — a call
+  that omits `--profile` runs on codex's stock built-in default. Codex v0.134+ has no in-file
+  default-profile selector. **SoT:** `~/.config/codex-session/profiles/<name>.config.toml` (one file
+  per profile, bare top-level keys, no `[profiles.<name>]` header).
 
 ## Wrapper: `codex-session`
 
@@ -61,8 +60,8 @@ account. Each call site passes an explicit `--profile` for its use case (see §P
 codex-session itself never injects `--profile`:
 
 ```text
-codex-session exec --profile implementation ...
-codex-session exec --profile implementation resume <thread-id> ...
+codex-session exec --profile medium ...
+codex-session exec --profile medium resume <thread-id> ...
 ```
 
 ## Quota knees & out-of-quota errors
@@ -116,18 +115,20 @@ codex-session emits these 1:1 as siblings of the base `config.toml` in the sessi
 Profiles are wired per use case — each skill call site passes an explicit `--profile`. codex itself
 no longer supports an in-file default selector, and codex-session does not auto-activate any
 profile, so a call that omits `--profile` runs on codex's stock built-in default (not a project
-profile). The skill-owned profiles:
+profile). The profiles are **tier-based** (model + effort tier, not workflow stage):
 
-- **`planning`** — `gpt-5.5`, `high` effort, full sandbox. Architecture/design planning (`prex`
-  stage 1).
-- **`implementation`** — `gpt-5.4`, `medium` effort, full sandbox. Writing code from a reviewed plan
-  (`prex` stage 3, fresh `exec` or `resume`). `gpt-5.4` is the subscription "everyday coding"
-  workhorse; `medium` keeps reasoning-token burn (the quota lever) low.
-- **`review-deep`** — `gpt-5.5`, `high` effort. Full first-pass review of a diff (`review-loop`
-  round 1).
-- **`review-followup`** — `gpt-5.4`, `low` effort. Re-checks incremental, already-triaged fixes
-  (`review-loop` rounds 2+) and read-only cross-check Q&A (claude `ask -c`). Round 1 (`review-deep`)
-  already did the heavy pass, so rounds 2+ run light.
+- **`medium`** — `gpt-5.5`, `medium` effort, full sandbox. The **quality default** for every
+  substantive call: planning (`prex` stage 1), implementing a reviewed plan (`prex` stage 3, fresh
+  `exec` or `resume`), and first-pass diff review (`review-loop` round 1). ≈ cost parity with
+  `gpt-5.4 @ medium` after 5.5's token efficiency, for a clearly better result. A shared profile
+  also keeps `exec resume` on the same model/effort across prex stages 1 → 3.
+- **`low`** — `gpt-5.5`, `low` effort, full sandbox. Light tier for work whose reasoning was already
+  done upstream: incremental re-checks of triaged fixes (`review-loop` rounds 2+) and read-only
+  cross-check Q&A (claude `ask -c`). Never for multi-step reasoning.
+- **`deep`** — `gpt-5.5`, `high` effort, full sandbox. **On-demand escalation only — never a skill
+  default.** The human picks it case by case (stuck/looping runs, novel design, security-critical
+  changes); `high` burns ~3–5× the reasoning tokens of `medium`. Before escalating, check whether a
+  tighter prompt or context refresh fixes the failure for free.
 - **`quick`** — `gpt-5.4-mini`, `medium` effort. Cheap fast Q&A and trivial text gen (codex-session
   `ask -f`, `gc`).
 - **`ping`** — health-probe-only profile, used internally by `account health`.
@@ -140,17 +141,15 @@ profile). The skill-owned profiles:
 > `The '<model>' model is not supported when using Codex with a ChatGPT account`. Never pin a
 > `-codex` model. Model/pricing rationale: [`codex-models-pricing.md`](./codex-models-pricing.md).
 
-`planning` and `review-deep` start with identical values (`gpt-5.5 @ high`) but are kept as separate
-profiles so planning and review can be tuned independently.
-
 The wrapper's own composability lever is `--config-recipe` (commit 3117d8e). The `--profile` flag
 passes through to stock codex unchanged. codex-session never injects `--profile` for user-facing
 pass-through calls; wrapper-owned health probes (e.g. the heartbeat check in `account health`) pass
 `--profile ping` internally.
 
 References: `docs/upstream-codex.md` §F6b–§F6c (codex-session repo);
-<https://developers.openai.com/codex/config-advanced#profiles>. Model/pricing/benchmark rationale
-behind these profile choices: [`codex-models-pricing.md`](./codex-models-pricing.md).
+<https://developers.openai.com/codex/config-advanced#profiles>. Model/pricing/benchmark facts:
+[`codex-models-pricing.md`](./codex-models-pricing.md); derived cost × quality matrix and tier
+guidance behind these profiles: [`codex-models-comparison.md`](./codex-models-comparison.md).
 
 ## Pre-flight: Account Health
 
@@ -218,7 +217,7 @@ instead of `--full-auto`. This is the documented Codex approach for externally-s
 environments (devcontainers, CI runners):
 
 ```bash
-codex-session exec --profile implementation \
+codex-session exec --profile medium \
   --dangerously-bypass-approvals-and-sandbox --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
@@ -229,7 +228,7 @@ codex-session exec --profile implementation \
 must appear before the `resume` subcommand:
 
 ```bash
-codex-session exec --profile implementation resume "$THREAD_ID" \
+codex-session exec --profile medium resume "$THREAD_ID" \
   --dangerously-bypass-approvals-and-sandbox --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
@@ -264,7 +263,7 @@ codex-session exec \
 Implementation call (resuming planning session):
 
 ```bash
-codex-session exec --profile implementation resume "$THREAD_ID" \
+codex-session exec --profile medium resume "$THREAD_ID" \
   --dangerously-bypass-approvals-and-sandbox --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt with write orientation>" \
@@ -312,7 +311,7 @@ Contract:
 Use this pattern when Codex should implement:
 
 ```bash
-codex-session exec --profile implementation --sandbox workspace-write --json \
+codex-session exec --profile medium --sandbox workspace-write --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
   < /dev/null > "$RUN_DIR/stage3-events.jsonl"
@@ -331,7 +330,7 @@ Contract:
 Use this pattern when Codex should resume an existing session for implementation:
 
 ```bash
-codex-session exec --profile implementation resume "$THREAD_ID" \
+codex-session exec --profile medium resume "$THREAD_ID" \
   --dangerously-bypass-approvals-and-sandbox --json \
   --output-last-message "$RUN_DIR/stage3-impl-report.txt" \
   "<implementation prompt>" \
@@ -341,7 +340,7 @@ codex-session exec --profile implementation resume "$THREAD_ID" \
 Use this pattern when Codex should resume an existing session for read-only review:
 
 ```bash
-codex-session exec --profile review-followup resume "$THREAD_ID" \
+codex-session exec --profile low resume "$THREAD_ID" \
   --dangerously-bypass-approvals-and-sandbox \
   --json --output-last-message "$RUN_DIR/round-N-review.txt" \
   "<review prompt>" \
@@ -421,8 +420,8 @@ Stage 5 delegates to the `/review-loop` skill — never call `codex review` dire
 - `codex review` does not support `--json` or `--output-last-message`.
 - `--uncommitted` combined with a positional `[PROMPT]` errors out.
 - `/review-loop` uses `codex-session exec --sandbox read-only` for every round. Each round is an
-  independent one-shot invocation (no `exec resume`); round 1 passes `--profile review-deep`, rounds
-  2+ pass `--profile review-followup`.
+  independent one-shot invocation (no `exec resume`); round 1 passes `--profile medium`, rounds 2+
+  pass `--profile low`.
 
 ## Thread ID Extraction
 
@@ -503,10 +502,10 @@ New and updated skills must not hardcode `/tmp` for run directories or lock file
 - All `codex-session exec` invocations must include `< /dev/null` to prevent blocking on inherited
   stdin. Without this, Codex prints `Reading additional input from stdin...` and hangs until timeout
   when called from TUI sessions or background agents.
-- Each call site passes an explicit `--profile` for its use case (`planning`, `implementation`,
-  `review-deep`, `review-followup`, `quick`; see §Profile Strategy). `--profile` is an `exec`-level
-  flag, so on a resume it goes before the `resume` subcommand. Codex v0.134+ has no in-file
-  default-profile selector — the wrapper never injects one.
+- Each call site passes an explicit `--profile` for its use case (`deep`, `medium`, `low`, `quick`;
+  see §Profile Strategy). `--profile` is an `exec`-level flag, so on a resume it goes before the
+  `resume` subcommand. Codex v0.134+ has no in-file default-profile selector — the wrapper never
+  injects one.
 - Codex must never run git commands. All git operations belong to the Claude Code orchestrator.
 - Do NOT use `/tmp` for skill run directories or lock files. Use the XDG base path from §Skill Run
   Directories.
