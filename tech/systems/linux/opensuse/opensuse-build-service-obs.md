@@ -34,6 +34,11 @@
     binary RPM ships from source pkg `expat`; `osc branch` with target-rename trick; cross-project
     version / CVE-2025-59375 patch matrix; why `SUSE:SLE-15-SP<n>:Update` beats `openSUSE:Factory`
     for SLES overlay work.
+  - [`case-studies/`](../../tools/osc-obs/case-studies/README.md) — narrative reflections on real
+    OBS home-project incidents (goal → mistakes → fix → rule distilled → happy path → final result).
+    Read once per topic to install the lesson; the topic notes above are the reference cards. Covers
+    `broken` link drift after a patch rename, and overriding a buildroot ABI by branching a SUSE
+    Update package into the home project.
 
 ## General
 

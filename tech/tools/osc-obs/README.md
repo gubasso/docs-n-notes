@@ -31,6 +31,18 @@ build-system errors that can't be inferred from prior context.
   `osc branch <src-prj> <src-pkg> <tgt-prj> <tgt-pkg>` rename trick that keeps downstream consumers
   referring to `libexpat`, cross-project version + CVE patch matrix, and why
   `SUSE:SLE-15-SP<n>:Update` beats `openSUSE:Factory` as a branch source for SLES overlay work.
+- [case-studies/](case-studies/) — narrative reflections on real incidents (goal → mistakes → fix →
+  rule distilled → happy path → final result). Read once per topic to install the lesson; the topic
+  notes above are the reference cards you grep for afterwards. Current entries:
+  - [`01-broken-link-drift-after-patch-rename.md`](case-studies/01-broken-link-drift-after-patch-rename.md)
+    — every lane went `broken: patch '<new>' does not exist` after a converger renamed an overlay
+    patch but didn't `osc rm` the old one. The `broken` state is pre-build, distinct from
+    `unresolvable` / `failed`, with its own diagnostic recipe and one-commit workspace recovery.
+  - [`02-libexpat-abi-override-via-sles-update-branch.md`](case-studies/02-libexpat-abi-override-via-sles-update-branch.md)
+    — overriding a buildroot ABI by branching a SUSE Update package into the home project. Two
+    foot-guns: binary RPM name ≠ source pkg name (`libexpat1` ships from `expat`), and
+    `openSUSE:Factory` is rarely the right branch source for SLES overlay work. The 4-arg
+    `osc branch` rename form solves both.
 
 ## Companion files
 
