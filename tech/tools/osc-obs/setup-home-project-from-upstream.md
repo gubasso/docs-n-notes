@@ -148,6 +148,15 @@ Older docs use `<topadd>` to prepend a few lines to the spec. Use `<apply>` inst
 
 ## 4. Branched providers (when the distro doesn't ship a recent enough binary)
 
+> **Before branching:** if the upstream project already publishes the binary you need under a shared
+> aggregator repo (most commonly the `pool` repo on `kind="maintenance_release"` projects such as
+> `SUSE:SLE-15-SP<n>:Update`), adding a `<path>` to your project's `_meta` is strictly less work
+> than `osc branch` — no source package to own, no `_link` to keep in sync, and the resolver
+> auto-tracks every new EVR upstream publishes. See
+> [sle-update-pool-vs-standard.md](sle-update-pool-vs-standard.md) for the probe recipe and the
+> canonical `<path>` shape. Reach for the `osc branch` flow below only when you actually need to
+> patch the source or the upstream project doesn't publish the binary you need.
+
 Sometimes the resolver can't satisfy a BuildRequires because the distro's published binary is too
 old. The fix is to branch the provider package into the home project, where its binary is rebuilt
 and _prepended_ to the resolver search path for the home-project's lanes.

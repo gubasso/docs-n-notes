@@ -31,6 +31,16 @@ build-system errors that can't be inferred from prior context.
   `osc branch <src-prj> <src-pkg> <tgt-prj> <tgt-pkg>` rename trick that keeps downstream consumers
   referring to `libexpat`, cross-project version + CVE patch matrix, and why
   `SUSE:SLE-15-SP<n>:Update` beats `openSUSE:Factory` as a branch source for SLES overlay work.
+- [blocked-state-is-transient.md](blocked-state-is-transient.md) — `osc results` reporting
+  `blocked: <dep>` on a lane is a scheduler-waiting state (not terminal). Default 15–20 min wait
+  before any intervention; `osc rebuild` is harmful when issued over an in-flight auto-rebuild.
+  Decision table for wait vs probe vs escalate.
+- [sle-update-pool-vs-standard.md](sle-update-pool-vs-standard.md) — `SUSE:SLE-15-SP<n>:Update` (and
+  other `kind="maintenance_release"` projects) typically has project-level publish disabled; its
+  `standard` repo is empty. Maintenance binaries live under the `pool` repo. The canonical
+  consumer-side resolver `<path>` is
+  `<path project="<source-distro>:<version>:Update" repository="pool"/>`. Includes the probe recipe
+  and the trade-off vs `osc branch` for the same purpose.
 - [case-studies/](case-studies/) — narrative reflections on real incidents (goal → mistakes → fix →
   rule distilled → happy path → final result). Read once per topic to install the lesson; the topic
   notes above are the reference cards you grep for afterwards. Current entries:
