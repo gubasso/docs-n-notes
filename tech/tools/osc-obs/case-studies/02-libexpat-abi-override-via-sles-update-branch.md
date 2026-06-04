@@ -353,6 +353,84 @@ project is the single `osc branch`.
    fallback is `openSUSE:Leap:15.<n>/expat` (which carries the same 2.7.1 + CVE patch on Leap 15.6)
    — same `osc branch` pattern, different source project.
 
+## Hardening — activate the fail-fast `BuildRequires: libexpat1 >= 2.7.1` guard
+
+The case study ends with the satellite green and `_buildenv` confirming the home-project
+`libexpat1`. The build is **correct today** but **silent** — the satellite has no source-level
+declaration of its dependency on the post-CVE ABI. If the home-project libexpat ever stops
+publishing (project deleted, branch reverted, repository scope changed), the resolver silently falls
+back to `SP<n>:GA`'s pre-CVE `libexpat1` 2.6.x. The satellite still builds and publishes; the
+regression only surfaces at runtime when the installed payload tries to dlsym a 2.7-only symbol
+(`XML_SetAllocTrackerActivationThreshold` in our case).
+
+The fix is **one line in the satellite spec**: turn the latent fail-fast guard into an active BR.
+The hardened satellite refuses to build (clean `unresolvable: nothing provides libexpat1 >= 2.7.1`)
+the moment the home-project provider disappears, instead of silently regressing to a runtime
+`ImportError`.
+
+### When safe to activate
+
+Activate the BR only when every lane it will fire on already publishes a satisfying `libexpat1` in
+the home project. The pre-flight is one API call per lane (rule 6 in the case study above):
+
+```bash
+osc -A <api> api \
+  '/build/<home-project>/<lane>/<arch>/_repository?view=binaryversions&binary=libexpat1&withevr=1'
+```
+
+Expected: `<binary name="libexpat1.rpm" evr="2.7.1-…" arch="<arch>"/>` on every lane the BR fires
+on. `error="not available"` on any lane → do **not** activate; either tighten the BR's `%if` arm
+(SP-only) or publish `libexpat1` on the missing lane first.
+
+### Activation diff (one-line)
+
+For a patch that carries the BR in commented form (the pattern this case study's project ships by
+default — kept commented while older SPs lacked a published libexpat):
+
+```bash
+sed -i 's|^+# BuildRequires: libexpat1 >= 2.7.2.*|+BuildRequires: libexpat1 >= 2.7.1|' \
+  <overlay>.patch
+```
+
+The version literal **must** match what SUSE actually shipped — for CVE-2025-59375 that's a 2.7.1
+backport, not a 2.7.2 rebase (case study rule 1: "Probe before encoding"). Commit with `osc vc`
+
+- `osc ci`, then watch the satellite rebuild settle with
+  `osc results --watch <home-project> <satellite-pkg>`.
+
+### Cross-lane risk and the escalate-first rule
+
+If the BR sits inside a multi-lane `%if 0%{?sle_version} >= 150400 && < 160000` arm and one of the
+other lanes lacks a satisfying `libexpat1`, that lane regresses to
+`unresolvable: nothing
+provides libexpat1 >= 2.7.1`. **Don't** patch around this from inside the
+activation step — escalate first so the operator picks the right scoping:
+
+- Add a nested SP-only conditional (`%if 0%{?sle_version} >= 150700`) inside the existing arm to
+  scope the BR down.
+- Or publish the missing lane's `libexpat1` first (extend the home-project `libexpat` package's
+  `meta prj` to cover the missing repository).
+
+Both alter project-scoped state and must be user-authorized — the agent must not pick a scope on its
+own.
+
+### What about the rebuild's `blocked: <dep>` flicker?
+
+After `osc ci`, the satellite often spends 5–15 min in `blocked: <dep-name>` (e.g.
+`blocked:
+libexpat1`) while the dependency itself goes through an `unchanged` republish cycle.
+**This is transient, not terminal** — per the
+[OBS user guide on scheduling and dispatching](https://openbuildservice.org/help/manuals/obs-user-guide/cha.obs.build_scheduling_and_dispatching.html):
+_"Usually the build of a package gets blocked when a package required to build it is still building
+at the moment."_ The scheduler auto-resolves it when the upstream binary settles. Flickering between
+`outdated` and `blocked` is normal tick behavior, not pathology.
+
+Only escalate to `osc rebuild` if you exceed ~20 min AND
+`osc jobhistory <home-project>
+<satellite-pkg> <lane> <arch>` confirms no build job was ever created
+for the lane (scheduler missed the change). Premature `osc rebuild` cancels the in-flight
+auto-rebuild — see rule 5 above.
+
 ## Why this case study matters / when to consult it
 
 Reach for this case study any time you need to **override a buildroot library at a higher version
