@@ -61,6 +61,13 @@ build-system errors that can't be inferred from prior context.
   links live there); cross-links into this `osc-obs` subtree.
 - `~/DocsNNotes/tech/tools/dctl.md` — `dctl` CLI surface used by `auth-in-devcontainers.md` when the
   host runs containers via dctl rather than vanilla VS Code remote-containers.
+- [`runbook-template.md`](runbook-template.md) — generic shape for a per-lane convergence runbook
+  driven by a Claude self-debug loop. Placeholder-based so it can be copied into any OBS overlay
+  project's `docs/` tree.
+- [`../../workflows/claude-self-debug-loop.md`](../../workflows/claude-self-debug-loop.md) —
+  architecture of the self-debug loop that consumes the runbook above (driver, log persistence,
+  failure handling, budget guardrails). Pairs with the `osc-obs` Claude Code skill in dotfiles for
+  side-effecting OBS verbs.
 
 ## Audience
 
