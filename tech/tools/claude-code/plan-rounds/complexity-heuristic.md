@@ -37,12 +37,12 @@ See `plan-lifecycle.md` § "Executor capacity model" for the prex pipeline detai
 2. Divide by the EF for the selected executor → **adjusted score**.
 3. Map the adjusted score to a grade:
 
-| Grade  | Adjusted  | Rounds | Notes                                                    |
-| ------ | --------- | ------ | -------------------------------------------------------- |
-| **S**  | ≤ 7.0     | 1      | Simple, focused change. One prex run handles it easily.  |
-| **M**  | 7.1–11.0  | 1      | Meaty but cohesive. One prex run, possibly a longer one. |
-| **L**  | 11.1–15.0 | 2–3    | Multi-round. Needs thoughtful splitting.                 |
-| **XL** | ≥ 15.1    | 4–8    | Complex. `STRATEGY.md` generated. Careful orchestration. |
+| Grade  | Adjusted  | Rounds | Output format                 | Notes                                                    |
+| ------ | --------- | ------ | ----------------------------- | -------------------------------------------------------- |
+| **S**  | ≤ 7.0     | 1      | Single file `plans/<slug>.md` | Simple, focused change. One prex run handles it easily.  |
+| **M**  | 7.1–11.0  | 1      | Single file `plans/<slug>.md` | Meaty but cohesive. One prex run, possibly a longer one. |
+| **L**  | 11.1–15.0 | 2–3    | Directory `plans/<slug>/`     | Multi-round. Needs thoughtful splitting.                 |
+| **XL** | ≥ 15.1    | 4–8    | Directory `plans/<slug>/`     | Complex. `STRATEGY.md` generated. Careful orchestration. |
 
 The adjusted-score thresholds are exactly the historical raw thresholds (5–7 / 8–11 / 12–15 / 16+),
 so a `single-pass` executor (EF=1.0) recovers the old behavior precisely. Under `prex` (EF=1.5) a
@@ -60,7 +60,8 @@ The axes are structured judgment aids, not a rigid formula. Override when:
 - **Bump down**: Many files but the change is mechanical (e.g., rename across 20 files). Or the
   codebase has strong test coverage that de-risks the change.
 
-When overriding, note the reason in the plan's `_README.md` under Decisions & Constraints.
+When overriding, note the reason under Decisions & Constraints — in the plan's `README.md` for
+directory plans, or in the single-file plan itself.
 
 ## Round-splitting rules
 
