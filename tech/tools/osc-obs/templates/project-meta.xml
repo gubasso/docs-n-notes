@@ -1,0 +1,27 @@
+<project name="home:YOURUSER:PROJECTNAME">
+  <title>Short project title</title>
+  <description>What this project is for.</description>
+  <person userid="YOURUSER" role="maintainer"/>
+  <person userid="YOURUSER" role="bugowner"/>
+
+  <!-- Build targets: add/remove repositories and architectures as needed.
+       Path order matters — list more specific repos before general ones.
+       See ../sle-update-pool-vs-standard.md for the Update:pool vs :standard
+       distinction on SLE overlay lanes. -->
+
+  <repository name="openSUSE_Tumbleweed">
+    <path project="openSUSE:Tumbleweed" repository="standard"/>
+    <arch>x86_64</arch>
+  </repository>
+
+  <repository name="openSUSE_Leap_15.6">
+    <path project="openSUSE:Leap:15.6" repository="standard"/>
+    <arch>x86_64</arch>
+  </repository>
+
+  <repository name="SLE_15_SP6">
+    <path project="SUSE:SLE-15-SP6:Update" repository="pool"/>
+    <path project="SUSE:SLE-15-SP6:GA"     repository="standard"/>
+    <arch>x86_64</arch>
+  </repository>
+</project>

@@ -1,0 +1,8 @@
+<!-- Example: a real, applied package metadata file for a public upstream package.
+     Use as a reference for shape and content; do NOT copy verbatim (replace
+     project="home:YOURUSER:..." with your own home project namespace). -->
+<package name="cloud-regionsrv-client" project="home:YOURUSER:cloud-regionsrv-client-test">
+  <title>Cloud guest registration client</title>
+  <description>Cloud guest registration client for SUSE Linux Enterprise. Queries a region service to obtain cloud-specific update server information, then registers the guest instance with the regional SMT/RMT update server.</description>
+  <url>https://github.com/SUSE-Enceladus/cloud-regionsrv-client</url>
+</package>

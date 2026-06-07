@@ -40,6 +40,27 @@
     `broken` link drift after a patch rename, and overriding a buildroot ABI by branching a SUSE
     Update package into the home project.
 
+## More upstream references
+
+- [openSUSE Packaging Portal](https://en.opensuse.org/Portal:Packaging) — comprehensive index of
+  packaging topics.
+- [openSUSE Python Packaging](https://en.opensuse.org/Portal:Packaging_Python) — Python-specific
+  packaging guidance.
+- [openSUSE Patch Guidelines](https://en.opensuse.org/openSUSE%3APackaging_Patches_guidelines) — how
+  to annotate and manage patches.
+- [openSUSE Git Packaging Workflow](https://en.opensuse.org/openSUSE%3AGit_Packaging_Workflow).
+- [RPM Packaging Guide](https://rpm-packaging-guide.github.io/) — spec file syntax, macros.
+- [Fedora RPM Macros](https://docs.fedoraproject.org/en-US/packaging-guidelines/RPMMacros/) —
+  applies broadly to RPM-based distros.
+- [Fedora — Staying Close to Upstream](https://docs.fedoraproject.org/en-US/package-maintainers/Staying_Close_to_Upstream_Projects/).
+- [OBS User Guide — Basic Workflow](https://openbuildservice.org/help/manuals/obs-user-guide/cha-obs-basicworkflow).
+- [OBS User Guide — SCM/CI Integration](https://openbuildservice.org/help/manuals/obs-user-guide/cha-obs-scm-ci-workflow-integration).
+- [How to Modify a Package in OBS (quilt)](https://documentation.suse.com/sbp/systems-management/html/SBP-Quilting-OSC/index.html).
+
+## Talks & videos
+
+- [openSUSE Conference 2025 — OBS to Git](https://www.youtube.com/watch?v=x9LXrFDhoBE).
+
 ## General
 
 ```text

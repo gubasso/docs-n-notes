@@ -41,6 +41,16 @@ build-system errors that can't be inferred from prior context.
   consumer-side resolver `<path>` is
   `<path project="<source-distro>:<version>:Update" repository="pool"/>`. Includes the probe recipe
   and the trade-off vs `osc branch` for the same purpose.
+- [osc-commands.md](osc-commands.md) — compact cheat sheet of the most-used `osc` verbs grouped by
+  workflow (auth, checkout/branch, sources, changelog, build, commit/submit, services, install test,
+  merge). Companion to the deeper guides; quickest answer to "what was the flag for X?".
+- [obs-github-coordination.md](obs-github-coordination.md) — the upstream-vs-OBS dual-repo
+  discipline. Carry patches only while the upstream fix is pending; drop them the moment a release
+  tagged with the fix lands. Covers tarball-based patch mechanics (`tar xf` + `diff -u` +
+  `PatchN:`), the `Upstream-Status:` header convention, and the carry → drop lifecycle.
+- [templates/](templates/README.md) — reusable OBS `_meta` XML for projects and packages
+  (Tumbleweed/Leap/SLE targets, package descriptor with upstream URL), plus a real applied example.
+  Copy, fill in placeholders, apply with `osc meta -F`.
 - [case-studies/](case-studies/) — narrative reflections on real incidents (goal → mistakes → fix →
   rule distilled → happy path → final result). Read once per topic to install the lesson; the topic
   notes above are the reference cards you grep for afterwards. Current entries:
