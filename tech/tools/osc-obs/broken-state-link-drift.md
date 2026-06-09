@@ -16,7 +16,7 @@ message. Then recover with `osc add` / `osc rm` / `osc ci` in the package's loca
 
 ## Signatures
 
-| Status column from `osc results -v`     | Root cause                                                                                                                |
+| Status column from `osc -v results`     | Root cause                                                                                                                |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | `broken: patch '<file>' does not exist` | `_link.apply` references a `*.patch` that was never `osc ci`'d (or was removed).                                          |
 | `broken: file '<file>' does not exist`  | `_link` references a base file (tarball, spec) missing from the source tree.                                              |
@@ -30,7 +30,7 @@ PRJ=home:<you>:<project>
 PKG=<package>
 OBS_API=https://api.opensuse.org
 
-osc -A "${OBS_API}" results -v "${PRJ}" "${PKG}"
+osc -A "${OBS_API}" -v results "${PRJ}" "${PKG}"
 osc -A "${OBS_API}" api "/source/${PRJ}/${PKG}?expand=1" 2>&1 | head -20
 osc -A "${OBS_API}" api "/source/${PRJ}/${PKG}"
 ( cd "${WORKSPACE}/${PRJ}/${PKG}" && osc -A "${OBS_API}" status )

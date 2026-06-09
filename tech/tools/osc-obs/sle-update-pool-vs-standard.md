@@ -107,7 +107,7 @@ For an applied-version example with concrete project / package names, see the in
 
 ## Sources
 
-- [OBS User Guide — Maintenance setup](https://openbuildservice.org/help/manuals/obs-user-guide/cha.obs.maintenance_setup.html)
+- [OBS User Guide — Maintenance setup](https://openbuildservice.org/help/manuals/obs-user-guide/cha-obs-maintenance-setup)
   — describes `kind="maintenance_release"` projects and their publish model.
 - The empty-`standard` signature is reproducible against any `SUSE:SLE-15-SP<n>:Update` on
   `api.opensuse.org` — the same shape applies to other distros' maintenance-release projects on

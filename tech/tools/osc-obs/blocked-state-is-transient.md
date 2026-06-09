@@ -53,7 +53,7 @@ min — siblings on other lanes typically complete faster.
 
 ## Sources
 
-- [OBS User Guide: Build Scheduling and Dispatching](https://openbuildservice.org/help/manuals/obs-user-guide/cha.obs.build_scheduling_and_dispatching.html)
+- [OBS User Guide: Build Scheduling and Dispatching](https://openbuildservice.org/help/manuals/obs-user-guide/cha-obs-build-scheduling-and-dispatching)
   — _"Usually the build of a package gets blocked when a package required to build it is still
   building at the moment."_
 - [openSUSE forums — openSUSE_Factory 'blocked'](https://forums.opensuse.org/t/opensuse-factory-blocked/29947)

@@ -20,18 +20,22 @@ For credential setup in a devcontainer (no host keyring), see
 
 ## Checkout and branch
 
+`osc co`'s synopsis is `osc co PROJECT [PACKAGE] [FILE]` — two space-separated positionals, not a
+slash-joined `PROJECT/PACKAGE` (verify with `osc help co`). `osc branch`'s synopsis is
+`osc branch SOURCEPROJECT SOURCEPACKAGE [TARGETPROJECT | . [TARGETPACKAGE]]`.
+
 ```bash
 # Check out a package (download a working copy)
 osc co openSUSE:Factory <package>
-osc co home:<your-user>:branches:<source-project>/<package>
+osc co home:<your-user>:branches:<source-project> <package>
 
 # Branch a package (like a fork — sets up build targets automatically)
 osc branch <source-project> <package>
-osc branch <source-project> <package> home:<your-user>:branches:<source-project>:<package>
+osc branch <source-project> <package> home:<your-user>:branches:<source-project> <package>
 
 # Branch then checkout in one step
-osc branch openSUSE:Factory/<package> home:<your-user>/<package>
-osc co home:<your-user>/<package>
+osc branch openSUSE:Factory <package> home:<your-user> <package>
+osc co home:<your-user> <package>
 ```
 
 The four-arg `osc branch` form lets you rename the target package on the fly — useful when the
@@ -126,12 +130,18 @@ zypper in <package>
 rpm -ql <package> | grep <expected-file>
 ```
 
-## Merging back
+## Getting changes from the link target back into your branch
+
+`osc` does not have a top-level `merge` verb. To pull upstream changes into a branched/linked
+package, use `osc pull` from inside the working copy:
 
 ```bash
-# Merge branch into target (if you branched earlier)
-osc merge home:<your-user>/<package> openSUSE:Factory/<package>
+osc pull                          # merge the link target's changes into the working copy
 ```
+
+To send your branch's changes the other way (back into the upstream project), open a submit request
+with `osc sr` — see "Committing and submitting" above. Maintainers of the target project review and
+merge it server-side.
 
 ## See also
 

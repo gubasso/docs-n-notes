@@ -11,7 +11,8 @@ A from-scratch, project-agnostic walkthrough for an OBS home project that:
   - apply a local patch) so they build the same way as the base package on each target service pack.
 
 This is the pattern that keeps a test repo coherent across multiple distro lanes (SLES 15 SP4–SP7
-and 12 SP5 in the worked example, but the shape is the same for any distro family).
+and 12 SP5 in the worked example — SP4 and 12 SP5 are LTSS-only as of 2026, still actively
+maintained; the shape is the same for any distro family).
 
 For the related auth setup and the recovery flow when an overlay goes wrong, see the
 [README index](README.md) in this subtree.
@@ -227,11 +228,10 @@ rpm -qpl /tmp/verify/<pkg>-*.x86_64.rpm | grep site-packages
 grep 'bdep name="<provider>"' /tmp/verify/_buildenv
 ```
 
-When something fails: the per-lane `osc results -v` message is usually the only diagnostic you need
+When something fails: the per-lane `osc -v results` message is usually the only diagnostic you need
 to classify the failure (`broken: …`, `unresolvable: nothing provides …`, `failed`). For `broken`,
 jump to [broken-state-link-drift.md](broken-state-link-drift.md). For `unresolvable`, the
-`osc buildinfo -d <project> <pkg> <repo>
-<arch>` call surfaces the resolver's full attempt and what
+`osc buildinfo -d <project> <pkg> <repo> <arch>` call surfaces the resolver's full attempt and what
 was missing. For `failed`, `osc buildlog … | tail -200` gives the compile error.
 
 ## 7. References

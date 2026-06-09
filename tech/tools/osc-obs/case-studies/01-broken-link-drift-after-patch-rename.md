@@ -2,7 +2,7 @@
 
 > <https://en.opensuse.org/openSUSE:Build_Service_Concept_SourceService>
 > <https://en.opensuse.org/openSUSE:OSC>
-> <https://openbuildservice.org/help/manuals/obs-user-guide/cha.obs.source_service.html>
+> <https://openbuildservice.org/help/manuals/obs-user-guide/cha-obs-source-services>
 
 ## TL;DR
 
@@ -43,7 +43,7 @@ _source service_ (the layer that expands a `_link` into a real source tree) cann
 | -------------- | ----------- | ------------------------------------------ | ------------------------------------------- |
 | `unresolvable` | resolver    | a `BuildRequires` can't be satisfied       | `buildinfo`                                 |
 | `failed`       | build       | configure / compile / link / `%check` died | `buildlog`                                  |
-| **`broken`**   | **nothing** | **source service can't expand `_link`**    | `osc results -v`, `?expand=1` HTTP 400 body |
+| **`broken`**   | **nothing** | **source service can't expand `_link`**    | `osc -v results`, `?expand=1` HTTP 400 body |
 
 ## What went wrong (timeline)
 
@@ -97,7 +97,7 @@ These are smaller items that ate time during the run, all preserved here so the 
 burn the same hours.
 
 1. **`osc results` summary doesn't show the message.** The non-verbose form is just
-   `<lane>  <arch>  <pkg>  broken` — without the precise reason. **Always use `osc results -v`** for
+   `<lane>  <arch>  <pkg>  broken` — without the precise reason. **Always use `osc -v results`** for
    `broken` lanes; the message lives in the status column there.
    (`osc api '/source/<prj>/<pkg>?expand=1'` is the orthogonal confirmation — same message,
    different code path.)

@@ -232,7 +232,7 @@ of your source-code repo's templates, ensuring consistency between the two works
 `_link.apply` referencing the _new_ patch that isn't there. Source-service expansion HTTP 400's.
 Every lane reports `broken: patch '<new>' does not exist`. The resolver never runs, the buildlog
 never exists, every diagnostic that expects a build (`osc buildinfo`, `osc buildlog`) returns
-nothing useful. The error message is precise — but only if you ask for it with `osc results -v` or
+nothing useful. The error message is precise — but only if you ask for it with `osc -v results` or
 hit `?expand=1` directly.
 
 **Avoid by.** Always treat patch renames as a three-step server-side operation in **one commit**:
@@ -539,7 +539,7 @@ resolve. Spending time on resolver diagnosis is pure waste.
 
 | State                   | What ran                      | Recovery starts with                           |
 | ----------------------- | ----------------------------- | ---------------------------------------------- |
-| `broken`                | nothing (source svc)          | `osc results -v` → fix link/source-tree        |
+| `broken`                | nothing (source svc)          | `osc -v results` → fix link/source-tree        |
 | `unresolvable`          | source svc + resolver         | `osc buildinfo` → fix BR / branch provider     |
 | `failed`                | source svc + resolver + build | `osc buildlog \| tail -200` → fix spec / patch |
 | `succeeded`             | everything                    | done; verify payload                           |

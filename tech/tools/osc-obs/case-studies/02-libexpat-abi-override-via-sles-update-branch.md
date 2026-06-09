@@ -2,7 +2,7 @@
 
 > <https://en.opensuse.org/openSUSE:Build_Service_Tutorial> <https://en.opensuse.org/openSUSE:OSC>
 > <https://en.opensuse.org/openSUSE:Packaging_guidelines>
-> <https://openbuildservice.org/help/manuals/obs-user-guide/cha.obs.concepts.html>
+> <https://openbuildservice.org/help/manuals/obs-user-guide/cha-obs-concepts>
 
 ## TL;DR
 
@@ -420,7 +420,7 @@ After `osc ci`, the satellite often spends 5–15 min in `blocked: <dep-name>` (
 `blocked:
 libexpat1`) while the dependency itself goes through an `unchanged` republish cycle.
 **This is transient, not terminal** — per the
-[OBS user guide on scheduling and dispatching](https://openbuildservice.org/help/manuals/obs-user-guide/cha.obs.build_scheduling_and_dispatching.html):
+[OBS user guide on scheduling and dispatching](https://openbuildservice.org/help/manuals/obs-user-guide/cha-obs-build-scheduling-and-dispatching):
 _"Usually the build of a package gets blocked when a package required to build it is still building
 at the moment."_ The scheduler auto-resolves it when the upstream binary settles. Flickering between
 `outdated` and `blocked` is normal tick behavior, not pathology.

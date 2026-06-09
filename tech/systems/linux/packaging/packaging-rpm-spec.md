@@ -119,8 +119,8 @@ Keep conditionals minimal — the build system already handles the target matrix
 
 ### `BuildRoot:` — remove it
 
-The `BuildRoot:` tag is **obsolete** since RPM >= 4.6.0. Modern RPM ignores it entirely, and OBS
-always invokes `rpmbuild` with its own `--buildroot` argument.
+The `BuildRoot:` tag is **obsolete** in modern RPM. `rpmbuild` defines its own buildroot via the
+`--buildroot` argument (which OBS always passes), so any value the spec sets is overridden.
 
 ```spec
 # DELETE this line — it has no effect:
@@ -129,10 +129,10 @@ BuildRoot:     %{_tmppath}/%{name}-%{version}-build
 
 Why it's safe to remove:
 
-- RPM spec format docs: "`BuildRoot` is obsolete and unused in rpm >= 4.6.0"
-- SLES 12+ Administration Guide: "the `BuildRoot` directive is deprecated since SLE 12"
-- OBS builds always pass `--buildroot` on the command line, overriding any spec-level value
-- Fedora 18+ and all current openSUSE releases do not require or honor it
+- Fedora packaging guidelines deprecated the tag (Fedora 18+ no longer requires or honors it);
+  openSUSE follows the same convention.
+- OBS builds always pass `--buildroot` on the command line, overriding any spec-level value.
+- All current openSUSE releases (Tumbleweed, Leap 15.x) build cleanly without it.
 
 Continue using `%{buildroot}` in your `%install` section — that variable is still set by RPM's
 `--buildroot` option.

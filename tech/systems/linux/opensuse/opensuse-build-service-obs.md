@@ -53,9 +53,14 @@
 - [Fedora RPM Macros](https://docs.fedoraproject.org/en-US/packaging-guidelines/RPMMacros/) —
   applies broadly to RPM-based distros.
 - [Fedora — Staying Close to Upstream](https://docs.fedoraproject.org/en-US/package-maintainers/Staying_Close_to_Upstream_Projects/).
+- [OBS User Guide — `osc`, the Command Line Tool](https://openbuildservice.org/help/manuals/obs-user-guide/cha-obs-osc).
 - [OBS User Guide — Basic Workflow](https://openbuildservice.org/help/manuals/obs-user-guide/cha-obs-basicworkflow).
+- [OBS User Guide — Using Source Services](https://openbuildservice.org/help/manuals/obs-user-guide/cha-obs-source-services).
 - [OBS User Guide — SCM/CI Integration](https://openbuildservice.org/help/manuals/obs-user-guide/cha-obs-scm-ci-workflow-integration).
-- [How to Modify a Package in OBS (quilt)](https://documentation.suse.com/sbp/systems-management/html/SBP-Quilting-OSC/index.html).
+- [OBS User Guide — `osc` Example Commands](https://openbuildservice.org/help/manuals/obs-user-guide/cha-obs-best-practices-oscexamples).
+- [OBS User Guide — Maintenance Support](https://openbuildservice.org/help/manuals/obs-user-guide/cha-obs-maintenance-setup).
+- [How to Modify a Package in OBS (quilt + osc)](https://documentation.suse.com/sbp/systems-management/html/SBP-Quilting-OSC/index.html)
+  — SUSE Best Practices walkthrough.
 
 ## Talks & videos
 
@@ -67,111 +72,32 @@
 Sometimes, you will see the obs://DOMAIN/PROJECT notation. The obs:// schema is a shorthand to abbreviate the long URL and needs to be replaced by the real OBS instance URL.
 ```
 
-## openSUSE Commander (OSC)
+## openSUSE Commander (OSC) — pointer
 
 > `osc`
 
-- [openSUSE:OSC](https://en.opensuse.org/openSUSE:OSC)
-- [openSUSE/osc](https://github.com/openSUSE/osc)
+For the `osc` verb cheat sheet (branch / co / build / commit / sr / etc.), home-project setup,
+patch/link mechanics, build-state diagnostics, and metadata templates, see the dedicated subtree:
+**[`~/DocsNNotes/tech/tools/osc-obs/`](../../tools/osc-obs/README.md)**.
 
-## Workflow
+Upstream references:
 
-- Contribution:
-  - Go to the package page
-  - Create a branch on my home
-  - Change the spec file to apply the patch (Patch0: ...)
-  - Apply patch to my home branch
-  - Wait for the changes
-  - Submit the patch to the origin
+- [openSUSE:OSC](https://en.opensuse.org/openSUSE:OSC) — wiki overview.
+- [openSUSE/osc](https://github.com/openSUSE/osc) — source.
+- [osc(1) manpage (Tumbleweed)](https://manpages.opensuse.org/Tumbleweed/osc/osc.1.en.html).
+- [oscrc(5) manpage (Tumbleweed)](https://manpages.opensuse.org/Tumbleweed/osc/oscrc.5.en.html).
 
-## clone and check out an existing package
+## Contribution flow at a glance
 
-To clone and check out an existing package from the Open Build Service (OBS) into your OBS home
-project using the `osc` command-line tool, you can follow these steps:
+The standard openSUSE contribution path, from a home project:
 
-1. **Branch or Copy the Package into Your Home Project:** You have two options to get the package
-   into your home project:
+1. Browse the source package page on `build.opensuse.org`.
+2. Create a personal branch into your home project (`osc branch`).
+3. Edit the spec / add a `PatchN:` for your fix.
+4. Build locally to verify (`osc build`).
+5. Commit (`osc commit`) and wait for the OBS build to go green.
+6. Submit a request back to the origin project (`osc sr`).
 
-- **Option A: Use `osc branch`** The `osc branch` command creates a personal branch of the package,
-  preserving its link to the original project.
-
-```bash
-osc branch [source_project] [package_name] [target_project] [target_package_name]
-```
-
-**Example:**
-
-```bash
-osc branch openSUSE:Factory example-package home:yourusername example-package
-```
-
-This command branches `example-package` from `openSUSE:Factory` into your home project
-`home:yourusername`.
-
-- **Option B: Use `osc copypac`** The `osc copypac` command copies the package without preserving
-  any link to the original.
-
-```bash
-osc copypac [source_project] [package_name] [target_project]
-```
-
-**Example:**
-
-```bash
-osc copypac openSUSE:Factory example-package home:yourusername
-```
-
-1. **Check Out the Package from Your Home Project:** Once the package is in your home project, you
-   can check it out using the `osc checkout` command.
-
-```bash
-osc checkout [target_project] [package_name]
-```
-
-**Example:**
-
-```bash
-osc checkout home:yourusername example-package
-```
-
-1. **Navigate to the Checked-Out Package Directory:** Change into the directory of the checked-out
-   package to start working on it.
-
-```bash
-cd home:yourusername/example-package
-```
-
-**Summary of Commands:**
-
-```bash
-# Option A: Branching the package
-osc branch [source_project] [package_name] [target_project] [target_package_name]
-osc checkout [target_project] [package_name]
-cd [target_project]/[package_name]
-
-# Option B: Copying the package
-osc copypac [source_project] [package_name] [target_project]
-osc checkout [target_project] [package_name]
-cd [target_project]/[package_name]
-```
-
-**Notes:**
-
-- Replace `[source_project]`, `[package_name]`, `[target_project]`, and `[target_package_name]` with
-  the actual project names and package names.
-
-- Using `osc branch` is recommended if you plan to contribute back, as it keeps a link to the
-  original package.
-
-- If you only need a standalone copy for personal use, `osc copypac` might suffice. **Additional
-  Resources:**
-- For more information on `osc` commands, you can consult the `osc` manual:
-
-```bash
-osc help
-osc help branch
-osc help copypac
-```
-
-By following these steps, you can successfully clone and check out an existing OBS package into your
-OBS home project using the `osc` command-line tool.
+Detailed walkthroughs are in `~/DocsNNotes/tech/tools/osc-obs/setup-home-project-from-upstream.md`
+(full home-project setup) and `~/DocsNNotes/tech/tools/osc-obs/obs-github-coordination.md`
+(upstream-PR-vs-OBS-patch lifecycle).
