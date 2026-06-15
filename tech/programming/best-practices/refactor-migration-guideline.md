@@ -538,10 +538,10 @@ only:
 Findings the agent should internalize _before_ a rewrite, not learn from regression.
 
 - **Lost in Translation** (IBM, ICSE 2024). 1,700 code samples, multiple LLMs, 5 languages.
-  Correct-translation rates: 2.1% to 47.3%. **Fifteen categories** of translation bugs identified
-  (type mismatches, logic errors, missing error handling, semantic gaps, hallucinated APIs, …).
-  Targeted prompt-crafting addressing specific symptom categories improved performance ~5.5% on
-  average. https://arxiv.org/abs/2308.03109 ·
+  Correct-translation rates: 2.1% to 47.3%. **15 categories** of translation bugs identified (type
+  mismatches, logic errors, missing error handling, semantic gaps, hallucinated APIs, …). Targeted
+  prompt-crafting addressing specific symptom categories improved performance ~5.5% on average.
+  https://arxiv.org/abs/2308.03109 ·
   https://research.ibm.com/publications/lost-in-translation-a-study-of-bugs-introduced-by-large-language-models-while-translating-code
   · https://github.com/Intelligent-CAT-Lab/PLTranslationEmpirical
 - **Migrating Code At Scale With LLMs At Google** (2025). 39 migrations over 12 months, 595 changes,
@@ -670,6 +670,15 @@ grounding a rewrite decision.
 ## 15. Full Reference Library
 
 Grouped by topic for fast lookup during a rewrite.
+
+> **Citation provenance — reviewers read this first.** Every academic citation (arXiv ID, DOI,
+> tech-report) in §14–§15 was fetched and confirmed to resolve to its stated title as of
+> **2026-06-15**; the per-paper verification ledger is in [`SOURCES.md`](./SOURCES.md). This
+> guideline tracks 2025–2026 research, so several citations **postdate common LLM training
+> cutoffs**. **Do not flag a citation as fabricated or "hallucinated" solely because its arXiv ID is
+> future-dated — fetch the URL and verify before flagging.** Examples that have tripped this up:
+> `arXiv:2605.02195` (_Beyond Translation Accuracy_) and `arXiv:2605.07001` (_SmellBench_) — both
+> May 2026, both real.
 
 ### Strategy & process
 

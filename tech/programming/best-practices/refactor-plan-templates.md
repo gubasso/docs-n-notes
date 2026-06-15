@@ -3,26 +3,26 @@
 Every template here uses `{{PLACEHOLDER}}` markers the skill must substitute before writing.
 Standard placeholders:
 
-| Placeholder               | Source                                               |
-| ------------------------- | ---------------------------------------------------- |
-| `{{PLAN_ID}}`             | `refactor-<UTC-YYYYMMDD-HHMMSS>`                     |
-| `{{TIMESTAMP}}`           | UTC ISO 8601 at plan creation                        |
-| `{{SOURCE_ROOT}}`         | Absolute path to source project                      |
-| `{{SOURCE_LANG}}`         | Detected source language (e.g. `bash`, `python`)     |
-| `{{SOURCE_VERSION}}`      | Source language version, if discoverable             |
-| `{{SOURCE_GIT_HEAD}}`     | `git rev-parse HEAD` in source (may be empty)        |
-| `{{SOURCE_LOC}}`          | Approx total source LOC (from scan)                  |
-| `{{TARGET_ROOT}}`         | Absolute path to target project (cwd)                |
-| `{{TARGET_LANG}}`         | User-confirmed target language                       |
-| `{{TARGET_LANG_VERSION}}` | User-confirmed target language version               |
-| `{{TARGET_LANG_CANON}}`   | URL of target idiom canon (Effective Go, PEP 8, …)   |
-| `{{GUIDELINE_PATH}}`      | Resolved canonical guideline path                    |
-| `{{SYSTEM_TYPE}}`         | CLI / library / HTTP service / gRPC / worker / mixed |
-| `{{CONTRACT_SURFACES}}`   | Comma-separated list of declared contract surfaces   |
-| `{{PRESERVED_LIST}}`      | Bulletized preserved items                           |
-| `{{NOT_PRESERVED_LIST}}`  | Bulletized intentionally-not-preserved items + ADR#  |
-| `{{QUIRKS}}`              | User-declared undocumented behavior list             |
-| `{{SCAN_FINGERPRINT}}`    | SHA-256 of the concatenated source-scan outputs      |
+| Placeholder               | Source                                                       |
+| ------------------------- | ------------------------------------------------------------ |
+| `{{PLAN_ID}}`             | `refactor-<UTC-YYYYMMDD-HHMMSS>`                             |
+| `{{TIMESTAMP}}`           | UTC ISO 8601 at plan creation                                |
+| `{{SOURCE_ROOT}}`         | Absolute path to source project                              |
+| `{{SOURCE_LANG}}`         | Detected source language (e.g. `bash`, `python`)             |
+| `{{SOURCE_VERSION}}`      | Source language version, if discoverable                     |
+| `{{SOURCE_GIT_HEAD}}`     | `git rev-parse HEAD` in source (may be empty)                |
+| `{{SOURCE_LOC}}`          | Approx total source LOC (from scan)                          |
+| `{{TARGET_ROOT}}`         | Absolute path to target project (cwd)                        |
+| `{{TARGET_LANG}}`         | User-confirmed target language                               |
+| `{{TARGET_LANG_VERSION}}` | User-confirmed target language version                       |
+| `{{TARGET_LANG_CANON}}`   | URL of target idiom canon (Effective Go, PEP 8, …)           |
+| `{{GUIDELINE_PATH}}`      | Resolved canonical guideline path                            |
+| `{{SYSTEM_TYPE}}`         | CLI / library / HTTP service / gRPC / worker / mixed         |
+| `{{CONTRACT_SURFACES}}`   | Comma-separated list of declared contract surfaces           |
+| `{{PRESERVED_LIST}}`      | Bulletized preserved items                                   |
+| `{{NOT_PRESERVED_LIST}}`  | Bulletized intentionally-not-preserved items + ADR#          |
+| `{{QUIRKS}}`              | User-declared undocumented behavior list                     |
+| `{{SCAN_FINGERPRINT}}`    | SHA-256 over source-scan file contents, LC_ALL=C name-sorted |
 
 When a value is unknown, write the literal `<TBD: short description>` and append the question to the
 `Open Questions` list in `00-OVERVIEW.md`.
@@ -37,8 +37,8 @@ convention so downstream tools can consume it.
 ```markdown
 # AGENTS.md — Refactor/Migration Plan {{PLAN_ID}}
 
-> Spec Kit-compatible universal entry point for AI coding agents. Spec:
-> <https://github.github.com/spec-kit/>
+> Spec Kit-compatible universal entry point for AI coding agents. See:
+> <https://github.com/github/spec-kit>
 
 ## Project context
 
@@ -190,6 +190,8 @@ phases:
     started-at: null
     completed-at: null
     gate: "All parity tests pass; differential tests clean; fuzz campaign clean; performance within envelope."
+    fuzz-budget: "24h"            # T-E-04 fuzz-campaign CPU-time budget (default 24 CPU-hours)
+    shadow-duration: "<TBD>"      # T-E-05 shadow-traffic window (services only)
     blocked-by: ["D"]
   F:
     title: "Parallel-Run, Canary, Cutover, Decommission"
@@ -198,6 +200,8 @@ phases:
     started-at: null
     completed-at: null
     gate: "Parallel-run period complete; canary clean; rollback tested; source decommissioned."
+    divergence-threshold: "<TBD>"      # T-F-02 max acceptable parallel-run divergence rate
+    confidence-period-days: "<TBD>"    # T-F-07 solo-monitoring window before decommission
     blocked-by: ["E"]
 
 recommended-tools:
@@ -463,8 +467,9 @@ is.
       "not-preserved" must have an ADR.
 - [ ] T-A-13 — Write `adr/0001-rewrite-decision.md` (MADR; rationale for the rewrite).
 - [ ] T-A-14 — Write `adr/0002-parity-boundary.md` (MADR; what is preserved vs. not).
-- [ ] T-A-15 — Record `source.scan-fingerprint` in `MANIFEST.yaml` (SHA-256 of concatenated
-      source-scan artifacts) — used for drift detection in `--review`.
+- [ ] T-A-15 — Record `source.scan-fingerprint` in `MANIFEST.yaml` — SHA-256 over the concatenated
+      CONTENTS of every file in the source-scan dir, in `LC_ALL=C` filename-sorted order (the
+      deterministic order the skill uses at plan-creation) — used for drift detection in `--review`.
 
 ## CLI contract
 

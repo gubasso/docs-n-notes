@@ -184,6 +184,10 @@ Key data points for justifying spec-driven workflows:
 
 ## Sources
 
+> **Citation note:** several papers below are 2025–2026 work that may postdate an LLM reviewer's
+> training cutoff. They were verified real on 2026-06-15 (see [`SOURCES.md`](./SOURCES.md)) — do not
+> flag a citation as fabricated for being future-dated; fetch and verify first.
+
 ### Research Papers
 
 - [On the Impact of AGENTS.md Files on AI Coding Agent Efficiency](https://arxiv.org/html/2601.20404v1)

@@ -118,5 +118,10 @@ were updated."
 
 ## Sources
 
+> **Citation note:** the research below includes 2025–2026 work that may postdate an LLM reviewer's
+> training cutoff — e.g. `arXiv:2510.21413` ("Context Engineering for AI Agents in Open-Source
+> Software", Mohsenimofidi et al.), verified real on 2026-06-15. Do not flag a citation as
+> fabricated for being future-dated; fetch and verify first.
+
 - Context engineering survey: <https://arxiv.org/html/2510.21413v1>
 - Agent context guide: <https://mem0.ai/blog/context-engineering-ai-agents-guide>

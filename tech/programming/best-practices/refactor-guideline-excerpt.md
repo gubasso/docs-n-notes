@@ -2,7 +2,11 @@
 
 > This is the embedded fallback the skill uses when the canonical guideline at
 > `tech/programming/best-practices/refactor-migration-guideline.md` in the user's docs-n-notes repo
-> cannot be resolved. Keep this excerpt in sync with the canonical doc's §0, §3, §6, §8, §11.
+> cannot be resolved. Keep this excerpt in sync with the canonical doc's §0, §1, §3, §6, §8, §11.
+>
+> Citation note: this excerpt cites 2025–2026 research that may postdate an LLM reviewer's training
+> cutoff; see `SOURCES.md` in this directory. Do not flag a citation as fabricated for being
+> future-dated — verify first.
 
 ---
 
@@ -30,6 +34,24 @@ enforce:
 5. **No scope creep.** New features ship in a separate change _after_ the rewrite is
    decommissioned-complete.
 6. **Gated phase model.** Phases A→F (§3) are mandatory and ordered.
+
+---
+
+## §1 — Glossary
+
+| Term                                  | Definition                                                                                                                                                                                                                                                                                                      |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Contract**                          | The external, observable surface a system promises: CLI flags, subcommands, exit codes, stdout/stderr shape, HTTP routes, request/response schemas, headers, error payloads, on-disk and wire formats, env vars, config schema, semver promises — what users (humans, scripts, integrating services) depend on. |
+| **Transliteration**                   | Mechanical mapping of source-language constructs into target-language syntax, preserving source-side structure. Always wrong in this guideline.                                                                                                                                                                 |
+| **Characterization test**             | A test documenting the source system's _current_ observable behavior (documented and undocumented) before any rewrite. (Feathers, _Working Effectively with Legacy Code_.)                                                                                                                                      |
+| **Golden / approval / snapshot test** | A characterization test whose expected output is a stored fixture; deviations are diffed and explicitly re-approved.                                                                                                                                                                                            |
+| **Differential test**                 | Runs the same input through source and target and asserts output equivalence (with documented allowed differences).                                                                                                                                                                                             |
+| **Property test**                     | Asserts an invariant holds for randomly-generated inputs, language-neutrally; runs against both source and target.                                                                                                                                                                                              |
+| **Parity test**                       | Any of {characterization, golden, differential, property} test that gates the rewrite.                                                                                                                                                                                                                          |
+| **Parity boundary**                   | The explicit, documented set of behaviors the rewrite **does** and **does not** preserve. Anything outside the boundary requires an ADR.                                                                                                                                                                        |
+| **Translation smell**                 | An idiom that betrays source-language origin in target code (getter/setters in Go, `Vec<Box<dyn Trait>>` mirroring a Java hierarchy in Rust, callback chains where async/await fits).                                                                                                                           |
+| **Strangler Fig**                     | Incremental-rewrite pattern: route traffic between old and new behind a seam; grow the new implementation until the old can be removed.                                                                                                                                                                         |
+| **ADR**                               | Architecture Decision Record — a short doc capturing context, decision, and consequences for one significant choice during the rewrite.                                                                                                                                                                         |
 
 ---
 
@@ -151,4 +173,4 @@ Summary:
 12. <https://clig.dev/>
 13. <https://approvaltests.com/>
 14. <https://adr.github.io/madr/>
-15. <https://github.github.com/spec-kit/>
+15. <https://github.com/github/spec-kit>

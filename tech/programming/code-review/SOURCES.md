@@ -77,8 +77,13 @@ Each file distills review heuristics from the named upstream plus local-canon CL
 
 These ground `llm-review-discipline.md`. No quarterly refresh; check on major findings.
 
+> **Citation note:** `arXiv:2601.18844` (Du et al., Jan 2026) postdates common LLM training cutoffs
+> and was verified real on 2026-06-15; the 2024 IDs predate it. Do not flag a citation as fabricated
+> for being future-dated — fetch the arXiv abstract and verify first.
+
 - Hou et al. "An Insight into Security Code Review with LLMs", arxiv 2401.16310.
-- Wu et al. "Reducing False Positives in Static Bug Detection with LLMs", arxiv 2601.18844.
+- Du et al. "Reducing False Positives in Static Bug Detection with LLMs: An Empirical Study in
+  Industry", arxiv 2601.18844.
 - Liu et al. "Utilizing Precise and Complete Code Context to Guide LLM in Automatic False Positive
   Mitigation", arxiv 2411.03079.
 - Datadog Security Labs, "Using LLMs to filter out false positives from static code analysis".
