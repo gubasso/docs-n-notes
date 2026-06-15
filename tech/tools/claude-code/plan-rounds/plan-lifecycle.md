@@ -24,8 +24,9 @@ There are no kanban state-directories and no numeric prefixes.
         └── <topic>.md           another round
 ```
 
-The complexity grade selects the plan format: **S/M plans are a single file** (`plans/<slug>.md`)
-merging the decision record with the executable round body; **L/XL plans are a directory**
+The complexity grade selects the plan format (see `complexity-heuristic.md` § "Grade mapping" — the
+single source of truth for grade→format): an **S/M plan is a single file** (`plans/<slug>.md`)
+merging the decision record with the executable round body; an **L/XL plan is a directory**
 (`plans/<slug>/`). A single-file plan is a first-class, fully executable plan — not a draft awaiting
 round-splitting.
 

@@ -51,6 +51,24 @@ borderline raw 8 → adjusted 5.33 → S (was M), borderline raw 12 → adjusted
 the in-round review-loop. Under `limited` (EF=0.8) the same boundaries promote borderline tasks by
 one grade.
 
+This grade table is the **single source of truth for grade→format**. Skills and coordinators must
+not restate the mapping — they point here.
+
+## EF is mandatory — reachable grades per executor
+
+Always map the **adjusted** score (raw ÷ EF), never the raw score. Because raw caps at 20, the
+reachable grade ceiling depends on the executor:
+
+| Executor (EF)       | Max adjusted | Reachable grades | Max rounds |
+| ------------------- | ------------ | ---------------- | ---------- |
+| `prex` (1.5)        | 13.3         | S / M / L        | 3 (L)      |
+| `single-pass` (1.0) | 20.0         | S / M / L / XL   | 8 (XL)     |
+| `limited` (0.8)     | 25.0         | S / M / L / XL   | 8 (XL)     |
+
+Under the default `prex` executor, **XL is unreachable** (max adjusted 13.3 → L) and L needs raw ≥
+17. A multi-round directory plan is the exception, not the norm — most prex plans are single-file
+S/M. If a classification yields XL or 4+ rounds under prex, the EF was not applied: recompute.
+
 ## Override guidance
 
 The axes are structured judgment aids, not a rigid formula. Override when:

@@ -3,7 +3,8 @@
 Templates for the files generated under `.implementation-plans/`. Use `{{PLACEHOLDER}}` markers —
 the generating skill substitutes them with actual values.
 
-The complexity grade selects the plan format:
+The complexity grade selects the plan format (see `complexity-heuristic.md` § "Grade mapping" — the
+single source of truth for grade→format); each format maps to these templates:
 
 - **S/M** — a single-file plan `plans/<slug>.md` (Template E), registered in the repo-wide
   `.implementation-plans/QUEUE.yaml` (Template D).
