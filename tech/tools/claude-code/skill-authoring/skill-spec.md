@@ -73,7 +73,9 @@ a _new_ top-level skills directory requires a restart.
 - **Metadata** (name + description + when_to_use) — always in context. Combined description +
   when_to_use is truncated at **1,536 chars** in the skill listing.
 - **SKILL.md body** — loaded when the skill triggers. **Keep under 500 lines.** If approaching the
-  limit, move detail into sibling files and reference them.
+  limit, move detail into sibling files and reference them. Deterministic shell costs body tokens on
+  every invocation — move it into versioned `agent-helper` subcommands per
+  [`skill-script-extraction.md`](skill-script-extraction.md) rather than inlining heredocs.
 - **Bundled resources** — loaded on demand when SKILL.md links to them.
 - **Skill listing budget** — dynamic (~1% of context window, fallback 8,000 chars). Raise via
   `SLASH_COMMAND_TOOL_CHAR_BUDGET`.

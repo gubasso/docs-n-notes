@@ -1,11 +1,12 @@
 ---
 digest-of: tech/tools/claude-code/skill-authoring
-last-synced: 2026-05-28
+last-synced: 2026-06-16
 source-files:
   - README.md
   - skill-spec.md
   - skill-style.md
-token-estimate: 2600
+  - skill-script-extraction.md
+token-estimate: 3300
 ---
 
 # AGENTS
@@ -45,13 +46,32 @@ authoring skills.
 - Staging discipline for `claude/.claude/**`: write to `$RUN_DIR/staging/dotclaude/<rel>`, install
   atomically at end.
 
+### Script Extraction (skill-script-extraction.md)
+
+- Skill bodies load in full on every invocation, so inline deterministic shell costs load-time
+  tokens every time. Move it into versioned `agent-helper` subcommands: saves tokens, runs
+  byte-identically, is bats-testable.
+- Rule: extract any deterministic shell chunk that is more than a trivial one-liner (single-use is
+  fine). Guardrails: split judgment-tangled chunks, keep trivial one-liners inline, coarse-not-micro
+  (one subcommand → one JSON object), prompt/message content stays model-authored.
+- Skill-as-orchestrator: parse args, call subcommands, read a few JSON fields, apply judgment
+  between calls. RUN_DIR is the durable handoff (shell state does not persist between Bash calls);
+  re-source `$RUN_DIR/paths.env`.
+- Output/status contract via `agent-helper msg`: machine lines to STDOUT (`RESOLVED <path>`,
+  `<CTX>_OK`, `<CTX>_FAILED`, `KEY=value`), human messages to STDERR (stage/info/ warn/error/fatal).
+  Parents parse the last status line; nothing may follow it.
+- Degradation: bare `agent-helper` call (no stale `_tmp` fallback); `agent-helper require <cmd>...`
+  capability gate; `agent-helper --version`; soft deps warn, hard deps fail closed.
+- Testing: every subcommand gets a bats suite; highest-risk gets adversarial fixtures.
+
 ## Source Map
 
-| Topic                                                         | File             |
-| ------------------------------------------------------------- | ---------------- |
-| Directory overview / index                                    | `README.md`      |
-| Official frontmatter fields, substitutions, token budgets     | `skill-spec.md`  |
-| House style, description pattern, body conventions, templates | `skill-style.md` |
+| Topic                                                         | File                         |
+| ------------------------------------------------------------- | ---------------------------- |
+| Directory overview / index                                    | `README.md`                  |
+| Official frontmatter fields, substitutions, token budgets     | `skill-spec.md`              |
+| House style, description pattern, body conventions, templates | `skill-style.md`             |
+| Script extraction rule, orchestrator model, msg contract      | `skill-script-extraction.md` |
 
 ## Maintenance Notes
 
