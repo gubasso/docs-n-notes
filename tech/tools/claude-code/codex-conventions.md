@@ -151,6 +151,41 @@ References: `docs/upstream-codex.md` §F6b–§F6c (codex-session repo);
 [`codex-models-pricing.md`](./codex-models-pricing.md); derived cost × quality matrix and tier
 guidance behind these profiles: [`codex-models-comparison.md`](./codex-models-comparison.md).
 
+## Codex Skill Frontmatter & Per-Skill Profile Map
+
+**Codex `SKILL.md` frontmatter supports only `name` and `description`.** There is no per-skill
+`model` or `reasoning_effort` field — model + reasoning effort are session-global (`model`,
+`model_reasoning_effort`) and are selected per call site via `--profile` (see §Profile Strategy). Do
+**not** add `model:` / `effort:` / `profile:` keys to a Codex `SKILL.md`; they are not part of the
+spec and are ignored. This differs from **Claude Code** skills, whose frontmatter _does_ support
+`model` and `effort` — see [`skill-authoring/skill-spec.md`](./skill-authoring/skill-spec.md).
+
+- **Sources:** <https://developers.openai.com/codex/skills> (Agent Skills),
+  <https://developers.openai.com/codex/config-reference> (Configuration Reference).
+- **Verified:** 2026-06-16. Re-fetch both sources and update this date when the spec changes.
+
+Because a skill cannot self-select its model, the profile is chosen entirely **at launch** by
+whoever invokes the skill — a human passing `--profile <tier>` at the `codex-session exec` prompt,
+or an orchestrator that hardcodes it (e.g. `review-loop` per round, the `plan-writer-multi`
+coordinator, the Claude `ask -c` runner). A `SKILL.md` body is just prompt content fed to an
+already-running model; it cannot change the live model or reasoning effort. **Do not** put
+`Recommended profile:` notes (or any `model`/`effort`/`profile` directive) in a Codex `SKILL.md`
+body — they are inert and misleading. Such notes existed briefly and were removed (dotfiles
+`codex-session/.agents/skills`); do not reintroduce them. This table is the single source of truth
+for which profile each skill should be launched with:
+
+| Codex skill             | Profile                     | Who sets it (at launch)                 |
+| ----------------------- | --------------------------- | --------------------------------------- |
+| gc                      | `quick`                     | caller's `--profile`                    |
+| ast-grep                | `quick`                     | caller's `--profile`                    |
+| ask                     | `medium`; `quick` via `-f`  | caller's `--profile`; `-f` → `quick`    |
+| test-review             | `low`                       | caller's `--profile`                    |
+| suckless-patcher        | `low`                       | caller's `--profile`                    |
+| refactor-migration-plan | `medium`                    | caller's `--profile`                    |
+| review-code-deep        | `medium` (r1) / `low` (r2+) | `review-loop` per round                 |
+| implementation-reviewer | `medium` (→ `deep`)         | caller's `--profile`; escalate manually |
+| plan-writer             | `medium`                    | `plan-writer-multi` coordinator         |
+
 ## Pre-flight: Account Health
 
 Before the first `codex-session` call in a workflow (including the sandbox detection probe), run a

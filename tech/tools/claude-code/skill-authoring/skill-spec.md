@@ -32,6 +32,11 @@ only `description` is _recommended_ so automatic invocation works.
 > **Note:** `license` is **not** a SKILL.md frontmatter field. License is declared at the repository
 > level (Anthropic's own skills use Apache-2.0 at the repo root).
 
+> **Codex is not at parity.** This table is **Claude Code** only. A **Codex** `SKILL.md` supports
+> only `name` + `description` — no `model` / `effort` field; Codex model+effort are session-global
+> and chosen via `--profile`. See [`../codex-conventions.md`](../codex-conventions.md) §Codex Skill
+> Frontmatter before porting a tier decision across engines.
+
 ## String substitutions
 
 Available anywhere in skill content:
