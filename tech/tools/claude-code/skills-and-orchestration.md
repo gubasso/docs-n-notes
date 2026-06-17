@@ -23,6 +23,15 @@ skill runs as an isolated subagent prompt and returns a structured result to the
 depending on ambient conversation continuation. This doc standardizes that model and deprecates the
 older breadcrumb plus `progress.json` workarounds as motivation, not precedent.
 
+> **Nesting is supported now (v2.1.172+), but the rule is unchanged.** As of Claude Code v2.1.172 a
+> subagent can spawn its own subagents (foreground subagents nest to any depth, each blocking its
+> parent). This retires the old workaround of shelling out to a fresh headless `claude -p` to get a
+> top-level process for a delegated unit that must itself delegate — use an **in-session subagent**
+> instead (the generic `claude-delegate` is the reusable primitive). The `#17351` failure is still
+> real and is specifically about the **`Skill` tool**, so the load-bearing rule below holds: for
+> nested delegation use the **`Agent` tool, never `Skill`**. See
+> [`orchestration/in-session-vs-headless-delegation.md`](orchestration/in-session-vs-headless-delegation.md).
+
 For background, see the official skills docs at <https://code.claude.com/docs/en/skills> and
 paddo.dev's "The Claude Skills Controllability Problem", which describes the same control-flow
 failure from a different angle.

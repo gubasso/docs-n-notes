@@ -496,13 +496,17 @@ all exceed the default.
 Run every Codex call in the **foreground** — `run_in_background` must be false/omitted. The
 `codex-session exec`/`resume` wrappers are synchronous with no internal timeout, so a foreground
 Bash call with the `600000ms` budget blocks until Codex exits and lets the caller classify the
-result. Never background a Codex `exec`/`resume`: orchestrating skills commonly run inside a
-headless `claude -p`, which has no event loop after the turn ends — backgrounding a long run and
-ending the turn exits the process and **reaps the detached Codex**, so files may land but later
-stages never run and the work is silently lost while the process still exits `0`. A Codex stage that
-cannot finish within the `600000ms` window is a **planning error** (split the work into smaller
-rounds), never a reason to background; a genuine overrun surfaces deterministically as a
-`timeout-124`/`sigterm` status with partial logs.
+result. Never background a Codex `exec`/`resume`: orchestrating skills run inside a headless host
+**or as an in-session/forked subagent**, and in a headless host there is no event loop after the
+turn ends — backgrounding a long run and ending the turn exits the process and **reaps the detached
+Codex**, so files may land but later stages never run and the work is silently lost while the
+process still exits `0` (in a subagent, backgrounding likewise breaks the synchronous sequencing the
+orchestrator relies on). A Codex stage that cannot finish within the `600000ms` window is a
+**planning error** (split the work into smaller rounds), never a reason to background; a genuine
+overrun surfaces deterministically as a `timeout-124`/`sigterm` status with partial logs. See
+[`orchestration/in-session-vs-headless-delegation.md`](orchestration/in-session-vs-headless-delegation.md)
+for why delegated work now runs as in-session foreground subagents (not `claude -p`) and why this
+foreground rule holds in every host.
 
 ## Skill Run Directories
 
