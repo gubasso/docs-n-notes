@@ -66,10 +66,18 @@ See <https://code.claude.com/docs/en/sub-agents> ("Spawn nested subagents") and
   being supported does not change this: the Agent tool is still the boundary. See
   `../skills-and-orchestration.md` (Dispatch vs Delegation).
 
-We deliberately did **not** add the option-2 backgrounding hook (architecture-only). Foreground
-blocking + the orchestrator's deterministic completion check (e.g. re-reading `QUEUE.yaml` for
-`status == done`) make the reaping failure structurally impossible. If a fully-detached
-headless-orchestrator use re-emerges, revisit option 2.
+We initially shipped this as prose-only (architecture-only), reasoning that foreground blocking plus
+the orchestrator's deterministic completion check (re-reading `QUEUE.yaml` for `status == done`)
+made the reaping failure unlikely. That proved insufficient: under in-session delegation a delegate
+can still background its **own** Codex Bash call one level down and end its turn, getting the child
+SIGTERM-reaped (observed 2026-06-17, `plan-queue-runner` → `claude-delegate` → `prex` stage 3). The
+"option-2" guard is now **implemented** as a `PreToolUse(Bash)` hook —
+`agent-helper hook-guard codex-foreground` — which fires inside subagents too (confirmed: PreToolUse
+runs for subagent tool calls, carrying `agent_id`) and blocks any Codex call that is backgrounded or
+declares a Bash timeout below `600000ms` (the default ~120000ms also SIGTERMs Codex mid-run). Prose
+remains the rationale; the hook is the guarantee. Multi-level completion stays independently
+backstopped by the QUEUE-status check. The lock dir is a single source of truth (`rundir_lock_dir`)
+shared by the producer and the now-thin Stop-gate hook, so the two can no longer diverge.
 
 ## Status
 
