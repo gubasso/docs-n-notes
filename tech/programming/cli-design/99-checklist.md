@@ -5,13 +5,15 @@ waive it in an ADR — don't ship with silent gaps.
 
 ## Architecture
 
+- [ ] Facing category declared at design time: `human-facing` or `machine-facing`.
 - [ ] `main` is ≤ 120 LOC: parses args, inits logging, builds `AppContext`, dispatches, maps errors
       to exit codes. Nothing else.
 - [ ] Parse-shape (CLI structs) and runtime-shape (domain requests) are different types. Projection
       happens at the top of every handler.
 - [ ] One `AppContext`, built once, passed by reference. No globals, no thread-locals.
 - [ ] Every subcommand is its own file on both sides (`cli/<name>` + `commands/<name>`).
-- [ ] The `ui/` boundary is real: no print statements outside it. Verified by a grep-able lint.
+- [ ] The human-UX `ui/` boundary or machine-output boundary is real: no print statements outside
+      it. Verified by a grep-able lint.
 - [ ] `domain/` has zero I/O imports. `adapters/` is the only place that talks to the outside world.
 - [ ] If a `lib.rs` (or public package surface) exists, it has a real second consumer. Otherwise,
       delete it.
@@ -20,17 +22,24 @@ waive it in an ADR — don't ship with silent gaps.
 
 ## Logging & output
 
-- [ ] **stdout** is reserved for command results. Nothing else writes there.
-- [ ] **stderr** carries UX: prompts, progress, warnings, terse error messages.
-- [ ] **Program-logs** go to `$XDG_STATE_HOME/<app>/<app>.log` by default. File rotation configured.
-- [ ] Terminal mirror of logs is opt-in (`--log-stderr` or higher verbosity flag).
+- [ ] Human-facing tools default to human-UX: stdout is command results; stderr carries prompts,
+      progress, warnings, and terse error messages.
+- [ ] Human-UX color respects `NO_COLOR` / `FORCE_COLOR` / `--color {auto,always,never}`.
+- [ ] Human-UX progress/prompts auto-hide when stderr is not a TTY.
+- [ ] Human-UX non-interactive mode: `--yes` for confirmations; auto-fail-vs-prompt when stdin is
+      not a TTY.
+- [ ] Machine-facing tools default to structured machine-output on stdout (JSON or best format).
+- [ ] Human-facing tools expose machine-output via `--format json`, `--json`, or equivalent for
+      commands whose output might be piped or scripted.
+- [ ] Machine-output does not paginate by default; any too-large output documents
+      `--limit`/`--page`/`--cursor`/`--offset` rules in `--help`.
+- [ ] Machine-output is token-friendly where possible without compromising machine readability.
+- [ ] Log-messages go to `$XDG_STATE_HOME/<app>/<app>.log` by default. File rotation configured.
+- [ ] Terminal mirror of log-messages is opt-in (`--log-stderr` or documented verbosity policy).
 - [ ] Log records are single-line, structured (`key=value` or JSON), no ANSI.
+- [ ] Log levels include at least `info`, `warn`, `error`, and `debug`.
 - [ ] Log schema has stable field names (`ts`, `level`, `target`, `op`, `status`, `dur_ms`,
       `err.kind`).
-- [ ] Color respects `NO_COLOR` / `FORCE_COLOR` / `--color {auto,always,never}`.
-- [ ] `--format {text,json,...}` exposed for any command whose output might be piped or scripted.
-- [ ] Progress/prompts auto-hide when stderr is not a TTY.
-- [ ] Non-interactive mode: `--yes` for confirmations; auto-fail-vs-prompt when stdin is not a TTY.
 
 → Detail: [01 — Logging & Output](01-logging-and-output.md)
 
@@ -40,7 +49,7 @@ waive it in an ADR — don't ship with silent gaps.
 - [ ] Every variant maps to a specific BSD sysexits exit code. No catch-all `1`.
 - [ ] The exit-code matrix is unit-tested.
 - [ ] User-facing errors include `what`, `where`, `why`, and a `hint` (when one is known).
-- [ ] Error chains are printed at terse depth by default, full depth at `-v` and in the program-log.
+- [ ] Error chains are printed at terse depth by default, full depth at `-v` and in log-messages.
 - [ ] Lower-layer errors don't leak into higher-layer types as opaque "unknown" wrappers. Wrap with
       cause links.
 - [ ] No `panic`/`unwrap`/`expect`/bare exceptions outside `main`, tests, build scripts, and
@@ -80,13 +89,19 @@ waive it in an ADR — don't ship with silent gaps.
 ## Designing for LLM coding agents
 
 - [ ] `--help` is documentation. Every flag and subcommand has descriptive help text.
-- [ ] Every command supports `--format json` (or equivalent machine-readable output).
+- [ ] `help` / usage output lets an agent discover commands, flags, defaults, and examples.
+- [ ] Machine-output is default for machine-facing tools; human-facing tools expose `--format json`
+      or equivalent.
 - [ ] Output is deterministic for the same input. No timestamps in default output (unless that's the
       point).
 - [ ] A `doctor` subcommand (or equivalent) exists and emits a structured health report.
+- [ ] An `init` subcommand (or equivalent) handles setup/scaffold/bootstrap and reuses `doctor`
+      checks as the source of truth.
+- [ ] Bash completion is shipped.
+- [ ] Man pages are shipped and available through a subcommand.
 - [ ] `--help` and JSON output are snapshot-tested to catch accidental regressions.
 - [ ] Error messages include a stable `err.kind` an agent can pattern-match on.
-- [ ] The program-log format is documented in the README so an agent can reason about it.
+- [ ] The log-message format is documented in the README so an agent can reason about it.
 
 → Detail: [05 — Designing for LLM Agents](05-designing-for-llm-agents.md)
 

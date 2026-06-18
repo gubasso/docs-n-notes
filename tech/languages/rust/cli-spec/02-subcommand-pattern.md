@@ -3,7 +3,8 @@
 > Prerequisite:
 > [General principles — Architecture](../../../programming/cli-design/00-architecture.md) (the
 > four-edit rule, parse-shape vs runtime-shape, when to extract a service). This chapter is the Rust
-> implementation using `clap`.
+> implementation using `clap`. Facing-category consequences follow
+> [General — Facing category & message types](../../../programming/cli-design/00-architecture.md#facing-category--message-types).
 
 ## The four files (Rust + clap)
 
@@ -218,6 +219,12 @@ usage line, or a subcommand list — clap generates those from the derive struct
 
 When you add a new subcommand or flag, you touch the derive struct and clap's `--help` updates
 automatically. `help_extras.txt` rarely changes after the first cut.
+
+For human-facing CLIs, the authored addendum can carry narrative examples and orientation. For
+machine-facing CLIs, keep generated `help`/usage, `doctor`, `init`, completion, and man surfaces
+terse, parseable, and self-documenting for agents. Use `clap_complete` for completions and
+`clap_mangen` for man pages; expose man-page text through a subcommand when agents need to read it
+from the CLI.
 
 ### The clap mechanisms (when to use which)
 

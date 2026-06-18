@@ -1,6 +1,6 @@
 ---
 digest-of: tech/programming/cli-design
-last-synced: 2026-05-27
+last-synced: 2026-06-18
 source-files:
   - README.md
   - 00-architecture.md
@@ -29,21 +29,26 @@ in `tech/languages/<lang>/cli-spec/`.
 
 - Split parse-shape (CLI parser structs) from runtime-shape (domain types). Projection happens once
   at the top of each handler.
-- One `AppContext` built in `main`, passed by reference. Holds config, paths, UI, runtime handle,
-  clock. No globals.
+- Declare the facing category at design time: `human-facing` or `machine-facing`. This is not a
+  runtime `isatty()` flip.
+- One `AppContext` built in `main`, passed by reference. Holds config, paths, runtime handle, clock,
+  and either a human-UX `Ui` or a machine-output/protocol facility. No globals.
 - Directory roles: `cli/` (parse-shape), `commands/` (handlers), `domain/` (pure types, no I/O),
-  `adapters/` (external I/O), `services/` (optional shared orchestration), `config/`, `ui/` (only
-  place that prints), `util/`.
+  `adapters/` (external I/O), `services/` (optional shared orchestration), `config/`, `ui/`
+  (human-facing) or structured-output boundary (machine-facing), `util/`.
 - Four-edit rule for subcommands: `cli/<name>`, `cli/root`, `commands/<name>`, `main` dispatch.
 - Single crate by default; workspace only at ~8k LOC or when a real second consumer appears.
 
 ### Logging and Output (01)
 
-- Two layers: user-UX (stdout=data, stderr=UX) and program-logs (file at
-  `$XDG_STATE_HOME/<app>/<app>.log`).
-- Default log to file in structured `key=value` or JSON, no ANSI. Terminal mirror is opt-in.
+- Three message types: human-UX (human-facing default), machine-output (machine-facing default,
+  human-facing opt-in), and log-messages (both categories, always).
+- Default log-messages to `$XDG_STATE_HOME/<app>/<app>.log` in structured `key=value` or JSON, no
+  ANSI. Terminal mirror is opt-in.
+- Machine-output does not paginate by default; if output can be too large, document
+  `--limit`/`--page`/`--cursor`/`--offset` in `--help`.
 - Verbosity: none=warn, `-v`=info, `-vv`=debug, `-vvv`=trace.
-- Respect `NO_COLOR`/`FORCE_COLOR`; detect TTY. No print outside `ui/`.
+- Respect `NO_COLOR`/`FORCE_COLOR` for human-UX; never color machine-output or log files.
 
 ### Error Messages (02)
 
@@ -73,10 +78,13 @@ in `tech/languages/<lang>/cli-spec/`.
 - Default path: CLI + thin Skill wrapper. MCP only for stateful/auth/multi-tenant needs.
 - Three-layer model: CLI (mechanism), SKILL.md (playbook), AGENTS.md (constitution).
 - Every output is a prompt: include affected IDs and next-command suggestions.
-- `--help` is documentation; `--json` everywhere; `doctor` command for health checks.
+- `--help` is documentation; machine-output is default for machine-facing tools and opt-in for
+  human-facing tools; `doctor` reports health checks.
+- Self-documenting machine surfaces: `help`/usage, `doctor`, `init`, completion, and man pages via a
+  subcommand.
 - Verb-noun structure mirroring kubectl/docker/gh. Familiar flag names (`--dry-run`, `--force`,
   `--yes`).
-- Paginate lists by default. Deterministic and idempotent operations.
+- Deterministic and idempotent operations.
 
 ### Naming and Docs (07)
 
@@ -98,22 +106,22 @@ in `tech/languages/<lang>/cli-spec/`.
 
 ## Source Map
 
-| Topic                                             | File                             |
-| ------------------------------------------------- | -------------------------------- |
-| Directory layout, parse/runtime shape, AppContext | `00-architecture.md`             |
-| Two-layer logging, log schema, channel matrix     | `01-logging-and-output.md`       |
-| Error anatomy, sysexits, error layering           | `02-error-messages.md`           |
-| 5-layer config merge, XDG, provenance             | `03-config-precedence.md`        |
-| 18 coding-style rules                             | `04-coding-style-rust-zig.md`    |
-| CLI+Skill+AGENTS.md model, agent-facing patterns  | `05-designing-for-llm-agents.md` |
-| Visibility, naming tables, help generation, docs  | `07-naming-and-docs.md`          |
-| Organizational patterns from 12 CLIs              | `09-reference-projects.md`       |
-| Pre-ship checklist                                | `99-checklist.md`                |
+| Topic                                            | File                             |
+| ------------------------------------------------ | -------------------------------- |
+| Facing category, parse/runtime shape, AppContext | `00-architecture.md`             |
+| Message types, log schema, channel matrix        | `01-logging-and-output.md`       |
+| Error anatomy, sysexits, error layering          | `02-error-messages.md`           |
+| 5-layer config merge, XDG, provenance            | `03-config-precedence.md`        |
+| 18 coding-style rules                            | `04-coding-style-rust-zig.md`    |
+| CLI+Skill+AGENTS.md model, agent-facing patterns | `05-designing-for-llm-agents.md` |
+| Visibility, naming tables, help generation, docs | `07-naming-and-docs.md`          |
+| Organizational patterns from 12 CLIs             | `09-reference-projects.md`       |
+| Pre-ship checklist                               | `99-checklist.md`                |
 
 ## Maintenance Notes
 
-- Chapters 06 and 08 are subdirectories not included in this digest; load them directly when
-  reviewing wrapper design or testing.
+- Chapters 06 and 08 are subdirectories not included as source files in this digest; load them
+  directly when reviewing wrapper design or testing. They include light category-scoping tags.
 - Language-specific specs (`rust/cli-spec/`, `python/cli-spec/`, `bash/cli-spec/`) apply these
   principles to concrete ecosystems.
 - Regenerate when any chapter file changes or new chapters are added.

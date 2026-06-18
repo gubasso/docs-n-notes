@@ -42,6 +42,10 @@
 - **Evaluate like a prompt**: build programmatic verifiers and run multi-sample evals. Agents are
   non-deterministic; your tooling must compensate.
 
+This chapter specializes the general
+[facing category and message type taxonomy](00-architecture.md#facing-category--message-types) for
+machine-facing and agent-consumed CLIs.
+
 ---
 
 ## 1. Strategic Choice: CLI + Skill, MCP as Exception
@@ -130,11 +134,13 @@ The agent pipes this into context once and is done. Beats walking `--help` on ev
 
 ### 2.2 `--json` everywhere
 
-- Every read-path command supports `--json` (or `--output json`). Writes should too, returning the
-  created object.
+- Human-facing commands support `--json` (or `--output json`) for machine-output. Machine-facing
+  commands make machine-output the default and may still accept `--json` as an explicit spelling.
+  Writes should return the created or changed object when useful.
 - **Schema is a contract**. Version it. Never rename fields on a whim — silent parser breakage is
   worse than errors.
-- Default human output is fine. `--json` must be deterministic, complete, and stable.
+- Human-facing tools can keep human output as their default. For machine-facing tools, the default
+  output must be deterministic, complete, and stable machine-output.
 - Consider exposing the JSON schema itself: `pigeon schema message` returns the message type's JSON
   Schema. Agents consuming it can validate before parsing.
 
@@ -209,12 +215,18 @@ see [mariozechner.at](https://mariozechner.at/posts/2025-08-15-mcp-vs-cli/).
 
 ### 2.6 Terse, parseable output by default
 
-- Plain text over wrapped JSON-RPC when piping to other tools. Save JSON for `--json`.
-- **Paginate list commands by default** (`--limit`, `--page`, `--cursor`). Agents blow context on
-  unbounded lists.
-- **Only colorize if `stdout.isatty()`**. ANSI escape codes in agent output are pure noise.
-- **stderr vs stdout discipline**: data on stdout, logs/progress/warnings on stderr. Agents pipe
-  stdout and shouldn't get log chatter mixed into parseable data.
+- Prefer plain structured output over wrapped JSON-RPC when piping to other tools. Human-facing
+  tools can keep JSON behind `--json`; machine-facing tools should make the structured form the
+  default.
+- **Do not paginate machine-output by default.** If an output can be too large, document the
+  `--limit`, `--page`, `--cursor`, or `--offset` rules in `--help` so agents can request pages
+  themselves. For human-facing list views or legacy agent-consumed text, default pagination can
+  still protect the reader.
+- **Only colorize human-UX when `stdout.isatty()`**. ANSI escape codes in machine-output are pure
+  noise.
+- **stderr vs stdout discipline**: command data goes on stdout; human-UX progress/warnings use
+  stderr; log-messages go to the log file unless explicitly mirrored. Agents pipe stdout and
+  shouldn't get log chatter mixed into parseable data.
 - **The same posture applies to _test_ output that an agent will later read** — pass-only lines,
   progress bars, and full stdout dumps for passing tests are pure noise in a captured CI log. The
   four output axes (per-test status, end-of-run summary, captured stdout of passing/failing tests)
@@ -229,7 +241,16 @@ see [mariozechner.at](https://mariozechner.at/posts/2025-08-15-mcp-vs-cli/).
   for non-interactive use.
 - Never prompt on stdin when `!isatty(stdin)`. Error out with a clear hint instead.
 
-### 2.8 Ship a doctor command
+### 2.8 Ship self-documenting machine surfaces
+
+Agents need to learn the tool from the tool. Ship:
+
+- `help` / usage output that covers commands, flags, defaults, and examples.
+- `doctor` for checks and diagnostics.
+- `init` for setup, scaffold, or bootstrap; keep it DRY by reusing `doctor` checks as the source of
+  truth.
+- Bash completion.
+- Man pages, also exposed through a subcommand so an agent can read them without leaving the CLI.
 
 `pigeon doctor` checks config, auth, reachability, schema version, and prints structured findings.
 
@@ -246,8 +267,8 @@ Next:
   Check network: curl -v https://api.winds.example.com/ping
 ```
 
-Agents run this first when things go sideways. It sidesteps a large class of "why doesn't this work"
-context-window rabbit holes.
+Agents run `doctor` first when things go sideways. They run `init` when setup is missing or stale.
+Together they sidestep a large class of "why doesn't this work" debugging detours.
 
 ### 2.9 Config via env + file, never interactive prompts
 
@@ -836,9 +857,12 @@ Use this when shipping a CLI you want agents to consume reliably.
 - [ ] Success output includes affected IDs and 2-3 likely next commands.
 - [ ] Error output has three parts: what went wrong / how to fix / what to do next.
 - [ ] Verb-noun command structure mirrors `kubectl`/`docker`/`gh`.
-- [ ] Pagination by default on list commands. `--limit`, `--page` or `--cursor`.
-- [ ] stdout/stderr discipline: data on stdout, logs/progress on stderr.
-- [ ] No ANSI colors unless `stdout.isatty()`.
+- [ ] Machine-output does not paginate by default; if an output can be too large, document
+      `--limit`/`--page`/`--cursor`/`--offset` in `--help` so agents page themselves.
+- [ ] stdout/stderr discipline: machine-output on stdout, human-UX progress/warnings on stderr,
+      log-messages file-first (`$XDG_STATE_HOME/<app>/<app>.log`) with opt-in stderr mirror.
+- [ ] No ANSI in machine-output or log-messages, ever; human-UX color only when `stdout.isatty()`
+      and the color policy allows it.
 - [ ] `--dry-run` on destructive ops; `--yes`/`--force` for non-interactive.
 - [ ] `doctor` command exists and surfaces config, auth, reachability, schema version.
 - [ ] Config precedence follows [`03 — Config Precedence`](03-config-precedence.md):

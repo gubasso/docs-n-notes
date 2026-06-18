@@ -88,11 +88,11 @@ integration tests. See [E2E tests](#e2e-tests).
 
 ## Tiers at a glance
 
-| Tier         | What it tests                                                             | External deps                                                      | Speed          | Runs in    |
-| ------------ | ------------------------------------------------------------------------- | ------------------------------------------------------------------ | -------------- | ---------- |
-| Unit         | One function/module in isolation                                          | None (or fully faked)                                              | ms             | pre-commit |
-| Integration  | Two-or-more components together, OR your code's seam to one external dep  | Stubs/fakes of the boundary, or a real contained dep               | tens of ms – s | pre-push   |
-| E2E (system) | The whole product through its user-facing entry point, against real state | The actual real things (live binary, real network, real container) | s – min        | CI only    |
+| Tier         | What it tests                                                            | External deps                                                      | Speed          | Runs in    |
+| ------------ | ------------------------------------------------------------------------ | ------------------------------------------------------------------ | -------------- | ---------- |
+| Unit         | One function/module in isolation                                         | None (or fully faked)                                              | ms             | pre-commit |
+| Integration  | Two-or-more components together, OR your code's seam to one external dep | Stubs/fakes of the boundary, or a real contained dep               | tens of ms – s | pre-push   |
+| E2E (system) | The whole product through its public CLI entry point, against real state | The actual real things (live binary, real network, real container) | s – min        | CI only    |
 
 **The framing that trips people up: integration ≠ "touches real things." Integration = "tests the
 interaction between things."**

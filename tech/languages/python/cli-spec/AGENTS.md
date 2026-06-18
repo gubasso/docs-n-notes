@@ -1,8 +1,9 @@
 ---
 digest-of: tech/languages/python/cli-spec
-last-synced: 2026-05-27
+last-synced: 2026-06-18
 source-files:
   - README.md
+  - logging-python.md
   - typer-patterns.md
   - config-precedence-python.md
   - parse-cli-options-examples.py
@@ -14,13 +15,16 @@ token-estimate: 900
 ## Scope
 
 Python-specific CLI conventions using Typer/Click and Pydantic. Covers stack defaults, typed CLI
-patterns, layered config, and validation callbacks.
+patterns, file-first logging, layered config, and validation callbacks.
 
 ## Key Points
 
 - **Stack**: Typer (parsing), Pydantic v2 (validation), pydantic-settings (layered config),
-  structlog/loguru (logging), rich (UX output), questionary (prompts), pytest + syrupy (testing),
-  ruff (lint+format).
+  structlog/loguru (file-first logging), rich and questionary for human-facing UX only, pytest +
+  syrupy (testing), ruff (lint+format).
+- **Logging**: `structlog` JSON records default to
+  `${XDG_STATE_HOME:-$HOME/.local/state}/<app>/<app>.log`; `mirror_stderr` is explicit opt-in and
+  defaults false for machine-facing CLIs.
 - **Parse-shape to runtime-shape**: Typer parameters map to Pydantic request models. Validation in
   `__post_init__`/validators, not handler bodies.
 - **Config precedence**: Two patterns: (1) manual 5-layer loader with `lru_cache`, `platformdirs`,
@@ -38,6 +42,7 @@ patterns, layered config, and validation callbacks.
 | Topic                                    | File                            |
 | ---------------------------------------- | ------------------------------- |
 | Stack defaults, TL;DR                    | `README.md`                     |
+| File-first structlog setup               | `logging-python.md`             |
 | Typer patterns, Pydantic validators      | `typer-patterns.md`             |
 | 5-layer config loader, pydantic-settings | `config-precedence-python.md`   |
 | Runnable validation examples             | `parse-cli-options-examples.py` |

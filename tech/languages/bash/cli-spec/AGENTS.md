@@ -1,6 +1,6 @@
 ---
 digest-of: tech/languages/bash/cli-spec
-last-synced: 2026-05-27
+last-synced: 2026-06-18
 source-files:
   - README.md
   - bash-cli-project-specs.md
@@ -12,7 +12,7 @@ token-estimate: 800
 ## Scope
 
 Bash-specific CLI conventions: directory layout, strict mode, module organization, testing, linting,
-installation, and distribution.
+installation, distribution, and Bash idioms for the general facing-category taxonomy.
 
 ## Key Points
 
@@ -29,13 +29,16 @@ installation, and distribution.
   comments.
 - **Errors/signals**: `mktemp -d || exit 1` + `trap ... EXIT INT TERM`. SIGINT=130, SIGTERM=143.
   `printf` over `echo`.
+- **Output/logging**: stdout is data or machine-output. Stderr carries human-facing progress/errors
+  or an explicit log mirror. Program logs default to an XDG state file.
+- **Human-UX idioms**: gate color, tables, and spinners with `[[ -t 1 ]]` or `[[ -t 2 ]]`.
 - **Testing**: `bats-core` with `bats-support`, `bats-assert`, `bats-file` as submodules. One test
   file per subcommand.
 - **Formatting**: `shfmt -i 2 -ci -bn -s`. All checks via pre-commit.
 - **Install/XDG**: `install.sh` honors `PREFIX` (system) and XDG (user). Bash completions, man pages
-  via scdoc.
+  via scdoc; expose man text through a subcommand when agents need to read it from the CLI.
 - **Non-negotiables**: Namespaced functions, XDG-aware installer, trap cleanup, agent-facing surface
-  (`--help`, `--json`, `doctor`, exit codes).
+  (`help`/usage, `--json`, `doctor`, `init`, completion, man-via-subcommand, exit codes).
 
 ## Source Map
 
@@ -46,6 +49,6 @@ installation, and distribution.
 
 ## Maintenance Notes
 
-- Agent-facing surface rules (output-as-prompt, error shape) are in the general
+- Facing-category and agent-facing surface rules (output-as-prompt, error shape) are in the general
   `cli-design/05-designing-for-llm-agents.md`, not duplicated here.
 - Regenerate when bash ecosystem tooling changes (bats major version, shellcheck rules).

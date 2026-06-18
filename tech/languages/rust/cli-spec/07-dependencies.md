@@ -9,7 +9,8 @@
 > (`figment`, `directories`), and
 > [`08-testing-and-quality`](../../../programming/cli-design/08-testing-and-quality/testing-strategy.md)
 > (`assert_cmd`, `insta`, `tempfile`, `nextest`). This chapter is the curated default crate list
-> with one-line justifications.
+> with one-line justifications. Facing-category consequences follow
+> [General — Facing category & message types](../../../programming/cli-design/00-architecture.md#facing-category--message-types).
 
 Opinionated default dependency list. Each entry has a one-line justification and a "skip if"
 condition. Pick deliberately; resist the urge to add "useful-looking" crates without a concrete
@@ -17,15 +18,18 @@ need.
 
 ## Runtime defaults
 
+Always:
+
 | Crate                | Features                     | Why                                                                                           | Skip if                                                                            |
 | -------------------- | ---------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
 | `clap`               | `derive`, `env`, `wrap_help` | Standard parser; `env` lets flags fall back to env vars; `wrap_help` makes `--help` readable. | Never.                                                                             |
 | `clap_complete`      | —                            | Generates shell completions via a subcommand.                                                 | The CLI is dev-internal and shell completions aren't needed.                       |
+| `clap_mangen`        | —                            | Generates man pages; expose them through a subcommand when useful.                            | The CLI is dev-internal and man pages aren't needed.                               |
 | `anyhow`             | —                            | Ad-hoc context-rich errors at the binary edge.                                                | You're writing a pure library (use only `thiserror`).                              |
 | `thiserror`          | —                            | Typed error enums in `domain/`, `adapters/`, `services/`, `error.rs`.                         | Never.                                                                             |
 | `tracing`            | —                            | Structured logging primitive. Emitted everywhere.                                             | Never.                                                                             |
 | `tracing-subscriber` | `env-filter`, `fmt`          | Installs the subscriber in `main`.                                                            | Never (in a binary).                                                               |
-| `tracing-appender`   | —                            | Non-blocking file sink.                                                                       | The CLI only ever runs interactively and stderr is enough.                         |
+| `tracing-appender`   | —                            | Non-blocking file sink.                                                                       | Only for a throwaway dev-internal CLI.                                             |
 | `serde`              | `derive`                     | Universal serialization.                                                                      | Never.                                                                             |
 | `serde_json`         | —                            | JSON I/O.                                                                                     | No JSON I/O anywhere.                                                              |
 | `toml`               | —                            | Config file parsing (via figment).                                                            | No config files.                                                                   |
@@ -33,6 +37,15 @@ need.
 | `directories`        | —                            | XDG/Windows/macOS config-path resolution.                                                     | No cross-platform config paths needed.                                             |
 | `camino`             | `serde1`                     | UTF-8-only paths; kills `Path::to_string_lossy()` boilerplate.                                | The CLI only operates on user-supplied paths it never round-trips through strings. |
 | `tokio`              | `rt`, `macros`               | Single current-thread runtime for async.                                                      | Fully sync CLI.                                                                    |
+
+Human-UX only:
+
+| Crate                                    | Why                                                      |
+| ---------------------------------------- | -------------------------------------------------------- |
+| `anstream`, `owo-colors`, `nu-ansi-term` | Color handling through established terminal conventions. |
+| `comfy-table`, `tabled`                  | Human-readable table rendering.                          |
+| `indicatif`                              | Progress bars and spinners.                              |
+| `inquire`, `dialoguer`                   | Interactive prompts.                                     |
 
 ## Dev-dependencies
 
@@ -56,9 +69,9 @@ Add only when a specific concrete need arises.
 | `regex`                             | Regular expressions. Heavyweight; consider whether `str::contains` suffices first.                                                    |
 | `reqwest`                           | HTTP client. Use `rustls` backend, not `native-tls`, to keep static builds working.                                                   |
 | `rusqlite` or `sqlx`                | SQL persistence. Pick `sqlx` only if you need async or compile-time query checking.                                                   |
-| `crossterm`                         | TUI input handling. Reach for it only if you need raw mode.                                                                           |
-| `indicatif`                         | Progress bars.                                                                                                                        |
-| `dialoguer`                         | Interactive prompts.                                                                                                                  |
+| `crossterm`                         | Human-UX TUI input handling. Reach for it only if you need raw mode.                                                                  |
+| `indicatif`                         | Human-UX progress bars.                                                                                                               |
+| `dialoguer`                         | Human-UX interactive prompts.                                                                                                         |
 | `dirs`                              | Old XDG helper. **Don't use**; `directories` supersedes it.                                                                           |
 | `walkdir`                           | Filesystem traversal with depth/symlink controls.                                                                                     |
 | `ignore`                            | `.gitignore`-aware traversal. Bigger than `walkdir`; use only if you actually need gitignore semantics.                               |
@@ -105,10 +118,12 @@ path = "src/main.rs"
 [dependencies]
 clap                = { version = "4", features = ["derive", "env", "wrap_help"] }
 clap_complete       = "4"
+clap_mangen         = "0.2"
 anyhow              = "1"
 thiserror           = "1"
 tracing             = "0.1"
 tracing-subscriber  = { version = "0.3", features = ["env-filter", "fmt"] }
+tracing-appender    = "0.2"
 serde               = { version = "1", features = ["derive"] }
 serde_json          = "1"
 toml                = "0.8"
@@ -116,6 +131,13 @@ figment             = { version = "0.10", features = ["env", "toml"] }
 directories         = "5"
 camino              = { version = "1", features = ["serde1"] }
 tokio               = { version = "1", features = ["rt", "macros"] }
+
+# Human-UX-only additions:
+# anstream      = "0.6"
+# owo-colors    = "4"
+# comfy-table   = "7"
+# indicatif     = "0.17"
+# inquire       = "0.7"
 
 [dev-dependencies]
 assert_cmd  = "2"

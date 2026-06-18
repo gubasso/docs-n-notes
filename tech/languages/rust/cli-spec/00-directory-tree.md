@@ -4,11 +4,13 @@
 > [General principles — Architecture](../../../programming/cli-design/00-architecture.md). That
 > chapter is canonical for directory roles, "does NOT belong here" rules, parse-shape vs
 > runtime-shape, the four-edit rule, and the `AppContext` pattern. This file translates the skeleton
-> to Rust file names, module conventions, and crate-stack choices.
+> to Rust file names, module conventions, and crate-stack choices. Facing-category consequences
+> follow
+> [General — Facing category & message types](../../../programming/cli-design/00-architecture.md#facing-category--message-types).
 
 ## Canonical tree
 
-```
+```text
 crate/
 ├─ Cargo.toml                  # edition = "2024", single bin
 ├─ rust-toolchain.toml         # pinned channel (stable by default)
@@ -33,7 +35,7 @@ crate/
 │  ├─ error.rs                 # AppError enum + exit_code().
 │  ├─ logging.rs               # tracing-subscriber init helper.
 │  ├─ exit.rs                  # OPTIONAL. Move exit-code mapping here if error.rs grows.
-│  ├─ ui/                      # human-facing terminal output ONLY.
+│  ├─ ui/                      # human-facing terminal output only; machine-facing uses output/ or protocol/.
 │  └─ util/                    # truly generic helpers.
 ├─ tests/
 │  ├─ cmd_<name>.rs            # one integration test per subcommand (assert_cmd)
@@ -53,6 +55,8 @@ The notes below are Rust-only deltas.
 
 - Size budget: ≤120 LOC.
 - The one tokio runtime constructor lives here; the resulting `Handle` goes onto `AppContext`.
+- Use `templates/src/main.rs.template` for human-facing CLIs and
+  `templates/src/main.rs.machine.template` for machine-facing CLIs.
 
 ### `src/lib.rs`
 
@@ -96,8 +100,9 @@ The notes below are Rust-only deltas.
 
 ### `src/context.rs`
 
-- Holds resolved `Config`, computed `Paths`, the shared `tokio::Runtime` handle, the `Ui` instance,
-  and the tracing root span.
+- Holds resolved `Config`, computed `Paths`, the shared `tokio::Runtime` handle, the tracing root
+  span, and either the `Ui` instance for human-facing CLIs or a structured-output/protocol facility
+  for machine-facing CLIs.
 
 ### `src/error.rs`
 
@@ -112,9 +117,12 @@ The notes below are Rust-only deltas.
 
 ### `src/ui/`
 
-- A single `Ui` struct exposes methods like `render_widget`, `confirm`, `progress`.
-- **No `println!` / `eprintln!` outside this module or `main.rs`** — enforce as a CI lint (see
-  [`09-coding-style.md`](09-coding-style.md)).
+- Human-facing CLIs use a single `Ui` struct with methods like `render_widget`, `confirm`, and
+  `progress`.
+- Machine-facing CLIs omit `src/ui/` unless they have explicit opt-in human-UX; default output lives
+  in `src/output/` or `src/protocol/`.
+- **No `println!` / `eprintln!` outside this module, the structured-output boundary, or `main.rs`**
+  — enforce as a CI lint (see [`09-coding-style.md`](09-coding-style.md)).
 
 ### `src/util/`
 

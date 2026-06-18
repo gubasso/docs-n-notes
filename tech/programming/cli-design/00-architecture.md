@@ -18,9 +18,53 @@ The other chapters use these terms. Read them here once.
 | **adapter**       | The only place that talks to the outside world. One per external system.                                                                      |
 | **domain**        | Pure types + invariants. No I/O.                                                                                                              |
 
+## Facing category & message types
+
+Choose a CLI's facing category at design time, before implementation starts. This is not a runtime
+`isatty()` switch: terminal detection can tune a human-UX renderer, but it must not change the
+tool's public contract.
+
+### Facing categories
+
+| Category           | Primary consumer                           | Default output     | Always present | Optional surface                                         |
+| ------------------ | ------------------------------------------ | ------------------ | -------------- | -------------------------------------------------------- |
+| **human-facing**   | A human at a terminal                      | **human-UX**       | log-messages   | machine-output via CLI options such as `--json`          |
+| **machine-facing** | A coding agent, script, or another program | **machine-output** | log-messages   | human-UX only when explicitly required; never by default |
+
+There is no separate "dual" category. A human-facing tool already ships machine-output options, so
+it covers the dual case without weakening the default UX.
+
+### Message types
+
+1. **human-UX** — for humans only. Keep messages nice, lean, clean, colorful, ergonomic, explicit,
+   and self-explanatory. Use examples, layouts, tables, schemes, ASCII art, spinners, async waiters,
+   and the best terminal-UX helper for the language when they improve comprehension. Choose the best
+   human format per output. Ship bash completion and man pages, including access through a
+   subcommand.
+1. **machine-output** — for agents and programs. Emit JSON or the best machine-readable format for
+   that output. Do not paginate by default; if output can become too large, document the
+   limit/page/cursor/offset rules in `--help` so an agent can request pages itself. Be
+   token-friendly when possible without compromising machine readability. Ship self-documented
+   surfaces agents can learn from: `help`/usage, `doctor` for checks and diagnostics, `init` for
+   setup/scaffold/bootstrap that reuses `doctor` checks as the source of truth, bash completion, and
+   man pages, including access through a subcommand.
+1. **log-messages** — for both categories, always. Log to files by default and mirror to `stderr`
+   only as an explicit opt-in (e.g. `--log-stderr`); never to `stdout`, which stays reserved for the
+   human result or machine-output (see the channels matrix in
+   [01 — Logging & Output](01-logging-and-output.md)). Use XDG-compliant paths, defaulting to user
+   XDG paths under `$HOME`. Provide at least `info`, `warn`, `error`, and `debug` levels, with room
+   to extend. Coding agents are expected log consumers too.
+
+### Category mapping
+
+| Facing category    | human-UX                            | machine-output                       | log-messages |
+| ------------------ | ----------------------------------- | ------------------------------------ | ------------ |
+| **human-facing**   | Default                             | Available via CLI options (`--json`) | Always       |
+| **machine-facing** | Only if explicitly required; opt-in | Default                              | Always       |
+
 ## Directory roles
 
-```
+```text
 src/
 ├─ main.rs                 entry: parse → init logging → AppContext → dispatch → exit-code
 ├─ cli/                    parse-shape (CLI parser structs)
@@ -34,7 +78,7 @@ src/
 ├─ context.rs              AppContext struct
 ├─ error.rs                top-level error + exit-code mapping
 ├─ logging.rs              logging-subsystem init helper
-├─ ui/                     human-facing output (the only place that writes to stdout)
+├─ ui/                     human-facing output; machine-facing uses output/ or protocol/
 └─ util/                   truly generic helpers (≤200 LOC per file)
 
 tests/
@@ -55,7 +99,8 @@ with people who think in those terms:
 - **Domain** → `domain/`
 - **Application** → `commands/` + `services/`
 - **Infrastructure** → `adapters/` + `config/` + `context.rs`
-- **Presentation** → `cli/` + `ui/`
+- **Presentation** → `cli/` + `ui/` for human-facing tools, or `cli/` + a structured-output boundary
+  for machine-facing tools
 
 The directory names stay as above; the layer names are just vocabulary.
 
@@ -127,8 +172,8 @@ exception hierarchy; Bash: namespaced exit codes) — see [02 — Error Messages
 ### `context.rs`
 
 **Owns**: the `AppContext` struct, built once in `main` and passed by reference everywhere. Holds
-`Config`, paths, the UI handle, the async-runtime handle (if any), the tracing root span, and an
-interface to clocks/randomness.
+`Config`, paths, the human-facing UI handle or machine-facing structured-output/protocol facility,
+the async-runtime handle (if any), the tracing root span, and an interface to clocks/randomness.
 
 **Does NOT own**: methods that do real work. `AppContext` is a value object, not a god-class.
 Behavior goes to `commands/`, `services/`, or `adapters/`.
@@ -157,11 +202,15 @@ Resolve once here, never recompute. Language-specific defaults live in each `cli
 
 ### `ui/`
 
-**Owns**: every byte of human-facing output. Renderers, color, progress bars, prompts.
+**Owns**: every byte of human-facing output. Renderers, color, progress bars, prompts. Human-facing
+tools use this as their presentation boundary.
 
-**Does NOT own**: structured diagnostics — those go through the program-log layer.
+**Does NOT own**: machine-output or structured diagnostics. Machine-facing tools use an `output/` or
+`protocol/` boundary for their default output, and log-messages go through the logging layer.
 
-**Rule**: no print statement is allowed _anywhere else_ in the codebase. Treat it as a CI lint.
+**Rule**: for human-facing tools, no print statement is allowed _anywhere else_ in the codebase.
+Treat it as a CI lint. For machine-facing tools, apply the same centralization rule to the
+structured-output boundary.
 
 ### `util/`
 
@@ -184,7 +233,7 @@ Snapshots under `snapshots/`.
 The argument struct the parser produces (parse-shape) and the request the handler consumes
 (runtime-shape) are **two different types**.
 
-```
+```text
 +-------------------+     +-----------------+     +---------------+
 |  CLI text input   | --> |   parse-shape   | --> |  runtime-shape|
 | (argv, env, file) |     |  (WidgetArgs)   |     |   (Request)   |
@@ -257,7 +306,7 @@ subcommand and breaks the four-edit rule.
 
 ## One `AppContext`, built once
 
-```
+```text
 main()
   parse_cli() -> Cli
   init_logging(cli.verbosity)
@@ -269,7 +318,8 @@ The context carries:
 
 - `config: Arc<Config>` — resolved config (see [03](03-config-precedence.md)).
 - `paths: Paths` — computed (data dir, state dir, cache dir).
-- `ui: Ui` — the only renderer.
+- `ui: Ui` — the only renderer for human-facing tools; machine-facing tools carry a structured
+  output/protocol facility instead.
 - `runtime: Handle` — shared async runtime, if any.
 - `clock: Arc<dyn Clock>` — abstracts time for tests.
 - (optionally) `tracing_root: tracing::Span`.

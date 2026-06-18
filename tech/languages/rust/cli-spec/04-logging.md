@@ -2,18 +2,26 @@
 
 > Prerequisite:
 > [General principles — Logging & Output](../../../programming/cli-design/01-logging-and-output.md)
-> for the two-layer model (user-UX + program-logs), XDG default destination, LLM-token-friendly
-> schema, and channel matrix. This chapter is the Rust implementation.
+> for the XDG default destination, LLM-token-friendly schema, and channel matrix. Facing-category
+> consequences follow
+> [General — Facing category & message types](../../../programming/cli-design/00-architecture.md#facing-category--message-types).
 
 ## Crate stack
 
+Always:
+
+| Concern                       | Crate                                      |
+| ----------------------------- | ------------------------------------------ |
+| Emission API (libs + bin)     | `tracing`                                  |
+| Subscriber install (bin only) | `tracing-subscriber` (`env-filter`, `fmt`) |
+| Non-blocking file sink        | `tracing-appender`                         |
+
+Human-UX only:
+
 | Concern                           | Crate                                       |
 | --------------------------------- | ------------------------------------------- |
-| Emission API (libs + bin)         | `tracing`                                   |
-| Subscriber install (bin only)     | `tracing-subscriber` (`env-filter`, `fmt`)  |
-| Non-blocking file sink            | `tracing-appender`                          |
 | Pretty error formatter (optional) | `color-eyre` (dev builds)                   |
-| Color in user-UX layer            | `anstream`, `owo-colors`, or `nu-ansi-term` |
+| Color                             | `anstream`, `owo-colors`, or `nu-ansi-term` |
 | Tables                            | `comfy-table`, `tabled`                     |
 | Progress / spinners               | `indicatif`                                 |
 | Prompts                           | `inquire`, `dialoguer`                      |
@@ -28,6 +36,8 @@
 - File destination by default: `$XDG_STATE_HOME/<app>/<app>.log` via
   `directories::ProjectDirs::state_dir()`. Resolve the path in `main` before installing the
   subscriber.
+- File-first logging is universal. Default `mirror_stderr` to `false` for machine-facing CLIs; for
+  human-facing CLIs, set it from `--log-stderr`, verbosity policy, or config.
 
 ## `src/logging.rs`
 
@@ -88,6 +98,9 @@ pub fn init(verbosity: u8, log_file: &Path, mirror_stderr: bool) -> anyhow::Resu
 
 Hold the returned `LogInit` for the lifetime of the program so the appender's background worker
 flushes on shutdown.
+
+The minimum level mapping is `error!`, `warn!`, `info!`, and `debug!`; `trace!` is optional for deep
+internals.
 
 ### Variant: human-readable text format
 

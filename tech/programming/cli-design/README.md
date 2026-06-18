@@ -17,7 +17,7 @@ details.
 | #  | Chapter                                                           | One-line hook                                                                                                                                 |
 | -- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | 0  | [Architecture](00-architecture.md)                                | Directory roles, parse-shape vs runtime-shape, one `AppContext` built once.                                                                   |
-| 1  | [Logging & output](01-logging-and-output.md)                      | Two layers: user-UX (terminal) vs program-logs (XDG state file, LLM-friendly).                                                                |
+| 1  | [Logging & output](01-logging-and-output.md)                      | Category-aware human-UX, machine-output, and log-messages (XDG state file, LLM-friendly).                                                     |
 | 2  | [Error messages](02-error-messages.md)                            | Expressive errors with stable `err.kind` keys, BSD sysexits, AI- and human-friendly.                                                          |
 | 3  | [Config precedence](03-config-precedence.md)                      | `CLI > env > project file > user file > defaults`. Source-tracking loaders.                                                                   |
 | 4  | [Coding style (Rust/Zig flavor)](04-coding-style-rust-zig.md)     | Explicit errors, parse-don't-validate, newtypes, composition over inheritance.                                                                |
@@ -42,7 +42,9 @@ matching general chapter.
 
 ## TL;DR (the irreducible defaults)
 
-- **Two output layers, never mix them.** stdout = data, stderr = UX, file = forensic log.
+- **Declare the facing category and message types.** Use
+  [human-facing or machine-facing](00-architecture.md#facing-category--message-types); keep
+  human-UX, machine-output, and log-messages distinct.
 - **Default-log to `$XDG_STATE_HOME/<app>/<app>.log`** in structured `key=value` (or JSON), no ANSI.
   Terminal mirror is opt-in.
 - **`CLI > env > project file > user file > defaults`** for every knob.

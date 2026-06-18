@@ -1,6 +1,6 @@
 ---
 digest-of: tech/languages/rust/cli-spec
-last-synced: 2026-05-27
+last-synced: 2026-06-18
 source-files:
   - README.md
   - 00-directory-tree.md
@@ -22,7 +22,8 @@ token-estimate: 2200
 
 Rust-specific CLI implementation spec applying the general principles from
 `tech/programming/cli-design/`. Covers directory layout, crate organization, subcommand patterns,
-error handling, logging, config, dependencies, naming, coding style, and reference projects.
+error handling, logging, config, dependencies, naming, coding style, and reference projects. The
+spec references the general facing-category taxonomy and records only Rust idioms.
 
 ## Key Points
 
@@ -30,15 +31,21 @@ error handling, logging, config, dependencies, naming, coding style, and referen
 
 - Parser: `clap` (derive, env, wrap_help). Config: `figment` (env, toml). XDG: `directories`.
   Errors: `thiserror` + `anyhow`. Logging: `tracing` + `tracing-subscriber` + `tracing-appender`.
-  Serialization: `serde` + `serde_json` + `toml`. Paths: `camino`. Async: `tokio` (rt, macros).
-  Tests: `assert_cmd` + `predicates` + `insta` + `tempfile`. Runner: `cargo nextest`.
+  Serialization: `serde` + `serde_json` + `toml`. Self-documentation: `clap_complete` and
+  `clap_mangen`. Paths: `camino`. Async: `tokio` (rt, macros). Tests: `assert_cmd` + `predicates`
+  - `insta` + `tempfile`. Runner: `cargo nextest`.
+- Human-UX crates (`anstream`/`owo-colors`, `comfy-table`, `indicatif`, `inquire`/`dialoguer`) are
+  human-facing-only additions.
 
 ### Directory Tree
 
 - `src/main.rs` (<=120 LOC), `cli/` (clap derive only), `commands/` (handlers), `domain/` (pure, no
   I/O), `adapters/` (traits + impls), `services/` (optional), `config/`, `context.rs`, `error.rs`,
-  `logging.rs`, `ui/` (only prints), `util/`.
+  `logging.rs`, conditional `ui/` for human-facing CLIs or `output/`/`protocol/` for machine-facing
+  CLIs, `util/`.
 - `tests/cmd_<name>.rs` per subcommand. Unit tests inline in `#[cfg(test)]`.
+- Templates include a human-facing `main.rs.template` and a machine-facing
+  `main.rs.machine.template`.
 
 ### Subcommand Pattern (Four-Edit Rule)
 
@@ -46,7 +53,8 @@ error handling, logging, config, dependencies, naming, coding style, and referen
   fn), `main.rs` (dispatch arm).
 - Handler signature: `pub fn run(ctx: &AppContext, args: <Verb>Args) -> Result<(), AppError>`.
 - Parse-shape to runtime-shape projection at top of handler via `Request::from_cli(args)`.
-- Help: `about` + `after_long_help = include_str!(...)`. Never hand-maintain a flag table.
+- Help: `about` + `after_long_help = include_str!(...)` for human-facing narrative addenda. Keep
+  machine-facing `help`/usage, `doctor`, `init`, completion, and man surfaces terse and parseable.
 
 ### Error Handling
 
@@ -59,7 +67,8 @@ error handling, logging, config, dependencies, naming, coding style, and referen
 
 - `tracing` for emission. `tracing-subscriber` with `EnvFilter` and `tracing-appender` for file
   sink.
-- Honor `RUST_LOG`. File: JSON, no ANSI. Optional stderr mirror respects `NO_COLOR`.
+- Honor `RUST_LOG`. File: JSON, no ANSI. `mirror_stderr=false` is the machine-facing default;
+  human-facing CLIs set mirroring from flags, verbosity policy, or config.
 - Hold the `WorkerGuard` for program lifetime.
 
 ### Config
@@ -98,7 +107,7 @@ error handling, logging, config, dependencies, naming, coding style, and referen
 | thiserror + anyhow stack, exit-code matrix  | `03-error-handling.md`        |
 | tracing setup, file sink, verbosity         | `04-logging.md`               |
 | figment layered config, XDG, CLI overrides  | `05-config.md`                |
-| Curated dependency list                     | `07-dependencies.md`          |
+| Curated dependency list, always vs UX-only  | `07-dependencies.md`          |
 | Visibility, naming tables, doc comments     | `08-naming-and-visibility.md` |
 | Rust-specific style deltas                  | `09-coding-style.md`          |
 | fd, bat, ripgrep, jj, cargo, helix patterns | `10-reference-projects.md`    |

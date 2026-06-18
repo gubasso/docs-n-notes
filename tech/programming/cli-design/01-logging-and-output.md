@@ -1,14 +1,16 @@
 # 01 — Logging & Output
 
-Every CLI emits two distinct streams of information. Conflating them is the root cause of unreadable
-terminals, broken pipes, and unusable log files. This chapter draws the line.
+Every CLI emits three message types. Conflating them is the root cause of unreadable terminals,
+broken pipes, brittle agents, and unusable log files. This chapter applies the
+[facing category taxonomy](00-architecture.md#facing-category--message-types) to output and logging.
 
-## The two layers
+## The three message types
 
-| Layer               | Audience                                               | Destination (default)                                       | Format                                                   | When written                                                  |
-| ------------------- | ------------------------------------------------------ | ----------------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------- |
-| **1. User-UX**      | Human at a terminal (or a downstream pipe consumer)    | `stdout` for results · `stderr` for prompts/progress/errors | Colored, formatted, tables, prompts                      | Always                                                        |
-| **2. Program-logs** | Developer, LLM coding agent, ops debugging post-mortem | `$XDG_STATE_HOME/<app>/<app>.log` (rotating)                | Structured `key=value` (or `--log-format=json`), no ANSI | Always (file); on-terminal only with `--log-stderr` or `-vv+` |
+| Message type       | Audience                                           | Destination (default)                                       | Format                                            | When written                                                  |
+| ------------------ | -------------------------------------------------- | ----------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------- |
+| **human-UX**       | Human at a terminal                                | `stdout` for results · `stderr` for prompts/progress/errors | Colored, formatted, tables, prompts               | Default for human-facing tools only                           |
+| **machine-output** | Coding agents, scripts, downstream programs        | `stdout`                                                    | JSON or the best structured format for the output | Default for machine-facing tools; opt-in for human-facing     |
+| **log-messages**   | Developer, coding agent, ops debugging post-mortem | `$XDG_STATE_HOME/<app>/<app>.log` (rotating)                | Structured `key=value` or JSON, no ANSI           | Always (file); on-terminal only with `--log-stderr` or `-vv+` |
 
 Why split them:
 
@@ -17,17 +19,21 @@ Why split them:
 - **Different reliability**: terminal output can be redirected mid-pipeline; logs must survive even
   when the user did `2>/dev/null`.
 - **Different retention**: terminal output is ephemeral; logs are forensic evidence after the fact.
-- **Different formats**: tables and colors corrupt logs when grep'd; structured records overwhelm
-  humans on a TTY.
+- **Different formats**: tables and colors corrupt logs and machine-output; structured records
+  overwhelm humans on a TTY.
 
-Rule of thumb: **if a human reads it once, it's user-UX. If a tool or developer reads it later, it's
-program-logs.**
+Rule of thumb: **if a human reads it once, it's human-UX. If a program consumes it now, it's
+machine-output. If a person or agent reads it later to understand what happened, it's
+log-messages.**
 
 ---
 
-## Layer 1 — User-UX
+## Human-UX
 
 ### Stream discipline
+
+These rules apply to human-facing tools. Machine-facing tools use their machine-output contract as
+the default instead of routing through a text UX renderer.
 
 - `stdout` = **the result**. The data a shell pipe expects. Whatever `--format` produces. Nothing
   else.
@@ -44,21 +50,34 @@ app widget list --format json 2>/dev/null | jq '.[] | .id'
 
 ### Output formats
 
-Expose a `--format` flag with at least `text` (default, human-pretty) and `json` (machine-readable).
-Add `yaml` / `table` / `tsv` as needed.
+Choose defaults by facing category:
 
-| Format           | Use case                                               |
-| ---------------- | ------------------------------------------------------ |
-| `text` (default) | Interactive humans. Color, alignment, headers.         |
-| `json`           | Scripting, agents, CI. Newline-delimited if streaming. |
-| `yaml`           | Humans who want machine-readable.                      |
-| `table`          | Wide tabular output for humans.                        |
-| `tsv` / `csv`    | Spreadsheets, classic Unix pipes.                      |
+- **Human-facing**: default to human-UX text/table output and expose machine-output via `--json` or
+  `--format json`.
+- **Machine-facing**: default to machine-output, usually JSON or newline-delimited JSON for streams.
+  Do not require a `--json` flag for the primary contract and do not route default output through a
+  text UX renderer.
 
-If the audience is genuinely interactive, `text` is OK to default to. If your CLI is most often
-piped, default to `json` and use `--format text` as the opt-in.
+Add `yaml` / `table` / `tsv` as needed, but make each format's consumer explicit.
+
+| Format        | Use case                                                                  |
+| ------------- | ------------------------------------------------------------------------- |
+| `text`        | Human-facing interactive output. Color, alignment, headers.               |
+| `json`        | Machine-output for scripting, agents, CI. Newline-delimited if streaming. |
+| `yaml`        | Humans who want machine-readable.                                         |
+| `table`       | Wide tabular output for humans.                                           |
+| `tsv` / `csv` | Spreadsheets, classic Unix pipes.                                         |
+
+If the CLI is most often piped or called by agents, it is machine-facing: default to `json` or the
+best structured format and make human text the opt-in.
+
+Machine-output should not paginate by default because unpaginated structured output is easiest for
+programs to consume. If an output can be too large, define per-output pagination rules and document
+the `--limit`, `--page`, `--cursor`, or `--offset` behavior in `--help` so an agent can self-serve.
 
 ### Color
+
+Color is a human-UX concern. Apply it only to human-facing renderers.
 
 Respect the three established conventions. Precedence: **NO_COLOR > FORCE_COLOR (or CLICOLOR_FORCE)
 
@@ -73,12 +92,15 @@ Respect the three established conventions. Precedence: **NO_COLOR > FORCE_COLOR 
 | `--color {auto,always,never}` flag | Per-invocation override; wins over env. |
 
 Default: `auto` — color when `stdout` is a TTY, off otherwise. Detect via `isatty(1)`. Never emit
-ANSI escapes into a log file or a non-TTY stream by accident.
+ANSI escapes into log-messages, machine-output, or a non-TTY stream by accident.
 
 References: [NO_COLOR.org](https://no-color.org/), [force-color.org](https://force-color.org/),
 [Indicating CLI color preference (gist)](https://gist.github.com/scop/4d5902b98f0503abec3fcbb00b38aec3).
 
 ### Tables, progress, prompts
+
+Tables, progress bars, spinners, and prompts are human-UX tools. Machine-facing commands do not
+prompt; missing required input is an error with a clear remediation path.
 
 Pick one library per concern; use it consistently.
 
@@ -94,7 +116,7 @@ TTY.
 
 ### Non-interactive mode
 
-Always provide a non-interactive escape hatch for every prompt:
+For human-facing tools, always provide a non-interactive escape hatch for every prompt:
 
 - `--yes` / `-y` — auto-confirm all yes/no prompts.
 - `--non-interactive` — fail loudly instead of prompting; pairs with explicit flags for required
@@ -102,14 +124,18 @@ Always provide a non-interactive escape hatch for every prompt:
 - Detect `stdin` is not a TTY → switch to non-interactive automatically and fail rather than
   silently hang.
 
+Machine-facing tools never prompt by default. They fail loudly when required inputs are missing.
+
 ### Anti-patterns
 
-- `println!`/`echo` scattered across the codebase. Centralize in one `ui/` module (or `ui` library
-  boundary). It's grep-able and it's a CI lint.
-- Mixing log records (`[INFO 12:34:56]`) into stdout. Use the program-logs layer for that.
-- Multi-line errors with stack traces dumped on stdout. Stack traces → program-logs (verbose mode),
-  short message → stderr.
-- ANSI escapes in piped output. Detect TTY; respect `NO_COLOR`.
+- `println!`/`echo` scattered across the codebase. Centralize in one `ui/` module for human-facing
+  output, or one structured-output boundary for machine-facing output. It's grep-able and it's a CI
+  lint.
+- Mixing log records (`[INFO 12:34:56]`) into stdout. Use log-messages for that.
+- Multi-line errors with stack traces dumped on stdout. Stack traces → log-messages (verbose mode),
+  short human message → stderr, structured machine error → machine-output when that is the command
+  contract.
+- ANSI escapes in piped output. Detect TTY for human-UX; never color machine-output.
 - Color-by-default in CI. CI rarely sets `NO_COLOR`; sniff `CI=true` or `GITHUB_ACTIONS=true` and
   default to no color (or to FORCE_COLOR if the CI renders ANSI, e.g. GitHub Actions does).
 - Asking interactive confirmation in a script that piped stdin from `/dev/null`. Detect and fail
@@ -117,14 +143,15 @@ Always provide a non-interactive escape hatch for every prompt:
 
 ---
 
-## Layer 2 — Program-logs
+## Log-messages
 
-This is the new contract: every CLI writes a forensic log to a file by default, in a format that
-LLMs and humans can both read. The terminal is no longer the primary log destination — the file is.
+This is the universal contract: every CLI writes forensic log-messages to a file by default, in a
+format that coding agents and humans can both read. The terminal is no longer the primary log
+destination — the file is. Human-facing and machine-facing tools both implement this.
 
 ### Default destination
 
-```
+```text
 $XDG_STATE_HOME/<app>/<app>.log
 ```
 
@@ -147,7 +174,8 @@ Disable entirely with `--no-log` (writes nowhere).
 
 ### When to mirror to the terminal
 
-By default: **the log file is the only destination**. The terminal stays clean for user-UX output.
+By default: **the log file is the only destination**. The terminal stays clean for human-UX output.
+For machine-facing tools, the terminal also stays clean for machine-output.
 
 Mirror to `stderr` when:
 
@@ -173,6 +201,9 @@ Standard convention:
 | `--quiet` / `-q` | `error` only      | Suppress warnings.                              |
 | `--silent`       | nothing           | Logs still go to file; just no terminal mirror. |
 
+Every CLI must support at least four levels: `info`, `warn`, `error`, and `debug`. `trace` is a
+useful extension for deep internals.
+
 Env var override (per language convention, e.g. `RUST_LOG`, `PYTHONLOGLEVEL`). The env var should
 accept directive syntax (e.g. `RUST_LOG=app=debug,hyper=warn`) so users can scope verbosity to a
 module.
@@ -188,13 +219,13 @@ Two emission modes, same field schema:
 
 **`key=value` (default, grep-friendly):**
 
-```
+```text
 ts=2026-05-18T10:23:45.123Z level=info target=app::widget op=create id=abc-123 status=ok dur_ms=12
 ```
 
 **`--log-format json` (tool-friendly, newline-delimited):**
 
-```
+```json
 {"ts":"2026-05-18T10:23:45.123Z","level":"info","target":"app::widget","op":"create","id":"abc-123","status":"ok","dur_ms":12}
 ```
 
@@ -253,16 +284,17 @@ Inspired by the practices emerging around AI agents debugging from logs
 
 What goes where, by event class:
 
-| Event                     | stdout | stderr        | log-file            | log-stderr (`-vv` etc.) |
-| ------------------------- | ------ | ------------- | ------------------- | ----------------------- |
-| Command result (data)     | ✅     | —             | —                   | —                       |
-| User prompt               | —      | ✅            | —                   | —                       |
-| Progress bar / spinner    | —      | ✅ (TTY only) | —                   | —                       |
-| Warning the user must see | —      | ✅            | ✅                  | ✅                      |
-| Error reported to user    | —      | ✅            | ✅                  | ✅                      |
-| Info-level operation log  | —      | —             | ✅                  | ✅                      |
-| Debug-level call trace    | —      | —             | ✅                  | ✅                      |
-| Trace-level firehose      | —      | —             | ✅ (only if `-vvv`) | ✅                      |
+| Event / message type      | human-facing stdout | human-facing stderr | machine-facing stdout | log-file        | log-stderr (`-vv` etc.) |
+| ------------------------- | ------------------- | ------------------- | --------------------- | --------------- | ----------------------- |
+| Human command result      | Yes                 | No                  | No                    | No              | No                      |
+| Machine command result    | Via `--json`        | No                  | Yes                   | No              | No                      |
+| User prompt               | No                  | Yes                 | Never prompt          | No              | No                      |
+| Progress bar / spinner    | No                  | Yes, TTY only       | No                    | No              | No                      |
+| Warning the user must see | No                  | Yes                 | Structured warning    | Yes             | Yes                     |
+| Error reported to caller  | No                  | Yes                 | Structured error      | Yes             | Yes                     |
+| Info-level operation log  | No                  | No                  | No                    | Yes             | Yes                     |
+| Debug-level call trace    | No                  | No                  | No                    | Yes             | Yes                     |
+| Trace-level firehose      | No                  | No                  | No                    | Only if enabled | Yes                     |
 
 ### Anti-patterns
 
@@ -290,7 +322,7 @@ Language-specific guides live alongside the matching language spec:
   `tracing-subscriber::fmt::layer().json()`. Color via `anstream` / `owo-colors`.
 - **Python**:
   [`tech/languages/python/cli-spec/typer-patterns.md`](../../languages/python/cli-spec/typer-patterns.md)
-  — `structlog` or `loguru` for structured records; `rich` for the user-UX layer.
+  — `structlog` or `loguru` for structured records; `rich` for the human-UX layer.
 - **Bash**:
   [`tech/languages/bash/cli-spec/bash-cli-project-specs.md`](../../languages/bash/cli-spec/bash-cli-project-specs.md)
   — `tput` for color, `printf` for structured records, `logger` for syslog routing.
@@ -303,7 +335,7 @@ Language-specific guides live alongside the matching language spec:
   and to exit codes.
 - [03 — Config Precedence](03-config-precedence.md): how the log destination and level are loaded
   from CLI/env/file/default.
-- [05 — Designing for LLM Agents](05-designing-for-llm-agents.md): why the program-log schema
+- [05 — Designing for LLM Agents](05-designing-for-llm-agents.md): why the log-message schema
   matters for agent-assisted debugging.
 
 ## References

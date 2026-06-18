@@ -3,7 +3,8 @@
 > Prerequisite:
 > [General principles — Architecture](../../../programming/cli-design/00-architecture.md) (Crate
 > organization section) for the "stay single-crate until..." rule and the workspace migration
-> triggers. This chapter is the Rust implementation.
+> triggers. This chapter is the Rust implementation. Facing-category consequences follow
+> [General — Facing category & message types](../../../programming/cli-design/00-architecture.md#facing-category--message-types).
 
 When to ship one crate, when to ship a workspace, and when (if ever) to split `lib.rs` from
 `main.rs`.
@@ -14,7 +15,7 @@ Start every CLI as a single Cargo package with one binary. This is what `fd`, `g
 `starship` do. It compiles faster, has zero workspace ceremony, and is the lowest-friction shape for
 the first months of a project.
 
-```
+```text
 my-cli/
 ├─ Cargo.toml          # [package] only, no [workspace]
 └─ src/
@@ -38,7 +39,8 @@ If neither is true, don't create `lib.rs`. A no-op `lib.rs` that only declares p
 and confuses readers about what the public API is.
 
 **When you do add `lib.rs`**, follow the Hertleif pattern: `main.rs` is a 30-line shim that calls
-`lib::run(args)` and maps errors to exit codes. All logic lives in `lib`.
+`lib::run(args)` and maps errors to exit codes. All logic lives in `lib`. This sample uses simple
+human-facing stderr error reporting; machine-facing templates emit structured errors instead.
 
 ```rust
 // src/main.rs
@@ -79,7 +81,7 @@ Two common patterns. Pick by your trigger.
 
 ### Pattern A — core lib + thin bin (the `bat` pattern)
 
-```
+```text
 Cargo.toml                # [workspace] root
 crates/
 ├─ app-core/              # library — all logic, all types
@@ -94,7 +96,7 @@ Use when trigger 1 fires (second consumer).
 
 ### Pattern B — domain crates + glue (the `ripgrep` pattern)
 
-```
+```text
 Cargo.toml                # [workspace] root
 crates/
 ├─ app-domain/            # pure types, no I/O

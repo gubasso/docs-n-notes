@@ -2,9 +2,12 @@
 
 > Prerequisite: [General CLI principles](../../../programming/cli-design/) for architecture,
 > logging, errors, config, and coding-style rules that apply to every CLI regardless of language.
+> Facing-category consequences follow
+> [General — Facing category & message types](../../../programming/cli-design/00-architecture.md#facing-category--message-types).
 >
-> For the **agent-facing surface** (`--help`, `--json`, output-as-prompt, error shape, `doctor`,
-> exit-code conventions, config precedence, dry-run discipline, skill wrapper, evals), see
+> For the **machine-facing standard surface** (`help`/usage, `--json`, output-as-prompt, error
+> shape, `doctor`, `init`, completion, man-via-subcommand, exit-code conventions, config precedence,
+> dry-run discipline, skill wrapper, evals), see
 > [Designing for LLM Coding Agents](../../../programming/cli-design/05-designing-for-llm-agents.md).
 > Rules there apply to this stack; they are not duplicated here.
 
@@ -214,7 +217,8 @@ trap 'rm -rf "$tmpdir"; exit 143' TERM
 - `mktemp -d` always with `|| exit 1`, always paired with an `EXIT` trap.
 - SIGINT exits `130`, SIGTERM `143` (128 + signal number).
 - `printf '%s\n'` over `echo` (portable across bash versions).
-- Logs to stderr, data to stdout. See agent-design doc §2.6 for why this matters for piping.
+- stdout is command data or machine-output; stderr is human-facing progress/errors or an explicit
+  log mirror; program logs are file-first.
 
 Exit-code conventions (`0`/`1`/`2` + `sysexits.h` ranges + `128+N`) are documented in
 [Designing for LLM Coding Agents](../../../programming/cli-design/05-designing-for-llm-agents.md)
@@ -304,6 +308,11 @@ Validation" for the repo-wide policy):
 
 `Makefile` wraps `install` / `uninstall` / `test` / `lint` / `man`.
 
+Bash human-UX should gate color, tables, and spinners with `[[ -t 1 ]]` or `[[ -t 2 ]]` as
+appropriate. Completion scripts and `scdoc`/man artifacts support both human use and agent
+self-documentation; expose man text through a `man` subcommand when the CLI needs agents to read it
+without shelling out to `man(1)`.
+
 Config precedence: see
 [`cli-design/03-config-precedence.md`](../../../programming/cli-design/03-config-precedence.md) for
 the canonical 5-layer ladder. Secret handling and missing-config error shape: see
@@ -366,7 +375,9 @@ jobs:
 1. XDG-aware, `PREFIX`-overridable installer; uninstall via manifest.
 1. bats-core tests under `test/` with `test_helper/` submodules.
 1. `trap ... EXIT INT TERM` cleanup for any script that creates temp state.
-1. `printf` over `echo`; stderr for logs; stdout is parseable data only.
+1. `printf` over `echo`; program logs default to XDG state file; stdout is data/machine-output;
+   stderr carries terminal UX and only mirrors logs by explicit option.
 1. Agent-facing surface per
    [Designing for LLM Coding Agents](../../../programming/cli-design/05-designing-for-llm-agents.md)
-   (`--help`, `--json`, error shape, `doctor`, dry-run, exit codes).
+   (`help`/usage, `--json`, error shape, `doctor`, `init`, completion, man-via-subcommand, dry-run,
+   exit codes).
