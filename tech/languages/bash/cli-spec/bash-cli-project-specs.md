@@ -217,8 +217,10 @@ trap 'rm -rf "$tmpdir"; exit 143' TERM
 - `mktemp -d` always with `|| exit 1`, always paired with an `EXIT` trap.
 - SIGINT exits `130`, SIGTERM `143` (128 + signal number).
 - `printf '%s\n'` over `echo` (portable across bash versions).
-- stdout is command data or machine-output; stderr is human-facing progress/errors or an explicit
-  log mirror; program logs are file-first.
+- stdout is the result only (command data or machine-output); stderr carries progress/prompts
+  (human-facing) and error reports for both categories — prose for human-facing, structured JSON for
+  machine-facing — plus an explicit log mirror; program logs are file-first. The stdout/stderr split
+  is universal; errors and a non-zero exit code never go to stdout.
 
 Exit-code conventions (`0`/`1`/`2` + `sysexits.h` ranges + `128+N`) are documented in
 [Designing for LLM Coding Agents](../../../programming/cli-design/05-designing-for-llm-agents.md)

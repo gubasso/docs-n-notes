@@ -2,7 +2,7 @@
 //!
 //! Parses args, initializes file-first logging with no stderr mirror by default,
 //! builds `AppContext`, dispatches to the selected subcommand, maps the
-//! resulting `AppError` to a sysexits exit code, and emits structured errors.
+//! resulting `AppError` to a sysexits exit code, and emits structured errors to stderr.
 //! NO business logic here — if you find yourself writing logic, lift it into
 //! `commands/`, `services/`, or `adapters/`.
 
@@ -58,18 +58,19 @@ fn main() -> ExitCode {
 }
 
 // Error envelopes share one stable schema — {"ok":false,"error":{kind,message,exit_code}} — and go
-// to stdout: per the canonical channel matrix (cli-design/01-logging-and-output.md), a machine-facing
-// tool reports the structured error on its machine-output channel, not stderr.
+// to stderr with a non-zero exit code, honoring the universal Unix stdout/stderr contract (see the
+// channel matrix in cli-design/01-logging-and-output.md): stdout carries only the successful result,
+// errors go to stderr. This holds for machine-facing tools too — agents expect it.
 fn print_init_error(e: &anyhow::Error) {
     // Logging failed before the subscriber was installed; sysexits EX_SOFTWARE (70).
-    println!(
+    eprintln!(
         "{{\"ok\":false,\"error\":{{\"kind\":\"LogInit\",\"message\":{},\"exit_code\":70}}}}",
         json_string(&e.to_string())
     );
 }
 
 fn print_error(e: &AppError) {
-    println!(
+    eprintln!(
         "{{\"ok\":false,\"error\":{{\"kind\":\"{}\",\"message\":{},\"exit_code\":{}}}}}",
         error_kind(e),
         json_string(&e.to_string()),

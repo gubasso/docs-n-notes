@@ -40,7 +40,8 @@ and confuses readers about what the public API is.
 
 **When you do add `lib.rs`**, follow the Hertleif pattern: `main.rs` is a 30-line shim that calls
 `lib::run(args)` and maps errors to exit codes. All logic lives in `lib`. This sample uses simple
-human-facing stderr error reporting; machine-facing templates emit structured errors instead.
+human-facing prose error reporting on stderr; machine-facing templates emit structured (JSON) errors
+to stderr instead. Both report errors on stderr with a non-zero exit code — only the format differs.
 
 ```rust
 // src/main.rs

@@ -54,13 +54,15 @@ hint is worse than nothing.
 | **Developer**    | Reproduce + fix.                       | Full chain (`Caused by:`), `RUST_LOG=trace` style verbose mode.             |
 | **LLM agent**    | Read logs, infer cause, suggest a fix. | Structured `err.kind` + `err.msg` fields in the program-log. Stable schema. |
 
-Where the caller's error goes depends on the facing category (see
+Where the caller's error goes follows the **universal Unix stdout/stderr contract** and does **not**
+change with facing category (see
 [00 — Facing category & message types](00-architecture.md#facing-category--message-types) and the
-channels matrix in [01 — Logging & Output](01-logging-and-output.md)). For a **human-facing** tool
-the user-UX message goes to `stderr`. For a **machine-facing** tool the caller's error is a
-**structured error on the machine-output channel** (stdout — the same channel as a successful result
-document). In **both** cases a structured record is also written to the program-log file, and all of
-them must agree on the facts.
+channels matrix in [01 — Logging & Output](01-logging-and-output.md)). The caller's error always
+goes to `stderr` with a non-zero exit code; `stdout` carries only a successful result. What differs
+is the _format_, not the channel: a **human-facing** tool writes a prose `What`/`Where`/`Hint`
+message to `stderr`, while a **machine-facing** tool writes a **structured (JSON) error to
+`stderr`**. In **both** cases a structured record is also written to the program-log file, and all
+of them must agree on the facts.
 
 ---
 

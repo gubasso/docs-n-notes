@@ -32,13 +32,20 @@ log-messages.**
 
 ### Stream discipline
 
-These rules apply to human-facing tools. Machine-facing tools use their machine-output contract as
-the default instead of routing through a text UX renderer.
+The stdout/stderr split below is **universal — it applies to every CLI regardless of facing
+category**. What changes by category is only the _format_ of the stdout result (human-UX text vs
+machine-output JSON) and whether interactive elements (prompts, progress) exist at all. The channel
+discipline itself never changes: a machine-facing tool is still a Unix program, and coding agents
+expect the same `stdout`/`stderr`/exit-code contract every other tool honors.
 
-- `stdout` = **the result**. The data a shell pipe expects. Whatever `--format` produces. Nothing
-  else.
-- `stderr` = **everything else**: prompts, progress bars, status messages, error reports, warnings.
-- Anything mixing the two breaks `<cmd> | jq`, `<cmd> > out.txt`, `<cmd> | xargs`.
+- `stdout` = **the result**, and only the result. The data a shell pipe expects — human-UX text or
+  machine-output JSON. Nothing else.
+- `stderr` = **everything else**: prompts, progress bars, status messages, warnings, and error
+  reports — for human-facing _and_ machine-facing tools alike. A machine-facing tool's error is
+  structured JSON written to `stderr` with a non-zero exit code; it is never mixed into the stdout
+  result.
+- Anything mixing the two breaks `<cmd> | jq`, `<cmd> > out.txt`, `<cmd> | xargs`, and `2>/dev/null`
+  — the ubiquitous contract that humans and coding agents both rely on.
 
 ```sh
 # Good — stdout is clean JSON, stderr shows progress
@@ -133,8 +140,8 @@ Machine-facing tools never prompt by default. They fail loudly when required inp
   lint.
 - Mixing log records (`[INFO 12:34:56]`) into stdout. Use log-messages for that.
 - Multi-line errors with stack traces dumped on stdout. Stack traces → log-messages (verbose mode),
-  short human message → stderr, structured machine error → machine-output when that is the command
-  contract.
+  short human message → stderr, structured machine error → stderr (as JSON) with a non-zero exit
+  code. Never mix an error into the stdout result, regardless of facing category.
 - ANSI escapes in piped output. Detect TTY for human-UX; never color machine-output.
 - Color-by-default in CI. CI rarely sets `NO_COLOR`; sniff `CI=true` or `GITHUB_ACTIONS=true` and
   default to no color (or to FORCE_COLOR if the CI renders ANSI, e.g. GitHub Actions does).
@@ -284,17 +291,20 @@ Inspired by the practices emerging around AI agents debugging from logs
 
 What goes where, by event class:
 
-| Event / message type      | human-facing stdout | human-facing stderr | machine-facing stdout | log-file        | log-stderr (`-vv` etc.) |
-| ------------------------- | ------------------- | ------------------- | --------------------- | --------------- | ----------------------- |
-| Human command result      | Yes                 | No                  | No                    | No              | No                      |
-| Machine command result    | Via `--json`        | No                  | Yes                   | No              | No                      |
-| User prompt               | No                  | Yes                 | Never prompt          | No              | No                      |
-| Progress bar / spinner    | No                  | Yes, TTY only       | No                    | No              | No                      |
-| Warning the user must see | No                  | Yes                 | Structured warning    | Yes             | Yes                     |
-| Error reported to caller  | No                  | Yes                 | Structured error      | Yes             | Yes                     |
-| Info-level operation log  | No                  | No                  | No                    | Yes             | Yes                     |
-| Debug-level call trace    | No                  | No                  | No                    | Yes             | Yes                     |
-| Trace-level firehose      | No                  | No                  | No                    | Only if enabled | Yes                     |
+The `stdout`/`stderr` columns are the same for every CLI; only the cell _format_ notes differ by
+facing category. `stdout` carries the successful result only; errors and warnings always go to
+`stderr` with a non-zero exit code.
+
+| Event / message type       | stdout                                                                  | stderr                                                         | log-file        | log-stderr (`-vv` etc.) |
+| -------------------------- | ----------------------------------------------------------------------- | -------------------------------------------------------------- | --------------- | ----------------------- |
+| Command result (success)   | Yes — human-UX text, or machine-output JSON (human-facing via `--json`) | No                                                             | No              | No                      |
+| User prompt                | No                                                                      | Yes — human-facing only; machine-facing never prompts          | No              | No                      |
+| Progress bar / spinner     | No                                                                      | Yes, TTY only — human-facing only                              | No              | No                      |
+| Warning reported to caller | No                                                                      | Yes — prose (human-facing) or structured JSON (machine-facing) | Yes             | Yes                     |
+| Error reported to caller   | No                                                                      | Yes — prose (human-facing) or structured JSON (machine-facing) | Yes             | Yes                     |
+| Info-level operation log   | No                                                                      | No                                                             | Yes             | Yes                     |
+| Debug-level call trace     | No                                                                      | No                                                             | Yes             | Yes                     |
+| Trace-level firehose       | No                                                                      | No                                                             | Only if enabled | Yes                     |
 
 ### Anti-patterns
 

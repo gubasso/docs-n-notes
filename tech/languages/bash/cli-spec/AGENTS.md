@@ -29,8 +29,10 @@ installation, distribution, and Bash idioms for the general facing-category taxo
   comments.
 - **Errors/signals**: `mktemp -d || exit 1` + `trap ... EXIT INT TERM`. SIGINT=130, SIGTERM=143.
   `printf` over `echo`.
-- **Output/logging**: stdout is data or machine-output. Stderr carries human-facing progress/errors
-  or an explicit log mirror. Program logs default to an XDG state file.
+- **Output/logging**: stdout is the result (data or machine-output) only. Stderr carries progress
+  and prompts (human-facing) plus error reports for **both** categories — prose for human-facing,
+  structured JSON for machine-facing — and an explicit log mirror. Program logs default to an XDG
+  state file. The stdout/stderr split is universal; errors never go to stdout.
 - **Human-UX idioms**: gate color, tables, and spinners with `[[ -t 1 ]]` or `[[ -t 2 ]]`.
 - **Testing**: `bats-core` with `bats-support`, `bats-assert`, `bats-file` as submodules. One test
   file per subcommand.
