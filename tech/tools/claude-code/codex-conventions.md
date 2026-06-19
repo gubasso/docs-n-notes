@@ -139,7 +139,8 @@ profile). The profiles are **tier-based** (model + effort tier, not workflow sta
 > via `-m` only). The **`-codex` family is API-key-only**: pinning `gpt-5.3-codex` (or any
 > `*-codex`) 400s with
 > `The '<model>' model is not supported when using Codex with a ChatGPT account`. Never pin a
-> `-codex` model. Model/pricing rationale: [`codex-models-pricing.md`](./codex-models-pricing.md).
+> `-codex` model. Model/pricing rationale now lives in the `cog` repo:
+> `docs/reference/models-reference-codex.md`.
 
 The wrapper's own composability lever is `--config-recipe` (commit 3117d8e). The `--profile` flag
 passes through to stock codex unchanged. codex-session never injects `--profile` for user-facing
@@ -147,9 +148,10 @@ pass-through calls; wrapper-owned health probes (e.g. the heartbeat check in `ac
 `--profile ping` internally.
 
 References: `docs/upstream-codex.md` §F6b–§F6c (codex-session repo);
-<https://developers.openai.com/codex/config-advanced#profiles>. Model/pricing/benchmark facts:
-[`codex-models-pricing.md`](./codex-models-pricing.md); derived cost × quality matrix and tier
-guidance behind these profiles: [`codex-models-comparison.md`](./codex-models-comparison.md).
+<https://developers.openai.com/codex/config-advanced#profiles>. Model/pricing/benchmark facts and
+the derived cost × quality matrix + tier guidance behind these profiles now live in the `cog` repo:
+`docs/reference/models-reference-codex.md` and `docs/reference/model-effort-policy.md` (with the
+descriptive `docs/reference/model-effort-codex.toml`).
 
 ## Codex Skill Frontmatter & Per-Skill Profile Map
 

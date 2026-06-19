@@ -5,7 +5,6 @@ source-files:
   - README.md
   - codex-conventions.md
   - invocation-cheatsheet.md
-  - models-reference.md
   - skills-and-orchestration.md
 token-estimate: 10400
 ---
@@ -34,17 +33,17 @@ orchestration, plan rounds, skill authoring, and implementation review practices
 
 ## Source Map
 
-| Topic                                                 | File                          |
-| ----------------------------------------------------- | ----------------------------- |
-| Claude Code operational index                         | `README.md`                   |
-| Codex CLI conventions, sandbox, safety rules          | `codex-conventions.md`        |
-| Invocation patterns and command cheat sheet           | `invocation-cheatsheet.md`    |
-| Model aliases, effort, knowledge cutoffs              | `models-reference.md`         |
-| Skills/orchestration integration                      | `skills-and-orchestration.md` |
-| Orchestration contracts and patterns                  | `orchestration/`              |
-| Plan lifecycle, round templates, complexity heuristic | `plan-rounds/`                |
-| Skill specification and house style                   | `skill-authoring/`            |
-| Review report template, severity levels               | `implementation-review/`      |
+| Topic                                                 | File                                                                                                   |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Claude Code operational index                         | `README.md`                                                                                            |
+| Codex CLI conventions, sandbox, safety rules          | `codex-conventions.md`                                                                                 |
+| Invocation patterns and command cheat sheet           | `invocation-cheatsheet.md`                                                                             |
+| Model aliases, effort, pricing (now in `cog` repo)    | `cog:docs/reference/models-reference-claude.md`, `models-reference-codex.md`, `model-effort-policy.md` |
+| Skills/orchestration integration                      | `skills-and-orchestration.md`                                                                          |
+| Orchestration contracts and patterns                  | `orchestration/`                                                                                       |
+| Plan lifecycle, round templates, complexity heuristic | `plan-rounds/`                                                                                         |
+| Skill specification and house style                   | `skill-authoring/`                                                                                     |
+| Review report template, severity levels               | `implementation-review/`                                                                               |
 
 ## Maintenance Notes
 
