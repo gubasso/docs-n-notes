@@ -28,14 +28,17 @@ STRATEGY.md.
   descriptive difficulty signal; round count is uncapped and set by Layer-2 splitting rules.
 - Every plan is a directory `plans/<slug>/`. Layer 1 splits work by domain/scope into flat sibling
   dirs related by top-level `queue-plans.yaml` `depends_on`; Layer 2 grades each dir and splits it
-  into uncapped rounds in `queue-rounds.yaml`.
+  into uncapped rounds in `queue-rounds.yaml`. Plan dirs are always direct children of `plans/` —
+  **never nested**, never with plan subdirectories; ordering lives only in `depends_on` (a shared
+  slug prefix is a naming convention, not a parent dir).
 - Override when: few files but 500+ LOC each, security-sensitive, or mechanical rename across many
   files.
 
 ### Plan Lifecycle
 
 - `.implementation-plans/` is flat and queue-driven: status/order/deps/command live in YAML, not in
-  paths. No `01-todo`/`02-done` kanban dirs, no `NN-` prefixes.
+  paths. No `01-todo`/`02-done` kanban dirs, no `NN-` prefixes. Plan dirs are a single level under
+  `plans/` — never nested inside one another.
 - Root holds `README.md` (static system explainer, bootstrapped once) and `queue-plans.yaml`
   (repo-wide ledger, all plans, full history). All plans live under `plans/` as directories:
   `plans/<slug>/` (`README.md` + `queue-rounds.yaml` + de-numbered `<topic>.md` round files +

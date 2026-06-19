@@ -25,10 +25,17 @@ There are no kanban state-directories and no numeric prefixes.
 Every plan is a directory (`plans/<slug>/`). The complexity grade is descriptive; it does not select
 a format or cap round count.
 
+**Plan directories are always direct children of `plans/` and are never nested.** There is exactly
+one level under `plans/` — `plans/<slug>/`. Never place a plan directory inside another plan
+directory, and never create subdirectories within a plan directory (round files are flat
+`<topic>.md` files in the plan dir). All relationships and ordering between plans are expressed
+**only** through the `depends_on` field in `queue-plans.yaml`, never through the filesystem; a
+shared slug prefix is a naming convention, not a parent directory.
+
 Planning uses two layers (see `complexity-heuristic.md` § "Two-layer decomposition"). Layer 1 splits
 work by domain or scope into one or more flat sibling plan dirs under `plans/`, related through the
-top-level `queue-plans.yaml` `depends_on` field and a shared slug prefix. Layer 2 grades each dir
-and splits it into uncapped rounds in that dir's `queue-rounds.yaml`.
+top-level `queue-plans.yaml` `depends_on` field. Layer 2 grades each dir and splits it into uncapped
+rounds in that dir's `queue-rounds.yaml`.
 
 The root `README.md` and `queue-plans.yaml` are bootstrapped by the generating skill the first time
 it runs in a repo: `README.md` from its template (never overwritten afterwards), `queue-plans.yaml`

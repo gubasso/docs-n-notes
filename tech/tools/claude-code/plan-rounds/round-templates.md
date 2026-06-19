@@ -6,7 +6,9 @@ the generating skill substitutes them with actual values.
 Every plan is a directory `plans/<slug>/` containing: `README.md` (Template B), one round file per
 round (Template A, **no number prefix**), an inner `queue-rounds.yaml` (Template D), and — for XL
 plans only — `STRATEGY.md` (Template C). The plan is also registered in the repo-wide
-`.implementation-plans/queue-plans.yaml` (Template D).
+`.implementation-plans/queue-plans.yaml` (Template D). Plan directories are flat siblings, a single
+level under `plans/` — **never nested** and never with plan subdirectories; ordering lives only in
+`depends_on`.
 
 The root files `.implementation-plans/README.md` (Template F) and
 `.implementation-plans/queue-plans.yaml` (Template D, empty `plans:` list) are bootstrapped once,
@@ -286,9 +288,12 @@ files — never in directory or file names.
 ├── README.md        this file — static explainer, no per-plan state
 ├── queue-plans.yaml repo-wide ledger: every plan + status (source of truth)
 └── plans/
-    └── <slug>/      plan directory: README.md, queue-rounds.yaml,
-                     <topic>.md round files, STRATEGY.md (XL only)
+    └── <slug>/      plan directory (flat sibling, never nested): README.md,
+                     queue-rounds.yaml, <topic>.md round files, STRATEGY.md (XL only)
 ```
+
+Plan directories are flat siblings — a single level under `plans/`. Never nest a plan directory
+inside another; ordering between plans lives only in `queue-plans.yaml` `depends_on`.
 
 ## Queue semantics
 

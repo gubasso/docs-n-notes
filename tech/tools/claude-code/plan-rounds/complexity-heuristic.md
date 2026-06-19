@@ -79,8 +79,14 @@ total round count or grade.
 
 Layer 1 splits work by domain or scope into one or more **flat sibling** plan directories under
 `plans/`. Related sibling dirs are wired together through the top-level `queue-plans.yaml`
-`depends_on` field and a shared slug prefix. One domain produces one dir; N domains produce N
-sibling dirs.
+`depends_on` field. One domain produces one dir; N domains produce N sibling dirs.
+
+**Plan directories are always direct children of `plans/` (`plans/<slug>/`) and are never nested.**
+Never place a plan directory inside another plan directory, and never create subdirectories within a
+plan directory. All relationships and execution order are expressed **only** through the
+`depends_on` field in the queue files, never through the filesystem hierarchy. A shared slug prefix
+(e.g. `auth-backend`, `auth-frontend`) is a naming convention that groups related siblings — it is
+**not** a parent directory.
 
 Layer 2 grades each dir's difficulty with the five axes plus EF, then splits that dir into
 **uncapped** rounds using the round-splitting rules below. The grade is **per-dir and descriptive**:
