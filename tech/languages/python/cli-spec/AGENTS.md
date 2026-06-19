@@ -1,21 +1,24 @@
 ---
 digest-of: tech/languages/python/cli-spec
-last-synced: 2026-06-18
+last-synced: 2026-06-19
 source-files:
   - README.md
+  - subcommand-pattern-python.md
+  - error-handling-python.md
   - logging-python.md
   - typer-patterns.md
   - config-precedence-python.md
   - parse-cli-options-examples.py
-token-estimate: 900
+token-estimate: 1300
 ---
 
 # AGENTS
 
 ## Scope
 
-Python-specific CLI conventions using Typer/Click and Pydantic. Covers stack defaults, typed CLI
-patterns, file-first logging, layered config, and validation callbacks.
+Python-specific CLI conventions using Typer/Click and Pydantic. Covers stack defaults, subcommand
+layout, typed CLI patterns, layered errors, file-first logging, layered config, and validation
+callbacks.
 
 ## Key Points
 
@@ -25,8 +28,12 @@ patterns, file-first logging, layered config, and validation callbacks.
 - **Logging**: `structlog` JSON records default to
   `${XDG_STATE_HOME:-$HOME/.local/state}/<app>/<app>.log`; `mirror_stderr` is explicit opt-in and
   defaults false for machine-facing CLIs.
+- **Subcommands**: One parse-shape file under `cli/<name>.py`, one runtime handler under
+  `commands/<name>.py`; Typer params project into Pydantic request models before services run.
 - **Parse-shape to runtime-shape**: Typer parameters map to Pydantic request models. Validation in
   `__post_init__`/validators, not handler bodies.
+- **Error handling**: Typed `AppError` subclasses carry stable `kind` and context, map explicitly to
+  BSD sysexits, and are caught once at the Typer boundary for structured stderr output.
 - **Config precedence**: Two patterns: (1) manual 5-layer loader with `lru_cache`, `platformdirs`,
   provenance dict; (2) `pydantic-settings` with `settings_customise_sources` for larger configs.
 - **Provenance**: Errors must name the source layer (`user-file:/path`, `env:MYAPP_X`,
@@ -39,13 +46,15 @@ patterns, file-first logging, layered config, and validation callbacks.
 
 ## Source Map
 
-| Topic                                    | File                            |
-| ---------------------------------------- | ------------------------------- |
-| Stack defaults, TL;DR                    | `README.md`                     |
-| File-first structlog setup               | `logging-python.md`             |
-| Typer patterns, Pydantic validators      | `typer-patterns.md`             |
-| 5-layer config loader, pydantic-settings | `config-precedence-python.md`   |
-| Runnable validation examples             | `parse-cli-options-examples.py` |
+| Topic                                        | File                            |
+| -------------------------------------------- | ------------------------------- |
+| Stack defaults, TL;DR                        | `README.md`                     |
+| Typer subcommand structure, dispatch         | `subcommand-pattern-python.md`  |
+| Layered exceptions, sysexits, error boundary | `error-handling-python.md`      |
+| File-first structlog setup                   | `logging-python.md`             |
+| Typer patterns, Pydantic validators          | `typer-patterns.md`             |
+| 5-layer config loader, pydantic-settings     | `config-precedence-python.md`   |
+| Runnable validation examples                 | `parse-cli-options-examples.py` |
 
 ## Maintenance Notes
 

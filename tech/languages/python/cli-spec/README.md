@@ -16,6 +16,8 @@ applies the general principles to the specifics of Python. Facing-category conse
 | [parse-cli-options-examples.py](parse-cli-options-examples.py) | Runnable examples: Typer + Pydantic for validation callbacks, tag parsing, complex key=value parsing.                 |
 | [config-precedence-python.md](config-precedence-python.md)     | Layered config-path resolution with `lru_cache` + `pydantic-settings`.                                                |
 | [logging-python.md](logging-python.md)                         | File-first `structlog` setup with XDG state paths and optional stderr mirroring.                                      |
+| [subcommand-pattern-python.md](subcommand-pattern-python.md)   | Typer subcommand structure: parse-shape files, handler files, dispatch wiring, and help rendering.                    |
+| [error-handling-python.md](error-handling-python.md)           | Layered Python exceptions, stable error kinds, BSD sysexits, and the top-level Typer error boundary.                  |
 
 ## Stack defaults
 
@@ -51,3 +53,4 @@ applies the general principles to the specifics of Python. Facing-category conse
 - [General — Config Precedence](../../../programming/cli-design/03-config-precedence.md)
 - [General — Coding Style (Rust/Zig flavor, with Python translations)](../../../programming/cli-design/04-coding-style-rust-zig.md)
 - [Python — Logging](logging-python.md)
+- [Python — Error Handling](error-handling-python.md)
