@@ -37,12 +37,15 @@ See `plan-lifecycle.md` § "Executor capacity model" for the prex pipeline detai
 2. Divide by the EF for the selected executor → **adjusted score**.
 3. Map the adjusted score to a grade:
 
-| Grade  | Adjusted  | Rounds | Output format                 | Notes                                                    |
-| ------ | --------- | ------ | ----------------------------- | -------------------------------------------------------- |
-| **S**  | ≤ 7.0     | 1      | Single file `plans/<slug>.md` | Simple, focused change. One prex run handles it easily.  |
-| **M**  | 7.1–11.0  | 1      | Single file `plans/<slug>.md` | Meaty but cohesive. One prex run, possibly a longer one. |
-| **L**  | 11.1–15.0 | 2–3    | Directory `plans/<slug>/`     | Multi-round. Needs thoughtful splitting.                 |
-| **XL** | ≥ 15.1    | 4–8    | Directory `plans/<slug>/`     | Complex. `STRATEGY.md` generated. Careful orchestration. |
+| Grade  | Adjusted  | Rounds      | Output format             | Notes                                                         |
+| ------ | --------- | ----------- | ------------------------- | ------------------------------------------------------------- |
+| **S**  | ≤ 7.0     | typically 1 | Directory `plans/<slug>/` | Simple, focused change. Usually one round handles it easily.  |
+| **M**  | 7.1–11.0  | typically 1 | Directory `plans/<slug>/` | Meaty but cohesive. Usually one round, possibly a longer one. |
+| **L**  | 11.1–15.0 | several     | Directory `plans/<slug>/` | Multi-round. Needs thoughtful splitting.                      |
+| **XL** | ≥ 15.1    | many        | Directory `plans/<slug>/` | Complex. `STRATEGY.md` generated. Careful orchestration.      |
+
+Round count is ultimately set by the Layer-2 round-splitting rules and is **uncapped**. The grade is
+a descriptive difficulty signal, not a round ceiling or a format selector.
 
 The adjusted-score thresholds are exactly the historical raw thresholds (5–7 / 8–11 / 12–15 / 16+),
 so a `single-pass` executor (EF=1.0) recovers the old behavior precisely. Under `prex` (EF=1.5) a
@@ -51,23 +54,41 @@ borderline raw 8 → adjusted 5.33 → S (was M), borderline raw 12 → adjusted
 the in-round review-loop. Under `limited` (EF=0.8) the same boundaries promote borderline tasks by
 one grade.
 
-This grade table is the **single source of truth for grade→format**. Skills and coordinators must
-not restate the mapping — they point here.
+This grade table is the **single source of truth for the difficulty grade**. Format is no longer
+grade-selected — every plan is a directory. Skills and coordinators must not restate the mapping —
+they point here.
 
-## EF is mandatory — reachable grades per executor
+## EF is mandatory — grade is descriptive
 
 Always map the **adjusted** score (raw ÷ EF), never the raw score. Because raw caps at 20, the
-reachable grade ceiling depends on the executor:
+highest grade the adjusted-score arithmetic can produce differs by executor (informational only —
+grade does not cap rounds):
 
-| Executor (EF)       | Max adjusted | Reachable grades | Max rounds |
-| ------------------- | ------------ | ---------------- | ---------- |
-| `prex` (1.5)        | 13.3         | S / M / L        | 3 (L)      |
-| `single-pass` (1.0) | 20.0         | S / M / L / XL   | 8 (XL)     |
-| `limited` (0.8)     | 25.0         | S / M / L / XL   | 8 (XL)     |
+| Executor (EF)       | Max adjusted | Grades the arithmetic yields |
+| ------------------- | ------------ | ---------------------------- |
+| `prex` (1.5)        | 13.3         | S / M / L                    |
+| `single-pass` (1.0) | 20.0         | S / M / L / XL               |
+| `limited` (0.8)     | 25.0         | S / M / L / XL               |
 
-Under the default `prex` executor, **XL is unreachable** (max adjusted 13.3 → L) and L needs raw ≥
-17. A multi-round directory plan is the exception, not the norm — most prex plans are single-file
-S/M. If a classification yields XL or 4+ rounds under prex, the EF was not applied: recompute.
+The EF maps complexity to a descriptive per-dir grade. Round count is then chosen independently by
+the Layer-2 round-splitting rules and is uncapped. Under any executor, more rounds are valid when
+the work needs them; the hard ceiling is per-round `/prex` capacity (one Codex 600s session), not
+total round count or grade.
+
+## Two-layer decomposition
+
+Layer 1 splits work by domain or scope into one or more **flat sibling** plan directories under
+`plans/`. Related sibling dirs are wired together through the top-level `queue-plans.yaml`
+`depends_on` field and a shared slug prefix. One domain produces one dir; N domains produce N
+sibling dirs.
+
+Layer 2 grades each dir's difficulty with the five axes plus EF, then splits that dir into
+**uncapped** rounds using the round-splitting rules below. The grade is **per-dir and descriptive**:
+it no longer selects a format or caps round count.
+
+Do not collapse the two layers. Multiple implementation **dirs** are a Layer-1 concern represented
+in the top-level `queue-plans.yaml` with `depends_on`; multiple **rounds** in one dir are a Layer-2
+concern represented in that plan's inner `queue-rounds.yaml`.
 
 ## Override guidance
 
@@ -78,13 +99,15 @@ The axes are structured judgment aids, not a rigid formula. Override when:
 - **Bump down**: Many files but the change is mechanical (e.g., rename across 20 files). Or the
   codebase has strong test coverage that de-risks the change.
 
-When overriding, note the reason under Decisions & Constraints — in the plan's `README.md` for
-directory plans, or in the single-file plan itself.
+When overriding, note the reason under Decisions & Constraints — in the plan dir's `README.md` or in
+the affected round files as appropriate.
 
 ## Round-splitting rules
 
-When the grade is L or XL, split the implementation into rounds. Apply these rules in priority
-order:
+Layer 2 uses these rules to split a plan dir into rounds. Round count is uncapped, but each round
+must be a good `/prex` chunk: one cohesive unit of work, usually under 300 lines of plan text,
+completable in one Codex 600s session, and never so small that a `/prex` session is wasteful. Apply
+these rules in priority order:
 
 1. **Module/subsystem boundaries** — group changes by the module they touch. Changes to the auth
    module go in one round; changes to the API layer go in another.
