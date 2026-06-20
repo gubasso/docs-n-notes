@@ -1,6 +1,6 @@
 ---
 digest-of: tech/programming/docs-design
-last-synced: 2026-06-05
+last-synced: 2026-06-20
 source-files:
   - README.md
   - 00-overview.md
@@ -11,9 +11,10 @@ source-files:
   - 05-drafts-and-promotion.md
   - 06-operational-docs.md
   - 07-ai-agent-considerations.md
+  - 08-tracking-and-revalidation.md
   - 99-checklist.md
   - template-adr.md
-token-estimate: 2800
+token-estimate: 3000
 ---
 
 # AGENTS
@@ -21,8 +22,8 @@ token-estimate: 2800
 ## Scope
 
 Language-agnostic documentation design canon: Diataxis zones, lean ADRs, load-bearing comments,
-single-source-of-truth placement, draft promotion, operational docs, agent-aware maintenance, and a
-review checklist for documentation changes.
+single-source-of-truth placement, draft promotion, operational docs, agent-aware maintenance,
+tracking and revalidation, and a review checklist for documentation changes.
 
 ## Key Points
 
@@ -83,6 +84,14 @@ review checklist for documentation changes.
 - `CLAUDE.md` or equivalent author instructions should include documentation maintenance rules.
 - Agents should update docs for durable behavior, operations, or decisions, not every detail.
 
+### Tracking and Revalidation (08)
+
+- A tracking file is a machine-readable registry of perishable artifacts and their re-check cadence.
+- The tracked artifact stays the source of truth; the registry keeps it from going stale.
+- Overdue scanning is deterministic tooling; revalidation is judgment and should surface uncertain
+  drift.
+- Primary audience is coding agents sweeping the repo; humans benefit too.
+
 ### Checklist (99)
 
 - Review placement, ADR length and status, draft handling, cross-links, agent readiness, and hook
@@ -107,6 +116,7 @@ review checklist for documentation changes.
 | Draft workflow               | `05-drafts-and-promotion.md`         |
 | Operational docs             | `06-operational-docs.md`             |
 | Agent considerations         | `07-ai-agent-considerations.md`      |
+| Tracking and revalidation    | `08-tracking-and-revalidation.md`    |
 | Review checklist             | `99-checklist.md`                    |
 
 ## Maintenance Notes

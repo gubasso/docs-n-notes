@@ -11,7 +11,11 @@ or record an explicit exception in the owning source of truth.
 - [ ] Cross-links point to the owning source instead of copying it.
 - [ ] No filesystem trees are pasted into markdown.
 - [ ] Project-agnostic docs use `<angle>` placeholders for project-specific names.
+- [ ] Perishable facts (prices, benchmarks, model rosters, API shapes) have an owner, a revalidation
+      cadence, and an up-to-date tracking entry when needed.
 - [ ] The root docs README remains an index, not a duplicate source of rules.
+
+See [08 — Tracking and Revalidation](08-tracking-and-revalidation.md).
 
 ## ADRs
 
