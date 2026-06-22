@@ -25,14 +25,17 @@
 
 ## Notes in this directory
 
-- [ansible](./ansible.md)
-- [backups](./backups.md)
-- [restic-backups](./restic-backups.md)
-- [storage-wasabi](./storage-wasabi.md)
-- [iac-infra-as-code](./iac-infra-as-code.md)
-- [terraform](./terraform.md)
-- [github-actions-ci-cd](./github-actions-ci-cd.md)
-- [selfhosted-gateway-fractal-gateway](./selfhosted-gateway-fractal-gateway.md)
+- [ansible](./ansible.md) — Ansible roles, organization models, best practices, and Vault
+- [backups](./backups.md) — backup strategy: the 3-2-1 rule, tools, and general concepts
+- [restic-backups](./restic-backups.md) — Restic backup tool notes
+- [storage-wasabi](./storage-wasabi.md) — Wasabi S3-compatible object storage configuration
+- [iac-infra-as-code](./iac-infra-as-code.md) — Infrastructure-as-Code overview, combining Terraform
+  and Ansible
+- [terraform](./terraform.md) — Terraform install (`tfenv`), conventions, and resources
+- [github-actions-ci-cd](./github-actions-ci-cd.md) — GitHub Actions workflows for CI and automated
+  Rust releases
+- [selfhosted-gateway-fractal-gateway](./selfhosted-gateway-fractal-gateway.md) — SelfHosted/Fractal
+  Gateway: Docker toolchain for exposing self-hosted services
 
 ## CI / CD
 

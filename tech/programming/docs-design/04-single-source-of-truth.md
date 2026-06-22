@@ -55,6 +55,26 @@ Code comments are a narrow home. They own local rationale that would be invisibl
 types. They do not own project policy, status matrices, or workflows. See
 [03 — Comments and Code as SoT](03-comments-and-code-as-sot.md).
 
+## Structure is owned by the filesystem
+
+Directory structure is a durable fact, and the filesystem already owns it. A README or index file
+must not maintain a parallel copy of the file tree. The directory listing is the source of truth for
+what exists; readers and agents can list the directory to see it.
+
+Index files — `README.md`, `CLAUDE.md`, `AGENTS.md`, and equivalents — explain what a directory is
+for: its purpose, domains, concepts, and rules. They do not reproduce a tree of every file and
+subdirectory. A pasted tree drifts the moment a file is added, renamed, or removed, and the stale
+copy then competes with the real structure.
+
+When a listing genuinely aids discovery, give each entry a purpose, not a bare path. A line like
+`- [docker](docker.md) — daemon setup and daily commands` tells the reader why to open the file; a
+line like `- [docker](docker.md)` only restates the filename the filesystem already shows. The test
+is the same as for any summary: if deleting the listing loses no information the filesystem does not
+already carry, it was a duplicated tree, not an index.
+
+This is the structural case of the rule above: write each durable fact once at its owner. The owner
+of "what files exist here" is the directory itself.
+
 ## Cross-link discipline
 
 Write once. Link everywhere else. A cross-link should name the reason to follow it:

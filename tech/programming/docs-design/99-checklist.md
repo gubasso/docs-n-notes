@@ -9,7 +9,8 @@ or record an explicit exception in the owning source of truth.
 - [ ] The file lives in the matching zone from [01 — Diataxis Zones](01-diataxis-zones.md).
 - [ ] The file does not restate a fact already owned elsewhere.
 - [ ] Cross-links point to the owning source instead of copying it.
-- [ ] No filesystem trees are pasted into markdown.
+- [ ] No filesystem trees are pasted into markdown; index files (README/AGENTS) explain purpose and
+      do not replicate the directory tree.
 - [ ] Project-agnostic docs use `<angle>` placeholders for project-specific names.
 - [ ] Perishable facts (prices, benchmarks, model rosters, API shapes) have an owner, a revalidation
       cadence, and an up-to-date tracking entry when needed.

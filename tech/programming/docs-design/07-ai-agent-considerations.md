@@ -97,7 +97,8 @@ author-instructions file. That section should say:
 - Never delete accepted decisions; supersede or reject them.
 - Keep drafts outside shipped docs.
 - Write facts once at the owning home and cross-link elsewhere.
-- Do not paste filesystem trees into markdown.
+- Do not paste filesystem trees into markdown; see
+  [04 — Single Source of Truth](04-single-source-of-truth.md).
 - Preserve placeholders in project-agnostic material.
 
 These rules prevent well-meaning agents from creating sprawling summaries, duplicating facts, or

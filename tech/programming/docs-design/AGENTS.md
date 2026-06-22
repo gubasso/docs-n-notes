@@ -1,6 +1,6 @@
 ---
 digest-of: tech/programming/docs-design
-last-synced: 2026-06-20
+last-synced: 2026-06-22
 source-files:
   - README.md
   - 00-overview.md
@@ -14,7 +14,7 @@ source-files:
   - 08-tracking-and-revalidation.md
   - 99-checklist.md
   - template-adr.md
-token-estimate: 3000
+token-estimate: 3100
 ---
 
 # AGENTS
@@ -60,6 +60,7 @@ tracking and revalidation, and a review checklist for documentation changes.
 
 - Avoid Repetition In Documentation: write once at the owning home, link elsewhere.
 - Project-wide rules live in author instructions; decisions in ADRs; exact facts in reference.
+- Structure is owned by the filesystem; index files explain purpose and never replicate the tree.
 - Resolve conflicts by editing non-owner files to link to the owner.
 - A digest is a map; source chapters and project docs own the guidance.
 

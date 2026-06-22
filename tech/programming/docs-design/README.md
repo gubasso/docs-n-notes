@@ -57,3 +57,5 @@ reference material. Leave broad explanation until the factual sources of truth a
 - Keep agent digests derived from source chapters; never let the digest become the source of truth.
 - Keep the root docs README as navigation. If it starts carrying decisions, procedures, or
   diagnostic facts, move those facts to the owning zone and link back.
+- Let the filesystem own structure: index files (README/AGENTS) explain purpose; they never
+  replicate the directory tree.
