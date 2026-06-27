@@ -255,6 +255,12 @@ _common_setup() {
   load 'bats-support/load'
   load 'bats-assert/load'
   load 'bats-file/load'
+
+  # Hermetic git environment — see "Sanitise the git environment" below.
+  local git_env_vars=()
+  mapfile -t git_env_vars < <(git rev-parse --local-env-vars 2>/dev/null || :)
+  ((${#git_env_vars[@]})) && unset "${git_env_vars[@]}"
+
   PATH="${BATS_TEST_DIRNAME}/../bin:$PATH"
 }
 ```
@@ -273,6 +279,42 @@ setup() {
   assert_output "expected"
 }
 ```
+
+### Sanitise the git environment (pre-commit pitfall)
+
+A test that creates a throwaway git repo (`git init` in a tmpdir, then
+`add`/`commit`/`worktree
+add`) passes when you run `bats test/` directly but **fails only when the
+same suite runs from a git hook** (e.g. pre-commit's local `test` stage). Symptoms:
+`error: invalid object … for
+'<some path from the PARENT repo>'`, `Error building trees`,
+`fatal: .git/index: index file open
+failed`, or a bats `Executed N-1 instead of expected N tests`
+warning when the crash aborts a test mid-run.
+
+Root cause: git hooks **export the parent repo's local git environment** — `GIT_DIR`,
+`GIT_INDEX_FILE`, `GIT_WORK_TREE`, `GIT_OBJECT_DIRECTORY`, `GIT_COMMON_DIR`, … — into the hook
+process and everything it spawns. `bats` inherits them, so a test's `git -C "$tmpdir" …` changes the
+working directory but still reads the inherited `GIT_INDEX_FILE`, operating on the **parent repo's
+staged index** instead of the throwaway repo's. `git -C`, `--git-dir`, and friends do **not**
+override these env vars.
+
+Fix once, at the shared test-harness boundary (`common-setup.bash` above), not per-test and not with
+shellcheck disables. Clear git's own canonical repo-local variable list:
+
+```bash
+unset $(git rev-parse --local-env-vars)        # documented githooks(5) idiom
+# array-safe form (preferred under `set -u` / strict mode):
+local git_env_vars=()
+mapfile -t git_env_vars < <(git rev-parse --local-env-vars 2>/dev/null || :)
+((${#git_env_vars[@]})) && unset "${git_env_vars[@]}"
+```
+
+`git rev-parse --local-env-vars` _is_ the authoritative list (no hardcoding; auto-tracks new git
+versions). This is the same sanitisation git's own `t/test-lib.sh` performs globally, the pattern
+[`githooks(5)`](https://git-scm.com/docs/githooks) documents for hooks that touch a foreign repo,
+and the exact class of bug pre-commit guards internally in its `no_git_env()` (`GIT_INDEX_FILE` is
+commented there as _"Causes 'error invalid object …' during commit"_).
 
 Reference: [bats-core tutorial](https://bats-core.readthedocs.io/en/stable/tutorial.html).
 
@@ -375,7 +417,8 @@ jobs:
 1. shfmt clean (`-i 2 -ci -bn -s`), config checked in.
 1. Namespaced functions (`mycli::<ns>::<fn>`), one public function per file.
 1. XDG-aware, `PREFIX`-overridable installer; uninstall via manifest.
-1. bats-core tests under `test/` with `test_helper/` submodules.
+1. bats-core tests under `test/` with `test_helper/` submodules; `common-setup.bash` clears git's
+   repo-local env (`unset $(git rev-parse --local-env-vars)`) so hook-run suites stay hermetic.
 1. `trap ... EXIT INT TERM` cleanup for any script that creates temp state.
 1. `printf` over `echo`; program logs default to XDG state file; stdout is data/machine-output;
    stderr carries terminal UX and only mirrors logs by explicit option.
