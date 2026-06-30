@@ -1,6 +1,6 @@
 ---
 digest-of: tech/programming/docs-design
-last-synced: 2026-06-22
+last-synced: 2026-06-30
 source-files:
   - README.md
   - 00-overview.md
@@ -12,9 +12,10 @@ source-files:
   - 06-operational-docs.md
   - 07-ai-agent-considerations.md
   - 08-tracking-and-revalidation.md
+  - 09-known-issues.md
   - 99-checklist.md
   - template-adr.md
-token-estimate: 3100
+token-estimate: 3350
 ---
 
 # AGENTS
@@ -93,10 +94,23 @@ tracking and revalidation, and a review checklist for documentation changes.
   drift.
 - Primary audience is coding agents sweeping the repo; humans benefit too.
 
+### Known Issues (09)
+
+- Bugs in external systems under test are tracked as known-issue cases under
+  `<project>/docs/reference/known-issues/` (reference zone), not a top-level topic folder.
+- One case = one directory `KI-<NNNN>-<slug>/` (sequential id, keyed on the internal id, not the
+  upstream bug); skeleton is README/issue.yaml/investigation/escalation/optional
+  mask/evidence/notes.
+- Lifecycle `open → investigating → mitigated | masked → monitoring → resolved`; on resolution the
+  directory collapses to one `resolved/` summary (issue/root-cause/resolution/recurrence), raw trail
+  in VCS history.
+- Link code to a case with a marker/comment carrying the id; mask suppressions carry a revert
+  trigger and checklist; a registry index + CI check keep references and directories in sync.
+
 ### Checklist (99)
 
-- Review placement, ADR length and status, draft handling, cross-links, agent readiness, and hook
-  validation before merging documentation changes.
+- Review placement, ADR length and status, draft handling, cross-links, agent readiness, known-issue
+  cases, and hook validation before merging documentation changes.
 - The checklist is the pre-merge guard for both human and agent-authored doc edits.
 
 ### ADR Template
@@ -118,6 +132,7 @@ tracking and revalidation, and a review checklist for documentation changes.
 | Operational docs             | `06-operational-docs.md`             |
 | Agent considerations         | `07-ai-agent-considerations.md`      |
 | Tracking and revalidation    | `08-tracking-and-revalidation.md`    |
+| Known issues (external bugs) | `09-known-issues.md`                 |
 | Review checklist             | `99-checklist.md`                    |
 
 ## Maintenance Notes

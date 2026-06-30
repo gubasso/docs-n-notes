@@ -66,6 +66,20 @@ See [05 — Drafts and Promotion](05-drafts-and-promotion.md).
 
 See [07 — AI Agent Considerations](07-ai-agent-considerations.md).
 
+## Known issues
+
+- [ ] A bug in an external system under test is a known-issue case under
+      `<project>/docs/reference/known-issues/`, not a top-level topic folder or a stray draft.
+- [ ] The case has a stable `KI-<NNNN>` id and the expected skeleton (index, metadata,
+      investigation, escalation, evidence; a mask ledger only when a workaround exists).
+- [ ] Any temporary mask carries a revert trigger and checklist, and the code site references the
+      id.
+- [ ] A resolved case is collapsed to one summary that keeps issue, root cause, resolution, and
+      recurrence signal; the raw trail is left in version-control history.
+- [ ] The registry/index row matches the case directory and its status.
+
+See [09 — Known Issues](09-known-issues.md).
+
 ## Verification
 
 - [ ] Cross-links pass the project's link-check hook.

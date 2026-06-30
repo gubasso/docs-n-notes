@@ -98,3 +98,10 @@ tracked:
     dependents:
       - docs/guides/cost-estimation.md
 ```
+
+## See also
+
+A **temporary-workaround revert ledger** is a tracking artifact of the same shape: it records the
+exact condition (an upstream fix confirmed deployed) under which the workaround must be removed.
+That ledger lives with its case in the known-issues library, not here — see
+[09 — Known Issues](09-known-issues.md).

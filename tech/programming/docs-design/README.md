@@ -38,6 +38,7 @@ reference material. Leave broad explanation until the factual sources of truth a
 | 6        | [Operational Docs](06-operational-docs.md)                   | Place runbooks, diagnostics, case studies, and workflows in zones. |
 | 7        | [AI Agent Considerations](07-ai-agent-considerations.md)     | Reduce context pollution with semantic names and tight docs.       |
 | 8        | [Tracking and Revalidation](08-tracking-and-revalidation.md) | Track perishable facts and revalidate their sources on a cadence.  |
+| 9        | [Known Issues](09-known-issues.md)                           | Track bugs in external systems under test; expand then collapse.   |
 | 99       | [Checklist](99-checklist.md)                                 | Review checklist for docs changes.                                 |
 | Template | [ADR template](template-adr.md)                              | Drop-in lean ADR template for project decisions.                   |
 
@@ -51,6 +52,8 @@ reference material. Leave broad explanation until the factual sources of truth a
 - Never delete accepted decisions; supersede or reject them.
 - Keep drafts in `<project>/.draft/` or another gitignored workspace.
 - Write each durable fact once and cross-link from everywhere else.
+- Track bugs in external systems under test as known-issue cases under
+  `<project>/docs/reference/known-issues/`; expand while hot, collapse to one summary when resolved.
 - Track perishable facts in a machine-readable registry with a cadence and a `last_checked` date.
 - Keep code comments load-bearing: rationale, invariants, boundary conditions, and links to owning
   decisions.
