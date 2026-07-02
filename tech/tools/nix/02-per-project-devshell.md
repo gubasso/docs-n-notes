@@ -79,6 +79,35 @@ Do **not** use `poetry shell` or `eval "$(poetry env activate)"` — neither fit
 mutates PATH declaratively and reverses it on `cd` out. The venv must exist first
 (`poetry install`); after creating it, run `direnv reload`.
 
+## Git hooks (pre-commit)
+
+`pre-commit` is **per-project**, not a global tool: declare it — and any `language: system` hook
+tools it shells out to (`dprint`, `taplo`, `typos`, `ruff`, …) — in the project's devShell, so hooks
+run with the same pinned toolchain as the shell and CI. pre-commit self-manages
+`language: python|node|rust|…` hook environments, so only `system` hooks need their tool on the
+devShell PATH.
+
+```nix
+devShells.default = pkgs.mkShell {
+  packages = [
+    pkgs.pre-commit
+    pkgs.dprint # a `language: system` hook tool → must be on PATH
+  ];
+};
+```
+
+Install the git hook once inside the shell (idempotent):
+
+```bash
+pre-commit install
+```
+
+Make it automatic on shell entry with a `shellHook` running `pre-commit install`, or go fully
+Nix-native with [cachix/git-hooks.nix](https://github.com/cachix/git-hooks.nix) (formerly
+`pre-commit-hooks.nix`), which generates `.pre-commit-config.yaml` from Nix and installs the hook
+from the devShell's `shellHook`. In a sandbox that auto-activates direnv (e.g. dctl), a
+non-interactive lifecycle step must call it project-scoped: `direnv exec . pre-commit install`.
+
 ## Maintaining the pin
 
 ```bash

@@ -1,4 +1,4 @@
-# 05 — Migrate one project off mise/rustup onto a Nix devShell
+# 04 — Migrate one project off mise/rustup onto a Nix devShell
 
 Do this per-project, incrementally. The dctl images already provide Nix + direnv; this just adds the
 three files to a repo.

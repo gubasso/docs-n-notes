@@ -18,6 +18,7 @@
           packages = [
             # pkgs.<language-runtime>   # e.g. go, deno, python314
             # pkgs.<package-manager>    # e.g. go, uv
+            # pkgs.pre-commit           # per-project git hooks (+ any `language: system` hook tools)
             pkgs.just
           ];
           shellHook = ''echo "dev shell ready"'';
