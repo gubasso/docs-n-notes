@@ -1,6 +1,6 @@
 ---
 digest-of: tech/languages/python/cli-spec
-last-synced: 2026-06-19
+last-synced: 2026-06-29
 source-files:
   - README.md
   - subcommand-pattern-python.md
@@ -9,7 +9,8 @@ source-files:
   - typer-patterns.md
   - config-precedence-python.md
   - parse-cli-options-examples.py
-token-estimate: 1300
+  - symbol-visibility-python.md
+token-estimate: 1600
 ---
 
 # AGENTS
@@ -43,6 +44,13 @@ callbacks.
 - **Key=value parsing**: `extract_cli_server_details` pattern for complex multi-field CLI entries.
 - **Testing**: `pytest -n auto`, one `tests/test_cmd_<name>.py` per subcommand,
   `typer.testing.CliRunner`.
+- **Symbol visibility**: enforce the leading-underscore module-private convention with a custom
+  stdlib-`ast` pre-commit checker — public iff referenced by another `src/` module (dev `tests/`
+  excluded; tests may import `_name` internals). Custom checker owns Direction A (public name, no
+  external ref → must be `_`); Ruff `PLC2701` (preview, isolated hook) owns Direction B
+  (cross-module `_name` import). Auto-exempt union families, entry points, pytest fixtures/hooks;
+  `# visibility: public` for dynamic cases. Resolve relative + module-qualified imports; rename with
+  token-aware tooling.
 
 ## Source Map
 
@@ -55,6 +63,7 @@ callbacks.
 | Typer patterns, Pydantic validators          | `typer-patterns.md`             |
 | 5-layer config loader, pydantic-settings     | `config-precedence-python.md`   |
 | Runnable validation examples                 | `parse-cli-options-examples.py` |
+| Leading-underscore visibility enforcement    | `symbol-visibility-python.md`   |
 
 ## Maintenance Notes
 

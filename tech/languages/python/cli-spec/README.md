@@ -18,6 +18,7 @@ applies the general principles to the specifics of Python. Facing-category conse
 | [logging-python.md](logging-python.md)                         | File-first `structlog` setup with XDG state paths and optional stderr mirroring.                                      |
 | [subcommand-pattern-python.md](subcommand-pattern-python.md)   | Typer subcommand structure: parse-shape files, handler files, dispatch wiring, and help rendering.                    |
 | [error-handling-python.md](error-handling-python.md)           | Layered Python exceptions, stable error kinds, BSD sysexits, and the top-level Typer error boundary.                  |
+| [symbol-visibility-python.md](symbol-visibility-python.md)     | Enforce the leading-underscore module-private convention via a custom AST pre-commit checker + Ruff `PLC2701`.        |
 
 ## Stack defaults
 
