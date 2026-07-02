@@ -1,0 +1,169 @@
+# Nix (flake devShell)
+
+Canonical **per-project environment manager** for any language. A flake pins the toolchain (language
+runtimes + system tools) and gives every checkout a reproducible dev shell. Language package
+managers (Poetry, npm, cargo, …) still own dependency resolution — see
+[development-tools-workflow](../workflows/development-tools-workflow.md).
+
+- [Nix flakes](https://nix.dev/concepts/flakes.html)
+- [nix.dev — declarative shell](https://nix.dev/tutorials/first-steps/declarative-shell.html)
+- [nix-community/nix-direnv](https://github.com/nix-community/nix-direnv)
+
+## Host setup (install Nix, enable flakes)
+
+`nix develop` / flakes need a working install with the **new CLI** enabled. Enable the experimental
+features once per user (or system-wide in `/etc/nix/nix.conf`):
+
+```bash
+mkdir -p ~/.config/nix
+echo 'experimental-features = nix-command flakes' >> ~/.config/nix/nix.conf
+```
+
+Both tokens are required: `nix-command` unlocks the new verbs (`develop`, `flake`); `flakes` unlocks
+flake evaluation.
+
+### openSUSE (Tumbleweed) — RPM multi-user daemon
+
+```bash
+sudo zypper install nix
+sudo systemctl enable --now nix-daemon.socket   # socket-activated daemon
+sudo usermod -aG nix-users "$USER"               # RPM gates daemon access on this group
+# re-login (or `newgrp nix-users`), then open a new shell
+# point Nix at openSUSE's CA bundle (TLS for flake-input downloads):
+echo 'ssl-cert-file = /etc/ssl/ca-bundle.pem' | sudo tee -a /etc/nix/nix.conf
+sudo systemctl restart nix-daemon
+```
+
+openSUSE specifics:
+
+- State dir is `/var/lib/nix/...` (upstream uses `/nix/var/nix/...`).
+- Access is **group-gated**: the daemon socket is `0660 root:nix-users` and the tmpfiles dir
+  (`/usr/lib/tmpfiles.d/nix-daemon.conf`) is `0750 root:nix-users`. Being in `nix-users` is the
+  native way in — do **not** `chmod` the socket/dir (a hack `systemd-tmpfiles --create` reverts
+  anyway; the `0660` socket file is the real gate).
+- **TLS / CA bundle**: openSUSE ships its bundle at `/etc/ssl/ca-bundle.pem`, but Nix's compiled-in
+  fallback probes the Debian/NixOS path (`/etc/ssl/certs/ca-certificates.crt`), which is absent.
+  Without the `ssl-cert-file` line above, downloads fail with `curl` 77
+  (`Problem with the
+  SSL CA cert … error adding trust anchors from file:`). Setting it in the
+  system-wide `/etc/nix/nix.conf` fixes both the client (flake eval) and the root daemon in one key
+  — cleaner than a `systemctl edit nix-daemon` env drop-in, which only covers the daemon. Ensure the
+  bundle exists first:
+  `sudo zypper install ca-certificates ca-certificates-mozilla && sudo update-ca-certificates`. See
+  [NixOS/nix#3155](https://github.com/NixOS/nix/issues/3155).
+- Verify: `nix store info` → `Store URL: daemon` (first connect socket-activates
+  `nix-daemon.service`); `nix config show | grep ssl-cert-file` → `/etc/ssl/ca-bundle.pem`.
+
+### NixOS
+
+Nix is the system; enable the new CLI + flakes declaratively:
+
+```nix
+# configuration.nix
+nix.settings.experimental-features = [ "nix-command" "flakes" ];
+```
+
+`sudo nixos-rebuild switch`, then `nix develop` works out of the box — the daemon is native and the
+socket is user-accessible by default (no group juggling).
+
+## Automatic activation (direnv)
+
+`.envrc` only auto-loads if **direnv is hooked into your shell** — this is the piece people miss
+(without it nothing activates on `cd`). Install direnv + nix-direnv and add the hook once,
+host-level, not per-project:
+
+```bash
+# install direnv + nix-direnv (OS package or Home Manager `programs.direnv`), then
+# hook the shell — for bash, in ~/.bashrc (zsh/fish have their own hook line):
+eval "$(direnv hook bash)"
+```
+
+nix-direnv caches the flake evaluation so re-entry is fast. On NixOS,
+`programs.direnv = { enable = true; nix-direnv.enable = true; };` installs the hook for you.
+
+### Layering a language venv (Python / Poetry)
+
+`use flake` puts `python`/`poetry` on PATH; layer the project's Poetry venv on top so
+console-scripts resolve without a manual activation. `layout poetry` is **not** in direnv's stdlib,
+so inline the logic in `.envrc`:
+
+```bash
+use flake
+
+# use flake must stay first — it provides `poetry`. `poetry env info --path` locates
+# the venv (stable on Poetry 1.x/2.x; works for in-project .venv or the cache dir).
+watch_file pyproject.toml poetry.lock
+venv="$(poetry env info --path 2>/dev/null || true)"
+if [[ -n "$venv" && -d "$venv" ]]; then
+  export VIRTUAL_ENV="$venv"
+  export POETRY_ACTIVE=1
+  PATH_add "$venv/bin"
+fi
+```
+
+Do **not** use `poetry shell` (removed in Poetry 2.0) or `eval "$(poetry env activate)"` (2.0+ only
+_prints_ the command — not suited to direnv, which mutates PATH declaratively and reverses it on
+`cd` out). The venv must exist first (`poetry install`); after creating it, run `direnv reload`.
+
+## The three files
+
+- `flake.nix` — declares `devShells.default` (the toolchain). Committed.
+- `flake.lock` — pins every input to an exact revision. Committed; generated by `nix`, never
+  hand-written.
+- `.envrc` — `use flake` (plus, for Python, a Poetry-venv layer — see
+  [Automatic activation](#automatic-activation-direnv)), so direnv auto-enters the shell and
+  activates the venv on `cd`.
+
+## Enter the shell
+
+```bash
+nix develop          # explicit, one-off
+direnv allow         # once; nix-direnv then auto-enters on cd (.envrc = use flake)
+```
+
+## Minimal `flake.nix`
+
+Values in angle brackets are placeholders.
+
+```nix
+{
+  description = "<project> dev shell";
+
+  inputs = {
+    # nixos-unstable = rolling branch (better-tested than nixpkgs-unstable);
+    # or pin a stable release, e.g. nixos-26.05. Avoid the bare `nixpkgs`
+    # registry shorthand — it resolves per-machine and is not reproducible.
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    flake-utils.url = "github:numtide/flake-utils";
+  };
+
+  outputs = { self, nixpkgs, flake-utils }:
+    flake-utils.lib.eachDefaultSystem (system:
+      let pkgs = import nixpkgs { inherit system; };
+      in {
+        devShells.default = pkgs.mkShell {
+          packages = [
+            pkgs.<language-runtime>   # e.g. python312, nodejs_22, rustc+cargo
+            pkgs.<package-manager>    # e.g. poetry, pnpm, cargo
+          ];
+          shellHook = ''echo "dev shell ready"'';
+        };
+      });
+}
+```
+
+## Maintaining the pin
+
+```bash
+nix flake lock              # generate flake.lock the first time (needs network)
+nix flake update            # bump ALL inputs
+nix flake update nixpkgs    # bump one input only
+```
+
+## Notes
+
+- Ignore `.direnv/` and `/result` in `.gitignore`.
+- Nix supplies runtimes and non-language system tools; it does **not** replace the project's package
+  manager by default (no poetry2nix / cargo2nix unless you specifically want Nix to build the app).
+- Offline / no-nix host: author `flake.nix` + `.envrc`, but `flake.lock` can only be generated where
+  `nix` and network are available. Do not fabricate a lock.
