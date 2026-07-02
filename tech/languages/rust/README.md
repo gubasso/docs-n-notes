@@ -10,3 +10,6 @@ Rust notes and workflow references.
 - [publish-crates-io](publish-crates-io.md)
 - [rust](rust.md)
 - [sqlx](sqlx.md)
+
+Toolchain: the canonical per-project setup is a Nix devShell reading `rust-toolchain.toml` — see
+[nix/03-rust-toolchain](../../tools/nix/03-rust-toolchain.md).

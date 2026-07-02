@@ -5,7 +5,7 @@
 > the project's **Nix flake devShell**; run Poetry _inside_ it (`nix develop` → `poetry install`).
 > Do not replace Poetry with Nix / poetry2nix by default. See
 > [development-tools-workflow](../../workflows/development-tools-workflow.md) and
-> [nix](../../tools/nix.md). The `pip install poetry` / `RUN pip install ...` lines below are
+> [nix](../../tools/nix/README.md). The `pip install poetry` / `RUN pip install ...` lines below are
 > container/deployment patterns, not local-dev setup.
 
 - Poetry alternative (written in Rust): https://github.com/astral-sh/rye

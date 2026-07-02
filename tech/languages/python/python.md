@@ -32,7 +32,7 @@ print("Output from last process : " + (p2.communicate()[0]).decode())
   - The Python interpreter is provisioned by the project's **Nix flake devShell** (canonical
     per-project environment manager); [Poetry](python-poetry.md) handles dependencies inside it. See
     [development-tools-workflow](../../workflows/development-tools-workflow.md) and
-    [nix](../../tools/nix.md).
+    [nix](../../tools/nix/README.md).
 
 - python types
 

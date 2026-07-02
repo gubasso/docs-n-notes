@@ -15,8 +15,9 @@ them into one tool.
 
 Per-project environments default to a **Nix flake devShell** for any language. The flake pins the
 runtime(s) and system tooling; `flake.lock` makes it reproducible; `.envrc` (`use flake`)
-auto-enters it via direnv/nix-direnv. See [nix](../tools/nix.md). This supersedes ad-hoc version
-managers ([mise](./mise.md), asdf, pyenv, nvm, rustup-as-installer) as the default.
+auto-enters it via direnv/nix-direnv. See [nix](../tools/nix/README.md). It is the default for any
+language, ahead of ad-hoc version managers ([mise](./mise.md), asdf, pyenv, nvm,
+rustup-as-installer).
 
 ## Dependency manager: language-native, inside the devShell
 
@@ -38,7 +39,8 @@ poetry install         # create the venv
 direnv reload          # pick up the freshly-created venv
 ```
 
-With direnv hooked (see [nix — Automatic activation](../tools/nix.md#automatic-activation-direnv)),
+With direnv hooked (see
+[nix — Automatic activation](../tools/nix/02-per-project-devshell.md#automatic-activation-direnv)),
 `cd` into the project auto-enters the devShell and activates the Poetry venv — no manual
 `eval "$(poetry env activate)"`. That manual step is only for plain `nix develop` without direnv.
 

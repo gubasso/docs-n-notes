@@ -28,7 +28,7 @@ conventions.
 - **Environment vs dependencies**: the Python runtime is provisioned by the project's Nix flake
   devShell (canonical per-project environment manager); Poetry manages dependencies inside it. Do
   not replace Poetry with Nix/poetry2nix by default. See
-  `../../workflows/development-tools-workflow.md` and `../../tools/nix.md`.
+  `../../workflows/development-tools-workflow.md` and `../../tools/nix/README.md`.
 - **Django review guide**: Django-specific review heuristics (N+1 queries, migrations, security,
   template injection).
 - **General notes** (`python.md`): project environment/runtime, shell commands via subprocess, type
