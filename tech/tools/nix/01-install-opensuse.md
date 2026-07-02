@@ -40,9 +40,10 @@ openSUSE specifics:
 - Verify: `nix store info` → `Store URL: daemon`; `nix config show | grep ssl-cert-file` →
   `/etc/ssl/ca-bundle.pem`.
 
-> The **container** case (dctl sandboxes) is different: a single-user, daemonless install on a
-> persistent `/nix` volume, no `nix-users` group. The same `ssl-cert-file` gotcha recurs there. See
-> [04-dctl-devcontainers](04-dctl-devcontainers.md).
+> The **container** case is different: a single-user, daemonless install, no `nix-users` group. For
+> a non-root user the per-user profile/state lives under `~/.local/state/nix` (XDG) — persist that
+> dir (and `/nix`) to survive an ephemeral container home. The same `ssl-cert-file` gotcha recurs
+> there.
 
 ## NixOS
 

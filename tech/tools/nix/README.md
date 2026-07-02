@@ -25,8 +25,7 @@ you deliberately want Nix to _build_ the app).
 3. [02-per-project-devshell](02-per-project-devshell.md) — flake + `.envrc` + direnv; the
    Poetry-venv layer.
 4. [03-rust-toolchain](03-rust-toolchain.md) — the hybrid `rust-toolchain.toml` + oxalica approach.
-5. [04-dctl-devcontainers](04-dctl-devcontainers.md) — how Nix runs inside dctl sandboxes.
-6. [05-migrate-a-project](05-migrate-a-project.md) — step-by-step to move one repo off mise/rustup.
+5. [04-migrate-a-project](04-migrate-a-project.md) — step-by-step to move one repo off mise/rustup.
 
 Copy-paste starting points live in [`templates/`](templates/) (python, rust, node, zig, generic).
 

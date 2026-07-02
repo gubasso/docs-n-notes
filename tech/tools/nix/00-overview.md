@@ -37,9 +37,8 @@ Leave the shell (`cd ..`) and direnv reverses the PATH changes. Nothing is insta
 project; the toolchain lives in the Nix store and is garbage-collected only when no gcroot
 references it (nix-direnv keeps one under `.direnv/`).
 
-## Why not just `nix profile install` everything?
+## Why not just `nix profile add` everything?
 
-`nix profile` is an imperative global profile — good for **user CLIs** you always want (see
-[04-dctl-devcontainers](04-dctl-devcontainers.md) for the dctl global toolset). Per-**project**
-toolchains belong in that project's flake so each repo pins its own node/python/rust version
-reproducibly, independent of what's globally installed.
+`nix profile` is an imperative global profile — good for **user CLIs** you always want.
+Per-**project** toolchains belong in that project's flake so each repo pins its own node/python/rust
+version reproducibly, independent of what's globally installed.

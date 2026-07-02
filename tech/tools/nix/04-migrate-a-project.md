@@ -45,4 +45,3 @@ three files to a repo.
   (`direnv exec . poetry install`, etc.) light up automatically; before that they no-op.
 - Rust: keep `rust-toolchain.toml` — the flake reads it (see
   [03-rust-toolchain](03-rust-toolchain.md)); no `~/.rustup` volume anymore.
-- See [04-dctl-devcontainers](04-dctl-devcontainers.md) for how activation works in the sandbox.

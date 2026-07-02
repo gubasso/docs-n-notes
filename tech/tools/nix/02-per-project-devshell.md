@@ -14,8 +14,7 @@ eval "$(direnv hook bash)"
 
 nix-direnv caches the flake evaluation so re-entry is fast. On NixOS / Home Manager,
 `programs.direnv = { enable = true; nix-direnv.enable = true; };` installs the hook for you. (In
-dctl sandboxes both the hook and a `[whitelist]` prefix are baked in — see
-[04-dctl-devcontainers](04-dctl-devcontainers.md).)
+dctl sandboxes both the hook and a `[whitelist]` prefix are baked in.)
 
 ## Enter the shell
 

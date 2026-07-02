@@ -1,7 +1,7 @@
 # Templates
 
 Copy the matching dir's files into a project root, tune the runtime, then `nix flake lock` on a host
-with Nix. See [../05-migrate-a-project](../05-migrate-a-project.md).
+with Nix. See [../04-migrate-a-project](../04-migrate-a-project.md).
 
 | Dir        | For             | Files                                              |
 | ---------- | --------------- | -------------------------------------------------- |
