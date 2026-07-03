@@ -16,6 +16,17 @@ nix-direnv caches the flake evaluation so re-entry is fast. On NixOS / Home Mana
 `programs.direnv = { enable = true; nix-direnv.enable = true; };` installs the hook for you. (In
 dctl sandboxes both the hook and a `[whitelist]` prefix are baked in.)
 
+**The hook only fires in prompt-drawing shells.** `direnv hook bash` works via `PROMPT_COMMAND`, so
+it activates only when a shell renders a prompt. It does **not** fire in **command shells**
+(`bash -c "cmd"`, and `bash -lic "cmd"` despite the `-i`) or in non-interactive/CI/lifecycle shells
+— none of them run the prompt loop. So a tool launched that way (a coding agent, a CI step, an
+editor task runner) starts with **no devShell** unless you activate it another way:
+
+- **Explicit:** `direnv exec . <cmd>` — loads the dir's `.envrc` and runs `<cmd>` inside it.
+- **Eager:** `eval "$(direnv export bash)"` at shell init — loads the current dir's env without a
+  prompt (useful when you can't wrap the command, e.g. an agent launched via a command shell; this
+  is what dctl sandboxes do, keyed off an env marker so only sandbox command shells trigger it).
+
 ## Enter the shell
 
 ```bash
