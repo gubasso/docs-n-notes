@@ -12,8 +12,11 @@ three files to a repo.
    - Zig → `templates/zig/{flake.nix,.envrc}`
    - Anything else → `templates/generic/{flake.nix,.envrc}`
 
-2. **Tune `flake.nix`** to the runtime the project needs (e.g. `python314` vs `python312`,
-   `nodejs_22`, add `pkgs.<system-lib>` for native builds).
+2. **Tune `flake.nix`** to the runtime the project needs (e.g. `nodejs_22`, a Zig version, add
+   `pkgs.<system-lib>` for native builds). **For Python/Poetry**, pin the version explicitly and add
+   the `assert python.version == pkgs.poetry.python.version` guard so the venv can't drift from the
+   pin; see [`02-per-project-devshell.md`](02-per-project-devshell.md) ("Aligning the Python
+   version").
 
 3. **Generate the lock** on a host with Nix + network (never fabricate it):
    ```bash

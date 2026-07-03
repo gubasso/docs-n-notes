@@ -79,6 +79,120 @@ Do **not** use `poetry shell` or `eval "$(poetry env activate)"` — neither fit
 mutates PATH declaratively and reverses it on `cd` out. The venv must exist first
 (`poetry install`); after creating it, run `direnv reload`.
 
+## Aligning the Python version (single source of truth)
+
+**The trap:** pinning `pkgs.python314` in the flake does **not** decide the venv's Python. nixpkgs'
+`pkgs.poetry` is built against nixpkgs' _default_ CPython (e.g. 3.13), so Poetry ships its **own**
+interpreter inside its closure. Poetry 2.x picks the interpreter with `findpython`, then hands venv
+creation to the `virtualenv` library, whose discovery **re-resolves** to the CPython in Poetry's own
+closure — even with `virtualenvs.use-poetry-python = false`. With two different CPythons on PATH
+(the flake's + Poetry's), the resolver decides, not your config, and you silently get a venv on
+Poetry's version instead of the flake's. (Refs: python-poetry/poetry#10527, NixOS/nixpkgs#439512.)
+
+**The fix — declare the version, then guard it.** Pin the interpreter **explicitly** (this line is
+your SoT) and add a native `assert` that forces Poetry's own interpreter to equal it. The pin is
+declarative and human-readable; the assert removes the race by guaranteeing the shell holds a single
+Python version, and turns a future nixpkgs divergence into a **loud build failure** instead of a
+silent venv on the wrong version:
+
+```nix
+let
+  pkgs = import nixpkgs { inherit system; };
+  python = pkgs.python313;   # <-- the ONE declared source of truth
+in
+# pkgs.poetry is built against nixpkgs' default CPython and creates the venv
+# with THAT interpreter, not whatever is on PATH. Assert they agree so the venv
+# matches the pin (cache-only, no Poetry rebuild); a nixpkgs bump that moves
+# Poetry's Python fails the build loudly — bump `python` to match.
+assert python.version == pkgs.poetry.python.version;
+{
+  devShells.default = pkgs.mkShell {
+    packages = [ python pkgs.poetry pkgs.pre-commit pkgs.just ];
+  };
+}
+```
+
+Why this shape:
+
+- **Explicit + declarative SoT.** `python = pkgs.python313` is a readable declaration of the runtime
+  version, pinned transitively by `flake.lock`. `pyproject.toml`'s `requires-python` is a
+  **separate** concern — package-compatibility metadata (a range, e.g. `>=3.11,<4.0`), not the
+  dev-interpreter pin; keep the pin inside that range.
+- **Deterministic + cache-only.** The only Poetry in the binary cache is the one built against
+  nixpkgs' **default** CPython, so pin `python` to that same version (today, the default) and both
+  come from cache — no `poetry env use`, no recompile.
+- **No silent drift.** The `assert` is the load-bearing part: without it an explicit pin that
+  diverges from Poetry's Python silently reintroduces the two-Python race. With it, divergence can't
+  slip by — the build stops and tells you to bump the pin. Keep `poetry.toml`'s
+  `use-poetry-python = false` (2.x default; idiomatic and self-documenting).
+
+**Rejected alternatives** (in order of how tempting they look):
+
+- **`python = pkgs.poetry.python`** (bind to Poetry's interpreter, no pin) — zero-race and
+  zero-maintenance, but the version is **implicit**: "whatever nixpkgs built Poetry against,"
+  declared nowhere. Fails the explicit/declarative-SoT goal. Use only if you _want_ the version to
+  auto-follow nixpkgs with no say in it.
+- **Explicit pin WITHOUT the `assert`** — reintroduces the silent two-Python race the moment a
+  nixpkgs bump moves Poetry's CPython away from the pin. The guard is the whole point.
+- **`pkgs.poetry.override { python3 = <pin>; }`** — the _only_ way to pin a minor **independently**
+  of nixpkgs' default, but it recompiles Poetry **and its whole closure** with **no cache hit** —
+  slow and fragile on a brand-new interpreter. Avoid unless you truly need a version Poetry isn't
+  built against.
+- **Remove `python` from the flake** — deterministic but implicit SoT, and nixpkgs' poetry wrapper
+  puts only `poetry` on PATH, **not** `python`/`python3` — editors and ad-hoc scripts have no
+  interpreter until the venv activates.
+- **`poetry env use …` in a `shellHook`** — imperative wrapped in declarative; non-idempotent,
+  mutates Poetry's cache, re-runs every entry. Reject.
+- **`poetry python install` (Poetry 2.1+, python-build-standalone)** — downloads an impure
+  interpreter outside the nix store, not pinned by `flake.lock`. Fights Nix. Reject.
+- **poetry2nix `mkPoetryEnv`** — fully nix-native, but duplicates `poetry.lock` into Nix and adds
+  override surface; over-engineered when Poetry already owns deps. Only if you want Poetry gone at
+  runtime.
+
+## Binary wheels need the C++ runtime (`libstdc++.so.6`)
+
+A pure Nix devShell provides the runtimes and build tools, but **not** the shared C/C++ runtime
+libraries on the dynamic loader's search path — Nix reaches those only through RPATHs baked into
+nix-built binaries. Precompiled **manylinux wheels** (grpcio's `cygrpc.so`, `numpy`,
+`pydantic-core`, `cryptography`, …) are **not** nix-built: pip/Poetry drops them in as-is, and they
+`dlopen`/link the _system_ `libstdc++.so.6` (and often `libz.so.1`) via the normal loader path.
+Inside the devShell that path doesn't include them, so `import` fails:
+
+```text
+ImportError: libstdc++.so.6: cannot open shared object file: No such file or directory
+```
+
+This bites at **import** time, not install time, and only under Nix — a plain distro venv (or the
+old `mise`/system-Python setup) finds the host's `/usr/lib/libstdc++.so.6` and works, which is why
+it surfaces right after migrating a project to a flake. The `NIX_CC` / `NIX_LDFLAGS` / `stdenv` vars
+in the shell are **compile-time** hooks and do nothing for an already-built wheel.
+
+Fix: put the gcc C++ runtime (and zlib) on `LD_LIBRARY_PATH` in the devShell. `mkShell` turns any
+attribute into an exported env var, so this is a clean one-liner (already baked into
+[`templates/python/flake.nix`](templates/python/flake.nix)):
+
+```nix
+devShells.default = pkgs.mkShell {
+  # `python` is the pinned interpreter — see "Aligning the Python version" above.
+  packages = [ python pkgs.poetry ];
+
+  # gcc libstdc++.so.6 + libz.so.1 for precompiled manylinux wheels
+  LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath [
+    pkgs.stdenv.cc.cc.lib   # ships libstdc++.so.6 — clears the reported error
+    pkgs.zlib               # libz.so.1 — grpcio/Google wheels dlopen this too
+  ];
+};
+```
+
+Then `direnv reload` (or re-enter `nix develop`). If a wheel still fails to load, `ldd` its `.so` to
+see which library is missing and add that package (e.g. `pkgs.libz`, `pkgs.openssl`, `pkgs.glib`).
+
+- **Why `LD_LIBRARY_PATH` and not `nix-ld`:** `nix-ld` also works but needs the _host_ to install
+  and configure the `nix-ld` NixOS module (or standalone service) — not portable to RPM/openSUSE
+  hosts. On a nix-ld host you may instead export `NIX_LD_LIBRARY_PATH`.
+- **Why not `autoPatchelfHook` / build the wheel from nixpkgs:** that moves the dep into Nix and
+  fights the "Poetry owns the venv, Nix owns the toolchain" split — over-engineered for a devShell.
+
 ## Git hooks (pre-commit)
 
 `pre-commit` is **per-project**, not a global tool: declare it — and any `language: system` hook
