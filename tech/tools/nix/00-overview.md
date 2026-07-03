@@ -39,6 +39,10 @@ references it (nix-direnv keeps one under `.direnv/`).
 
 ## Why not just `nix profile add` everything?
 
-`nix profile` is an imperative global profile — good for **user CLIs** you always want.
-Per-**project** toolchains belong in that project's flake so each repo pins its own node/python/rust
-version reproducibly, independent of what's globally installed.
+`nix profile` is an imperative global profile — good for **user CLIs** you always want; keep it
+lean. Anything tied to a _specific_ project belongs in that project's flake devShell, not the global
+profile: not just its language toolchain (so each repo pins its own node/python/rust version
+reproducibly, independent of what's globally installed), but also its **task runners, linters,
+formatters, and pre-commit hook tools** (`just`, `dprint`, `pre-commit`, `ruff`, …). Rule of thumb:
+if only some projects need it — or it wants a project-pinned version — it goes in the flake, not the
+profile.
