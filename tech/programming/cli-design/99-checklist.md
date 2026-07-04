@@ -171,6 +171,8 @@ waive it in an ADR — don't ship with silent gaps.
 - [ ] Format-check, lint, test all gate the PR.
 - [ ] Toolchain version is pinned (`rust-toolchain.toml`, `.python-version`, `go.mod`).
 - [ ] Dependency lock file committed for binaries.
+- [ ] Dependencies are added/updated only via the package manager's resolve-and-lock command
+      (`cargo add` / `uv add` / `go get`), never by hand-editing pinned versions.
 - [ ] Reproducible builds in CI (cached, deterministic).
 - [ ] Smoke test on every supported OS.
 - [ ] Release artifacts include shell completions and a man page (if applicable).

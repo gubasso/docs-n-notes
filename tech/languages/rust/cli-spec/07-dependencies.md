@@ -16,6 +16,27 @@ Opinionated default dependency list. Each entry has a one-line justification and
 condition. Pick deliberately; resist the urge to add "useful-looking" crates without a concrete
 need.
 
+## Adding dependencies
+
+**Manage every dependency through Cargo's CLI — never hand-edit dependency names, versions, or
+features in `Cargo.toml`.**
+
+- Add or change a crate with `cargo add <crate>` (e.g.
+  `cargo add clap --features derive,env,wrap_help`). `cargo add` fetches the latest
+  SemVer-compatible version, resolves the whole graph, writes the entry into `Cargo.toml`, and
+  updates `Cargo.lock` in one step.
+- Remove a crate with `cargo remove <crate>`.
+- Bump the lockfile with `cargo update` — deliberately, and read the changelog first.
+- Add a dev-dependency with `cargo add --dev <crate>`; add a feature to a crate you already depend
+  on with `cargo add <crate> --features <feat>`.
+- Do **not** type version strings or feature lists into `Cargo.toml` by hand. Hand-edits drift from
+  the resolver, skip the lockfile update, and pin stale versions. Agents and contributors change
+  dependencies only through these commands.
+- Commit `Cargo.lock` for binaries (not for libraries); `cargo add`/`cargo update` keep it in sync.
+
+The [pinning policy](#pinning-policy) below still governs the resulting entries: majors in
+`Cargo.toml`, exact versions in `Cargo.lock`.
+
 ## Runtime defaults
 
 Always:
@@ -101,6 +122,10 @@ Deprecated, dead, or superseded:
 
 ## Cargo.toml skeleton
 
+Hand-author only the non-dependency tables — `[package]`, `[[bin]]`, `[profile.release]`. Everything
+under `[dependencies]`/`[dev-dependencies]` is installed with `cargo add` (see
+[Adding dependencies](#adding-dependencies)); never type crate versions in by hand.
+
 ```toml
 [package]
 name        = "app-template"
@@ -115,25 +140,61 @@ repository  = "https://github.com/you/app-template"
 name = "app"
 path = "src/main.rs"
 
+[profile.release]
+lto           = "thin"
+codegen-units = 1
+strip         = "symbols"
+```
+
+Install the default runtime stack — each command resolves the latest SemVer-compatible version,
+writes it into `[dependencies]`, and updates `Cargo.lock`:
+
+```sh
+cargo add clap --features derive,env,wrap_help
+cargo add clap_complete clap_mangen
+cargo add anyhow thiserror
+cargo add tracing
+cargo add tracing-subscriber --features env-filter,fmt
+cargo add tracing-appender
+cargo add serde --features derive
+cargo add serde_json toml
+cargo add figment --features env,toml
+cargo add directories
+cargo add camino --features serde1
+cargo add tokio --features rt,macros
+
+# Human-UX-only additions (add when the CLI is human-facing):
+cargo add anstream owo-colors comfy-table indicatif inquire
+
+# Dev-dependencies:
+cargo add --dev assert_cmd predicates tempfile
+cargo add --dev insta --features yaml
+```
+
+The resolved `[dependencies]` block will look roughly like the following. **Illustrative only —
+install via `cargo add`; do not hand-copy these versions.** As of 2026-07 the current majors are
+`thiserror` 2, `toml` 1 (TOML spec 1.1), and `anstream` 1.0:
+
+```toml
 [dependencies]
 clap                = { version = "4", features = ["derive", "env", "wrap_help"] }
 clap_complete       = "4"
 clap_mangen         = "0.2"
 anyhow              = "1"
-thiserror           = "1"
+thiserror           = "2"
 tracing             = "0.1"
 tracing-subscriber  = { version = "0.3", features = ["env-filter", "fmt"] }
 tracing-appender    = "0.2"
 serde               = { version = "1", features = ["derive"] }
 serde_json          = "1"
-toml                = "0.8"
+toml                = "1"
 figment             = { version = "0.10", features = ["env", "toml"] }
 directories         = "5"
 camino              = { version = "1", features = ["serde1"] }
 tokio               = { version = "1", features = ["rt", "macros"] }
 
 # Human-UX-only additions:
-# anstream      = "0.6"
+# anstream      = "1"
 # owo-colors    = "4"
 # comfy-table   = "7"
 # indicatif     = "0.17"
@@ -144,11 +205,6 @@ assert_cmd  = "2"
 predicates  = "3"
 insta       = { version = "1", features = ["yaml"] }
 tempfile    = "3"
-
-[profile.release]
-lto           = "thin"
-codegen-units = 1
-strip         = "symbols"
 ```
 
 Trim aggressively for very small CLIs (drop `tokio`, `figment`, `directories` if you don't need

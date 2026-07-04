@@ -1,6 +1,6 @@
 ---
 digest-of: tech/languages/rust/cli-spec
-last-synced: 2026-06-18
+last-synced: 2026-07-04
 source-files:
   - README.md
   - 00-directory-tree.md
@@ -9,6 +9,7 @@ source-files:
   - 03-error-handling.md
   - 04-logging.md
   - 05-config.md
+  - 06-testing-and-quality/
   - 07-dependencies.md
   - 08-naming-and-visibility.md
   - 09-coding-style.md
@@ -80,6 +81,9 @@ spec references the general facing-category taxonomy and records only Rust idiom
 
 ### Dependencies
 
+- Manage deps through Cargo's CLI only: `cargo add`/`cargo remove`/`cargo update`. Never hand-edit
+  dependency names/versions/features in `Cargo.toml`. Commit `Cargo.lock` for binaries. (ADR-0001)
+- Current majors: `thiserror` 2, `toml` 1 (TOML spec 1.1), `anstream` 1.0.
 - Avoid: `env_logger`, `log`, `structopt`, `failure`, `confy`, `dirs`, `lazy_static`, `serde_yaml`.
 - Prefer: `std::sync::LazyLock` over `once_cell`. `time` over `chrono` when possible.
 

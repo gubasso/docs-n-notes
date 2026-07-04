@@ -49,10 +49,15 @@ templates/
 ├─ Cargo.toml.template
 └─ src/
    ├─ main.rs.template
-   ├─ cli/mod.rs.template
-   ├─ commands/mod.rs.template
+   ├─ main.rs.machine.template
    ├─ error.rs.template
-   └─ logging.rs.template
+   ├─ logging.rs.template
+   ├─ cli/
+   │  ├─ mod.rs.template
+   │  └─ example.rs.template
+   └─ commands/
+      ├─ mod.rs.template
+      └─ example.rs.template
 ```
 
 Copy the tree, drop the `.template` suffixes, rename `app_template` → your crate name.

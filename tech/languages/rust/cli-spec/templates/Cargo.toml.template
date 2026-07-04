@@ -16,26 +16,11 @@ readme      = "README.md"
 name = "app"
 path = "src/main.rs"
 
-[dependencies]
-clap                = { version = "4", features = ["derive", "env", "wrap_help"] }
-clap_complete       = "4"
-anyhow              = "1"
-thiserror           = "1"
-tracing             = "0.1"
-tracing-subscriber  = { version = "0.3", features = ["env-filter", "fmt"] }
-serde               = { version = "1", features = ["derive"] }
-serde_json          = "1"
-toml                = "0.8"
-figment             = { version = "0.10", features = ["env", "toml"] }
-directories         = "5"
-camino              = { version = "1", features = ["serde1"] }
-tokio               = { version = "1", features = ["rt", "macros"] }
-
-[dev-dependencies]
-assert_cmd  = "2"
-predicates  = "3"
-insta       = { version = "1", features = ["yaml"] }
-tempfile    = "3"
+# Dependencies are NOT listed here. Install them with `cargo add` before the first build so the
+# resolver picks the latest SemVer-compatible versions and writes Cargo.lock. Do not hand-edit
+# dependency versions/features. See 07-dependencies.md "Adding dependencies" for the exact command
+# list (runtime stack via `cargo add ...`, dev tools via `cargo add --dev ...`). `cargo add`
+# populates [dependencies]/[dev-dependencies] here for you.
 
 [profile.release]
 lto           = "thin"
