@@ -11,9 +11,9 @@ Container and devcontainer notes.
 - [docker-portainer](docker-portainer.md) — Portainer container-management UI notes
 - [docker-secrets](docker-secrets.md) — using Docker secrets in Compose services
 - [kubernetes](kubernetes.md) — Kubernetes general notes
-- [libkrun-crun-newline-mangling-upstream-issue](libkrun-crun-newline-mangling-upstream-issue.md) —
-  upstream bug writeup: `podman --runtime krun` mangles newlines in `sh -c` payloads
 - [podman-first-dev-containers-workflow-terminal-neovim](podman-first-dev-containers-workflow-terminal-neovim.md)
   — terminal + Neovim dev-container workflow built on Podman
-- [podman-libkrun](podman-libkrun.md) — rootless Podman + libkrun (`crun --krun`) on Arch: what
-  works and known issues
+
+See also: [../sandbox-isolation-backends/](../sandbox-isolation-backends/README.md) — the canonical
+reference for KVM-class microVM isolation (libkrun / `crun --krun`), including the rootless
+podman+krun operational notes and the `\n`-mangling bug that previously lived here.
