@@ -13,3 +13,7 @@ draft*
 
 # pre-commit / link checker
 .lycheecache
+
+# nix + direnv
+.direnv/
+/result

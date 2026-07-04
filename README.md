@@ -51,3 +51,13 @@ Config file headers use toilet for ASCII art:
 ```bash
 toilet -f future -F border "Fish config"
 ```
+
+## License
+
+This repository is dual-licensed to reflect its mix of prose and code:
+
+- **Documentation and notes** (prose, Markdown, generated `AGENTS.md` digests) are licensed under
+  [CC-BY-4.0](LICENSE).
+- **Scripts, configuration, and other code** are licensed under the [MIT License](LICENSE-CODE).
+
+Copyright (c) 2026 Gustavo Basso.
