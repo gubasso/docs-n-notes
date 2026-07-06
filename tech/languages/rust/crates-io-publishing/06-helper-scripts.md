@@ -90,8 +90,9 @@ cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.."
 case "${1:-}" in
   release-plz-update)  exec release-plz update ;;
   release-plz-pr)      exec release-plz release-pr ;;
+  cargo-release-dry)   shift; exec cargo release "$@" ;;           # dry-run by default; add --execute to publish
   semver-check)        exec cargo semver-checks check-release ;;   # library crates
-  *) echo "usage: release {release-plz-update|release-plz-pr|semver-check}" >&2; exit 1 ;;
+  *) echo "usage: release {release-plz-update|release-plz-pr|cargo-release-dry LEVEL|semver-check}" >&2; exit 1 ;;
 esac
 ```
 

@@ -43,7 +43,10 @@ placeholders.
   **no** `CARGO_REGISTRY_TOKEN`; plain `cargo publish` workflows use
   `rust-lang/crates-io-auth-action` instead.
 - **release-plz:** opens a review-gated release PR (bump + changelog); merge publishes.
-  `semver_check = true` gates public-API compatibility for libraries.
+  `semver_check = true` gates public-API compatibility for libraries. `cargo-release`
+  (`cargo release <level> --execute`, dry-run by default, no review PR) is the operator-driven
+  **local alternative** for maintainers who want an explicit local release command; release-plz is
+  the CI-first default.
 - **Helper scripts:** the auth check lives in the project's own `publish` script, checks that auth
   is _configured_ (never that a token is valid), and never echoes a token value. `publish-dry` needs
   no auth.
@@ -73,6 +76,7 @@ placeholders.
 - External auth model is perishable: re-verify the release-plz OIDC flow, the
   `crates-io-auth-action` version, and Trusted Publishing setup against upstream docs on a cadence
   (RFC 3691, release-plz docs, crates.io blog).
-- Supersedes the former single-file `publish-crates-io.md` and `cargo-release-setup.md` (the latter
-  was outdated: `cargo-release` instead of release-plz, wrong `publish-update` scope for the first
-  publish, long-lived token instead of OIDC).
+- Supersedes the former single-file `publish-crates-io.md` and `cargo-release-setup.md`. The old
+  `cargo-release-setup.md` defaulted to `cargo-release` with a wrong `publish-update` first-publish
+  scope and a long-lived token instead of OIDC; here release-plz + OIDC is the default and
+  `cargo-release` is documented only as the operator-driven local alternative (see chapter 05).

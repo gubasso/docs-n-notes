@@ -83,6 +83,23 @@ release-plz release-pr   # open/refresh the release PR
 Publishing still happens on the release-PR merge (CI), or manually via `cargo publish` when CI is
 unavailable.
 
+## Local alternative: cargo-release
+
+release-plz is the default; [`cargo-release`](https://github.com/crate-ci/cargo-release) is the
+operator-driven local alternative for a maintainer who wants an explicit local release command with
+no automation PR. It bumps the version, tags, and publishes in one step, and is **dry-run by
+default** — nothing happens without `--execute`:
+
+```bash
+cargo release patch            # dry-run: show what a patch release would do
+cargo release patch --execute  # bump + tag + publish directly (no review PR)
+```
+
+Because it publishes directly rather than through a reviewed release PR, it still needs
+[configured auth](02-api-tokens-and-scopes.md) (a local `cargo login` token, or OIDC in CI). Choose
+it over release-plz only when you deliberately want the local, no-bot workflow; for CI-first
+releases, prefer release-plz.
+
 ## SemVer gating
 
 With `semver_check = true`, release-plz runs [`cargo-semver-checks`](07-semver-yank-rollback.md) on

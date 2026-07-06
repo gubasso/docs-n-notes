@@ -20,6 +20,9 @@ Two paths, one recommended and one for when CI is unavailable:
   [04 — Trusted Publishing / OIDC](04-trusted-publishing-oidc.md).
 - **Local (escape hatch).** Run the [helper scripts](06-helper-scripts.md) by hand with a long-lived
   token from `cargo login`. Used for the mandatory first publish and whenever CI is down.
+  [`cargo-release`](05-release-plz-automation.md#local-alternative-cargo-release) is the
+  operator-driven alternative for maintainers who want an explicit local release command with no
+  automation PR.
 
 The **first version is always published manually** — Trusted Publishing can only be configured
 against a crate that already exists, so it cannot mint the token for the very first upload. After
