@@ -123,11 +123,62 @@ release-plz so its tag push _does_ retrigger a standalone `release-promote.yml`.
 
 ## The full release flow
 
-1. Merge feature work to `develop`.
-1. release-plz opens/updates the release PR on `develop` (version bump + changelog).
-1. Review and merge the release PR — the release gate.
-1. release-plz tags `vX.Y.Z` and publishes to crates.io over OIDC.
-1. The `promote` job fast-forwards `master` onto the tag.
+> **You never hand-create the tag.** release-plz creates `vX.Y.Z` when its release PR merges. The
+> only manual actions are two merges — feature work into `develop`, then the release PR. Everything
+> after the second merge (tag, `cargo publish`, `master` promotion) is automated.
+
+```text
+merge feature branch ─▶ develop        (you)
+                          │
+                          ▼
+        release-plz opens the "release PR"     (auto: version bump + changelog)
+                          │
+                          ▼
+              merge the release PR      (you ← the only release decision)
+                          │
+                          ▼
+   tag vX.Y.Z + cargo publish over OIDC        (auto: release-plz)
+                          │
+                          ▼
+     promote job fast-forwards master ─▶ vX.Y.Z    (auto: needs release-plz)
+```
+
+1. Merge feature work to `develop`. Commits must be
+   [Conventional Commits](https://www.conventionalcommits.org/) — release-plz reads them to choose
+   the bump and write the changelog.
+1. release-plz opens/updates the release PR on `develop` (version bump in
+   `Cargo.toml`/`Cargo.lock` + `CHANGELOG.md`).
+1. Review and merge the release PR — the release gate, the one human decision.
+1. release-plz tags `vX.Y.Z` and publishes to crates.io over OIDC (no stored token).
+1. The `promote` job (`needs: release-plz`) fast-forwards `master` onto the tag.
+
+### Worked example
+
+A crate at `0.1.0` (`develop` and `master` both on the `0.1.0` commit). Two feature branches merge
+into `develop`:
+
+```text
+feat: add --json output flag
+fix: skip empty archives
+```
+
+The `feat:` outranks the `fix:`, so release-plz proposes a **minor** bump `0.1.0 → 0.2.0` and opens
+a PR `chore: release <crate> 0.2.0` (version bump + `CHANGELOG.md`). Merging it triggers the rest:
+
+```text
+before                         after merging the release PR
+
+develop  ● 0.1.0               develop  ●── 0.1.0
+master   ● 0.1.0                          ╲
+                                           ●── feat/fix commits
+                                            ╲
+                                             ● 0.2.0  ◀─ tag v0.2.0  (release-plz)
+                                                      └▶ cargo publish 0.2.0 (OIDC)
+                               master   ●───────────▶ ● 0.2.0  (promote: --ff-only)
+```
+
+`master` now points at exactly the commit tagged `v0.2.0` and published — linear, no drift. The next
+release repeats from `develop`.
 
 ## Local alternative
 

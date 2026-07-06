@@ -5,7 +5,7 @@ source-files:
   - README.md
   - 00-release-plz-and-branch-model.md
   - 01-trusted-publishing.md
-token-estimate: 1500
+token-estimate: 1750
 ---
 
 # AGENTS
@@ -37,11 +37,11 @@ reference (tokens, metadata, helper scripts, SemVer/yank) and is cross-linked, n
 
 ## Source Map
 
-| Topic                                             | File                                 |
-| ------------------------------------------------- | ------------------------------------ |
-| Index, binding header, TL;DR                      | `README.md`                          |
-| release-plz on develop + tag-based master promote | `00-release-plz-and-branch-model.md` |
-| crates.io Trusted Publishing + require-TP box     | `01-trusted-publishing.md`           |
+| Topic                                                                           | File                                 |
+| ------------------------------------------------------------------------------- | ------------------------------------ |
+| Index, binding header, TL;DR                                                    | `README.md`                          |
+| release-plz on develop + tag-based master promote (flow chart + worked example) | `00-release-plz-and-branch-model.md` |
+| crates.io Trusted Publishing + require-TP box                                   | `01-trusted-publishing.md`           |
 
 ## Maintenance Notes
 
