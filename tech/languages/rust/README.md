@@ -3,11 +3,11 @@
 Rust notes and workflow references.
 
 - [axum](axum.md)
-- [cargo-release-setup](cargo-release-setup.md)
 - [code-review-guide](code-review-guide.md)
+- [crates-io-publishing](crates-io-publishing/README.md) — publishing to crates.io (release-plz +
+  Trusted Publishing/OIDC, token scopes, helper scripts)
 - [datetime-serde-sqlx-chrono](datetime-serde-sqlx-chrono.md)
 - [patterns](patterns.md)
-- [publish-crates-io](publish-crates-io.md)
 - [rust](rust.md)
 - [sqlx](sqlx.md)
 

@@ -1,17 +1,15 @@
 ---
 digest-of: tech/languages/rust
-last-synced: 2026-05-28
+last-synced: 2026-07-06
 source-files:
   - README.md
   - axum.md
-  - cargo-release-setup.md
   - code-review-guide.md
   - datetime-serde-sqlx-chrono.md
   - patterns.md
-  - publish-crates-io.md
   - rust.md
   - sqlx.md
-token-estimate: 7100
+token-estimate: 7000
 ---
 
 # AGENTS
@@ -30,7 +28,8 @@ integration patterns, review heuristics, and publishing workflow references.
 - **Axum**: Web framework reference notes.
 - **DateTime handling**: serde + SQLx + chrono integration patterns.
 - **SQLx**: Database query patterns and migrations-related notes.
-- **Publishing**: crates.io release workflow.
+- **Publishing**: crates.io publishing lives in the `crates-io-publishing/` sub-shelf (release-plz +
+  Trusted Publishing/OIDC, token scopes, helper scripts), which has its own nested `AGENTS.md`.
 
 ## Source Map
 
@@ -38,15 +37,14 @@ integration patterns, review heuristics, and publishing workflow references.
 | -------------------------------- | ------------------------------- |
 | Rust index                       | `README.md`                     |
 | Axum web framework               | `axum.md`                       |
-| Cargo release setup              | `cargo-release-setup.md`        |
 | Rust review heuristics           | `code-review-guide.md`          |
+| crates.io publishing (sub-shelf) | `crates-io-publishing/`         |
 | DateTime + serde + SQLx + chrono | `datetime-serde-sqlx-chrono.md` |
 | General Rust patterns            | `patterns.md`                   |
-| crates.io publishing             | `publish-crates-io.md`          |
 | General Rust notes               | `rust.md`                       |
 | SQLx patterns                    | `sqlx.md`                       |
 
 ## Maintenance Notes
 
-- `cli-spec/` has its own digest and is not included here.
+- `cli-spec/` and `crates-io-publishing/` each have their own digest and are not expanded here.
 - Regenerate when any top-level Rust markdown file changes or new ones are added.
