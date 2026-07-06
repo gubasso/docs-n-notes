@@ -1,6 +1,6 @@
 ---
 digest-of: tech/tools/git
-last-synced: 2026-05-28
+last-synced: 2026-07-06
 source-files:
   - README.md
   - cmds-examples.md
@@ -14,10 +14,9 @@ source-files:
   - glab-https-git-credential-helper-setup.md
   - rebase-workflow.md
   - workflows/gh-cli-workflow.md
-  - workflows/git-rebase-workflow.md
   - workflows/glab-cli-workflow.md
   - workflows/make-origin-match-your-local-branch-state.md
-token-estimate: 15050
+token-estimate: 14700
 ---
 
 # AGENTS

@@ -3,13 +3,13 @@
 Graphical log
 
 ```sh
-git log --oneline --graph --decorate -n 15 main develop
+git log --oneline --graph --decorate -n 15 master develop
 
 git log --graph --decorate --oneline --simplify-by-decoration \
-  --branches=main --branches=develop --tags \
+  --branches=master --branches=develop --tags \
   --max-count=50
 
 git log --graph --decorate --oneline \
-  --branches=main --tags \
+  --branches=master --tags \
   --max-count=50
 ```

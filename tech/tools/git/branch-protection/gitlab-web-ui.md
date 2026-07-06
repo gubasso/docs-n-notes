@@ -6,7 +6,7 @@ UI labels verified against docs.gitlab.com on 2026-04-22 for GitLab 17.x / 18.x.
 
 ---
 
-## 1. Protect `main`
+## 1. Protect `master`
 
 1. **Settings → Access tokens → Add new token**:
    - Token name: `ci-release-bot`
@@ -22,11 +22,11 @@ UI labels verified against docs.gitlab.com on 2026-04-22 for GitLab 17.x / 18.x.
    - Visibility: `Masked` (or `Masked and hidden`, one-way)
    - [x] Protect variable
 
-3. Unprotect the default `main` rule. **Settings → Repository → Protected branches** → `main` row →
-   **More actions (⋮) → Delete protected branch** → type name to confirm.
+3. Unprotect the default `master` rule. **Settings → Repository → Protected branches** → `master`
+   row → **More actions (⋮) → Delete protected branch** → type name to confirm.
 
 4. **Settings → Repository → Protected branches → Add protected branch**:
-   - Branch: `main`
+   - Branch: `master`
    - Allowed to merge: `Maintainers`
    - Allowed to push and merge:
      - **Free**: `No one` (pair with §3.2 job-token toggle)
@@ -46,7 +46,7 @@ UI labels verified against docs.gitlab.com on 2026-04-22 for GitLab 17.x / 18.x.
 
 ## 2. `develop` — integration branch
 
-1. Project page → **branch dropdown → New branch** → name `develop`, source `main`.
+1. Project page → **branch dropdown → New branch** → name `develop`, source `master`.
 
 2. **Settings → Repository → Protected branches → Add protected branch**:
    - Branch: `develop`
@@ -80,11 +80,11 @@ UI labels verified against docs.gitlab.com on 2026-04-22 for GitLab 17.x / 18.x.
    - Allowed to create: `Maintainers`
    - **Protect**
 
-2. Grant CI push access to protected `main`:
+2. Grant CI push access to protected `master`:
    - **17.2+**: **Settings → CI/CD → Job token permissions → Permissions → Allow Git push requests
      to the repository**.
    - **Older / stricter**: use `PROMOTE_TOKEN` from §1.2 and (Premium) add its bot user to **Allowed
-     to push and merge** on `main`.
+     to push and merge** on `master`.
 
 3. **Web IDE** or **Add file → New file** → path `.gitlab-ci.yml` (or include it). Paste from
    [`ci/release-promote.gitlab-ci.yml`](gitlab/ci/release-promote.gitlab-ci.yml). Commit on a
@@ -94,7 +94,7 @@ UI labels verified against docs.gitlab.com on 2026-04-22 for GitLab 17.x / 18.x.
 
 ## Verify
 
-- **Settings → Repository → Protected branches** — `main`, `develop` listed with expected
+- **Settings → Repository → Protected branches** — `master`, `develop` listed with expected
   allow-lists.
 - **Settings → Repository → Protected tags** — `v*` listed, Allowed to create = `Maintainers`.
 - **Settings → CI/CD → Job token permissions** — Git push toggle in the expected state.

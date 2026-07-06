@@ -17,20 +17,29 @@ jobs:
 
       - name: Verify tag is on develop
         run: |
+          # Promotion targets the release TAG (the canonical release marker),
+          # not an arbitrary branch SHA. Resolve the tagged commit explicitly.
           git fetch origin develop
-          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/develop; then
+          tag_sha="$(git rev-parse "refs/tags/${GITHUB_REF_NAME}^{commit}")"
+          if ! git merge-base --is-ancestor "$tag_sha" origin/develop; then
             echo "Tag $GITHUB_REF_NAME is not on develop. Refusing to promote." >&2
             exit 1
           fi
 
-      - name: Fast-forward main to tag
+      - name: Fast-forward master to the release tag
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git fetch origin main
-          git checkout -B main origin/main
-          git merge --ff-only "$GITHUB_SHA"
-          git push origin main
+          # Promote master onto the tagged commit, not a branch SHA.
+          tag_sha="$(git rev-parse "refs/tags/${GITHUB_REF_NAME}^{commit}")"
+          if git fetch origin master; then
+            git checkout -B master origin/master
+            git merge --ff-only "$tag_sha"
+          else
+            # master does not exist yet: create it at the release tag.
+            git checkout -B master "$tag_sha"
+          fi
+          git push origin master
 
       - name: Create GitHub Release
         env:

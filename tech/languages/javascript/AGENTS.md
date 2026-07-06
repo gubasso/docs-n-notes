@@ -1,6 +1,6 @@
 ---
 digest-of: tech/languages/javascript
-last-synced: 2026-05-27
+last-synced: 2026-07-06
 source-files:
   - code-review-guide.md
   - typescript-code-review-guide.md
@@ -37,19 +37,23 @@ plus general language and framework references.
 
 ## Source Map
 
-| Topic                    | File                              |
-| ------------------------ | --------------------------------- |
-| JS review heuristics     | `code-review-guide.md`            |
-| TS review heuristics     | `typescript-code-review-guide.md` |
-| React review heuristics  | `react-code-review-guide.md`      |
-| Svelte review heuristics | `svelte-code-review-guide.md`     |
-| General JS patterns      | `javascript-js.md`                |
-| TypeScript patterns      | `typescript.md`                   |
-| Node.js / npm            | `node-npm.md`                     |
-| Svelte framework         | `svelte.md`                       |
+| Topic                    | File                                                           |
+| ------------------------ | -------------------------------------------------------------- |
+| JS review heuristics     | `code-review-guide.md`                                         |
+| TS review heuristics     | `typescript-code-review-guide.md`                              |
+| React review heuristics  | `react-code-review-guide.md`                                   |
+| Svelte review heuristics | `svelte-code-review-guide.md`                                  |
+| General JS patterns      | `javascript-js.md`                                             |
+| TypeScript patterns      | `typescript.md`                                                |
+| Node.js / npm            | `node-npm.md`                                                  |
+| Svelte framework         | `svelte.md`                                                    |
+| Release workflow (stub)  | `release-workflow-spec/` (Changesets + npm Trusted Publishing) |
 
 ## Maintenance Notes
 
 - Review guides are loaded on demand by the review-code-deep skill based on file extensions in the
   diff.
 - No CLI-spec subdirectory exists for JavaScript; CLI patterns use the general `cli-design/` canon.
+- The `release-workflow-spec/` **stub** (Changesets + `changesets/action` + npm Trusted Publishing
+  OIDC) is the JS/Node binding of `tech/programming/release-workflow/`, to be expanded when adopted;
+  it cross-links the `node-npm.md` Releases section.

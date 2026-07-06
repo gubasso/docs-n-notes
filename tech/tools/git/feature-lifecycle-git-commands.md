@@ -12,7 +12,7 @@ Uses `git clone --reference` to create isolated work-clones (feature directories
 - Main repo: `~/Projects/org/repo`
 - Work-clone: `~/Projects/org/repo.<issue>-<slug>` (e.g., `repo.42-add-auth-module`) — a
   `git clone --reference` of the main repo, sharing its object store
-- Integration branch: `devel`
+- Integration branch: `develop`
 - Default branch: `master`
 - Feature branch: `<issue>-<slug>` (e.g., `42-add-auth-module`)
 
@@ -41,7 +41,7 @@ The issue already exists on the forge. Let the forge create and name the branch,
 
 ```bash
 # 1. Let the forge create the branch (from the main repo)
-gh issue develop 42 --base devel                 # GitHub — creates remote branch
+gh issue develop 42 --base develop                 # GitHub — creates remote branch
 
 # 2. Retrieve the branch name the forge chose
 BRANCH=$(gh issue develop 42 --list --json headRefName --jq '.[0].headRefName')
@@ -68,7 +68,7 @@ Create the issue from the CLI first, then let the forge create and name the bran
 gh issue create --title "Add auth module"        # GitHub → returns URL with ID
 
 # 2. Let the forge create the branch
-gh issue develop 42 --base devel
+gh issue develop 42 --base develop
 
 # 3. Retrieve the branch name the forge chose
 BRANCH=$(gh issue develop 42 --list --json headRefName --jq '.[0].headRefName')
@@ -95,7 +95,7 @@ git stash
 gh issue create --title "Add auth module"        # → issue #42
 
 # 3. Let the forge create the branch
-gh issue develop 42 --base devel
+gh issue develop 42 --base develop
 
 # 4. Retrieve the branch name the forge chose
 BRANCH=$(gh issue develop 42 --list --json headRefName --jq '.[0].headRefName')
@@ -138,7 +138,7 @@ Keep the feature branch current with the integration branch.
 
 ```bash
 git fetch origin
-git rebase origin/devel
+git rebase origin/develop
 git push --force-with-lease
 ```
 
@@ -153,10 +153,10 @@ cd ~/Projects/org/repo.42-add-auth-module
 git push -u origin 42-add-auth-module
 
 # GitHub
-gh pr create --base devel --head 42-add-auth-module
+gh pr create --base develop --head 42-add-auth-module
 
 # GitLab
-glab mr create --target-branch devel --source-branch 42-add-auth-module
+glab mr create --target-branch develop --source-branch 42-add-auth-module
 ```
 
 Add `--draft` for a draft PR or MR.
@@ -170,7 +170,7 @@ After the PR is merged on the forge, pull the target branch and remove the work-
 ```bash
 # Pull the merged changes into the main repo
 cd ~/Projects/org/repo
-git checkout devel
+git checkout develop
 git pull
 
 # Remove the work-clone
@@ -190,8 +190,8 @@ forge, then pull and tag locally.
 ```bash
 # Open the release PR on the forge
 cd ~/Projects/org/repo
-gh pr create --base master --head devel --title "Release v1.0.0"   # GitHub
-glab mr create --target-branch master --source-branch devel        # GitLab
+gh pr create --base master --head develop --title "Release v1.0.0"   # GitHub
+glab mr create --target-branch master --source-branch develop        # GitLab
 
 # After the PR is merged on the forge — pull and tag locally
 git checkout master
@@ -236,20 +236,20 @@ SYNC:
 
 REBASE:
   git fetch origin                                 # fetch upstream
-  git rebase origin/devel                          # rebase onto integration
+  git rebase origin/develop                          # rebase onto integration
   git push --force-with-lease                      # force-push safely
 
 FINISH:
   git push -u origin <branch>                      # push feature branch
-  gh pr create --base devel                        # open PR (GitHub)
+  gh pr create --base develop                        # open PR (GitHub)
 
 CLEANUP:
-  cd <main-repo> && git checkout devel && git pull # pull merged changes
+  cd <main-repo> && git checkout develop && git pull # pull merged changes
   rm -rf <work-clone>                              # delete work-clone
   git branch -d <branch>                           # delete local branch
 
 RELEASE:
-  gh pr create --base master --head devel          # open release PR (GitHub)
+  gh pr create --base master --head develop          # open release PR (GitHub)
   git checkout master && git pull                  # pull after remote merge
   git tag -a <version> -m "<version>"              # tag release
   git push origin <version>                        # push tag
@@ -273,7 +273,7 @@ git push
 
 # In the main repo — fetch and merge
 cd ~/Projects/org/repo
-git checkout devel
+git checkout develop
 git fetch origin
 git merge --no-ff origin/42-add-auth-module
 ```
@@ -284,7 +284,7 @@ git merge --no-ff origin/42-add-auth-module
 cd ~/Projects/org/repo
 git remote add temp-42 ~/Projects/org/repo.42-add-auth-module
 git fetch temp-42
-git checkout devel
+git checkout develop
 git merge --no-ff temp-42/42-add-auth-module
 git remote remove temp-42
 ```
@@ -294,7 +294,7 @@ For a local release merge (no forge PR):
 ```bash
 cd ~/Projects/org/repo
 git checkout master
-git merge --no-ff devel
+git merge --no-ff develop
 git tag -a v1.0.0 -m "v1.0.0"
 git push origin master --follow-tags
 ```

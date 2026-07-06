@@ -11,7 +11,7 @@ export OWNER_REPO=owner/repo
 
 ---
 
-## 1. Protect `main`
+## 1. Protect `master`
 
 1. (Skip if using default `github-actions` app id `15368` — already baked into the payload.) Resolve
    bypass actor id:
@@ -20,8 +20,8 @@ export OWNER_REPO=owner/repo
 
 2. Apply the ruleset:
 
-   - payload: [`rulesets/main.json`](github/rulesets/main.json)
-   - script: [`scripts/apply-main-ruleset.sh`](github/scripts/apply-main-ruleset.sh)
+   - payload: [`rulesets/master.json`](github/rulesets/master.json)
+   - script: [`scripts/apply-master-ruleset.sh`](github/scripts/apply-master-ruleset.sh)
 
 ---
 

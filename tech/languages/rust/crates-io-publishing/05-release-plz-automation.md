@@ -46,7 +46,7 @@ name: release-plz
 
 on:
   push:
-    branches: [main]
+    branches: [develop]
 
 permissions:
   contents: write
@@ -69,6 +69,13 @@ jobs:
 
 See [04 — Trusted Publishing / OIDC](04-trusted-publishing-oidc.md) for why `id-token: write` and no
 registry token are all the auth this needs.
+
+> **Branch model.** release-plz auto-detects the default branch; the example runs on `develop`
+> (integration + release trigger). To keep a `master` release branch as a mirror of the latest
+> published version, add a `promote` job that fast-forwards `master` onto the release tag. The
+> [rust release-workflow binding](../release-workflow-spec/00-release-plz-and-branch-model.md) shows
+> the full `develop` → tag → promote-`master` wiring; the
+> [general principles](../../../programming/release-workflow/00-branch-model.md) explain the model.
 
 ## Local operator commands
 

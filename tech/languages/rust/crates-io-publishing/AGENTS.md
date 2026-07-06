@@ -11,7 +11,7 @@ source-files:
   - 06-helper-scripts.md
   - 07-semver-yank-rollback.md
   - 08-binary-distribution-cargo-dist.md
-token-estimate: 1300
+token-estimate: 1450
 ---
 
 # AGENTS
@@ -41,7 +41,11 @@ placeholders.
   `publish-new` for the first upload, shortest expiry, revoked once OIDC is live.
 - **OIDC:** release-plz mints the short-lived token itself with `permissions: id-token: write` and
   **no** `CARGO_REGISTRY_TOKEN`; plain `cargo publish` workflows use
-  `rust-lang/crates-io-auth-action` instead.
+  `rust-lang/crates-io-auth-action` instead. Configure the trusted publisher on the crate settings
+  page (`https://crates.io/crates/<crate>/settings`), matching owner + repo + **workflow filename**
+  (the file name, not the workflow `name:`) + optional environment — **branch-agnostic**. Enable
+  **"require trusted publishing"** (crates.io Jan 2026) once OIDC works to reject all token
+  publishes; it disables the local token escape hatch until toggled off.
 - **release-plz:** opens a review-gated release PR (bump + changelog); merge publishes.
   `semver_check = true` gates public-API compatibility for libraries. `cargo-release`
   (`cargo release <level> --execute`, dry-run by default, no review PR) is the operator-driven
@@ -72,6 +76,9 @@ placeholders.
 
 ## Maintenance Notes
 
+- This is the crates.io _publishing_ reference. The _workflow_ view (branch model,
+  `develop`/`master` promotion) lives in the sibling `../release-workflow-spec/` binding and the
+  general shelf `tech/programming/release-workflow/`; they cross-link rather than duplicate.
 - Regenerate when any chapter changes or a new one is added.
 - External auth model is perishable: re-verify the release-plz OIDC flow, the
   `crates-io-auth-action` version, and Trusted Publishing setup against upstream docs on a cadence

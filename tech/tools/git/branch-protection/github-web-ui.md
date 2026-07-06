@@ -6,11 +6,11 @@ UI labels verified against docs.github.com on 2026-04-22.
 
 ---
 
-## 1. Protect `main`
+## 1. Protect `master`
 
 **Settings → Code and automation → Rules → Rulesets → New ruleset → New branch ruleset**.
 
-- **Ruleset name**: `main-protection`
+- **Ruleset name**: `master-protection`
 - **Enforcement status**: `Active`
 - **Bypass list → Add bypass** → `github-actions` (GitHub Apps) → **Bypass mode**: `Always allow`
 - **Target branches → Add a target** → **Include default branch**
@@ -33,7 +33,7 @@ UI labels verified against docs.github.com on 2026-04-22.
 
 ## 2. `develop` — integration branch
 
-1. Repo root → **branch dropdown** → type `develop` → **Create branch: develop from main**.
+1. Repo root → **branch dropdown** → type `develop` → **Create branch: develop from master**.
 
 2. **Settings → Code and automation → Rules → Rulesets → New ruleset → New branch ruleset**:
 

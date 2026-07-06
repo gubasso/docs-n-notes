@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Dump current protection state for main, develop, and v* tags.
+# Dump current protection state for master, develop, and v* tags.
 #
 # Usage: PROJECT_ID=123 ./verify.sh
 

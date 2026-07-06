@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# List rulesets on the repo and dry-run which rules apply to main/develop.
+# List rulesets on the repo and dry-run which rules apply to master/develop.
 #
 # Usage: OWNER_REPO=owner/repo ./verify.sh
 
@@ -11,8 +11,8 @@ echo "== rulesets =="
 gh ruleset list -R "$OWNER_REPO"
 
 echo
-echo "== applicable to main =="
-gh ruleset check main -R "$OWNER_REPO"
+echo "== applicable to master =="
+gh ruleset check master -R "$OWNER_REPO"
 
 echo
 echo "== applicable to develop =="

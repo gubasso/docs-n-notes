@@ -1,6 +1,6 @@
 # branch-protection
 
-Templates and helper scripts for the `develop` → tag → CI → `main` workflow.
+Templates and helper scripts for the `develop` → tag → CI → `master` workflow.
 
 - [workflow](workflow.md)
 - [github-cli](github-cli.md)

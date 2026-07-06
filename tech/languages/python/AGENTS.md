@@ -1,6 +1,6 @@
 ---
 digest-of: tech/languages/python
-last-synced: 2026-07-01
+last-synced: 2026-07-06
 source-files:
   - django-code-review-guide.md
   - python.md
@@ -52,10 +52,14 @@ conventions.
 | Poetry (deps + environment) | `python-poetry.md`                                                        |
 | Flask, Eve, MongoDB         | `python-flask.md`, `python-eve.md`, `python-mongo.md`                     |
 | CLI project spec            | `cli-spec/` (separate AGENTS.md)                                          |
+| Release workflow (stub)     | `release-workflow-spec/` (release-please / PyPI Trusted Publishing)       |
 
 ## Maintenance Notes
 
-- CLI-spec has its own AGENTS.md; this digest covers only the top-level Python files.
+- CLI-spec has its own AGENTS.md; this digest covers only the top-level Python files. The
+  `release-workflow-spec/` **stub** (release-please / python-semantic-release + PyPI Trusted
+  Publishing) is the Python binding of `tech/programming/release-workflow/`, to be expanded when
+  adopted.
 - Framework notes (Eve, Flask, MongoDB) are reference-link collections; load directly when relevant.
 - Environment-manager guidance is cross-cutting; its home is
   `tech/workflows/development-tools-workflow.md` — the Python notes only cross-link it.

@@ -1,6 +1,6 @@
 ---
 digest-of: tech/languages/bash
-last-synced: 2026-05-27
+last-synced: 2026-07-06
 source-files:
   - code-review-guide.md
 token-estimate: 400
@@ -28,13 +28,17 @@ for Bash scripts.
 
 ## Source Map
 
-| Topic                                                                          | File                             |
-| ------------------------------------------------------------------------------ | -------------------------------- |
-| Bash-specific review heuristics (strict mode, quoting, injection, common bugs) | `code-review-guide.md`           |
-| CLI project spec (layout, modules, testing)                                    | `cli-spec/` (separate AGENTS.md) |
+| Topic                                                                          | File                                          |
+| ------------------------------------------------------------------------------ | --------------------------------------------- |
+| Bash-specific review heuristics (strict mode, quoting, injection, common bugs) | `code-review-guide.md`                        |
+| CLI project spec (layout, modules, testing)                                    | `cli-spec/` (separate AGENTS.md)              |
+| Release workflow (tag → GitHub Release → install.sh/AUR/OBS)                   | `release-workflow-spec/` (separate AGENTS.md) |
 
 ## Maintenance Notes
 
 - The code-review guide is loaded on demand by the review-code-deep skill when `.sh`/`.bash` files
   are in the diff.
-- CLI-spec has its own AGENTS.md; this digest covers only the top-level bash directory.
+- `cli-spec/` and `release-workflow-spec/` each have their own AGENTS.md; this digest covers only
+  the top-level bash directory. The `release-workflow-spec/` binding (bash release + distribution:
+  tag, git-cliff changelog, Makefile, install.sh, AUR, OBS) is the bash binding of the general
+  `tech/programming/release-workflow/` shelf.

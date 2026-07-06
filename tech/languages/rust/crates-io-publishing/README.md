@@ -9,6 +9,12 @@ around the modern, low-secret setup: **CI-first releases with
 It is deliberately not "just run `cargo publish`". That command is one step near the end; the
 durable value is in the metadata, token hygiene, auth model, and automation around it.
 
+> **Workflow vs publishing.** This shelf is the crates.io _publishing_ reference (metadata, tokens,
+> helper scripts, SemVer/yank). For the _release workflow_ — the `develop`/`master` branch model and
+> how release-plz promotes `master` onto the release tag — see the
+> [release-workflow-spec](../release-workflow-spec/) binding and the
+> [general principles](../../../programming/release-workflow/).
+
 ## Publishing model
 
 Two paths, one recommended and one for when CI is unavailable:

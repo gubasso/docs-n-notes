@@ -1,6 +1,6 @@
 ---
 digest-of: tech/tools/git/branch-protection
-last-synced: 2026-05-28
+last-synced: 2026-07-06
 source-files:
   - README.md
   - github-cli.md
@@ -15,8 +15,8 @@ token-estimate: 2850
 
 ## Scope
 
-Branch-protection workflow notes for the `develop` → tag → CI → `main` path, with GitHub and GitLab
-CLI/UI runbooks plus the canonical strategy document.
+Branch-protection workflow notes for the `develop` → tag → CI → `master` path, with GitHub and
+GitLab CLI/UI runbooks plus the canonical strategy document.
 
 ## Key Points
 
@@ -41,3 +41,7 @@ CLI/UI runbooks plus the canonical strategy document.
 
 - The parent `tech/tools/git/` digest points here for the branch-protection subtree.
 - Keep the README index aligned with the workflow docs and the two script/config subtrees.
+- The abstract branch/release model (the `develop` → tag → CI-promote-`master` strategy) is owned by
+  the general shelf `tech/programming/release-workflow/`; this subtree is the platform _enforcement_
+  layer (GitHub Rulesets / GitLab protected-branch runbooks, rulesets, scripts, and the
+  tag-triggered release-promote CI templates). Standardized on `develop`/`master`.

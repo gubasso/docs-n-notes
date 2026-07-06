@@ -1,5 +1,5 @@
 {
-  "name": "main-protection",
+  "name": "master-protection",
   "target": "branch",
   "enforcement": "active",
   "conditions": {

@@ -12,23 +12,23 @@ export PROJECT_ID=$(bash .../gitlab/scripts/get-project-id.sh)
 
 ---
 
-## 1. Protect `main`
+## 1. Protect `master`
 
 1. Create a Project Access Token (**Settings → Access tokens**, role `Maintainer`, scope
    `write_repository`) and capture its bot user id:
 
    - script: [`scripts/get-bot-user-id.sh`](gitlab/scripts/get-bot-user-id.sh)
 
-2. Remove GitLab's default protection on `main`:
+2. Remove GitLab's default protection on `master`:
 
-   - script: [`scripts/unprotect-main.sh`](gitlab/scripts/unprotect-main.sh)
+   - script: [`scripts/unprotect-master.sh`](gitlab/scripts/unprotect-master.sh)
 
 3. Apply protection — pick your tier:
 
    - **Free** (pushes blocked; CI job-token toggle handles the release job):
-     [`scripts/protect-main-free.sh`](gitlab/scripts/protect-main-free.sh)
+     [`scripts/protect-master-free.sh`](gitlab/scripts/protect-master-free.sh)
    - **Premium/Ultimate** (only `BOT_USER_ID` may push):
-     [`scripts/protect-main-premium.sh`](gitlab/scripts/protect-main-premium.sh)
+     [`scripts/protect-master-premium.sh`](gitlab/scripts/protect-master-premium.sh)
 
 4. (Premium+, optional) project push rules:
 
@@ -70,12 +70,12 @@ git checkout -b develop && git push -u origin develop
 
    - script: [`scripts/protect-tags.sh`](gitlab/scripts/protect-tags.sh)
 
-2. Grant CI push access to protected `main`:
+2. Grant CI push access to protected `master`:
 
    - **17.2+**: Web UI only — **Settings → CI/CD → Job token permissions → Allow Git push requests
      to the repository**. No API equivalent yet ([#494324][gl-494324]).
    - **Older**: `PROMOTE_TOKEN` + Premium allow-list (see
-     [`scripts/protect-main-premium.sh`](gitlab/scripts/protect-main-premium.sh)).
+     [`scripts/protect-master-premium.sh`](gitlab/scripts/protect-master-premium.sh)).
 
 3. Copy the release job into `.gitlab-ci.yml`:
 
