@@ -39,6 +39,8 @@ Copy-paste starting points live in [`templates/`](templates/) (python, rust, nod
 
 ## Related
 
+- [Nix **language**](../../languages/nix/README.md) — the expression-language and flake **syntax**
+  reference (this shelf is the tool/workflow side; that shelf is the language side).
 - [development-tools-workflow](../../workflows/development-tools-workflow.md) — the three-role split
   (environment / dependencies / tasks).
 - [mise](../../workflows/mise.md) — fallback tool-version manager for hosts where a flake is
