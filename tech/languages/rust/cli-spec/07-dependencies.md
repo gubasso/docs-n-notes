@@ -7,7 +7,7 @@
 > [`02-error-messages`](../../../programming/cli-design/02-error-messages.md) (`thiserror`,
 > `anyhow`), [`03-config-precedence`](../../../programming/cli-design/03-config-precedence.md)
 > (`figment`, `directories`), and
-> [`08-testing-and-quality`](../../../programming/cli-design/08-testing-and-quality/testing-strategy.md)
+> [`08-testing-and-quality`](../../../programming/cli-design/09-testing-and-quality/testing-strategy.md)
 > (`assert_cmd`, `insta`, `tempfile`, `nextest`). This chapter is the curated default crate list
 > with one-line justifications. Facing-category consequences follow
 > [General — Facing category & message types](../../../programming/cli-design/00-architecture.md#facing-category--message-types).

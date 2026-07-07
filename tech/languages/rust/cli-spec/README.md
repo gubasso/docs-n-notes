@@ -27,11 +27,11 @@ Use this spec as a template at project bootstrap and as a tie-breaker during cod
 | 3  | [Error handling](03-error-handling.md)               | `thiserror` inside, `anyhow` only at the edge; BSD sysexits.                       | [02-error-messages](../../../programming/cli-design/02-error-messages.md)               |
 | 4  | [Logging](04-logging.md)                             | `tracing` + `tracing-subscriber` + file sink to `$XDG_STATE_HOME`.                 | [01-logging-and-output](../../../programming/cli-design/01-logging-and-output.md)       |
 | 5  | [Config](05-config.md)                               | `figment` layered loader; `directories` for XDG paths.                             | [03-config-precedence](../../../programming/cli-design/03-config-precedence.md)         |
-| 6  | [Testing & quality](06-testing-and-quality/)         | `assert_cmd` + `insta` + `nextest` + `proptest` + `cargo-mutants` + `cargo-bloat`. | [08-testing-and-quality](../../../programming/cli-design/08-testing-and-quality/)       |
+| 6  | [Testing & quality](06-testing-and-quality/)         | `assert_cmd` + `insta` + `nextest` + `proptest` + `cargo-mutants` + `cargo-bloat`. | [09-testing-and-quality](../../../programming/cli-design/09-testing-and-quality/)       |
 | 7  | [Dependencies](07-dependencies.md)                   | Curated default crate list with justification.                                     | —                                                                                       |
-| 8  | [Naming and visibility](08-naming-and-visibility.md) | `pub(crate)` by default; `foo.rs + foo/` over `mod.rs`.                            | [07-naming-and-docs](../../../programming/cli-design/07-naming-and-docs.md)             |
+| 8  | [Naming and visibility](08-naming-and-visibility.md) | `pub(crate)` by default; `foo.rs + foo/` over `mod.rs`.                            | [08-naming-and-docs](../../../programming/cli-design/08-naming-and-docs.md)             |
 | 9  | [Coding style](09-coding-style.md)                   | Rust idioms: newtypes, FromStr, lints, LazyLock.                                   | [04-coding-style-rust-zig](../../../programming/cli-design/04-coding-style-rust-zig.md) |
-| 10 | [Reference projects](10-reference-projects.md)       | Layouts to study (ripgrep, fd, bat, jj, cargo, helix).                             | [09-reference-projects](../../../programming/cli-design/09-reference-projects.md)       |
+| 10 | [Reference projects](10-reference-projects.md)       | Layouts to study (ripgrep, fd, bat, jj, cargo, helix).                             | [09-reference-projects](../../../programming/cli-design/10-reference-projects.md)       |
 
 ## Supporting material
 

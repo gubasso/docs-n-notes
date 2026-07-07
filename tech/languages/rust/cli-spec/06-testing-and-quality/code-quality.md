@@ -6,9 +6,9 @@
 > detection, and architectural boundary enforcement.
 >
 > General principles:
-> [10 — Regression Safeguards](../../../../programming/cli-design/08-testing-and-quality/regression-safeguards.md)
+> [10 — Regression Safeguards](../../../../programming/cli-design/09-testing-and-quality/regression-safeguards.md)
 > ·
-> [10a — Code Quality Tools](../../../../programming/cli-design/08-testing-and-quality/code-quality-tools.md).
+> [10a — Code Quality Tools](../../../../programming/cli-design/09-testing-and-quality/code-quality-tools.md).
 
 ## Tool stack
 
@@ -510,9 +510,9 @@ check: lint lint-complexity lint-boundaries test audit
 - [09 — Coding Style (Rust)](../09-coding-style.md) — base lint config, no-unwrap rule, CI lint for
   no-println.
 - General principles:
-  - [10 — Regression Safeguards](../../../../programming/cli-design/08-testing-and-quality/regression-safeguards.md)
+  - [10 — Regression Safeguards](../../../../programming/cli-design/09-testing-and-quality/regression-safeguards.md)
     — safeguard categories, layering model, TDD-for-agents.
-  - [10a — Code Quality Tools](../../../../programming/cli-design/08-testing-and-quality/code-quality-tools.md)
+  - [10a — Code Quality Tools](../../../../programming/cli-design/09-testing-and-quality/code-quality-tools.md)
     — per-language quality tool matrix.
 
 ## References

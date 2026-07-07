@@ -1,7 +1,7 @@
 # 10 — Reference Projects (Rust)
 
 > Prerequisite:
-> [General principles — Reference Projects](../../../programming/cli-design/09-reference-projects.md)
+> [General principles — Reference Projects](../../../programming/cli-design/10-reference-projects.md)
 > for the language-agnostic organizational patterns these projects exemplify. This chapter zooms in
 > on the Rust specifics.
 

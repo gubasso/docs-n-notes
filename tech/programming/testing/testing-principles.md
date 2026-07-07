@@ -5,7 +5,7 @@ Loaded by `test-review` only when the canonical principles file
 paths.
 
 **Authoritative source:** the full version of these principles, with examples and tooling pointers,
-lives at `tech/programming/cli-design/08-testing-and-quality/testing-strategy.md` in the user's
+lives at `tech/programming/cli-design/09-testing-and-quality/testing-strategy.md` in the user's
 docs-n-notes repo. Update this excerpt when the canonical file changes substantively — but the
 test-review skill should still prefer the canonical file via the resolution chain whenever it is
 reachable.

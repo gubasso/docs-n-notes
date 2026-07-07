@@ -154,7 +154,7 @@ Reach for a fully-overridden help (`override_help` / equivalent) only when the p
 cannot express the layout you need — almost never in practice. If you're tempted, it's usually a
 sign the _commands_ are mis-organized, not that the help renderer is too rigid.
 
-**Wrapper-CLI corollary** (see [06 — CLI Wrapper Design](06-cli-wrapper-design/)): when migrating a
+**Wrapper-CLI corollary** (see [07 — CLI Wrapper Design](07-cli-wrapper-design/)): when migrating a
 wrapper from bash to a typed language, preserve **functional fidelity** (env vars, passthrough
 rules, examples) in the addendum, not **implementation-detail fidelity** (the manually-formatted
 flag table from the old script). The new project's flag table is whatever the new project's commands

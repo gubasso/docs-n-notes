@@ -5,7 +5,7 @@ and why every subcommand earns one integration test from day one.
 
 For concrete per-language tooling (runners, snapshot libraries, property-based libraries,
 mutation-testing tools, recording stubs, pre-commit and CI snippets), see the companion file
-**[08a — Testing Tools](testing-tools.md)**.
+**[09a — Testing Tools](testing-tools.md)**.
 
 ## Non-negotiable principles
 
@@ -357,7 +357,7 @@ components were composed.
 
 Cross-reference: the Rust/Zig wrapper testing patterns (`Spawner` trait, golden argv snapshots) live
 in
-[06 — CLI Wrapper Design § 9 Testability](../06-cli-wrapper-design/process-and-posix.md#9-testability).
+[07 — CLI Wrapper Design § 9 Testability](../07-cli-wrapper-design/process-and-posix.md#9-testability).
 
 ## Snapshot tests
 
@@ -725,9 +725,9 @@ LLM-era specific (the failure modes AI agents fall into most often):
 - [02 — Error Messages](../02-error-messages.md) — exit-code matrix is unit-tested.
 - [05 — Designing for LLM Agents § Test-writing hazards](../05-designing-for-llm-agents.md#test-writing-hazards-for-ai-agents)
   — agent-specific failure modes.
-- [06 — CLI Wrapper Design § 9 Testability](../06-cli-wrapper-design/process-and-posix.md#9-testability)
+- [07 — CLI Wrapper Design § 9 Testability](../07-cli-wrapper-design/process-and-posix.md#9-testability)
   — wrapper-specific seams (Spawner trait, golden argv).
-- [08a — Testing Tools](testing-tools.md) — per-language tooling matrix and pre-commit/CI snippets.
+- [09a — Testing Tools](testing-tools.md) — per-language tooling matrix and pre-commit/CI snippets.
 - [99 — Checklist § Testing](../99-checklist.md#testing) — one-page sanity checklist.
 - Language-specific guides:
   - [`rust/cli-spec/06-testing.md`](../../../languages/rust/cli-spec/06-testing-and-quality/testing.md)
@@ -740,7 +740,7 @@ LLM-era specific (the failure modes AI agents fall into most often):
 ## References
 
 For per-language tool URLs and pre-commit / CI snippets, see
-[08a — Testing Tools](testing-tools.md#references).
+[09a — Testing Tools](testing-tools.md#references).
 
 Foundational reading:
 

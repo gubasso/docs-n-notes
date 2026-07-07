@@ -3,19 +3,19 @@
 > Part of the [Rust CLI Spec](../README.md).
 >
 > For the language-agnostic principles, see
-> [08 — Testing & Quality](../../../../programming/cli-design/08-testing-and-quality/).
+> [09 — Testing & Quality](../../../../programming/cli-design/09-testing-and-quality/).
 
 Rust-specific testing and code quality tooling. These chapters apply the general principles from
-[`cli-design/08-testing-and-quality/`](../../../../programming/cli-design/08-testing-and-quality/)
+[`cli-design/09-testing-and-quality/`](../../../../programming/cli-design/09-testing-and-quality/)
 using the Rust ecosystem.
 
 ## Chapters
 
 | Chapter                                 | What it covers                                                           | General principle                                                                                     |
 | --------------------------------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
-| [Testing](testing.md)                   | `assert_cmd` + `insta` + `tempfile` + `nextest`. Core crate stack.       | [Testing strategy](../../../../programming/cli-design/08-testing-and-quality/testing-strategy.md)     |
-| [Advanced testing](advanced-testing.md) | `proptest` + `cargo-mutants` + `trycmd` + `wiremock` + golden files.     | [Testing tools](../../../../programming/cli-design/08-testing-and-quality/testing-tools.md)           |
-| [Code quality](code-quality.md)         | `rust-code-analysis` + clippy restrictions + `cargo-bloat` + boundaries. | [Code quality tools](../../../../programming/cli-design/08-testing-and-quality/code-quality-tools.md) |
+| [Testing](testing.md)                   | `assert_cmd` + `insta` + `tempfile` + `nextest`. Core crate stack.       | [Testing strategy](../../../../programming/cli-design/09-testing-and-quality/testing-strategy.md)     |
+| [Advanced testing](advanced-testing.md) | `proptest` + `cargo-mutants` + `trycmd` + `wiremock` + golden files.     | [Testing tools](../../../../programming/cli-design/09-testing-and-quality/testing-tools.md)           |
+| [Code quality](code-quality.md)         | `rust-code-analysis` + clippy restrictions + `cargo-bloat` + boundaries. | [Code quality tools](../../../../programming/cli-design/09-testing-and-quality/code-quality-tools.md) |
 
 ## See also
 

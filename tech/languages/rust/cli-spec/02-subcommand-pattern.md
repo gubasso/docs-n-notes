@@ -188,7 +188,7 @@ Add these to the general anti-patterns:
 ## Help rendering with clap
 
 > Prerequisite:
-> [General — `--help` is generated, not authored](../../../programming/cli-design/07-naming-and-docs.md#--help-is-generated-not-authored).
+> [General — `--help` is generated, not authored](../../../programming/cli-design/08-naming-and-docs.md#--help-is-generated-not-authored).
 > The rule (parser owns the structure, hand-authored prose goes in the intro/epilog) is canonical.
 > This section is the clap-specific implementation.
 

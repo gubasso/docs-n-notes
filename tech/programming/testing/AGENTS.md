@@ -86,6 +86,6 @@ Testing principles, anti-pattern catalog, per-language tool matrix, and output t
 ## Maintenance Notes
 
 - Canonical principles source is
-  `tech/programming/cli-design/08-testing-and-quality/testing-strategy.md`; this directory carries
+  `tech/programming/cli-design/09-testing-and-quality/testing-strategy.md`; this directory carries
   the embedded fallback and skill-specific artifacts.
 - Tool matrix should be refreshed when major versions of testing tools release.

@@ -18,7 +18,7 @@ round: 1                                       # increments on re-runs
 phase: 3-complete                              # 0-init | 1-lint | 2-findings | 3-plan-complete | 4-implementing | 5-done
 
 principles:
-  path: "/home/gu/Projects/docs-n-notes/tech/programming/cli-design/08-testing-and-quality/testing-strategy.md"
+  path: "/home/gu/Projects/docs-n-notes/tech/programming/cli-design/09-testing-and-quality/testing-strategy.md"
   resolution-source: "probe"                   # flag | env | docs-notes-repo | probe | embedded-fallback
   sha256: "abc123…"                            # to detect drift between rounds
 

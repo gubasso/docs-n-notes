@@ -1,7 +1,7 @@
 # 08 — Naming and Visibility (Rust)
 
 > Prerequisite:
-> [General principles — Naming & Documentation](../../../programming/cli-design/07-naming-and-docs.md)
+> [General principles — Naming & Documentation](../../../programming/cli-design/08-naming-and-docs.md)
 > for the verb/noun naming table, doc-comment strategy, and "comment why not what" rule. This
 > chapter is the Rust implementation.
 

@@ -1,7 +1,7 @@
 # Testing (Rust)
 
 > Prerequisite:
-> [General principles — Testing Strategy](../../../../programming/cli-design/08-testing-and-quality/testing-strategy.md)
+> [General principles — Testing Strategy](../../../../programming/cli-design/09-testing-and-quality/testing-strategy.md)
 > for the pyramid, isolation rules, and what to mock. This chapter is the Rust implementation.
 
 ## Crate stack
@@ -130,7 +130,7 @@ cargo nextest run --profile ci             # CI workflow — retries, quiet outp
 `--profile <name>`. A CI workflow that just runs `cargo nextest run` ignores its own `[profile.ci]`
 retry/timeout/output tuning and falls back to `[profile.default]`. This is the Rust instance of the
 general "explicit-profile" pattern in
-[cli-design § Tuning test-runner output for CI + AI agents](../../../../programming/cli-design/08-testing-and-quality/testing-tools.md#tuning-test-runner-output-for-ci--ai-agents).
+[cli-design § Tuning test-runner output for CI + AI agents](../../../../programming/cli-design/09-testing-and-quality/testing-tools.md#tuning-test-runner-output-for-ci--ai-agents).
 
 ### nextest profile reference
 
@@ -263,7 +263,7 @@ mod tests {
 
 ## See also
 
-- [General principle — Testing Strategy](../../../../programming/cli-design/08-testing-and-quality/testing-strategy.md)
+- [General principle — Testing Strategy](../../../../programming/cli-design/09-testing-and-quality/testing-strategy.md)
 - [03 — Error Handling](../03-error-handling.md) — exit-code unit tests
 - [07 — Dependencies (Rust)](../07-dependencies.md)
 

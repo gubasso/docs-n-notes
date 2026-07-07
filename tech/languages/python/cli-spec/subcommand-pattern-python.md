@@ -246,7 +246,7 @@ tests, or the handler grows past the readable-command boundary.
 ## Help rendering with Typer / Click
 
 > Prerequisite:
-> [General — `--help` is generated, not authored](../../../programming/cli-design/07-naming-and-docs.md#--help-is-generated-not-authored).
+> [General — `--help` is generated, not authored](../../../programming/cli-design/08-naming-and-docs.md#--help-is-generated-not-authored).
 > Typer and Click own usage, option, and subcommand tables.
 
 Use parser metadata for generated help:

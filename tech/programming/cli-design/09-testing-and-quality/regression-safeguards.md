@@ -6,7 +6,7 @@ layering model that determines when each check runs.
 
 For concrete per-language tooling, see the companion file
 **[10a — Code Quality Tools](code-quality-tools.md)** and the existing testing references
-**[08 — Testing Strategy](testing-strategy.md)** / **[08a — Testing Tools](testing-tools.md)**.
+**[09 — Testing Strategy](testing-strategy.md)** / **[09a — Testing Tools](testing-tools.md)**.
 
 ## Why AI agents cause regressions
 
@@ -35,14 +35,14 @@ contract** — what the program does, not how it does it.
 
 | Technique               | What it locks down                                         | Where documented                                                                                |
 | ----------------------- | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Unit tests              | Individual functions and modules behave correctly.         | [08 § Unit tests](testing-strategy.md#unit-tests)                                               |
-| Integration tests       | Subcommands produce correct output and side effects.       | [08 § Integration tests](testing-strategy.md#integration-tests--one-per-subcommand)             |
-| Snapshot / golden tests | Structured output (JSON, help text, error messages).       | [08 § Snapshot tests](testing-strategy.md#snapshot-tests)                                       |
-| E2E / acceptance tests  | The binary works end-to-end against real dependencies.     | [08 § E2E tests](testing-strategy.md#e2e-tests)                                                 |
-| Property-based tests    | Invariants hold for all inputs of a shape.                 | [08 § Property-based](testing-strategy.md#property-based-testing)                               |
-| Mutation testing        | Tests actually detect changes in production code.          | [08 § Mutation testing](testing-strategy.md#mutation-testing-as-quality-gate)                   |
-| Contract tests          | API / CLI output schemas remain stable across versions.    | [08a § Contract testing](testing-tools.md#contract-testing)                                     |
-| Argv-contract tests     | Subprocess invocations produce correct argument vectors.   | [08 § Argv-contract](testing-strategy.md#argv-contract-tests-for-clis-that-wrap-other-binaries) |
+| Unit tests              | Individual functions and modules behave correctly.         | [09 § Unit tests](testing-strategy.md#unit-tests)                                               |
+| Integration tests       | Subcommands produce correct output and side effects.       | [09 § Integration tests](testing-strategy.md#integration-tests--one-per-subcommand)             |
+| Snapshot / golden tests | Structured output (JSON, help text, error messages).       | [09 § Snapshot tests](testing-strategy.md#snapshot-tests)                                       |
+| E2E / acceptance tests  | The binary works end-to-end against real dependencies.     | [09 § E2E tests](testing-strategy.md#e2e-tests)                                                 |
+| Property-based tests    | Invariants hold for all inputs of a shape.                 | [09 § Property-based](testing-strategy.md#property-based-testing)                               |
+| Mutation testing        | Tests actually detect changes in production code.          | [09 § Mutation testing](testing-strategy.md#mutation-testing-as-quality-gate)                   |
+| Contract tests          | API / CLI output schemas remain stable across versions.    | [09a § Contract testing](testing-tools.md#contract-testing)                                     |
+| Argv-contract tests     | Subprocess invocations produce correct argument vectors.   | [09 § Argv-contract](testing-strategy.md#argv-contract-tests-for-clis-that-wrap-other-binaries) |
 | Eval harnesses          | AI agent workflows produce correct results over N samples. | [05 § Verification](../05-designing-for-llm-agents.md#5-verification-and-evals)                 |
 
 ### Category 2: Structural quality gates
@@ -107,7 +107,7 @@ CI — NIGHTLY  (hours OK)
 - **Profiles are dead config unless invoked explicitly.** Every CI step, pre-commit hook, and
   pre-push hook must pass the right `--profile` / `--config` flag. This is the most common reason a
   gate silently does nothing. See
-  [08a § Tuning test-runner output](testing-tools.md#tuning-test-runner-output-for-ci--ai-agents).
+  [09a § Tuning test-runner output](testing-tools.md#tuning-test-runner-output-for-ci--ai-agents).
 
 ## Test-Driven Development for AI agents
 
@@ -191,7 +191,7 @@ gates, the tighter the feedback loop, and the less human review is needed.
 
 - **Relying on coverage alone.** Coverage says what was executed, not what was checked. Pair it with
   mutation testing for real signal. See
-  [08 § Coverage philosophy](testing-strategy.md#coverage-philosophy).
+  [09 § Coverage philosophy](testing-strategy.md#coverage-philosophy).
 - **Skipping mutation testing because "tests pass."** AI-generated tests are notorious for high
   coverage, low mutation score. The test runs the code but doesn't check the result.
 - **No complexity threshold.** Without a complexity gate, AI agents freely introduce deeply nested,
@@ -219,8 +219,8 @@ Add to [99 — Checklist](../99-checklist.md):
 
 ## See also
 
-- [08 — Testing Strategy](testing-strategy.md) — the testing pyramid and principles.
-- [08a — Testing Tools](testing-tools.md) — per-language testing tool matrix.
+- [09 — Testing Strategy](testing-strategy.md) — the testing pyramid and principles.
+- [09a — Testing Tools](testing-tools.md) — per-language testing tool matrix.
 - [10a — Code Quality Tools](code-quality-tools.md) — per-language quality gate tool matrix.
 - [05 — Designing for LLM Agents](../05-designing-for-llm-agents.md) — CLI design for agent
   consumption.

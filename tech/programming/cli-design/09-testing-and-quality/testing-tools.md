@@ -1,7 +1,7 @@
 # Testing Tools
 
 Per-language tooling reference for the principles laid out in
-[08 — Testing Strategy](testing-strategy.md). Pick from the matrix; copy the snippets at the bottom
+[09 — Testing Strategy](testing-strategy.md). Pick from the matrix; copy the snippets at the bottom
 into the target project.
 
 This file is a directory, not a tutorial. Each tool's home page is one click away; the value here is
@@ -74,7 +74,7 @@ reviewed line by line, and the PR includes both the code change and the snapshot
 
 `proptest` and `hypothesis` both shrink failing inputs to a minimal counterexample and persist
 failing seeds in a regression file — check that file into the repo so the regression is locked down.
-See [08 § Property-based testing](testing-strategy.md#property-based-testing) for when to reach for
+See [09 § Property-based testing](testing-strategy.md#property-based-testing) for when to reach for
 it.
 
 ### Mutation testing
@@ -91,7 +91,7 @@ it.
 
 **Rule:** run mutation testing nightly in CI, not on every PR. Cap mutants per module so a run
 finishes in minutes. Track score per critical module; a drop is a regression in test quality even if
-all tests pass. See [08 § Mutation testing](testing-strategy.md#mutation-testing-as-quality-gate).
+all tests pass. See [09 § Mutation testing](testing-strategy.md#mutation-testing-as-quality-gate).
 
 ### Recording / HTTP fakes
 
@@ -141,7 +141,7 @@ Pair it with mutation testing for real signal.
 
 ## Pre-commit / CI tiering
 
-The principle from [08 § CI essentials](testing-strategy.md#ci-essentials): each tier has a time
+The principle from [09 § CI essentials](testing-strategy.md#ci-essentials): each tier has a time
 budget; assign each test type to the tier whose budget it fits.
 
 | Tier       | Time budget      | Tests run                                |
@@ -356,7 +356,7 @@ that module to gated.
 ### Test-isolation enforcement snippets
 
 For each language, a snippet that enforces the "no shared state, no global env, no real clock" rules
-from [08 § Test isolation](testing-strategy.md#test-isolation--the-single-most-important-rule).
+from [09 § Test isolation](testing-strategy.md#test-isolation--the-single-most-important-rule).
 
 **Python — `conftest.py`:**
 
@@ -423,7 +423,7 @@ teardown() {
 ## Tool selection by failure mode
 
 When the symptom is X, reach for tool Y. Pairing this with the heuristics in
-[08 § Detecting "testing the third-party library"](testing-strategy.md#detecting-testing-the-third-party-library)
+[09 § Detecting "testing the third-party library"](testing-strategy.md#detecting-testing-the-third-party-library)
 covers the most common test-quality failures.
 
 | Symptom                                                                              | Likely cause                                                                                      | Tool / pattern to reach for                                          |
@@ -441,7 +441,7 @@ covers the most common test-quality failures.
 ## References
 
 Per-tool documentation links are inline in the matrix above. For _why_ you'd reach for each tool
-category, see the cross-references back to [08 — Testing Strategy](testing-strategy.md):
+category, see the cross-references back to [09 — Testing Strategy](testing-strategy.md):
 
 - [§ Non-negotiable principles](testing-strategy.md#non-negotiable-principles)
 - [§ Test-shape models](testing-strategy.md#test-shape-models--pyramid-vs-trophy-vs-honeycomb)

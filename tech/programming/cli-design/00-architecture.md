@@ -356,7 +356,7 @@ workspace navigation outweighs the wins.
 - **Domain crates + glue** (the `ripgrep` pattern): `app-domain/`, `app-adapter-<system>/`,
   `app-service/`, `app-cli/`. Use when subsystems are publishable.
 
-See [09 — Reference Projects](09-reference-projects.md) for organizational patterns from
+See [10 — Reference Projects](10-reference-projects.md) for organizational patterns from
 well-studied codebases.
 
 ### Directory rules across a workspace
@@ -390,9 +390,9 @@ consumer, **don't** create the public surface — keep modules internal.
 
 - [04 — Coding Style](04-coding-style-rust-zig.md) — explicit errors, parse-don't-validate,
   composition, no globals.
-- [07 — Naming & Documentation](07-naming-and-docs.md) — verb/noun discipline, module headers ("what
+- [08 — Naming & Documentation](08-naming-and-docs.md) — verb/noun discipline, module headers ("what
   it is, what it isn't").
-- [08 — Testing Strategy](08-testing-and-quality/testing-strategy.md) — what tests live where in the
+- [09 — Testing Strategy](09-testing-and-quality/testing-strategy.md) — what tests live where in the
   tree.
 - Language-specific spec:
   [`rust/cli-spec/00-directory-tree.md`](../../languages/rust/cli-spec/00-directory-tree.md).

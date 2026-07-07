@@ -105,18 +105,31 @@ waive it in an ADR — don't ship with silent gaps.
 
 → Detail: [05 — Designing for LLM Agents](05-designing-for-llm-agents.md)
 
+## Preflight & health checks
+
+- [ ] `doctor` aggregates **all** environment prerequisites (not one path); supports `--scope` +
+      `--json`.
+- [ ] Every check has a stable ID and is classified **hard** (blocks) or **soft** (warn + fallback).
+- [ ] Each subcommand runs its hard-prerequisite subset **at entry** and fails fast before any side
+      effect.
+- [ ] Read-only/inert commands (`status`, `version`, `help`, `doctor`, list/show) do **not** gate.
+- [ ] Guards, `doctor`, and `init` share one probe set; refusals carry a stable exit code +
+      remediation.
+
+→ Detail: [06 — Preflight & Health Checks](06-preflight-and-health-checks.md)
+
 ## Naming & docs
 
 - [ ] Visibility defaults to the least public modifier that works. No blanket `pub mod` across the
       codebase.
-- [ ] Verb/noun naming follows the table in [07](07-naming-and-docs.md): `<Verb>Args`,
+- [ ] Verb/noun naming follows the table in [08](08-naming-and-docs.md): `<Verb>Args`,
       `<Verb>Request`, `<Layer>Error`.
 - [ ] Every public and crate-public item has a doc comment.
 - [ ] Doc comments on CLI flag fields are written for the user; they become `--help` text.
 - [ ] Crate root has a module map linking to the architecture spec.
 - [ ] No `Manager` / `Helper` / `Utils` / `Handler` / `Wrapper` suffix soup.
 
-→ Detail: [07 — Naming & Documentation](07-naming-and-docs.md)
+→ Detail: [08 — Naming & Documentation](08-naming-and-docs.md)
 
 ## Testing
 
@@ -138,12 +151,12 @@ waive it in an ADR — don't ship with silent gaps.
 - [ ] Mutation score (≥ 60% on critical modules) tracked nightly, even if not gated (`cargo-mutants`
       / `mutmut` / `stryker`).
 - [ ] LLM-generated tests reviewed against the third-party-API heuristics in
-      [08 § Detecting "testing the third-party library"](08-testing-and-quality/testing-strategy.md#detecting-testing-the-third-party-library).
+      [09 § Detecting "testing the third-party library"](09-testing-and-quality/testing-strategy.md#detecting-testing-the-third-party-library).
 - [ ] Every test survives the "import-removal test": deleting a third-party import would break the
       test (proving it tests the boundary, not the library).
 
-→ Detail: [08 — Testing Strategy](08-testing-and-quality/testing-strategy.md) → Tooling:
-[08a — Testing Tools](08-testing-and-quality/testing-tools.md)
+→ Detail: [09 — Testing Strategy](09-testing-and-quality/testing-strategy.md) → Tooling:
+[09a — Testing Tools](09-testing-and-quality/testing-tools.md)
 
 ## Regression safeguards
 
@@ -163,8 +176,8 @@ waive it in an ADR — don't ship with silent gaps.
       implements, human reviews.
 - [ ] Eval harness exists for agent-consumed CLI skills (10+ samples per prompt, tracked over time).
 
-→ Detail: [10 — Regression Safeguards](08-testing-and-quality/regression-safeguards.md) → Tooling:
-[10a — Code Quality Tools](08-testing-and-quality/code-quality-tools.md)
+→ Detail: [10 — Regression Safeguards](09-testing-and-quality/regression-safeguards.md) → Tooling:
+[10a — Code Quality Tools](09-testing-and-quality/code-quality-tools.md)
 
 ## CI / shipping
 
@@ -188,7 +201,7 @@ If the CLI wraps another binary (orchestrates a subprocess), additionally:
 - [ ] Exit-code passthrough where the wrapper has nothing to add.
 - [ ] `--` sentinel handled correctly: passes-through verbatim to the child.
 
-→ Detail: [06 — CLI Wrapper Design](06-cli-wrapper-design/)
+→ Detail: [07 — CLI Wrapper Design](07-cli-wrapper-design/)
 
 ## See also
 

@@ -6,11 +6,11 @@
 > CLI testing.
 >
 > General principles:
-> [08 — Testing Strategy](../../../../programming/cli-design/08-testing-and-quality/testing-strategy.md)
+> [09 — Testing Strategy](../../../../programming/cli-design/09-testing-and-quality/testing-strategy.md)
 > ·
-> [08a — Testing Tools](../../../../programming/cli-design/08-testing-and-quality/testing-tools.md)
+> [09a — Testing Tools](../../../../programming/cli-design/09-testing-and-quality/testing-tools.md)
 > ·
-> [10 — Regression Safeguards](../../../../programming/cli-design/08-testing-and-quality/regression-safeguards.md).
+> [10 — Regression Safeguards](../../../../programming/cli-design/09-testing-and-quality/regression-safeguards.md).
 
 ## Crate stack (advanced)
 
@@ -387,7 +387,7 @@ async fn fetches_quota_from_api() {
 
 **Assert on your code's return value, not on the mock.** The mock is the boundary fake; the
 assertion is about your domain logic. See
-[08 § heuristic 2](../../../../programming/cli-design/08-testing-and-quality/testing-strategy.md#2-the-mock-is-the-only-subject).
+[09 § heuristic 2](../../../../programming/cli-design/09-testing-and-quality/testing-strategy.md#2-the-mock-is-the-only-subject).
 
 ## Interactive CLI testing with `rexpect`
 
@@ -468,11 +468,11 @@ tests/
   analysis.
 - [07 — Dependencies (Rust)](../07-dependencies.md) — curated default crate list.
 - General principles:
-  - [08 — Testing Strategy](../../../../programming/cli-design/08-testing-and-quality/testing-strategy.md)
+  - [09 — Testing Strategy](../../../../programming/cli-design/09-testing-and-quality/testing-strategy.md)
     — pyramid, isolation, mutation testing, property-based testing.
-  - [08a — Testing Tools](../../../../programming/cli-design/08-testing-and-quality/testing-tools.md)
+  - [09a — Testing Tools](../../../../programming/cli-design/09-testing-and-quality/testing-tools.md)
     — per-language tool matrix.
-  - [10 — Regression Safeguards](../../../../programming/cli-design/08-testing-and-quality/regression-safeguards.md)
+  - [10 — Regression Safeguards](../../../../programming/cli-design/09-testing-and-quality/regression-safeguards.md)
     — TDD-for-agents, eval harnesses, layering model.
 
 ## References

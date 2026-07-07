@@ -6,7 +6,7 @@ gates: complexity metrics, dependency hygiene, binary analysis, architectural en
 detection, and code churn tracking.
 
 For testing tools (runners, snapshot, property-based, mutation, recording, contract), see
-**[08a — Testing Tools](testing-tools.md)**.
+**[09a — Testing Tools](testing-tools.md)**.
 
 ## Opinionated defaults — "if in doubt, start here"
 
@@ -444,7 +444,7 @@ jobs:
 ## See also
 
 - [10 — Regression Safeguards](regression-safeguards.md) — principles and layering model.
-- [08a — Testing Tools](testing-tools.md) — testing tool matrix (runners, snapshot, mutation,
+- [09a — Testing Tools](testing-tools.md) — testing tool matrix (runners, snapshot, mutation,
   property-based, recording).
 - [04 — Coding Style](../04-coding-style-rust-zig.md) § 16 — strict lints.
 - [99 — Checklist](../99-checklist.md) — one-page sanity check.

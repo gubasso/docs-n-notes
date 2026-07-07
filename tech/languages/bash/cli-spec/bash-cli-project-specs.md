@@ -232,7 +232,7 @@ bash side just has to implement them consistently.
 ## Testing (bats-core)
 
 > Prerequisite:
-> [General principles — Testing Strategy](../../../programming/cli-design/08-testing-and-quality/testing-strategy.md)
+> [General principles — Testing Strategy](../../../programming/cli-design/09-testing-and-quality/testing-strategy.md)
 > for the pyramid, tier table, isolation rules, and what to mock. This section is the bats-core
 > implementation.
 

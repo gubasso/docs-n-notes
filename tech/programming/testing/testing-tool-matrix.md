@@ -2,7 +2,7 @@
 
 Loaded by Phase 3 of the `test-review` skill when generating the **Suggestions** section of
 `REFACTOR_PLAN.md`. Mirrors the canonical reference at
-`tech/programming/cli-design/08-testing-and-quality/testing-tools.md`. Refresh from canonical when
+`tech/programming/cli-design/09-testing-and-quality/testing-tools.md`. Refresh from canonical when
 adding a new language.
 
 The rule for surfacing suggestions: **never silently install.** Every suggestion in REFACTOR_PLAN.md
@@ -283,5 +283,5 @@ in `REFACTOR_PLAN.md` unless the user explicitly promotes them.
 
 For the full per-language matrix (CLI testing libraries, contract testing, coverage tools, recording
 stubs in their entirety) the canonical reference is the user's
-`tech/programming/cli-design/08-testing-and-quality/testing-tools.md`. Read that file when the
+`tech/programming/cli-design/09-testing-and-quality/testing-tools.md`. Read that file when the
 project's needs go beyond the opinionated defaults above.

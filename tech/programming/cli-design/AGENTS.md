@@ -1,6 +1,6 @@
 ---
 digest-of: tech/programming/cli-design
-last-synced: 2026-06-18
+last-synced: 2026-07-07
 source-files:
   - README.md
   - 00-architecture.md
@@ -9,10 +9,11 @@ source-files:
   - 03-config-precedence.md
   - 04-coding-style-rust-zig.md
   - 05-designing-for-llm-agents.md
-  - 07-naming-and-docs.md
-  - 09-reference-projects.md
+  - 06-preflight-and-health-checks.md
+  - 08-naming-and-docs.md
+  - 10-reference-projects.md
   - 99-checklist.md
-token-estimate: 2800
+token-estimate: 3100
 ---
 
 # AGENTS
@@ -20,8 +21,8 @@ token-estimate: 2800
 ## Scope
 
 Language-agnostic CLI design canon: architecture, logging, errors, config, coding style, LLM-agent
-design, naming, reference projects, and a pre-ship checklist. Language-specific implementations live
-in `tech/languages/<lang>/cli-spec/`.
+design, preflight/health checks, naming, reference projects, and a pre-ship checklist.
+Language-specific implementations live in `tech/languages/<lang>/cli-spec/`.
 
 ## Key Points
 
@@ -86,14 +87,26 @@ in `tech/languages/<lang>/cli-spec/`.
   `--yes`).
 - Deterministic and idempotent operations.
 
-### Naming and Docs (07)
+### Preflight & Health Checks (06)
+
+- Every subcommand validates its prerequisites at entry and fails fast **before** any side effect —
+  never a half-applied mutation or an opaque late error.
+- One first-class `doctor` aggregates **all** environment checks (`--scope`, `--json`); it must not
+  probe just one path.
+- One probe set, three call sites: `doctor` (whole catalog), per-command guards (the subset that
+  command needs), and `init`/setup — no independent per-command checks that drift.
+- Each check has a stable ID (doubles as `err.kind`) and is classified **hard** (blocks, non-zero
+  exit + remediation) or **soft** (warn + documented fallback).
+- Read-only/inert commands (`status`, `version`, `help`, `doctor`, list/show) never gate.
+
+### Naming and Docs (08)
 
 - Visibility defaults to least-public. `pub(crate)` before `pub`.
 - `<Verb>Args` (parse-shape), `<Verb>Request` (runtime), `<Layer>Error`, concept-name newtypes.
 - `--help` is generated from parser, not hand-authored. Narrative goes in intro/epilog hooks.
 - Module headers: "what it is, what it isn't."
 
-### Reference Projects (09)
+### Reference Projects (10)
 
 - Ten patterns from real CLIs: single-crate, lib+bin, domain-crates, client+server+common, plugin
   ABI, uniform exec(), focused error+ui modules, options/output split, context+modules,
@@ -106,22 +119,24 @@ in `tech/languages/<lang>/cli-spec/`.
 
 ## Source Map
 
-| Topic                                            | File                             |
-| ------------------------------------------------ | -------------------------------- |
-| Facing category, parse/runtime shape, AppContext | `00-architecture.md`             |
-| Message types, log schema, channel matrix        | `01-logging-and-output.md`       |
-| Error anatomy, sysexits, error layering          | `02-error-messages.md`           |
-| 5-layer config merge, XDG, provenance            | `03-config-precedence.md`        |
-| 18 coding-style rules                            | `04-coding-style-rust-zig.md`    |
-| CLI+Skill+AGENTS.md model, agent-facing patterns | `05-designing-for-llm-agents.md` |
-| Visibility, naming tables, help generation, docs | `07-naming-and-docs.md`          |
-| Organizational patterns from 12 CLIs             | `09-reference-projects.md`       |
-| Pre-ship checklist                               | `99-checklist.md`                |
+| Topic                                             | File                                |
+| ------------------------------------------------- | ----------------------------------- |
+| Facing category, parse/runtime shape, AppContext  | `00-architecture.md`                |
+| Message types, log schema, channel matrix         | `01-logging-and-output.md`          |
+| Error anatomy, sysexits, error layering           | `02-error-messages.md`              |
+| 5-layer config merge, XDG, provenance             | `03-config-precedence.md`           |
+| 18 coding-style rules                             | `04-coding-style-rust-zig.md`       |
+| CLI+Skill+AGENTS.md model, agent-facing patterns  | `05-designing-for-llm-agents.md`    |
+| Preflight guards + doctor aggregation (hard/soft) | `06-preflight-and-health-checks.md` |
+| Visibility, naming tables, help generation, docs  | `08-naming-and-docs.md`             |
+| Organizational patterns from 12 CLIs              | `10-reference-projects.md`          |
+| Pre-ship checklist                                | `99-checklist.md`                   |
 
 ## Maintenance Notes
 
-- Chapters 06 and 08 are subdirectories not included as source files in this digest; load them
-  directly when reviewing wrapper design or testing. They include light category-scoping tags.
+- Chapters 07 (CLI wrapper design) and 09 (testing & quality) are subdirectories not included as
+  source files in this digest; load them directly when reviewing wrapper design or testing. They
+  include light category-scoping tags.
 - Language-specific specs (`rust/cli-spec/`, `python/cli-spec/`, `bash/cli-spec/`) apply these
   principles to concrete ecosystems.
 - Regenerate when any chapter file changes or new chapters are added.

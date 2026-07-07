@@ -22,10 +22,11 @@ details.
 | 3  | [Config precedence](03-config-precedence.md)                      | `CLI > env > project file > user file > defaults`. Source-tracking loaders.                                                                   |
 | 4  | [Coding style (Rust/Zig flavor)](04-coding-style-rust-zig.md)     | Explicit errors, parse-don't-validate, newtypes, composition over inheritance.                                                                |
 | 5  | [Designing for LLM coding agents](05-designing-for-llm-agents.md) | `--help`, `--json`, doctor commands, evaluation harnesses.                                                                                    |
-| 6  | [CLI wrapper design](06-cli-wrapper-design/)                      | Wrapping/orchestrating _other_ CLI binaries: typed builders + POSIX process model.                                                            |
-| 7  | [Naming & documentation](07-naming-and-docs.md)                   | Visibility defaults, doc-comment strategy, "comment why, not what".                                                                           |
-| 8  | [Testing & quality](08-testing-and-quality/)                      | Testing pyramid, per-language tooling, regression safeguards, code quality gates. Strategy, tools, AI-agent verification, complexity metrics. |
-| 9  | [Reference projects](09-reference-projects.md)                    | Organizational patterns from well-studied CLIs (language-agnostic takeaways).                                                                 |
+| 6  | [Preflight & health checks](06-preflight-and-health-checks.md)    | Per-subcommand fail-fast preflight guards + a first-class `doctor` that aggregates every environment check; one probe set, three call sites.  |
+| 7  | [CLI wrapper design](07-cli-wrapper-design/)                      | Wrapping/orchestrating _other_ CLI binaries: typed builders + POSIX process model.                                                            |
+| 8  | [Naming & documentation](08-naming-and-docs.md)                   | Visibility defaults, doc-comment strategy, "comment why, not what".                                                                           |
+| 9  | [Testing & quality](09-testing-and-quality/)                      | Testing pyramid, per-language tooling, regression safeguards, code quality gates. Strategy, tools, AI-agent verification, complexity metrics. |
+| 10 | [Reference projects](10-reference-projects.md)                    | Organizational patterns from well-studied CLIs (language-agnostic takeaways).                                                                 |
 | 99 | [Checklist](99-checklist.md)                                      | One-page sanity check before shipping a CLI.                                                                                                  |
 
 ## Language-specific implementation
@@ -55,3 +56,7 @@ matching general chapter.
 - **`pub`/`pub(crate)`/private discipline.** Default to the least visibility that works.
 - **`--help` is documentation.** Treat `--help` and `man` pages as part of the API.
 - **`--json` for everything machine-readable.** LLM agents, CI scripts, and pipes will thank you.
+- **Guard prerequisites up front, aggregate them in `doctor`.** One probe set, three call sites:
+  `doctor` runs the whole catalog, each subcommand fail-fast-guards the subset it needs (refuse
+  before any mutation), and setup verbs reuse the same checks. See
+  [06](06-preflight-and-health-checks.md).
