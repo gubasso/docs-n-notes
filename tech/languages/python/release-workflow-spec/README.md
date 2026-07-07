@@ -4,6 +4,12 @@ This is the **Python binding** of the
 [general principles](../../../programming/release-workflow/README.md); it is a **stub to be
 expanded** when a Python project actually adopts it.
 
+## Source of truth
+
+The committed version — `pyproject.toml` `[project] version` (or `__version__`) — is the authoring
+source of truth, bumped in place by the release tool; the annotated tag mirrors it. See
+[Version source of truth](../../../programming/design-decisions/version-source-of-truth.md).
+
 ## Recommended tooling
 
 - **Release-PR gate:** [release-please](https://github.com/googleapis/release-please) — Google's

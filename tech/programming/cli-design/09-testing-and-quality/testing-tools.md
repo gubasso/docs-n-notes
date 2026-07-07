@@ -114,13 +114,13 @@ upstream-shape drift can't sneak into the suite.
 
 For services that talk to other services (honeycomb shape; rarely relevant to a single CLI).
 
-| Lang   | Tools                                                                                                                                |
-| ------ | ------------------------------------------------------------------------------------------------------------------------------------ |
-| Rust   | [`pact-rust`](https://github.com/pact-foundation/pact-reference)                                                                     |
-| Python | [`pact-python`](https://github.com/pact-foundation/pact-python)                                                                      |
-| TS/JS  | [`pact-js`](https://github.com/pact-foundation/pact-js)                                                                              |
-| Go     | [`pact-go`](https://github.com/pact-foundation/pact-go)                                                                              |
-| Java   | [`pact-jvm`](https://github.com/pact-foundation/pact-jvm), [Spring Cloud Contract](https://spring.io/projects/spring-cloud-contract) |
+| Lang   | Tools                                                                                                                                     |
+| ------ | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Rust   | [`pact-rust`](https://github.com/pact-foundation/pact-reference)                                                                          |
+| Python | [`pact-python`](https://github.com/pact-foundation/pact-python)                                                                           |
+| TS/JS  | [`pact-js`](https://github.com/pact-foundation/pact-js)                                                                                   |
+| Go     | [`pact-go`](https://github.com/pact-foundation/pact-go)                                                                                   |
+| Java   | [`pact-jvm`](https://github.com/pact-foundation/pact-jvm), [Spring Cloud Contract](https://github.com/spring-cloud/spring-cloud-contract) |
 
 Pact is the canonical consumer-driven contract framework. Out of scope for a single-binary CLI;
 relevant the moment your CLI talks to a service you also own.

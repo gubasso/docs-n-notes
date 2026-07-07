@@ -4,9 +4,12 @@ Part of the [bash release-workflow spec](README.md). General principle: **versio
 truth** — see the [general principles](../../../programming/release-workflow/README.md).
 
 A lean, opinionated workflow for releasing and distributing a Bash CLI on Linux. Targets a
-single-maintainer pure-Bash project (no compiled artifacts, "noarch" payload). One source of truth
-(a signed `v*` git tag) fans out to: a `curl | bash` installer, an AUR package, and the openSUSE
-Build Service (OBS) for `.rpm`/`.deb` across openSUSE, Fedora, Debian, and Ubuntu.
+single-maintainer pure-Bash project (no compiled artifacts, "noarch" payload). The committed
+`VERSION` file is the authoring source of truth; the signed `v*` tag is cut to match it and is the
+published record that fans out to: a `curl | bash` installer, an AUR package, and the openSUSE Build
+Service (OBS) for `.rpm`/`.deb` across openSUSE, Fedora, Debian, and Ubuntu. See
+[Version source of truth](../../../programming/design-decisions/version-source-of-truth.md) for why
+the committed version leads and the tag mirrors it.
 
 > **Bash diverges from the general registry-publish model.** There is no central package registry
 > (no crates.io / npm / PyPI equivalent that _is_ the release). A Bash program's "release" is a git
@@ -27,7 +30,7 @@ Build Service (OBS) for `.rpm`/`.deb` across openSUSE, Fedora, Debian, and Ubunt
 
 Six moving parts:
 
-1. `VERSION` file as single source of truth.
+1. `VERSION` file — the committed authoring source of truth; the tag is cut to mirror it.
 1. Conventional commits + `git-cliff` for `CHANGELOG.md`.
 1. `Makefile` that respects `PREFIX`/`DESTDIR` (GNU conventions) and has a `dist` target.
 1. GitHub Actions workflow triggered on `v*` tag → builds tarball, attaches `SHA256SUMS` + SLSA
@@ -41,7 +44,7 @@ Six moving parts:
 The maintainer's working branches are `develop` (integration) and `master` (release); the release
 tag is cut on `master`.
 
-## Versioning — single source of truth
+## Versioning — source of truth
 
 Add a `VERSION` file at the repo root containing one line:
 
@@ -49,8 +52,11 @@ Add a `VERSION` file at the repo root containing one line:
 0.1.0
 ```
 
-This is what GNU coding standards and packaging tools (OBS `set_version`, `nfpm`, RPM `%autosetup`)
-expect.
+This committed file is the **authoring** source of truth — the one place the number is bumped (by
+`git-cliff --bump`, see [06](06-release-ritual-and-alternatives.md)). The signed `v*` tag is then
+cut to match it and is the **published record** every distribution channel keys off. Keeping the
+number authored in exactly one committed file is what GNU coding standards and packaging tools (OBS
+`set_version`, `nfpm`, RPM `%autosetup`) expect, and it leaves nothing to drift.
 
 Two equivalent ways to expose it from the binary's `version` subcommand:
 

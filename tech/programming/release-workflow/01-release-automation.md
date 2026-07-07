@@ -33,6 +33,15 @@ commits / changesets on develop
   CI promotes master to the tag
 ```
 
+## Source of truth
+
+The version has two roles, kept distinct. The **authoring source of truth** is the committed version
+in the repo — `Cargo.toml`, `package.json`, `pyproject.toml`, or a `VERSION` file — bumped in place
+by the release tool. The **published record** is the annotated `vX.Y.Z` tag, cut to match it. The
+committed version leads; the tag mirrors it. Pick a tool that can bump _that_ committed file (a tool
+whose updater cannot is the wrong tool). See
+[Version source of truth](../design-decisions/version-source-of-truth.md).
+
 ## SemVer
 
 Versions follow [Semantic Versioning](https://semver.org/): `MAJOR.MINOR.PATCH`. Conventional-commit

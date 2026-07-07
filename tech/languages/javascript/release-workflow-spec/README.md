@@ -4,6 +4,12 @@ This is the **JavaScript/Node binding** of the
 [general principles](../../../programming/release-workflow/README.md); it is a **stub to be
 expanded**.
 
+## Source of truth
+
+The committed `package.json` `version` is the authoring source of truth, bumped in place by
+Changesets (or the chosen tool); the annotated tag mirrors it. See
+[Version source of truth](../../../programming/design-decisions/version-source-of-truth.md).
+
 ## Recommended tooling
 
 - **Release-PR tool (idiomatic):** [Changesets](https://github.com/changesets/changesets) +
