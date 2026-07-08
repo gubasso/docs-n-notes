@@ -27,6 +27,13 @@ attribute set). You describe _what things are_; Nix computes only what's actuall
 5. [`05-tooling-gotchas-resources.md`](05-tooling-gotchas-resources.md) — CLI, ecosystem
    (`flake-parts`, `crane`, `direnv`), common gotchas, best resources.
 
+## Bootstrapping a Nix project
+
+- [`project-bootstrap-spec/`](project-bootstrap-spec/README.md) — the once-per-project recipe for
+  authoring a flake as the deliverable (scaffold, pin `nixpkgs`, format/lint/`nix flake check`
+  gates); the Nix binding of the general
+  [project-bootstrap](../../programming/project-bootstrap/README.md) hub.
+
 ## 30-second synthesis
 
 Learn the **language core** (attrsets + functions + `let/in`, evaluated not executed), then the

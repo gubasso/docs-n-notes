@@ -70,14 +70,36 @@ root README  →  this hub  →  runbook.md  →  language project-bootstrap-spe
 ## Language-specific bindings
 
 These bindings apply the general recipe with a concrete toolchain. They assume you've read the
-general runbook, and each links back to it.
+general runbook, and each links back to it. Every language stack has one; they all follow the same
+shape (README + runbook + `00-toolchain-and-layout` + `01-quality-gates` + implementation-kind
+files):
 
-- [`tech/languages/rust/project-bootstrap-spec/`](../../languages/rust/project-bootstrap-spec/) —
-  the **reference binding**: cargo layout + toolchain pinning, rustfmt/clippy/deny quality gates,
-  and a Rust CLI implementation-kind. Other languages follow this shape.
+- [`rust`](../../languages/rust/project-bootstrap-spec/) — the **reference binding**: cargo layout +
+  toolchain pinning, rustfmt/clippy/deny gates, CLI implementation-kind.
+- [`bash`](../../languages/bash/project-bootstrap-spec/) — shfmt/shellcheck/bats,
+  `set -euo pipefail`, getopts CLI.
+- [`c`](../../languages/c/project-bootstrap-spec/) — CMake/Meson, clang-format/clang-tidy,
+  sanitizers; CLI + library kinds.
+- [`css`](../../languages/css/project-bootstrap-spec/) — stylelint/prettier, PostCSS/Sass;
+  stylesheet-library kind.
+- [`go`](../../languages/go/project-bootstrap-spec/) — go mod, golangci-lint, govulncheck; CLI +
+  web-service kinds.
+- [`javascript`](../../languages/javascript/project-bootstrap-spec/) — npm/pnpm, prettier/eslint,
+  vitest, tsc; CLI + web-app kinds.
+- [`lua`](../../languages/lua/project-bootstrap-spec/) — LuaRocks, stylua/luacheck/busted;
+  rock-library kind.
+- [`nix`](../../languages/nix/project-bootstrap-spec/) — flake init, statix/deadnix,
+  `nix flake
+  check`; flake-project kind.
+- [`python`](../../languages/python/project-bootstrap-spec/) — uv, ruff, mypy, pytest; CLI + library
+  kinds.
+- [`r`](../../languages/r/project-bootstrap-spec/) — usethis/renv, lintr/testthat; package +
+  analysis kinds.
+- [`zig`](../../languages/zig/project-bootstrap-spec/) — zig init, build.zig.zon, zig fmt/test;
+  CLI + library kinds.
 
-Other-language bindings (python, bash, go, …) are followups; add a `project-bootstrap-spec/` under
-the language directory when you bootstrap a project in it.
+Add further implementation-kinds (library, web-service, …) under a language binding as followups
+when you bootstrap a project of that kind.
 
 ## Related (later phases & platform setup)
 
