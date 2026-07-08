@@ -2,6 +2,11 @@
 
 Personal notes and documentations for tech and a bunch of unrelated topics.
 
+> **Starting a new project?** →
+> [tech/programming/project-bootstrap/](tech/programming/project-bootstrap/README.md) — the
+> once-per-project setup recipe (general → language → implementation-kind), with a Rust reference
+> binding.
+
 ## Structure
 
 ```
@@ -25,6 +30,7 @@ personal/            # life / non-tech
 
 ### Where to add new content
 
+- Setting up a new project → `tech/programming/project-bootstrap/`
 - Cross-cutting idea (works for any language/stack) → `tech/programming/`
 - "In Rust/Python/JS, you do X" → `tech/languages/<lang>/`
 - Specific ecosystem (Solana program, ICP canister, browser DOM) → `tech/platforms/<name>/`

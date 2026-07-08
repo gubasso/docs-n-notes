@@ -53,6 +53,8 @@ you've read the matching general chapter, and each links back to it.
 
 ## Related (git mechanics & platform setup)
 
+- [Project bootstrap](../project-bootstrap/README.md) — the **earlier** once-per-project setup phase
+  (repo, foundations, dev env, quality gates, CI); release-workflow is the phase that follows it.
 - [Branch protection & CI-driven release](../../tools/git/branch-protection/) — the platform
   runbooks and rulesets (GitHub Rulesets / GitLab protected branches) that enforce this model.
 - [Rebase workflow](../../tools/git/rebase-workflow.md) — keeping feature branches linear on

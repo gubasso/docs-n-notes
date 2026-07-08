@@ -10,6 +10,9 @@ Rust notes and workflow references.
   runbook (rust binding of [general release-workflow](../../programming/release-workflow/README.md))
 - [datetime-serde-sqlx-chrono](datetime-serde-sqlx-chrono.md)
 - [patterns](patterns.md)
+- [project-bootstrap-spec](project-bootstrap-spec/README.md) — bootstrap a new Rust project:
+  toolchain/layout, quality gates, and CLI implementation-kind (rust binding of
+  [general project-bootstrap](../../programming/project-bootstrap/README.md))
 - [rust](rust.md)
 - [sqlx](sqlx.md)
 

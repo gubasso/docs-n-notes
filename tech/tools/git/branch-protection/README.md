@@ -3,6 +3,9 @@
 Templates and a one-shot setup script per platform for the `develop` → tag → CI → `master` workflow.
 Run once per new project.
 
+Part of the once-per-project setup — see
+[project bootstrap](../../../programming/project-bootstrap/runbook.md).
+
 - [workflow](workflow.md) — strategy, prerequisites, caveats, verification checklist.
 - [first-run-enablement](first-run-enablement.md) — turning Actions/CI on and to write, after the
   first push.
