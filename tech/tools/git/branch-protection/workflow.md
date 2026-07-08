@@ -8,12 +8,15 @@ Specification for protecting `master`, restricting development to `develop`, and
 > [tech/programming/release-workflow/](../../../programming/release-workflow/). This document is the
 > platform **enforcement** layer — how to apply the rulesets/protections on GitHub and GitLab.
 
-Step-by-step runbooks (pick one per platform):
+Apply it (pick one per platform):
 
-- [github-web-ui](github-web-ui.md) — GitHub, point-and-click.
-- [github-cli](github-cli.md) — GitHub, `gh` + JSON payloads.
-- [gitlab-web-ui](gitlab-web-ui.md) — GitLab, point-and-click.
-- [gitlab-cli](gitlab-cli.md) — GitLab, `glab` + scripts.
+- **Scripted** — `github/setup.sh` (reads `OWNER_REPO`) or `gitlab/setup.sh` (reads `PROJECT`,
+  `TIER`). One run per new project; see [README](README.md#usage).
+- **Point-and-click** — [github-web-ui](github-web-ui.md) / [gitlab-web-ui](gitlab-web-ui.md).
+
+Required CI status checks are **not** baked into the rulesets — pass `REQUIRED_CHECKS`
+(comma-separated contexts matching the job names your CI emits) to `github/setup.sh`. If unset, no
+status-check rule is added. GitLab gates on the pipeline itself, not named checks.
 
 Related:
 

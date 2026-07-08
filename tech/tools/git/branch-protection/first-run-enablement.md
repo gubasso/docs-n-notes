@@ -27,8 +27,8 @@ auto-detects it).
 
 **Protected `master`.** When you protect `master` (no human writes, linear history), keep the CI
 bypass actor — `github-actions[bot]`, or a GitHub App token when `master` needs its own CI on
-promotion, since a `GITHUB_TOKEN` tag push does not retrigger workflows. Details in
-[github-cli.md](github-cli.md) / [github-web-ui.md](github-web-ui.md) and
+promotion, since a `GITHUB_TOKEN` tag push does not retrigger workflows. Apply it with
+[`github/setup.sh`](github/setup.sh) or [github-web-ui.md](github-web-ui.md); see
 [workflow.md](workflow.md).
 
 ## GitLab (gitlab.com)
@@ -39,8 +39,8 @@ Settings → **CI/CD** (and Settings → General → Visibility):
    runners on, or a project runner registered).
 2. **Let CI write to protected branches.** For the `master` promotion push, add the pipeline
    identity (a project/group access token or the appropriate role) to **Allowed to push and merge**
-   on the protected `master`, or drive promotion with a token that can push. See
-   [gitlab-cli.md](gitlab-cli.md) / [gitlab-web-ui.md](gitlab-web-ui.md).
+   on the protected `master`, or drive promotion with a token that can push. Apply it with
+   [`gitlab/setup.sh`](gitlab/setup.sh) or [gitlab-web-ui.md](gitlab-web-ui.md).
 3. **Default branch** → `develop`.
 
 **OIDC / Trusted Publishing (crates.io, gitlab.com only).** Declare an `id_tokens` entry in the

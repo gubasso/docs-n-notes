@@ -51,7 +51,8 @@ UI labels verified against docs.github.com on 2026-04-22.
        - Allowed merge methods: Squash, Merge
      - [x] Require status checks to pass before merging
        - Require branches to be up to date before merging
-       - Add: `ci/build`, `ci/test`
+       - Add your project's actual CI check names (e.g. `ci/build`, `ci/test`) — the job names your
+         CI emits; see your language's `release-workflow-spec`.
    - **Create**
 
 3. **Settings** → scroll to **Default branch** section → **Switch to another branch** icon →

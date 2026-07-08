@@ -38,7 +38,8 @@ Everyday releases after setup are not here — those are just "merge the release
 
 4. **Apply branch protection** for `develop`, `master`, and tags — `master` written only by CI (keep
    the CI bypass actor in place _before_ you protect it), linear history, tag protection. →
-   [branch-protection/](../../../tools/git/branch-protection/) (`github-cli.md` / `gitlab-cli.md`).
+   [branch-protection/](../../../tools/git/branch-protection/) (`github/setup.sh` /
+   `gitlab/setup.sh`).
 
 5. **First manual publish** — see the section below.
 
