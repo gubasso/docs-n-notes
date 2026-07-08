@@ -1,9 +1,9 @@
-# 05 — release-plz automation
+# 04 — release-plz configuration & CI
 
 [release-plz](https://release-plz.dev/) automates the release cycle: it watches the default branch,
 opens a **release PR** that bumps versions and updates the changelog, and — on merge — tags the
 release and publishes to crates.io. Combined with
-[Trusted Publishing](04-trusted-publishing-oidc.md) it needs no stored registry token.
+[Trusted Publishing](03-trusted-publishing-oidc.md) it needs no stored registry token.
 
 ## The release-PR workflow
 
@@ -39,7 +39,11 @@ publish = false
 
 ## CI workflow
 
-Wire release-plz into GitHub Actions with OIDC auth (no `CARGO_REGISTRY_TOKEN`):
+Wire release-plz into GitHub Actions with OIDC auth (no `CARGO_REGISTRY_TOKEN`). Save this as
+**`.github/workflows/release-plz.yml`** — that filename is what you register with the crates.io
+trusted publisher ([03](03-trusted-publishing-oidc.md)), and keeping it distinct from cargo-dist's
+`release.yml` avoids the collision described in
+[workflow file conventions](../../../programming/release-workflow/04-workflow-file-conventions.md):
 
 ```yaml
 name: release-plz
@@ -67,14 +71,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-See [04 — Trusted Publishing / OIDC](04-trusted-publishing-oidc.md) for why `id-token: write` and no
+See [03 — Trusted Publishing / OIDC](03-trusted-publishing-oidc.md) for why `id-token: write` and no
 registry token are all the auth this needs.
 
 > **Branch model.** release-plz auto-detects the default branch; the example runs on `develop`
 > (integration + release trigger). To keep a `master` release branch as a mirror of the latest
 > published version, add a `promote` job that fast-forwards `master` onto the release tag. The
-> [rust release-workflow binding](../release-workflow-spec/00-release-plz-and-branch-model.md) shows
-> the full `develop` → tag → promote-`master` wiring; the
+> [branch model & `master` promotion](00-branch-model-and-release-plz.md) shows the full `develop` →
+> tag → promote-`master` wiring; the
 > [general principles](../../../programming/release-workflow/00-branch-model.md) explain the model.
 
 ## Local operator commands

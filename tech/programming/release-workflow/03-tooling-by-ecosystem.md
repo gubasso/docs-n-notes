@@ -5,16 +5,23 @@ ecosystem. Pick the idiomatic one; they all reduce to "merge the release PR to p
 
 ## Recommendation matrix
 
-| Ecosystem          | Recommended release-PR tool                                                                                                                                   | Change intent        | Publish / OIDC                                                                  |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ------------------------------------------------------------------------------- |
-| **Rust**           | [release-plz](https://release-plz.dev/) (cargo-release = local alt)                                                                                           | Conventional Commits | `cargo publish` + [crates.io Trusted Publishing](02-trusted-publishing-oidc.md) |
-| **Python**         | [release-please](https://github.com/googleapis/release-please) (PR gate) or [python-semantic-release](https://python-semantic-release.readthedocs.io/) (push) | Conventional Commits | `build` / `uv build` + PyPI Trusted Publishing                                  |
-| **JS / Node**      | [Changesets](https://github.com/changesets/changesets) (+ [changesets/action](https://github.com/changesets/action))                                          | Changeset files      | `npm publish` + npm Trusted Publishing (OIDC)                                   |
-| **Cross-language** | [release-please](https://github.com/googleapis/release-please)                                                                                                | Conventional Commits | tags + GitHub Release only — **bring your own publish step**                    |
-| **Go**             | [GoReleaser](https://goreleaser.com/)                                                                                                                         | git tag              | No registry — tag + module proxy + SCM release artifacts                        |
+| Ecosystem          | Recommended release-PR tool                                                                                                                                   | Change intent        | Publish / OIDC                                                                  | Binary / artifact distribution                                                         |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| **Rust**           | [release-plz](https://release-plz.dev/) (cargo-release = local alt)                                                                                           | Conventional Commits | `cargo publish` + [crates.io Trusted Publishing](02-trusted-publishing-oidc.md) | [cargo-dist](https://github.com/axodotdev/cargo-dist) (prebuilt binaries + installers) |
+| **Python**         | [release-please](https://github.com/googleapis/release-please) (PR gate) or [python-semantic-release](https://python-semantic-release.readthedocs.io/) (push) | Conventional Commits | `build` / `uv build` + PyPI Trusted Publishing                                  | wheels + sdist (the published artifacts _are_ the dist)                                |
+| **JS / Node**      | [Changesets](https://github.com/changesets/changesets) (+ [changesets/action](https://github.com/changesets/action))                                          | Changeset files      | `npm publish` + npm Trusted Publishing (OIDC)                                   | npm tarball (the registry _is_ the dist)                                               |
+| **Cross-language** | [release-please](https://github.com/googleapis/release-please)                                                                                                | Conventional Commits | tags + GitHub Release only — **bring your own publish step**                    | attach artifacts to the GitHub Release                                                 |
+| **Go**             | [GoReleaser](https://goreleaser.com/)                                                                                                                         | git tag              | No registry — tag + module proxy + SCM release artifacts                        | GoReleaser (same tool builds + attaches)                                               |
+| **Bash**           | git-cliff + manual signed tag                                                                                                                                 | Conventional Commits | No registry — tag + GitHub Release (tarball)                                    | `install.sh` / AUR / OBS(zypper) / Homebrew (downstream)                               |
 
 Each language binding under `tech/languages/*/release-workflow-spec/` documents the concrete tool +
 workflow YAML.
+
+Binary/artifact distribution — shipping **prebuilt binaries and installers** — is a concern separate
+from registry publishing (which ships source). A crate can do either, both, or neither. When you run
+both, keep them in **separate workflow files** and register only the _publish_ file with the
+registry's trusted publisher — see
+[04 — Workflow file conventions](04-workflow-file-conventions.md).
 
 ## How each tool implements the model
 

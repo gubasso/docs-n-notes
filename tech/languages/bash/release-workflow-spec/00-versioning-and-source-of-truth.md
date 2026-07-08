@@ -41,8 +41,10 @@ Six moving parts:
    one-liner, AUR (`yay`/`paru`), or `zypper ar` / `dnf config-manager` / `apt` against the
    OBS-hosted repo.
 
-The maintainer's working branches are `develop` (integration) and `master` (release); the release
-tag is cut on `master`.
+The maintainer's working branches are `develop` (integration + release trigger) and `master` (the
+release mirror). The signed release tag is cut on `develop`; CI fast-forwards `master` onto that tag
+— **`master` is written only by CI**, never by a human (see
+[03 — CI release workflow](03-ci-release-workflow.md)).
 
 ## Versioning — source of truth
 

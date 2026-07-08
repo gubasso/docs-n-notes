@@ -22,6 +22,9 @@ an artifact to a registry that _is_ the release. **Bash has no such registry.** 
 **Tagging is publishing.** There is nothing to `cargo publish` / `npm publish`; the tag fans out to
 every channel instead.
 
+> **New project?** Follow the [**runbook**](runbook.md) — the ordered, once-per-project setup steps
+> (repo settings, enabling Actions, branch protection, first tag, distribution channels).
+
 ## Index
 
 | # | Chapter                                                                      | One-line hook                                                                | General principle                 |
@@ -49,4 +52,5 @@ every channel instead.
   trigger an OBS service run.
 - Distribution channels, in priority order: `install.sh` (`curl | bash`, checksum-verified) → AUR
   (`<tool>` + `<tool>-git`) → OBS-hosted `zypper`/`dnf`/`apt` repos.
-- Working branches are `develop`/`master`; the release tag is cut on `master`.
+- Working branches are `develop`/`master`; the tag is cut on `develop` and **CI fast-forwards
+  `master` onto it** — `master` is written only by CI.

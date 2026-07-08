@@ -4,6 +4,24 @@ This is the **Python binding** of the
 [general principles](../../../programming/release-workflow/README.md); it is a **stub to be
 expanded** when a Python project actually adopts it.
 
+> **New project?** Follow the [runbook](runbook.md) (skeleton) for the ordered setup steps.
+
+## Standardized structure (roles to expand)
+
+This shelf follows the same per-language skeleton as the [rust](../../rust/release-workflow-spec/)
+and [bash](../../bash/release-workflow-spec/) shelves; each role becomes a chapter as it is filled
+in:
+
+| Role                         | Python specifics (to expand)                                              |
+| ---------------------------- | ------------------------------------------------------------------------- |
+| Branch model + release tool  | `develop`/`master`; release-please (PR gate) or python-semantic-release   |
+| Package/artifact metadata    | `pyproject.toml` `[project]`, classifiers, version SoT                    |
+| Registry auth                | PyPI Trusted Publishing (OIDC), `id-token: write`                         |
+| Release automation config/CI | release-please config / `gh-action-pypi-publish` or `uv publish` workflow |
+| Binary/artifact distribution | wheels + sdist (the published artifacts _are_ the dist)                   |
+| SemVer / version discipline  | SemVer; version bumped in `pyproject.toml` by the release tool            |
+| Per-new-project runbook      | [runbook.md](runbook.md)                                                  |
+
 ## Source of truth
 
 The committed version — `pyproject.toml` `[project] version` (or `__version__`) — is the authoring

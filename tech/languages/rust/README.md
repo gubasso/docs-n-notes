@@ -4,11 +4,10 @@ Rust notes and workflow references.
 
 - [axum](axum.md)
 - [code-review-guide](code-review-guide.md)
-- [crates-io-publishing](crates-io-publishing/README.md) — publishing to crates.io (release-plz +
-  Trusted Publishing/OIDC, token scopes, helper scripts)
-- [release-workflow-spec](release-workflow-spec/README.md) — the `develop`/`master` release workflow
-  with release-plz + `master` promotion (rust binding of
-  [general release-workflow](../../programming/release-workflow/README.md))
+- [release-workflow-spec](release-workflow-spec/README.md) — the unified Rust release & publishing
+  shelf: `develop`/`master` workflow with release-plz + `master` promotion, crates.io Trusted
+  Publishing, crate metadata, token scopes, helper scripts, cargo-dist, and a per-new-project
+  runbook (rust binding of [general release-workflow](../../programming/release-workflow/README.md))
 - [datetime-serde-sqlx-chrono](datetime-serde-sqlx-chrono.md)
 - [patterns](patterns.md)
 - [rust](rust.md)

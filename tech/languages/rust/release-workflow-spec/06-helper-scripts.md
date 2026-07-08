@@ -2,8 +2,8 @@
 
 A small set of project-local scripts makes the manual paths repeatable: a token-free readiness
 check, an auth-gated publish, and a dispatcher for local release chores. They are the escape hatch
-for the [first publish](03-first-publish-manual.md) and for when CI is down; the everyday path is
-still [release-plz](05-release-plz-automation.md).
+for the [first publish](runbook.md) and for when CI is down; the everyday path is still
+[release-plz](04-release-plz-config.md).
 
 ## Design principles
 

@@ -21,8 +21,8 @@ breakage:
 cargo semver-checks check-release
 ```
 
-This runs natively inside [release-plz](05-release-plz-automation.md) when `semver_check = true`, so
-an incompatible change forces a major bump instead of slipping out as a minor/patch.
+This runs natively inside [release-plz](04-release-plz-config.md) when `semver_check = true`, so an
+incompatible change forces a major bump instead of slipping out as a minor/patch.
 
 A **binary-only crate** exposes no public API, so `cargo-semver-checks` does not apply — but its
 releases still follow SemVer for users pinning versions.
@@ -46,8 +46,7 @@ Because you cannot edit or delete a published version, "rolling back" means **pu
 one**:
 
 1. Fix the problem on the default branch.
-1. Cut a new PATCH version (let [release-plz](05-release-plz-automation.md) do it, or bump
-   manually).
+1. Cut a new PATCH version (let [release-plz](04-release-plz-config.md) do it, or bump manually).
 1. Publish the new version.
 1. Optionally `cargo yank` the bad version so new dependents skip it.
 

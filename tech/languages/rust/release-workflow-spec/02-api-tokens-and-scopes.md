@@ -32,7 +32,7 @@ A crate scope restricts the token to named crates:
   scopes were introduced to eliminate.
 - **Least privilege by action.** For a first publish, `publish-new` only. For a crate whose releases
   are automated, you usually need _no_ long-lived token at all — see
-  [04 — Trusted Publishing](04-trusted-publishing-oidc.md).
+  [03 — Trusted Publishing](03-trusted-publishing-oidc.md).
 - **Short expiration.** A bootstrap token needs to live only long enough for one publish. Prefer the
   shortest expiry offered over "no expiration".
 - **Revoke when done.** Once CI publishes over OIDC, the manual token has no job — delete it.
@@ -45,7 +45,7 @@ A crate scope restricts the token to named crates:
 | Situation                        | Use                                                                                    |
 | -------------------------------- | -------------------------------------------------------------------------------------- |
 | First-ever publish of a crate    | Long-lived token, `publish-new`, exact crate scope, short expiry, revoked after.       |
-| Automated CI releases            | **No stored token** — Trusted Publishing / OIDC ([04](04-trusted-publishing-oidc.md)). |
+| Automated CI releases            | **No stored token** — Trusted Publishing / OIDC ([03](03-trusted-publishing-oidc.md)). |
 | Local publish when CI is down    | Long-lived token via `cargo login`, `publish-update`, exact crate scope.               |
 | CI without OIDC (rare / mirrors) | `CARGO_REGISTRY_TOKEN` secret, `publish-update`, exact crate scope.                    |
 

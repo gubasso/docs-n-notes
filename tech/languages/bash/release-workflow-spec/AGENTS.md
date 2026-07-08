@@ -1,6 +1,6 @@
 ---
 digest-of: tech/languages/bash/release-workflow-spec
-last-synced: 2026-07-06
+last-synced: 2026-07-08
 source-files:
   - README.md
   - 00-versioning-and-source-of-truth.md
@@ -10,7 +10,8 @@ source-files:
   - 04-install-sh-and-aur.md
   - 05-obs-multi-distro.md
   - 06-release-ritual-and-alternatives.md
-token-estimate: 2100
+  - runbook.md
+token-estimate: 2350
 ---
 
 # AGENTS
@@ -58,8 +59,10 @@ distribution channels (`install.sh`, AUR, OBS for `.rpm`/`.deb`).
 
 - `.github/workflows/release.yml`, trigger `on push tags ['v*']`. Permissions: `contents: write`,
   `id-token: write`, `attestations: write`.
-- Steps: test → `make dist` → `orhun/git-cliff-action` notes → `actions/attest-build-provenance`
-  (SLSA L3, keyless via Sigstore/GitHub OIDC) → `gh release create` → trigger OBS service run.
+- Jobs: `test` → `release` (`make dist` → `orhun/git-cliff-action` notes →
+  `actions/attest-build-provenance` (SLSA L3, keyless via Sigstore/GitHub OIDC) →
+  `gh release create` → trigger OBS service run) → `promote` (fast-forward `master` onto the tag,
+  ancestry-checked against `develop`, `--ff-only`; keeps `master` CI-only).
 - OBS trigger: `POST api.opensuse.org/trigger/runservice`, header literal `Authorization: Token`
   (never `Bearer`), `--fail-with-body`. Needs `OBS_TOKEN` repo secret.
 
@@ -78,9 +81,11 @@ distribution channels (`install.sh`, AUR, OBS for `.rpm`/`.deb`).
 
 ### Branch model & alternatives
 
-- Working branches are `develop`/`master`; release tag cut on `master`.
+- Working branches are `develop`/`master`; the tag is cut on `develop` and **CI fast-forwards
+  `master` onto it** (a `promote` job, ancestry-checked, `--ff-only`) — `master` is written only by
+  CI.
 - Release ritual: `git-cliff --bump` → write `VERSION` → commit → signed `git tag -s` →
-  `git push --follow-tags`; CI does the rest.
+  `git push --follow-tags`; CI builds the release and promotes `master`.
 - Alternatives noted (when to pick): release-please, GoReleaser, nfpm (attach `.rpm`/`.deb` to the
   Release with no hosted repo), Fedora COPR, self-hosted repos, OBS-Arch (additive to AUR, never a
   substitute).
@@ -103,5 +108,10 @@ distribution channels (`install.sh`, AUR, OBS for `.rpm`/`.deb`).
   Actions/OBS action versions shift.
 - Branch naming is standardized to `develop`/`master` throughout; if a chapter reintroduces
   `main`/`devel`, fix it and re-sync.
+- `master` is **CI-only**: the tag is cut on `develop` and a `promote` job fast-forwards `master`
+  onto it (`03-ci-release-workflow.md`), matching the general model. Do not reintroduce "tag cut on
+  `master`".
+- `runbook.md` is the per-new-project setup guide (parallels the rust shelf's `runbook.md`); the
+  recurring release ritual stays in `06-release-ritual-and-alternatives.md`.
 - This is the bash binding of `tech/programming/release-workflow/` (authored in parallel); the
   back-link target may not exist yet.

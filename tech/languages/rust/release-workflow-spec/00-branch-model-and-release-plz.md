@@ -1,4 +1,4 @@
-# 00 — release-plz & the branch model
+# 00 — Branch model & release-plz
 
 General counterparts: [branch model](../../../programming/release-workflow/00-branch-model.md) ·
 [release automation](../../../programming/release-workflow/01-release-automation.md).
@@ -183,9 +183,8 @@ release repeats from `develop`.
 ## Local alternative
 
 `cargo-release` is the imperative, no-bot local alternative (`cargo release patch --execute`); it
-still needs [configured auth](../crates-io-publishing/02-api-tokens-and-scopes.md). Prefer
-release-plz for CI-first releases. See
-[`crates-io-publishing/05-release-plz-automation.md`](../crates-io-publishing/05-release-plz-automation.md).
+still needs [configured auth](02-api-tokens-and-scopes.md). Prefer release-plz for CI-first
+releases. See [`04 — release-plz config`](04-release-plz-config.md).
 
 ## Reference
 

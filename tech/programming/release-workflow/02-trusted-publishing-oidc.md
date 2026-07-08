@@ -20,11 +20,11 @@ reconfiguring the publisher, as long as the workflow _filename_ and owner/repo s
 
 ## Per-registry status
 
-| Registry      | Trusted Publishing                                                                         | Publish mechanism                                                                                             |
-| ------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| **crates.io** | GA 2025 (RFC 3691). GitHub Actions today; GitLab planned.                                  | release-plz mints + exchanges the token itself; plain `cargo publish` uses `rust-lang/crates-io-auth-action`. |
-| **PyPI**      | GA since 2023.                                                                             | `pypa/gh-action-pypi-publish` or `uv publish` (both do the OIDC exchange).                                    |
-| **npm**       | GA 2025-07-31. Requires npm CLI ≥ 11.5.1; provenance attestations generated automatically. | `npm publish` with OIDC configured — no `NPM_TOKEN`.                                                          |
+| Registry      | Trusted Publishing                                                                         | Publish mechanism                                                                                                                                                    |
+| ------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **crates.io** | GA 2025 (RFC 3691). GitHub Actions + GitLab.com CI/CD; self-hosted GitLab not yet.         | release-plz mints + exchanges the token itself; plain `cargo publish` uses `rust-lang/crates-io-auth-action` (GitHub) or the `CRATES_IO_ID_TOKEN` exchange (GitLab). |
+| **PyPI**      | GA since 2023.                                                                             | `pypa/gh-action-pypi-publish` or `uv publish` (both do the OIDC exchange).                                                                                           |
+| **npm**       | GA 2025-07-31. Requires npm CLI ≥ 11.5.1; provenance attestations generated automatically. | `npm publish` with OIDC configured — no `NPM_TOKEN`.                                                                                                                 |
 
 ## Enforcement — require trusted publishing
 

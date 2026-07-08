@@ -20,15 +20,19 @@ auth model, and the promotion mechanics around it.
    that crates.io, PyPI, and npm now share.
 1. Pick your ecosystem's tool from [03 — Tooling by ecosystem](03-tooling-by-ecosystem.md) and jump
    to the matching language binding.
+1. If the project also ships prebuilt binaries/installers, read
+   [04 — Workflow file conventions](04-workflow-file-conventions.md) before adding a second workflow
+   — it keeps the binary-dist workflow from colliding with the publish workflow.
 
 ## Index
 
-| # | Chapter                                                    | One-line hook                                                                             |
-| - | ---------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| 0 | [Branch model](00-branch-model.md)                         | `develop` integrates, `master` mirrors releases; CI promotes on a tag, no human writes.   |
-| 1 | [Release automation](01-release-automation.md)             | The release-PR invariant: change-intent → bot PR → merge = publish; SemVer + changelog.   |
-| 2 | [Trusted Publishing / OIDC](02-trusted-publishing-oidc.md) | Short-lived keyless registry auth; the cross-ecosystem convergence point.                 |
-| 3 | [Tooling by ecosystem](03-tooling-by-ecosystem.md)         | release-plz / release-please / Changesets / GoReleaser and how each implements the model. |
+| # | Chapter                                                      | One-line hook                                                                                               |
+| - | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| 0 | [Branch model](00-branch-model.md)                           | `develop` integrates, `master` mirrors releases; CI promotes on a tag, no human writes.                     |
+| 1 | [Release automation](01-release-automation.md)               | The release-PR invariant: change-intent → bot PR → merge = publish; SemVer + changelog.                     |
+| 2 | [Trusted Publishing / OIDC](02-trusted-publishing-oidc.md)   | Short-lived keyless registry auth; the cross-ecosystem convergence point.                                   |
+| 3 | [Tooling by ecosystem](03-tooling-by-ecosystem.md)           | release-plz / release-please / Changesets / GoReleaser and how each implements the model.                   |
+| 4 | [Workflow file conventions](04-workflow-file-conventions.md) | Separate the publish workflow from the binary-dist workflow; register the _publish_ file with the registry. |
 
 ## Language-specific implementation
 
@@ -36,9 +40,9 @@ These bindings apply the general principles with a concrete tool and workflow YA
 you've read the matching general chapter, and each links back to it.
 
 - [`tech/languages/rust/release-workflow-spec/`](../../languages/rust/release-workflow-spec/) —
-  **release-plz** on `develop` + `master` promotion, crates.io Trusted Publishing. Links to the
-  deeper [`crates-io-publishing/`](../../languages/rust/crates-io-publishing/) shelf for tokens,
-  metadata, and helper scripts.
+  **release-plz** on `develop` + `master` promotion, crates.io Trusted Publishing, crate metadata,
+  tokens, helper scripts, cargo-dist binary distribution, and the per-new-project runbook — one
+  unified shelf.
 - [`tech/languages/bash/release-workflow-spec/`](../../languages/bash/release-workflow-spec/) — tag
   → GitHub Release → `install.sh` / AUR / OBS. Bash has no central registry, so tagging _is_
   publishing.
