@@ -9,7 +9,7 @@ only the **bootstrap-time ordering**; the detailed _how_ of each output lives in
 ## Prerequisites
 
 - The [general runbook](../../../programming/project-bootstrap/runbook.md) and the Nix
-  [binding runbook](runbook.md) are done — an evaluable, gated flake exists with `nixpkgs` pinned
+  [binding runbook](./runbook.md) are done — an evaluable, gated flake exists with `nixpkgs` pinned
   and `flake.lock` committed.
 
 ## Add these, in this order
@@ -28,7 +28,7 @@ it:
 3. **`apps.default` (if it ships an executable).** A `{ type; program; }` pointing at the built
    binary so `nix run` works. → [`03-flake-outputs.md`](../03-flake-outputs.md).
 4. **`checks` for the quality gates.** Expose format/lint/dead-code as `checks.<sys>.*` so
-   `nix flake check` gates them. → [01 — Quality gates](01-quality-gates.md).
+   `nix flake check` gates them. → [01 — Quality gates](./01-quality-gates.md).
 5. **Optional `nixosModules` / `homeManagerModules`.** If the flake ships reusable config, author a
    module with `options`/`config`. → [`04-nixos-and-modules.md`](../04-nixos-and-modules.md).
 

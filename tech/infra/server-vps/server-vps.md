@@ -189,7 +189,7 @@ sudo systemctl status ufw
 
 ## Related
 
-- [# Home Server](./it/server-vps-home_server.md)
+- [# Home Server](./server-vps-home_server.md)
 
 ## Resources
 

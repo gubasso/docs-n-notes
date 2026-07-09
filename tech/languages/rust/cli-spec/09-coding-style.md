@@ -106,13 +106,13 @@ The general no-`print`-outside-`ui/` rule is enforced in Rust by:
 macros, not by hand-written `println!`. The Tier 1 help pattern
 (`#[command(after_long_help = include_str!("../ui/help_extras.txt"))]`) is fully compliant with this
 rule. See
-[02 — Subcommand Pattern · Help rendering with clap](02-subcommand-pattern.md#help-rendering-with-clap)
+[02 — Subcommand Pattern · Help rendering with clap](./02-subcommand-pattern.md#help-rendering-with-clap)
 for the recipe and escalation tiers.
 
 ## See also
 
 - [General — Coding Style](../../../programming/cli-design/04-coding-style-rust-zig.md) — canonical
   rules.
-- [02 — Subcommand Pattern (Rust)](02-subcommand-pattern.md)
-- [03 — Error Handling (Rust)](03-error-handling.md)
-- [00 — Directory Tree (Rust)](00-directory-tree.md)
+- [02 — Subcommand Pattern (Rust)](./02-subcommand-pattern.md)
+- [03 — Error Handling (Rust)](./03-error-handling.md)
+- [00 — Directory Tree (Rust)](./00-directory-tree.md)

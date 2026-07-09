@@ -54,22 +54,22 @@ web application[8].
 ### Step 1: Create an ElastiCache Redis Cluster
 
 1. Open the ElastiCache console and click "Create"
-1. Select Redis as the engine
-1. Specify a name like "app-cache-cluster"
-1. Choose the node type (e.g. cache.t2.micro) based on your performance needs
-1. Set number of replicas to 1 or more for high availability
-1. Enable Multi-AZ with automatic failover
-1. Select the VPC and subnet group
-1. Configure the security group to allow inbound traffic on port 6379
-1. Review settings and click "Create"
+2. Select Redis as the engine
+3. Specify a name like "app-cache-cluster"
+4. Choose the node type (e.g. cache.t2.micro) based on your performance needs
+5. Set number of replicas to 1 or more for high availability
+6. Enable Multi-AZ with automatic failover
+7. Select the VPC and subnet group
+8. Configure the security group to allow inbound traffic on port 6379
+9. Review settings and click "Create"
 
 ### Step 2: Update Application to Use Redis
 
 1. Install a Redis client library in your application
-1. When the application needs data, first check if it exists in Redis
-1. If found in Redis, return the cached data
-1. If not found, query MySQL, then store the result in Redis with an expiration
-1. Serve the MySQL data back to the user and it will be cached for subsequent requests
+2. When the application needs data, first check if it exists in Redis
+3. If found in Redis, return the cached data
+4. If not found, query MySQL, then store the result in Redis with an expiration
+5. Serve the MySQL data back to the user and it will be cached for subsequent requests
 
 ### Step 3: Monitor Performance
 

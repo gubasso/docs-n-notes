@@ -53,7 +53,7 @@ owner. Know whether readers should edit the generated output, the source file, o
 
 Code comments are a narrow home. They own local rationale that would be invisible from names and
 types. They do not own project policy, status matrices, or workflows. See
-[03 — Comments and Code as SoT](03-comments-and-code-as-sot.md).
+[03 — Comments and Code as SoT](./03-comments-and-code-as-sot.md).
 
 ## Structure is owned by the filesystem
 
@@ -67,10 +67,10 @@ subdirectory. A pasted tree drifts the moment a file is added, renamed, or remov
 copy then competes with the real structure.
 
 When a listing genuinely aids discovery, give each entry a purpose, not a bare path. A line like
-`- [docker](docker.md) — daemon setup and daily commands` tells the reader why to open the file; a
-line like `- [docker](docker.md)` only restates the filename the filesystem already shows. The test
-is the same as for any summary: if deleting the listing loses no information the filesystem does not
-already carry, it was a duplicated tree, not an index.
+`- [docker](./docker.md) — daemon setup and daily commands` tells the reader why to open the file; a
+line like `- [docker](./docker.md)` only restates the filename the filesystem already shows. The
+test is the same as for any summary: if deleting the listing loses no information the filesystem
+does not already carry, it was a duplicated tree, not an index.
 
 This is the structural case of the rule above: write each durable fact once at its owner. The owner
 of "what files exist here" is the directory itself.
@@ -115,10 +115,10 @@ When two files disagree, use the placement table:
 
 After choosing the owner, edit the non-owner file to link to it. Do not leave both claims in place.
 If the conflict reveals a changed decision, write or update an ADR and mark the older decision
-superseded. See [02 — Lean ADRs](02-lean-adrs.md).
+superseded. See [02 — Lean ADRs](./02-lean-adrs.md).
 
 Operational docs use the same conflict rule. If a runbook embeds a diagnostic table, move the table
-to reference and link to it. See [06 — Operational Docs](06-operational-docs.md).
+to reference and link to it. See [06 — Operational Docs](./06-operational-docs.md).
 
 Do not resolve conflicts by adding a third summary page. That hides the drift while preserving the
 two stale claims. Resolve ownership first, then update or delete duplicated prose. The end state

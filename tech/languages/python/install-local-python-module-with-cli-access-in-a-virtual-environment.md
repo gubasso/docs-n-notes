@@ -22,26 +22,26 @@ available in the terminal.
    git clone https://github.com/SUSE-Enceladus/img-proof.git
    ```
 
-1. **Go to project root**
+2. **Go to project root**
 
    ```bash
    cd img-proof
    ```
 
-1. **Create and activate virtual environment**
+3. **Create and activate virtual environment**
 
    ```bash
    python3 -m venv .venv
    source .venv/bin/activate
    ```
 
-1. **Install the module in editable mode**
+4. **Install the module in editable mode**
 
    ```bash
    pip install -e .
    ```
 
-1. **Run the CLI command**
+5. **Run the CLI command**
 
    ```bash
    img-proof --help

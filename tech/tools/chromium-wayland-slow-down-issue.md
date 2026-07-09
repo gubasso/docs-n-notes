@@ -80,7 +80,7 @@ the GPU pipeline or introduce rendering glitches ([github.com][6]).
    - Look for any “Software only” or “Disabled” entries under GPU rasterization or WebGL; these
      indicate fallback to CPU rendering ([github.com][6]).
 
-1. **Verify Driver Availability**
+2. **Verify Driver Availability**
 
    - Ensure that `/dev/dri/render*` nodes exist and that `libgbm`, `libdrm`, and Wayland EGL
      libraries are installed; missing components force software compositing ([github.com][1]).

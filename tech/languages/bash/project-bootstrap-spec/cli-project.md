@@ -8,7 +8,7 @@ and is not restated here.
 ## Prerequisites
 
 - The [general runbook](../../../programming/project-bootstrap/runbook.md) and the Bash
-  [binding runbook](runbook.md) are done — a runnable, strict-mode, gated script exists.
+  [binding runbook](./runbook.md) are done — a runnable, strict-mode, gated script exists.
 
 ## Add these, in this order
 

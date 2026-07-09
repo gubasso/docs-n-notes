@@ -6,7 +6,7 @@ enough that future maintainers can trust it.
 
 ## Default template
 
-Use the drop-in [ADR template](template-adr.md). A filled ADR has five sections:
+Use the drop-in [ADR template](./template-adr.md). A filled ADR has five sections:
 
 - `Context and Problem Statement`: the problem and why it matters.
 - `Considered Options`: the serious alternatives, not every idea mentioned in chat.
@@ -145,5 +145,5 @@ status vocabulary is too large or the decision is doing too much.
 - Kubernetes KEP process:
   <https://github.com/kubernetes/enhancements/blob/master/keps/sig-architecture/0000-kep-process/README.md>
 
-See [04 — Single Source of Truth](04-single-source-of-truth.md) for where ADR facts should be linked
-instead of repeated.
+See [04 — Single Source of Truth](./04-single-source-of-truth.md) for where ADR facts should be
+linked instead of repeated.

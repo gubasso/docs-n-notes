@@ -1,7 +1,7 @@
 # Bash Release — Makefile & GNU Coding Standards
 
-Part of the [bash release-workflow spec](README.md). General principle: **build & install contract**
-— see the [general principles](../../../programming/release-workflow/README.md).
+Part of the [bash release-workflow spec](./README.md). General principle: **build & install
+contract** — see the [general principles](../../../programming/release-workflow/README.md).
 
 The single highest-leverage change. Per the
 [GNU Coding Standards on Directory Variables](https://www.gnu.org/prep/standards/html_node/Directory-Variables.html)

@@ -1,6 +1,6 @@
 # Bash Release — Conventional Commits & Changelog
 
-Part of the [bash release-workflow spec](README.md). General principle: **changelog** — see the
+Part of the [bash release-workflow spec](./README.md). General principle: **changelog** — see the
 [general principles](../../../programming/release-workflow/README.md).
 
 Use [Conventional Commits](https://www.conventionalcommits.org/) and enforce them with a

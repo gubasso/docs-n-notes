@@ -81,9 +81,9 @@ can keep truthful, shrink the set of documents. Keep the placement rules; reduce
 
 ## See also
 
-- [01 — Diataxis Zones](01-diataxis-zones.md) defines the reader-needs layout.
-- [02 — Lean ADRs](02-lean-adrs.md) defines decision records and lifecycle.
-- [03 — Comments and Code as SoT](03-comments-and-code-as-sot.md) defines when rationale belongs
+- [01 — Diataxis Zones](./01-diataxis-zones.md) defines the reader-needs layout.
+- [02 — Lean ADRs](./02-lean-adrs.md) defines decision records and lifecycle.
+- [03 — Comments and Code as SoT](./03-comments-and-code-as-sot.md) defines when rationale belongs
   next to code.
-- [04 — Single Source of Truth](04-single-source-of-truth.md) defines placement and cross-link
+- [04 — Single Source of Truth](./04-single-source-of-truth.md) defines placement and cross-link
   discipline.

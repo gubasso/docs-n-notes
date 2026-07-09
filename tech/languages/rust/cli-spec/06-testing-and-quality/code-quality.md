@@ -434,7 +434,7 @@ lint-boundaries:
 
 ### justfile (full picture)
 
-Extends the testing recipes from [06 § nextest profiles](testing.md#test-runner):
+Extends the testing recipes from [06 § nextest profiles](./testing.md#test-runner):
 
 ```just
 # --- Structural quality gates ---
@@ -504,8 +504,8 @@ check: lint lint-complexity lint-boundaries test audit
 
 ## See also
 
-- [Testing (Rust)](testing.md) — core test crate stack.
-- [Advanced Testing (Rust)](advanced-testing.md) — proptest, cargo-mutants, trycmd, wiremock.
+- [Testing (Rust)](./testing.md) — core test crate stack.
+- [Advanced Testing (Rust)](./advanced-testing.md) — proptest, cargo-mutants, trycmd, wiremock.
 - [07 — Dependencies (Rust)](../07-dependencies.md) — curated crate list, pinning policy.
 - [09 — Coding Style (Rust)](../09-coding-style.md) — base lint config, no-unwrap rule, CI lint for
   no-println.

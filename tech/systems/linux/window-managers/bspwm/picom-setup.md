@@ -343,4 +343,4 @@ Use `glx` unless you have issues, then fall back to `xrender`.
 
 - [Arch Wiki: Picom](https://wiki.archlinux.org/title/Picom)
 - [Picom GitHub](https://github.com/yshui/picom)
-- [setup-arch-linux](setup-arch-linux.md) - bspwm stack overview
+- [setup-arch-linux](./setup-arch-linux.md) - bspwm stack overview

@@ -7,14 +7,14 @@ ordering**.
 ## Prerequisites
 
 - The [general runbook](../../../programming/project-bootstrap/runbook.md) and the Go
-  [binding runbook](runbook.md) are done — a buildable, gated module exists.
+  [binding runbook](./runbook.md) are done — a buildable, gated module exists.
 
 ## Add these, in this order
 
 When scaffolding an HTTP service, layer these on the buildable module in order:
 
 1. **Server layout.** Put the entrypoint under `cmd/<name>/main.go`; keep handlers, routing, and
-   business logic in `internal/`. → [00 — Toolchain & layout](00-toolchain-and-layout.md).
+   business logic in `internal/`. → [00 — Toolchain & layout](./00-toolchain-and-layout.md).
 2. **Server & routing.** Start from the stdlib `net/http` server and `http.ServeMux` (the Go 1.22+
    mux supports method/path patterns); reach for a router (e.g. `chi`) only when you need richer
    routing or middleware ergonomics.

@@ -1,7 +1,7 @@
 # ADR Proposals (backlog)
 
 Un-numbered proposals awaiting a decision. Each is a candidate ADR: when accepted it graduates to
-the next `NNNN-kebab-title.md` file in this directory (see [README](README.md) for the format).
+the next `NNNN-kebab-title.md` file in this directory (see [README](./README.md) for the format).
 Until then it stays here with **Status: Proposed** and a short rationale. Do not treat these as
 adopted spec rules.
 
@@ -59,7 +59,7 @@ force.
 **Status:** Proposed **Date:** 2026-07-04
 
 The `cli-design` shelf has no `adr/` directory today. The cargo-CLI-only rule captured in
-[ADR-0001](0001-cargo-cli-only-dependencies.md) generalizes (`cargo add` / `uv add` / `go get` —
+[ADR-0001](./0001-cargo-cli-only-dependencies.md) generalizes (`cargo add` / `uv add` / `go get` —
 resolve-and-lock, never hand-edit pins); the language-agnostic checklist item was already added to
 `cli-design/99-checklist.md`. Proposal: **if/when** `cli-design` adopts an `adr/` convention, record
 a language-agnostic dependency-hygiene ADR there. Rationale: this is a cross-language principle, but

@@ -18,7 +18,7 @@ discipline and avoids stub content that drifts.
 
 1. Bootstrap the Go project with [`../project-bootstrap-spec/`](../project-bootstrap-spec/README.md)
    first — that stops at a buildable, gated module.
-1. When a real release need arises, replace this placeholder with a full shelf following the same
+2. When a real release need arises, replace this placeholder with a full shelf following the same
    per-language skeleton as the [rust](../../rust/release-workflow-spec/README.md) and
    [python](../../python/release-workflow-spec/README.md) bindings.
 

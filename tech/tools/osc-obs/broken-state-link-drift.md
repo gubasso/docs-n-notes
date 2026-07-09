@@ -98,5 +98,5 @@ goes `broken: patch '<new>' does not exist` simultaneously. The recovery (above)
 
 The same class of failure also catches converger scripts that `osc add` the new patch but never
 enumerate / `osc rm` orphan patches. If your converger automates patch evolution, audit it for this
-asymmetry — see also [`common-mistakes-and-pitfalls.md`](common-mistakes-and-pitfalls.md) §2.2
+asymmetry — see also [`common-mistakes-and-pitfalls.md`](./common-mistakes-and-pitfalls.md) §2.2
 ("Converger script that `osc add`s but never `osc rm`s").

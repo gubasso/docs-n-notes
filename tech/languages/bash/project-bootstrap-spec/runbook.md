@@ -17,20 +17,20 @@ overlay that slots into it.
 ## Steps
 
 1. **Lay down the script layout.** Create `bin/<name>` (thin shim) and a `lib/` tree; set the
-   shebang and `set -euo pipefail`. → [00 — Toolchain & layout](00-toolchain-and-layout.md).
+   shebang and `set -euo pipefail`. → [00 — Toolchain & layout](./00-toolchain-and-layout.md).
 
 2. **Host the toolchain in the devShell.** Add `bash`, `shfmt`, `shellcheck`, and `bats` to the Nix
    devShell so local and CI share one set of versions. →
-   [00 — Toolchain & layout](00-toolchain-and-layout.md),
+   [00 — Toolchain & layout](./00-toolchain-and-layout.md),
    [nix/02-per-project-devshell](../../../tools/nix/02-per-project-devshell.md). _Automate:_
    `bootstrap-nix`.
 
 3. **Configure quality gates.** `shfmt` for formatting, `shellcheck` for linting, and `bats-core`
    for tests; wire all three into pre-commit and the task runner. →
-   [01 — Quality gates](01-quality-gates.md). _Automate:_ `bootstrap-precommit`,
+   [01 — Quality gates](./01-quality-gates.md). _Automate:_ `bootstrap-precommit`,
    `bootstrap-taskrunner`.
 
-4. **Pick the implementation kind.** For a CLI tool, follow [`cli-project.md`](cli-project.md);
+4. **Pick the implementation kind.** For a CLI tool, follow [`cli-project.md`](./cli-project.md);
    other kinds are followups.
 
 5. **Continue the general spine.** Return to the
@@ -43,6 +43,7 @@ overlay that slots into it.
 
 ## Reference
 
-- [00 — Toolchain & layout](00-toolchain-and-layout.md) · [01 — Quality gates](01-quality-gates.md)
-  · [general runbook](../../../programming/project-bootstrap/runbook.md) ·
+- [00 — Toolchain & layout](./00-toolchain-and-layout.md) ·
+  [01 — Quality gates](./01-quality-gates.md) ·
+  [general runbook](../../../programming/project-bootstrap/runbook.md) ·
   [`../cli-spec/`](../cli-spec/README.md)

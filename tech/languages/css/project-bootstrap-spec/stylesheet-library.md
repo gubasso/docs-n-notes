@@ -8,13 +8,13 @@ This file owns only the **bootstrap-time ordering**; deeper authoring patterns l
 ## Prerequisites
 
 - The [general runbook](../../../programming/project-bootstrap/runbook.md) and the CSS
-  [binding runbook](runbook.md) are done — a buildable, gated package exists.
+  [binding runbook](./runbook.md) are done — a buildable, gated package exists.
 
 ## Add these, in this order
 
 1. **Design tokens.** Define tokens once as CSS custom properties (`--color-*`, `--space-*`,
    `--font-*`) and/or Sass variables, in the settings layer. →
-   [00 — Toolchain & layout](00-toolchain-and-layout.md). Consider **Style Dictionary** if tokens
+   [00 — Toolchain & layout](./00-toolchain-and-layout.md). Consider **Style Dictionary** if tokens
    must be emitted to multiple targets (CSS, JS, JSON).
 
 2. **Theming seam.** Expose theming via custom-property overrides — a base `:root` theme plus

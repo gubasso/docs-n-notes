@@ -398,4 +398,4 @@ rofi -dump-theme
 - [Arch Wiki: Rofi](https://wiki.archlinux.org/title/Rofi)
 - [Rofi GitHub](https://github.com/davatorium/rofi)
 - [Rofi Themes Collection](https://github.com/davatorium/rofi-themes)
-- [setup-arch-linux](setup-arch-linux.md) - bspwm stack overview
+- [setup-arch-linux](./setup-arch-linux.md) - bspwm stack overview

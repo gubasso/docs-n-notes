@@ -20,8 +20,8 @@ libkrun host-to-guest argv path **at container creation time**, before any `exec
 And a multi-line `sh -c` payload is exactly the shape the libkrun newline bug mangles — the first
 line runs, every subsequent line arrives at the guest shell with a stray `n` fused onto its first
 token, so the shim dies with `necho: not found` and the container never comes up. See
-[60-podman-libkrun-operational-notes.md](60-podman-libkrun-operational-notes.md) for the full repro
-and mechanism.
+[60-podman-libkrun-operational-notes.md](./60-podman-libkrun-operational-notes.md) for the full
+repro and mechanism.
 
 The consequences are worth stating precisely:
 

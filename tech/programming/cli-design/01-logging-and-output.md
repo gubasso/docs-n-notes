@@ -2,7 +2,8 @@
 
 Every CLI emits three message types. Conflating them is the root cause of unreadable terminals,
 broken pipes, brittle agents, and unusable log files. This chapter applies the
-[facing category taxonomy](00-architecture.md#facing-category--message-types) to output and logging.
+[facing category taxonomy](./00-architecture.md#facing-category--message-types) to output and
+logging.
 
 ## The three message types
 
@@ -173,9 +174,9 @@ reasonable defaults; let users override via config.
 The destination is configurable in precedence order (low → high):
 
 1. Built-in default: `$XDG_STATE_HOME/<app>/<app>.log`
-1. Config file: `[logging] file = "/path/to.log"`
-1. Env var: `<APP>_LOG_FILE=/path/to.log` (or `<APP>_LOG_DIR=/path/to/dir`)
-1. CLI flag: `--log-file /path/to.log`
+2. Config file: `[logging] file = "/path/to.log"`
+3. Env var: `<APP>_LOG_FILE=/path/to.log` (or `<APP>_LOG_DIR=/path/to/dir`)
+4. CLI flag: `--log-file /path/to.log`
 
 Disable entirely with `--no-log` (writes nowhere).
 
@@ -250,16 +251,16 @@ ts=2026-05-18T10:23:45.123Z level=info target=app::widget op=create id=abc-123 s
 Use **short, stable field names**. Document the schema in your README. LLMs benefit from convention
 more than from verbosity.
 
-| Field                  | Use                                                                                                    |
-| ---------------------- | ------------------------------------------------------------------------------------------------------ |
-| `op`                   | Operation name, e.g. `widget.create`, `git.fetch`. Prefer this over a freeform `msg`.                  |
-| `id`, `path`, `url`, … | Operation-specific subject.                                                                            |
-| `status`               | `ok` / `error` / `skip` / `noop`.                                                                      |
-| `dur_ms`               | Duration in milliseconds (integer).                                                                    |
-| `err.kind`             | Stable error code (e.g. `ConfigNotFound`, `Timeout`). See [02 — Error Messages](02-error-messages.md). |
-| `err.msg`              | Human-readable error message.                                                                          |
-| `span`                 | Span/trace ID when spans are in use.                                                                   |
-| `parent`               | Parent span ID.                                                                                        |
+| Field                  | Use                                                                                                      |
+| ---------------------- | -------------------------------------------------------------------------------------------------------- |
+| `op`                   | Operation name, e.g. `widget.create`, `git.fetch`. Prefer this over a freeform `msg`.                    |
+| `id`, `path`, `url`, … | Operation-specific subject.                                                                              |
+| `status`               | `ok` / `error` / `skip` / `noop`.                                                                        |
+| `dur_ms`               | Duration in milliseconds (integer).                                                                      |
+| `err.kind`             | Stable error code (e.g. `ConfigNotFound`, `Timeout`). See [02 — Error Messages](./02-error-messages.md). |
+| `err.msg`              | Human-readable error message.                                                                            |
+| `span`                 | Span/trace ID when spans are in use.                                                                     |
+| `parent`               | Parent span ID.                                                                                          |
 
 Quote any value containing spaces or `=`. Escape with the format's standard rules (logfmt for
 key=value, JSON for the other).
@@ -271,19 +272,19 @@ Inspired by the practices emerging around AI agents debugging from logs
 [Logging vs LLM Observability in 2026](https://futureagi.com/blog/logging-vs-llm-observability-2026)):
 
 1. **One record = one line.** Multi-line records cost tokens and break grep.
-1. **Short, stable field names.** `dur_ms` beats `duration_milliseconds`. Don't rename fields
+2. **Short, stable field names.** `dur_ms` beats `duration_milliseconds`. Don't rename fields
    between versions — LLMs and tools memorize them.
-1. **Stable schema, optional fields.** A record can omit fields it doesn't need, but the names it
+3. **Stable schema, optional fields.** A record can omit fields it doesn't need, but the names it
    does emit must match the documented schema.
-1. **Don't repeat headers.** No banner lines, no per-command "===" separators. The timestamp on each
+4. **Don't repeat headers.** No banner lines, no per-command "===" separators. The timestamp on each
    record is enough.
-1. **Span entry/exit collapsed.** If you use tracing spans, emit one record per span at _exit_ (with
+5. **Span entry/exit collapsed.** If you use tracing spans, emit one record per span at _exit_ (with
    `dur_ms`), not separate `enter` + `exit` records. Halves the token count.
-1. **Errors as fields, not prose.** `err.kind=ConfigNotFound err.path=/etc/app.toml` beats
+6. **Errors as fields, not prose.** `err.kind=ConfigNotFound err.path=/etc/app.toml` beats
    `"Could not load config from /etc/app.toml because the file did not exist"`. The structured form
    takes fewer tokens and is grep-able.
-1. **No ANSI escapes in the file.** Ever. They double the byte count and confuse parsers.
-1. **No multi-line stack traces in the default format.** When trace output is required, gate it
+7. **No ANSI escapes in the file.** Ever. They double the byte count and confuse parsers.
+8. **No multi-line stack traces in the default format.** When trace output is required, gate it
    behind `-vvv` and a separate `err.trace` field whose value is a single escaped line (or a pointer
    to a file).
 
@@ -339,13 +340,13 @@ Language-specific guides live alongside the matching language spec:
 
 ## See also
 
-- [00 — Architecture](00-architecture.md): where the logging-init helper lives and how it's wired
+- [00 — Architecture](./00-architecture.md): where the logging-init helper lives and how it's wired
   through `AppContext`.
-- [02 — Error Messages](02-error-messages.md): how errors map to log records (`err.kind`, `err.msg`)
-  and to exit codes.
-- [03 — Config Precedence](03-config-precedence.md): how the log destination and level are loaded
+- [02 — Error Messages](./02-error-messages.md): how errors map to log records (`err.kind`,
+  `err.msg`) and to exit codes.
+- [03 — Config Precedence](./03-config-precedence.md): how the log destination and level are loaded
   from CLI/env/file/default.
-- [05 — Designing for LLM Agents](05-designing-for-llm-agents.md): why the log-message schema
+- [05 — Designing for LLM Agents](./05-designing-for-llm-agents.md): why the log-message schema
   matters for agent-assisted debugging.
 
 ## References

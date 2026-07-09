@@ -5,8 +5,8 @@
 ## Installation and Setup
 
 1. asdf python local env
-1. poetry add dvc
-1. run with: `poetry run dvc`
+2. poetry add dvc
+3. run with: `poetry run dvc`
    - `alias dvc='poetry run dvc'`
 
 ### Setup remote

@@ -14,10 +14,10 @@
 
 ## Notes in this directory
 
-- [color-management](color-management.md)
-- [gtk-qt-ui-coherence-x11-window-managers](gtk-qt-ui-coherence-x11-window-managers.md)
-- [picom-troubleshooting](picom-troubleshooting.md)
-- [programming-fonts](programming-fonts.md)
+- [color-management](./color-management.md)
+- [gtk-qt-ui-coherence-x11-window-managers](./gtk-qt-ui-coherence-x11-window-managers.md)
+- [picom-troubleshooting](./picom-troubleshooting.md)
+- [programming-fonts](./programming-fonts.md)
 - [colors/](colors/README.md)
 - [rofi/](rofi/README.md)
 
@@ -31,7 +31,7 @@ xwallpapers
 
 ## UI coherence
 
-- [GTK/Qt UI coherence](gtk-qt-ui-coherence-x11-window-managers.md)
+- [GTK/Qt UI coherence](./gtk-qt-ui-coherence-x11-window-managers.md)
 
 ## Tools
 

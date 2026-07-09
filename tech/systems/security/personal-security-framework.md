@@ -182,7 +182,7 @@ cd "$PRIVATE_DIR/.dotfiles-private"
 
   1. Organize each app or service in its own directory under `.dotfiles-private/`
 
-  1. From inside `.dotfiles-private/`, run:
+  2. From inside `.dotfiles-private/`, run:
 
      ```bash
      stow brave kde suse-shell thunderbird
@@ -249,7 +249,7 @@ only saved in its ciphered form. We’ll use **gocryptfs** as the encryption lay
 ### Prerequisites
 
 1. Install gocryptfs
-1. Read the detailed guide:
+2. Read the detailed guide:
    [https://github.com/gubasso/docs-n-notes/blob/master/it/gocryptfs.md](https://github.com/gubasso/docs-n-notes/blob/master/it/gocryptfs.md)
 
 ### Directory Setup

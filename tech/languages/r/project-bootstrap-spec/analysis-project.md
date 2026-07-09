@@ -7,14 +7,14 @@ only the **bootstrap-time ordering**; everyday authoring detail lives in the too
 ## Prerequisites
 
 - The [general runbook](../../../programming/project-bootstrap/runbook.md) and the R
-  [binding runbook](runbook.md) are done.
+  [binding runbook](./runbook.md) are done.
 - The project was scaffolded with `usethis::create_project(".")` (a project, not a package).
 
 ## Add these, in this order
 
 1. **Lock the environment first.** `renv::init()` then `renv::snapshot()` — an analysis is only
    reproducible if `renv.lock` pins every dependency. Commit `renv.lock` and `.Rprofile`. →
-   [00 — Toolchain & layout](00-toolchain-and-layout.md).
+   [00 — Toolchain & layout](./00-toolchain-and-layout.md).
 
 2. **Lay out data / code directories.** A conventional shape: `data-raw/` (immutable inputs), `R/`
    or `scripts/` (transformation code), `output/` (generated, git-ignored). Keep raw data read-only.
@@ -29,7 +29,7 @@ only the **bootstrap-time ordering**; everyday authoring detail lives in the too
      [R Markdown notes](../R.md) for the R Markdown/pandoc setup.
 
 5. **Wire the reproducibility gate.** CI runs `renv::restore()` then `tar_make()` (or renders the
-   report) so a broken pipeline fails the build. → [01 — Quality gates](01-quality-gates.md).
+   report) so a broken pipeline fails the build. → [01 — Quality gates](./01-quality-gates.md).
 
 ## Quality gate for analyses
 
@@ -40,4 +40,4 @@ non-package project. Bootstrap stops at a pipeline that restores and runs green 
 ## Related
 
 - [`../R.md`](../R.md) — existing R Markdown / pandoc / citation notes.
-- [00 — Toolchain & layout](00-toolchain-and-layout.md) — `renv` and R version pinning.
+- [00 — Toolchain & layout](./00-toolchain-and-layout.md) — `renv` and R version pinning.

@@ -140,8 +140,7 @@ set -C
 set noclobber
 ```
 
-- Prevent output redirection using ‘>’, ‘>&’, and ‘\<>’ from overwriting existing files.
-  [^6](gubasso/references)
+- Prevent output redirection using ‘>’, ‘>&’, and ‘\<>’ from overwriting existing files. [^6]
 
 ## [read stdin in function in bash script](https://stackoverflow.com/questions/14004756/read-stdin-in-function-in-bash-script)
 

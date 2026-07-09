@@ -10,24 +10,24 @@ Here are the key points about NAT gateways:
    the internet for tasks like downloading software updates, accessing external APIs, or fetching
    data.
 
-1. Prevent inbound connections: At the same time, NAT gateways do not allow inbound connections
+2. Prevent inbound connections: At the same time, NAT gateways do not allow inbound connections
    initiated from the internet, thus providing a layer of security for instances in private subnets.
 
-1. Managed service: NAT Gateway is a fully managed service by AWS. It is automatically scaled up or
+3. Managed service: NAT Gateway is a fully managed service by AWS. It is automatically scaled up or
    down based on the amount of traffic and is highly available within an Availability Zone.
 
-1. Placement: NAT gateways are created in a specific public subnet and associated with an Elastic IP
+4. Placement: NAT gateways are created in a specific public subnet and associated with an Elastic IP
    address. Instances in private subnets route their internet-bound traffic to the NAT gateway.
 
-1. Redundancy: For high availability, it's recommended to create NAT gateways in multiple
+5. Redundancy: For high availability, it's recommended to create NAT gateways in multiple
    Availability Zones and configure routing to ensure each private subnet has a route to a NAT
    gateway.
 
-1. Comparison with NAT instances: Prior to NAT gateways, users had to set up their own NAT instances
+6. Comparison with NAT instances: Prior to NAT gateways, users had to set up their own NAT instances
    (EC2 instances configured to perform NAT). NAT gateways are the preferred solution due to their
    automatic scaling, patching, and higher bandwidth.
 
-1. Cost: There is an hourly charge for each provisioned NAT gateway and data processing charges for
+7. Cost: There is an hourly charge for each provisioned NAT gateway and data processing charges for
    each gigabyte processed through the gateway.
 
 So in summary, NAT gateways provide a managed, scalable way to enable outbound internet access for

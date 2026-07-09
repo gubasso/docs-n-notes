@@ -7,7 +7,7 @@ the detailed _how_ is owned by [`../cli-spec/`](../cli-spec/README.md) and is no
 ## Prerequisites
 
 - The [general runbook](../../../programming/project-bootstrap/runbook.md) and the Rust
-  [binding runbook](runbook.md) are done — a buildable, gated crate exists.
+  [binding runbook](./runbook.md) are done — a buildable, gated crate exists.
 
 ## Add these, in this order
 

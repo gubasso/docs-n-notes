@@ -1,7 +1,7 @@
 # Feature Lifecycle — Git Commands
 
 Pure git commands implementing the feature lifecycle described in
-[feature-lifecycle](feature-lifecycle.md).
+[feature-lifecycle](./feature-lifecycle.md).
 
 Uses `git clone --reference` to create isolated work-clones (feature directories) for each feature.
 

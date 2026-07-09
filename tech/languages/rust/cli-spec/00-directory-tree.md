@@ -74,7 +74,7 @@ The notes below are Rust-only deltas.
 
 - Signature: `pub fn run(ctx: &AppContext, args: <Verb>Args) -> Result<(), AppError>`. Free
   function, not a method on the args struct. See
-  [`02-subcommand-pattern.md`](02-subcommand-pattern.md).
+  [`02-subcommand-pattern.md`](./02-subcommand-pattern.md).
 
 ### `src/domain/`
 
@@ -92,11 +92,11 @@ The notes below are Rust-only deltas.
 - Each adapter file defines a trait (`GitBackend`, `Clock`, …) and a default implementation.
   Services depend on the trait, not the impl.
 - Each adapter defines its own error enum; `AppError` aggregates them via `#[from]`. See
-  [`03-error-handling.md`](03-error-handling.md).
+  [`03-error-handling.md`](./03-error-handling.md).
 
 ### `src/config/`
 
-- Uses `figment` for the merge chain. See [`05-config.md`](05-config.md).
+- Uses `figment` for the merge chain. See [`05-config.md`](./05-config.md).
 
 ### `src/context.rs`
 
@@ -108,12 +108,12 @@ The notes below are Rust-only deltas.
 
 - `AppError` is a `thiserror` enum aggregating per-layer errors via `#[from]`. Includes
   `impl AppError { pub fn exit_code(&self) -> u8 }`. See
-  [`03-error-handling.md`](03-error-handling.md).
+  [`03-error-handling.md`](./03-error-handling.md).
 
 ### `src/logging.rs`
 
 - `pub fn init(verbosity: u8) -> anyhow::Result<()>` helper that installs `tracing-subscriber` with
-  `EnvFilter`. See [`04-logging.md`](04-logging.md).
+  `EnvFilter`. See [`04-logging.md`](./04-logging.md).
 
 ### `src/ui/`
 
@@ -122,7 +122,7 @@ The notes below are Rust-only deltas.
 - Machine-facing CLIs omit `src/ui/` unless they have explicit opt-in human-UX; default output lives
   in `src/output/` or `src/protocol/`.
 - **No `println!` / `eprintln!` outside this module, the structured-output boundary, or `main.rs`**
-  — enforce as a CI lint (see [`09-coding-style.md`](09-coding-style.md)).
+  — enforce as a CI lint (see [`09-coding-style.md`](./09-coding-style.md)).
 
 ### `src/util/`
 
@@ -148,7 +148,7 @@ Add when you actually need them — not preemptively:
 ## Reading order for new contributors
 
 1. `Cargo.toml` — see the dependency footprint.
-1. `src/main.rs` — see the dispatch surface.
-1. `src/cli/mod.rs` — see the user-facing command set.
-1. Pick one `commands/<name>.rs` — trace it down through `services/` → `adapters/`.
-1. `src/error.rs` — understand the failure model.
+2. `src/main.rs` — see the dispatch surface.
+3. `src/cli/mod.rs` — see the user-facing command set.
+4. Pick one `commands/<name>.rs` — trace it down through `services/` → `adapters/`.
+5. `src/error.rs` — understand the failure model.

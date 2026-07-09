@@ -9,18 +9,21 @@ applies the general principles to the specifics of Bash.
 
 ## Files
 
-| File                                                   | Hook                                                                                                                                                                         |
-| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [bash-cli-project-specs.md](bash-cli-project-specs.md) | Full reference: directory layout, strict mode, modules, loader, ShellCheck discipline, error handling, signals, tempfiles, `bats-core` testing, install + XDG, distribution. |
+| File                                                     | Hook                                                                                                                                                                         |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [bash-cli-project-specs.md](./bash-cli-project-specs.md) | Full reference: directory layout, strict mode, modules, loader, ShellCheck discipline, error handling, signals, tempfiles, `bats-core` testing, install + XDG, distribution. |
 
 ## TL;DR
 
 - `bin/<name>` is a thin shim → `lib/loader.sh` → `lib/core.sh` → `main "$@"`.
 - `set -euo pipefail` everywhere; know its caveats (`||true`, subshell exit-code propagation).
-- One function per file under `lib/functions/` and `lib/commands/`.
+- One function per file: `libexec/commands/` for CLI subcommands, top-level `functions/` for a
+  sourced framework surface, and `lib/` for shared libraries.
 - ShellCheck on every file; treat warnings as errors.
 - `bats-core` for tests; one test file per subcommand.
-- XDG paths via `${XDG_CONFIG_HOME:-$HOME/.config}` etc.
+- XDG paths by role: config under `${XDG_CONFIG_HOME:-$HOME/.config}`, user code/data under
+  `${XDG_DATA_HOME:-$HOME/.local/share}`, and explicit `~/.local/bin` symlinks for user commands
+  exposed on `PATH`.
 - Logs to `${XDG_STATE_HOME:-$HOME/.local/state}/<app>/<app>.log` — same default as every other
   language in this spec.
 

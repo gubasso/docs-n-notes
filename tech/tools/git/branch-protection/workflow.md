@@ -11,8 +11,8 @@ Specification for protecting `master`, restricting development to `develop`, and
 Apply it (pick one per platform):
 
 - **Scripted** — `github/setup.sh` (reads `OWNER_REPO`) or `gitlab/setup.sh` (reads `PROJECT`,
-  `TIER`). One run per new project; see [README](README.md#usage).
-- **Point-and-click** — [github-web-ui](github-web-ui.md) / [gitlab-web-ui](gitlab-web-ui.md).
+  `TIER`). One run per new project; see [README](./README.md#usage).
+- **Point-and-click** — [github-web-ui](./github-web-ui.md) / [gitlab-web-ui](./gitlab-web-ui.md).
 
 Required CI status checks are **not** baked into the rulesets — pass `REQUIRED_CHECKS`
 (comma-separated contexts matching the job names your CI emits) to `github/setup.sh`. If unset, no

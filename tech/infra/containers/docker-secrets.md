@@ -64,7 +64,7 @@ In this script:
 
 1. The `export DATABASE_URL=...` line reads the content of the `database_url` secret and exports it
    as an environment variable.
-1. The `exec "$@"` line is crucial. The `"$@"` is a shell parameter that expands to the original
+2. The `exec "$@"` line is crucial. The `"$@"` is a shell parameter that expands to the original
    command-line arguments (preserving any spaces and special characters). The `exec` command
    replaces the current shell with the command you're executing, which is the standard way to end an
    `entrypoint.sh` script. This ensures that the command Docker was originally going to run (defined
@@ -105,15 +105,15 @@ using `exec docker-entrypoint.sh postgres`:
    and prepare the service (in this case, PostgreSQL) to run correctly. By explicitly calling
    `docker-entrypoint.sh postgres`, the custom `entrypoint.sh` ensures that the original setup
    process for PostgreSQL is followed.
-1. **Default Command** : The `postgres` argument is likely the default command that would be used to
+2. **Default Command** : The `postgres` argument is likely the default command that would be used to
    start the PostgreSQL server. If most users of the image will be using this default, then
    hardcoding it into the custom entrypoint script simplifies usage and ensures consistency.
-1. **Control Over Command** : Using `exec "$@"` would execute whatever command is passed to the
+3. **Control Over Command** : Using `exec "$@"` would execute whatever command is passed to the
    Docker container. In some scenarios, you might want more control over what command gets executed,
    especially if you are setting up a specialized environment or have specific requirements.
    Hardcoding the command (like `exec docker-entrypoint.sh postgres`) ensures that your environment
    setup is always followed by the execution of a specific, intended command.
-1. **Customization for Specific Use-Cases** : Sometimes, the default behavior of the Docker image
+4. **Customization for Specific Use-Cases** : Sometimes, the default behavior of the Docker image
    might not perfectly align with the needs of a specific project. In such cases, a custom
    `entrypoint.sh` allows for tweaking the startup process or the environment before executing the
    intended primary process.

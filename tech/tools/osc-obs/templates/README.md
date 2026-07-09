@@ -5,11 +5,11 @@ the placeholders, and apply with `osc meta -F`.
 
 ## Files
 
-- [`project-meta.xml`](project-meta.xml) — generic project metadata with common build targets
+- [`project-meta.xml`](./project-meta.xml) — generic project metadata with common build targets
   (Tumbleweed, Leap, an SLE example).
-- [`package-meta.xml`](package-meta.xml) — minimal package metadata (title, description, upstream
+- [`package-meta.xml`](./package-meta.xml) — minimal package metadata (title, description, upstream
   URL).
-- [`example-package-meta.xml`](example-package-meta.xml) — a realistic, applied package metadata
+- [`example-package-meta.xml`](./example-package-meta.xml) — a realistic, applied package metadata
   file for reference (real public upstream, no placeholders).
 
 ## Usage

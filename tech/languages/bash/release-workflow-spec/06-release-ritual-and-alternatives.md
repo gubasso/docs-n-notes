@@ -1,7 +1,7 @@
 # Bash Release — Release Ritual, Checklist & Alternatives
 
-Part of the [bash release-workflow spec](README.md). General principle: **release process & tooling
-choices** — see the [general principles](../../../programming/release-workflow/README.md).
+Part of the [bash release-workflow spec](./README.md). General principle: **release process &
+tooling choices** — see the [general principles](../../../programming/release-workflow/README.md).
 
 ## The release ritual
 

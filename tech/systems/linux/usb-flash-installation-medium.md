@@ -19,13 +19,13 @@
    ls -l /dev/disk/by-id/usb-*
    ```
 
-1. Unmount anything auto-mounted:
+2. Unmount anything auto-mounted:
 
    ```sh
    sudo umount /dev/disk/by-id/usb-My_flash_drive* 2>/dev/null || true
    ```
 
-1. Write the new ISO to the whole device (no `-partN`):
+3. Write the new ISO to the whole device (no `-partN`):
 
    ```sh
    sudo dd bs=4M if=/path/to/archlinux-x86_64.iso of=/dev/disk/by-id/usb-My_flash_drive \
@@ -33,7 +33,7 @@
    sudo sync
    ```
 
-1. Replug the USB (recommended) so the kernel re-reads the new layout.
+4. Replug the USB (recommended) so the kernel re-reads the new layout.
 
 ### When you would use `wipefs`/partitioning again
 
@@ -94,8 +94,8 @@ sudo parted -s /dev/sdX mklabel msdos mkpart primary fat32 0% 100%
 This single command will:
 
 1. Create a new partition table.
-1. Create a primary partition covering the entire disk.
-1. Label it with the specified file system type. After running this command, you can then format the
+2. Create a primary partition covering the entire disk.
+3. Label it with the specified file system type. After running this command, you can then format the
    partition if necessary using a tool like `mkfs` (e.g., `sudo mkfs.vfat /dev/sdX1` for FAT32).
    However, the `parted` command above is sufficient for creating the partition structure itself.
 

@@ -12,13 +12,13 @@ section.
 
 ## Index
 
-- [01-broken-link-drift-after-patch-rename.md](01-broken-link-drift-after-patch-rename.md) — every
+- [01-broken-link-drift-after-patch-rename.md](./01-broken-link-drift-after-patch-rename.md) — every
   consumer lane went `broken: patch '<new>' does not exist` simultaneously after a converger script
   `osc add`'d a new overlay patch but never `osc rm`'d the old one. The `broken` state is pre-build
   (source-service link expansion failure), distinct from `unresolvable` / `failed`, and needs its
   own diagnostic recipe. Recovery is one workspace commit; prevention is making the converger
   enumerate-and-prune, not append-only.
-- [02-libexpat-abi-override-via-sles-update-branch.md](02-libexpat-abi-override-via-sles-update-branch.md)
+- [02-libexpat-abi-override-via-sles-update-branch.md](./02-libexpat-abi-override-via-sles-update-branch.md)
   — overriding a buildroot ABI by branching a SUSE Update package into the home project so the
   resolver's path order naturally prefers it. Two foot-guns: (a) binary RPM name ≠ source pkg name
   (`libexpat1` ships from `expat`), (b) `openSUSE:Factory` is rarely the right branch source for

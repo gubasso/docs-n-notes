@@ -12,8 +12,8 @@ someone re-derives the whole investigation instead of grepping one id.
 ## Where it lives
 
 A known-issue case library is **reference** material (diagnostics, known symptoms, case studies —
-see [01 — Diataxis Zones](01-diataxis-zones.md) and
-[06 — Operational Docs](06-operational-docs.md)). Put it at:
+see [01 — Diataxis Zones](./01-diataxis-zones.md) and
+[06 — Operational Docs](./06-operational-docs.md)). Put it at:
 
 ```text
 <project>/docs/reference/known-issues/
@@ -107,7 +107,7 @@ A mask never hides a defect silently. Its `mask.md` records **What is masked / W
 Trigger / Revert Checklist**. The Revert Trigger is the exact condition — upstream fix _confirmed
 deployed_ and stability proven — that ends the mask; a green run that still carries the mask does
 not prove the underlying fix. This is the same discipline as a tracking file for perishable facts
-(see [08 — Tracking and Revalidation](08-tracking-and-revalidation.md)).
+(see [08 — Tracking and Revalidation](./08-tracking-and-revalidation.md)).
 
 ## The registry index
 
@@ -130,8 +130,8 @@ directories — the same gate Chromium and large test suites apply to their expe
 
 ## See also
 
-- [01 — Diataxis Zones](01-diataxis-zones.md) for reader-needs placement.
-- [06 — Operational Docs](06-operational-docs.md) for case studies and diagnostics in the reference
-  zone.
-- [08 — Tracking and Revalidation](08-tracking-and-revalidation.md) for the mask ledger as a
+- [01 — Diataxis Zones](./01-diataxis-zones.md) for reader-needs placement.
+- [06 — Operational Docs](./06-operational-docs.md) for case studies and diagnostics in the
+  reference zone.
+- [08 — Tracking and Revalidation](./08-tracking-and-revalidation.md) for the mask ledger as a
   tracking artifact.

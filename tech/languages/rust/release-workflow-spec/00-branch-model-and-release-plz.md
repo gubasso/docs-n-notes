@@ -146,11 +146,11 @@ merge feature branch ─▶ develop        (you)
 1. Merge feature work to `develop`. Commits must be
    [Conventional Commits](https://www.conventionalcommits.org/) — release-plz reads them to choose
    the bump and write the changelog.
-1. release-plz opens/updates the release PR on `develop` (version bump in
+2. release-plz opens/updates the release PR on `develop` (version bump in
    `Cargo.toml`/`Cargo.lock` + `CHANGELOG.md`).
-1. Review and merge the release PR — the release gate, the one human decision.
-1. release-plz tags `vX.Y.Z` and publishes to crates.io over OIDC (no stored token).
-1. The `promote` job (`needs: release-plz`) fast-forwards `master` onto the tag.
+3. Review and merge the release PR — the release gate, the one human decision.
+4. release-plz tags `vX.Y.Z` and publishes to crates.io over OIDC (no stored token).
+5. The `promote` job (`needs: release-plz`) fast-forwards `master` onto the tag.
 
 ### Worked example
 
@@ -183,8 +183,8 @@ release repeats from `develop`.
 ## Local alternative
 
 `cargo-release` is the imperative, no-bot local alternative (`cargo release patch --execute`); it
-still needs [configured auth](02-api-tokens-and-scopes.md). Prefer release-plz for CI-first
-releases. See [`04 — release-plz config`](04-release-plz-config.md).
+still needs [configured auth](./02-api-tokens-and-scopes.md). Prefer release-plz for CI-first
+releases. See [`04 — release-plz config`](./04-release-plz-config.md).
 
 ## Reference
 

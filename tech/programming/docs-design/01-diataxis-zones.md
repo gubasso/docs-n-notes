@@ -55,7 +55,7 @@ for policies, workflows, or troubleshooting notes.
 
 Put a document in `decisions/` when it records a choice the project may later revisit. It should be
 a lean ADR: short context, serious options, chosen outcome, consequences, and status. See
-[02 — Lean ADRs](02-lean-adrs.md).
+[02 — Lean ADRs](./02-lean-adrs.md).
 
 Put a document in `guides/` when it tells the reader how to complete a task. A guide can include
 prerequisites and verification, but it should not become the canonical home for every field or error
@@ -70,7 +70,7 @@ subsystem responsibilities, design forces, trade-offs, and conceptual background
 allowed to be discursive, but it should link to ADRs instead of restating their decisions.
 
 Operational material follows the same map. Runbooks are guides. Diagnostics and case studies are
-reference. See [06 — Operational Docs](06-operational-docs.md).
+reference. See [06 — Operational Docs](./06-operational-docs.md).
 
 ## Boundary tests
 

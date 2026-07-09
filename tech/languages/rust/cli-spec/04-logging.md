@@ -165,8 +165,8 @@ consumers.
 ## See also
 
 - [General principle — Logging & Output](../../../programming/cli-design/01-logging-and-output.md)
-- [05 — Config (Rust)](05-config.md) — log destination resolution
-- [03 — Error Handling](03-error-handling.md) — how errors flow into log records (`err.kind`,
+- [05 — Config (Rust)](./05-config.md) — log destination resolution
+- [03 — Error Handling](./03-error-handling.md) — how errors flow into log records (`err.kind`,
   `err.msg`)
 
 ## References

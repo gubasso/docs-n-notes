@@ -54,11 +54,11 @@ Sources:
 clig.dev / 12-factor precedence ladder (highest wins):
 
 1. Command-line flags
-1. Environment variables (`MYWRAP_*` prefix)
-1. Project config (`./.mywraprc` or repo file)
-1. User config (`$XDG_CONFIG_HOME/mywrap/config.toml`)
-1. System config (`/etc/mywrap/...`)
-1. Built-in defaults
+2. Environment variables (`MYWRAP_*` prefix)
+3. Project config (`./.mywraprc` or repo file)
+4. User config (`$XDG_CONFIG_HOME/mywrap/config.toml`)
+5. System config (`/etc/mywrap/...`)
+6. Built-in defaults
 
 - Use **XDG Base Directory** paths for config/data/cache.
 - Reserve a **single namespaced env prefix** (`MYWRAP_*`); never leak it into the child's
@@ -147,9 +147,9 @@ Sources:
 Layered lookup, highest priority first:
 
 1. **`$MYWRAP_CHILD_BIN`** — explicit override (single source of truth for tests and CI).
-1. **Config file** entry (`child_bin = "/opt/foo/bin/foo"`).
-1. **`PATH` search** via `execvp` semantics.
-1. **Bundled vendor path** if you ship one (`$XDG_DATA_HOME/mywrap/bin/foo`).
+2. **Config file** entry (`child_bin = "/opt/foo/bin/foo"`).
+3. **`PATH` search** via `execvp` semantics.
+4. **Bundled vendor path** if you ship one (`$XDG_DATA_HOME/mywrap/bin/foo`).
 
 ### Recursion guard (shim pattern)
 
@@ -194,7 +194,7 @@ precedent does not support that. `self` is justified only when **both** of the f
 
 1. The verb's _object_ is the running binary itself — it updates, uninstalls, or otherwise mutates
    the wrapper, **and**
-1. The same verb name plausibly exists on the wrapped child (e.g., `rustup update` already means
+2. The same verb name plausibly exists on the wrapped child (e.g., `rustup update` already means
    "update toolchains" — a different operation — so `rustup self update` disambiguates).
 
 If either condition fails, **expose the verb at the top level**.

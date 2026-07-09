@@ -13,22 +13,22 @@ then the C specifics here.
 
 1. Read the general [hub](../../../programming/project-bootstrap/README.md) and
    [general runbook](../../../programming/project-bootstrap/runbook.md) — the cross-language _what_.
-1. Follow this [`runbook.md`](runbook.md) for the C-specific overlay steps.
-1. Jump to your implementation-kind file (e.g. [`cli-project.md`](cli-project.md) or
-   [`library-project.md`](library-project.md)).
+2. Follow this [`runbook.md`](./runbook.md) for the C-specific overlay steps.
+3. Jump to your implementation-kind file (e.g. [`cli-project.md`](./cli-project.md) or
+   [`library-project.md`](./library-project.md)).
 
 ## Index
 
-| # | Chapter                                          | One-line hook                                                                     |
-| - | ------------------------------------------------ | --------------------------------------------------------------------------------- |
-| 0 | [Toolchain & layout](00-toolchain-and-layout.md) | `src/`/`include/` layout, CMake/Meson, gcc/clang, C standard, Nix devShell.       |
-| 1 | [Quality gates](01-quality-gates.md)             | clang-format, clang-tidy/cppcheck, ASan/UBSan, a unit-test framework, pre-commit. |
+| # | Chapter                                            | One-line hook                                                                     |
+| - | -------------------------------------------------- | --------------------------------------------------------------------------------- |
+| 0 | [Toolchain & layout](./00-toolchain-and-layout.md) | `src/`/`include/` layout, CMake/Meson, gcc/clang, C standard, Nix devShell.       |
+| 1 | [Quality gates](./01-quality-gates.md)             | clang-format, clang-tidy/cppcheck, ASan/UBSan, a unit-test framework, pre-commit. |
 
 ## Implementation kinds
 
-- [`cli-project.md`](cli-project.md) — C CLI: the bootstrap-time ordering for argument parsing,
+- [`cli-project.md`](./cli-project.md) — C CLI: the bootstrap-time ordering for argument parsing,
   entry point, and exit codes.
-- [`library-project.md`](library-project.md) — C library: a shared/static library with a public
+- [`library-project.md`](./library-project.md) — C library: a shared/static library with a public
   header API, install/export rules, and ABI hygiene.
 
 `daemon-project.md` and other kinds are followups; add them when you bootstrap those kinds.

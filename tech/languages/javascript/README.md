@@ -11,11 +11,11 @@ Notes and specs for the JavaScript stack, including TypeScript and Node.
 
 ## Notes
 
-- [`javascript-js.md`](javascript-js.md) — assorted JavaScript snippets.
-- [`typescript.md`](typescript.md) — TypeScript notes.
-- [`node-npm.md`](node-npm.md) — Node / npm usage and prerelease versioning.
-- [`react-code-review-guide.md`](react-code-review-guide.md) — React review conventions.
-- [`svelte.md`](svelte.md) · [`svelte-code-review-guide.md`](svelte-code-review-guide.md) — Svelte
-  notes and review conventions.
-- [`typescript-code-review-guide.md`](typescript-code-review-guide.md) — TypeScript review
+- [`javascript-js.md`](./javascript-js.md) — assorted JavaScript snippets.
+- [`typescript.md`](./typescript.md) — TypeScript notes.
+- [`node-npm.md`](./node-npm.md) — Node / npm usage and prerelease versioning.
+- [`react-code-review-guide.md`](./react-code-review-guide.md) — React review conventions.
+- [`svelte.md`](./svelte.md) · [`svelte-code-review-guide.md`](./svelte-code-review-guide.md) —
+  Svelte notes and review conventions.
+- [`typescript-code-review-guide.md`](./typescript-code-review-guide.md) — TypeScript review
   conventions.

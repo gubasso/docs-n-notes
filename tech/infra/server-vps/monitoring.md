@@ -6,9 +6,9 @@ how you can approach it and the steps you can take to study and master these ski
 ### Manual Monitoring
 
 1. **Memory Usage** : Use the `free -m` command to check memory usage.
-1. **Processor Usage** : Use the `top` or `htop` command to see CPU usage and running processes.
-1. **Disk Usage** : Use the `df -h` command to check disk space usage.
-1. **Network Usage** : Use the `ifconfig` or `ip a` command to check network interfaces and
+2. **Processor Usage** : Use the `top` or `htop` command to see CPU usage and running processes.
+3. **Disk Usage** : Use the `df -h` command to check disk space usage.
+4. **Network Usage** : Use the `ifconfig` or `ip a` command to check network interfaces and
    `netstat` to monitor network connections.
 
 ### Automated Monitoring
@@ -22,14 +22,14 @@ how you can approach it and the steps you can take to study and master these ski
 
 1. **Set Up Alerts** : Configure alerts in Prometheus or use tools like Nagios to notify you of any
    critical issues.
-1. **Log Management** : Use tools like ELK Stack (Elasticsearch, Logstash, Kibana) to manage and
+2. **Log Management** : Use tools like ELK Stack (Elasticsearch, Logstash, Kibana) to manage and
    analyze logs from your server.
 
 ### Step-by-Step Guide to Study
 
 1. **Learn Basic Linux Commands** : Familiarize yourself with basic commands for checking system
    performance (`top`, `htop`, `free`, `df`, `netstat`).
-1. **Explore Monitoring Tools** :
+2. **Explore Monitoring Tools** :
 
 - **Netdata** : Start with Netdata for an easy-to-set-up real-time monitoring tool. Follow the
   Netdata installation guide.
@@ -38,6 +38,6 @@ how you can approach it and the steps you can take to study and master these ski
 
 1. **Set Up a Test Environment** : Create a virtual machine or use a cloud instance to practice
    installing and configuring these tools.
-1. **Configure Alerts and Logs** : Learn how to set up alerts in Prometheus and explore log
+2. **Configure Alerts and Logs** : Learn how to set up alerts in Prometheus and explore log
    management with the ELK Stack. Follow the
    [ELK Stack guide](https://www.elastic.co/what-is/elk-stack) .

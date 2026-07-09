@@ -116,7 +116,7 @@ adding a new top-level operational bucket that duplicates the Diataxis model.
 
 ## See also
 
-- [01 — Diataxis Zones](01-diataxis-zones.md) for reader-needs placement.
-- [04 — Single Source of Truth](04-single-source-of-truth.md) for conflict resolution and linking.
-- [09 — Known Issues](09-known-issues.md) for tracking bugs in external systems under test as
+- [01 — Diataxis Zones](./01-diataxis-zones.md) for reader-needs placement.
+- [04 — Single Source of Truth](./04-single-source-of-truth.md) for conflict resolution and linking.
+- [09 — Known Issues](./09-known-issues.md) for tracking bugs in external systems under test as
   case-study directories that collapse to a summary when resolved.

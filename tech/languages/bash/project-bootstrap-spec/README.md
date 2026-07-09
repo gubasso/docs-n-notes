@@ -12,21 +12,21 @@ then the Bash specifics here.
 
 1. Read the general [hub](../../../programming/project-bootstrap/README.md) and
    [general runbook](../../../programming/project-bootstrap/runbook.md) — the cross-language _what_.
-1. Follow this [`runbook.md`](runbook.md) for the Bash-specific overlay steps.
-1. Jump to your implementation-kind file (e.g. [`cli-project.md`](cli-project.md)).
-1. When ready to publish, hand off to
+2. Follow this [`runbook.md`](./runbook.md) for the Bash-specific overlay steps.
+3. Jump to your implementation-kind file (e.g. [`cli-project.md`](./cli-project.md)).
+4. When ready to publish, hand off to
    [`../release-workflow-spec/`](../release-workflow-spec/README.md) — the later Bash release phase.
 
 ## Index
 
-| # | Chapter                                          | One-line hook                                                           |
-| - | ------------------------------------------------ | ----------------------------------------------------------------------- |
-| 0 | [Toolchain & layout](00-toolchain-and-layout.md) | `bin/`+`lib/` layout, shebang, `set -euo pipefail`, Nix-hosted tooling. |
-| 1 | [Quality gates](01-quality-gates.md)             | `shfmt` (format), `shellcheck -S style` (lint), `bats-core` (test).     |
+| # | Chapter                                            | One-line hook                                                           |
+| - | -------------------------------------------------- | ----------------------------------------------------------------------- |
+| 0 | [Toolchain & layout](./00-toolchain-and-layout.md) | `bin/`+`lib/` layout, shebang, `set -euo pipefail`, Nix-hosted tooling. |
+| 1 | [Quality gates](./01-quality-gates.md)             | `shfmt` (format), `shellcheck -S style` (lint), `bats-core` (test).     |
 
 ## Implementation kinds
 
-- [`cli-project.md`](cli-project.md) — Bash CLI: the bootstrap-time ordering for `getopts`
+- [`cli-project.md`](./cli-project.md) — Bash CLI: the bootstrap-time ordering for `getopts`
   arg-parsing, subcommands, usage/help, and config, delegating detail to
   [`../cli-spec/`](../cli-spec/README.md).
 

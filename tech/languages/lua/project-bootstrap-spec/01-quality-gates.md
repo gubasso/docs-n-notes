@@ -22,7 +22,7 @@ allowed globals, then fail the build on findings:
 luacheck .
 ```
 
-Matching `std` to the runtime chosen in [00 — Toolchain & layout](00-toolchain-and-layout.md) is
+Matching `std` to the runtime chosen in [00 — Toolchain & layout](./00-toolchain-and-layout.md) is
 what makes global/undefined-variable warnings accurate.
 
 ## Tests — `busted`

@@ -111,12 +111,13 @@ write the log file (success or failure) so the next run sees what was tried.
 
 ## See also
 
-- [`README.md`](README.md) — `osc-obs` reference subtree index.
-- [`broken-state-link-drift.md`](broken-state-link-drift.md) — pre-build link/source drift recovery.
-- [`blocked-state-is-transient.md`](blocked-state-is-transient.md) — `blocked: <dep>` is not
+- [`README.md`](./README.md) — `osc-obs` reference subtree index.
+- [`broken-state-link-drift.md`](./broken-state-link-drift.md) — pre-build link/source drift
+  recovery.
+- [`blocked-state-is-transient.md`](./blocked-state-is-transient.md) — `blocked: <dep>` is not
   terminal.
-- [`libexpat-source-naming.md`](libexpat-source-naming.md) — binary-vs-source naming convention.
-- [`sle-update-pool-vs-standard.md`](sle-update-pool-vs-standard.md) — `pool` vs `standard` for
+- [`libexpat-source-naming.md`](./libexpat-source-naming.md) — binary-vs-source naming convention.
+- [`sle-update-pool-vs-standard.md`](./sle-update-pool-vs-standard.md) — `pool` vs `standard` for
   Update projects.
 - [`../../workflows/claude-self-debug-loop.md`](../../workflows/claude-self-debug-loop.md) — loop
   driver this template feeds.

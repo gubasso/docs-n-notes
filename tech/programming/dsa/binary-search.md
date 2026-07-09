@@ -89,10 +89,10 @@ to writing bug free implementations, it's rather difficult.
 Some of the most common problems include:
 
 1. Infinity loop
-1. Can't decide where to shrink
-1. Do I use lo or hi
-1. When to exit the loop
-1. ...
+2. Can't decide where to shrink
+3. Do I use lo or hi
+4. When to exit the loop
+5. ...
 
 In this article, I will be sharing my insights on how to write bug free binary search with just a
 little pattern.
@@ -183,9 +183,9 @@ making some serious decisions that can completely change the behavior of our cod
 include:
 
 1. Do I use left or right `mid`?
-1. Do I use `<` or `<=` , `>` or `>=`?
-1. How much do I shrink the boundary? is it `mid` or `mid - 1` or even `mid + 1` ?
-1. ...
+2. Do I use `<` or `<=` , `>` or `>=`?
+3. How much do I shrink the boundary? is it `mid` or `mid - 1` or even `mid + 1` ?
+4. ...
 
 And just by messing up one of these decisions, either because you don't understand it completely or
 by mistake, it's going to break your code. To solve these decision problems, I use the following set
@@ -296,10 +296,10 @@ the boundary shrink correctly?
 My rule of thumb when it comes to binary search:
 
 1. Include **ALL** possible answers when initialize `lo` & `hi`
-1. Don't overflow the `mid` calculation
-1. Shrink boundary using a logic that will **exclude** mid
-1. Avoid infinity loop by picking the correct `mid` and shrinking logic
-1. Always think of the case when there are 2 elements left
+2. Don't overflow the `mid` calculation
+3. Shrink boundary using a logic that will **exclude** mid
+4. Avoid infinity loop by picking the correct `mid` and shrinking logic
+5. Always think of the case when there are 2 elements left
 
 _Because this problem is a failrly easy, the implementations may be pretty straight forward and you
 may wonder why do I need so many rules. However, binary search problems can get much much more

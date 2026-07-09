@@ -52,8 +52,8 @@ The CIDR suffix determines the size of the network and number of available host 
 So the key points are:
 
 1. The /xx notation specifies how many leading bits represent the network
-1. As the number after / gets larger, the network size gets smaller and supports fewer hosts
-1. It allows flexible allocation of IP address blocks to organizations based on their network size
+2. As the number after / gets larger, the network size gets smaller and supports fewer hosts
+3. It allows flexible allocation of IP address blocks to organizations based on their network size
    requirements
 
 CIDR replaced the older classful networking architecture (Class A, B, C). Its advantages include:

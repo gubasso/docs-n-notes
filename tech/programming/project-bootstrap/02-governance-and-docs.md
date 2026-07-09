@@ -34,10 +34,10 @@ itself.
 Every directory's `README.md` is its index — it routes to the files in and under it, and does not
 duplicate their content. This keeps navigation deterministic and prevents the drift that
 [single source of truth](../docs-design/04-single-source-of-truth.md) warns against. This shelf's
-[hub README](README.md) is an example.
+[hub README](./README.md) is an example.
 
 ## Automation
 
 `bootstrap-governance` seeds `CLAUDE.md`, an `AGENTS.md`, and an ADR scaffold (MADR-minimal plus a
 self-containment ADR). The conventions above are the SoT; see
-[07 — Automation with cog](07-automation-with-cog.md).
+[07 — Automation with cog](./07-automation-with-cog.md).

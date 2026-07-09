@@ -1,6 +1,6 @@
 # Advanced Testing (Rust)
 
-> Prerequisite: [Testing (Rust)](testing.md) for the basics (`assert_cmd`, `insta`, `tempfile`,
+> Prerequisite: [Testing (Rust)](./testing.md) for the basics (`assert_cmd`, `insta`, `tempfile`,
 > `trybuild`, `nextest`). This chapter covers advanced techniques: property-based testing, mutation
 > testing, document-driven CLI testing, inline snapshots, golden files, HTTP fakes, and interactive
 > CLI testing.
@@ -417,7 +417,7 @@ verifying the interactive UX itself.
 
 ## Dev-dependencies summary
 
-Updated dependency table (extends [06 § Crate stack](testing.md#crate-stack)):
+Updated dependency table (extends [06 § Crate stack](./testing.md#crate-stack)):
 
 ```toml
 [dev-dependencies]
@@ -462,9 +462,9 @@ tests/
 
 ## See also
 
-- [Testing (Rust)](testing.md) — core crate stack, unit/integration patterns, nextest profiles,
+- [Testing (Rust)](./testing.md) — core crate stack, unit/integration patterns, nextest profiles,
   support module.
-- [Code Quality (Rust)](code-quality.md) — complexity metrics, clippy restriction lints, binary
+- [Code Quality (Rust)](./code-quality.md) — complexity metrics, clippy restriction lints, binary
   analysis.
 - [07 — Dependencies (Rust)](../07-dependencies.md) — curated default crate list.
 - General principles:

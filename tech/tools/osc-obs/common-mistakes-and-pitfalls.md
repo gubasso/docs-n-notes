@@ -1,7 +1,7 @@
 # Common mistakes & pitfalls when running OBS home projects
 
-> Companion to [`setup-home-project-from-upstream.md`](setup-home-project-from-upstream.md) and
-> [`broken-state-link-drift.md`](broken-state-link-drift.md). The happy-path guide says "do these
+> Companion to [`setup-home-project-from-upstream.md`](./setup-home-project-from-upstream.md) and
+> [`broken-state-link-drift.md`](./broken-state-link-drift.md). The happy-path guide says "do these
 > steps in order"; this doc says "and here are the steps that bit me — don't repeat them."
 
 Every entry is distilled from a real incident. Each entry has a fixed shape: **What** (the mistake),
@@ -59,7 +59,7 @@ credentials_mgr_class line.
 **Avoid by.** Keep a container-only oscrc, separate from the host's. The container file uses
 `osc.credentials.ObfuscatedConfigFileCredentialsManager` and the obfuscated
 `pass = base64(bz2(plaintext))` line. Bind-mount **that file** into the container; leave the host's
-KWallet-backed oscrc alone. See [`auth-in-devcontainers.md`](auth-in-devcontainers.md) for the
+KWallet-backed oscrc alone. See [`auth-in-devcontainers.md`](./auth-in-devcontainers.md) for the
 Tier-1 walkthrough.
 
 ### 1.2. Using `osc … api /person/<user>` as the seed step
@@ -238,7 +238,7 @@ hit `?expand=1` directly.
 **Avoid by.** Always treat patch renames as a three-step server-side operation in **one commit**:
 `osc add <new>.patch && osc rm
 <old>.patch && osc ci`. If you're scripting it, see §2.2. Full
-diagnosis + recovery: [`broken-state-link-drift.md`](broken-state-link-drift.md).
+diagnosis + recovery: [`broken-state-link-drift.md`](./broken-state-link-drift.md).
 
 ### 2.2. Converger script that `osc add`s but never `osc rm`s
 
@@ -443,8 +443,8 @@ osc -A <api> results -v <project> <pkg>
 
 If any new lane goes `unresolvable`, the gate is wider than the infrastructure can support. Either
 narrow the gate back, or commit to branching the missing providers into the home project (see §4
-"Branched providers" in [`setup-home-project-from-upstream.md`](setup-home-project-from-upstream.md)
-for the pattern).
+"Branched providers" in
+[`setup-home-project-from-upstream.md`](./setup-home-project-from-upstream.md) for the pattern).
 
 ### 4.2. Trusting the disttag for python ABI proof
 
@@ -581,11 +581,12 @@ operator runs deliberately.
 
 ## Companion files
 
-- [`setup-home-project-from-upstream.md`](setup-home-project-from-upstream.md) — the happy-path
+- [`setup-home-project-from-upstream.md`](./setup-home-project-from-upstream.md) — the happy-path
   walkthrough this doc complements.
-- [`broken-state-link-drift.md`](broken-state-link-drift.md) — deep-dive on the §2.1 / §2.2 failure
-  mode and its recovery.
-- [`auth-in-devcontainers.md`](auth-in-devcontainers.md) — full decision matrix for §1's auth setup.
+- [`broken-state-link-drift.md`](./broken-state-link-drift.md) — deep-dive on the §2.1 / §2.2
+  failure mode and its recovery.
+- [`auth-in-devcontainers.md`](./auth-in-devcontainers.md) — full decision matrix for §1's auth
+  setup.
 - Curated upstream-URL index:
   `~/DocsNNotes/tech/systems/linux/opensuse/opensuse-build-service-obs.md`.
 

@@ -41,17 +41,17 @@ it covers the dual case without weakening the default UX.
    and the best terminal-UX helper for the language when they improve comprehension. Choose the best
    human format per output. Ship bash completion and man pages, including access through a
    subcommand.
-1. **machine-output** — for agents and programs. Emit JSON or the best machine-readable format for
+2. **machine-output** — for agents and programs. Emit JSON or the best machine-readable format for
    that output. Do not paginate by default; if output can become too large, document the
    limit/page/cursor/offset rules in `--help` so an agent can request pages itself. Be
    token-friendly when possible without compromising machine readability. Ship self-documented
    surfaces agents can learn from: `help`/usage, `doctor` for checks and diagnostics, `init` for
    setup/scaffold/bootstrap that reuses `doctor` checks as the source of truth, bash completion, and
    man pages, including access through a subcommand.
-1. **log-messages** — for both categories, always. Log to files by default and mirror to `stderr`
+3. **log-messages** — for both categories, always. Log to files by default and mirror to `stderr`
    only as an explicit opt-in (e.g. `--log-stderr`); never to `stdout`, which stays reserved for the
    human result or machine-output (see the channels matrix in
-   [01 — Logging & Output](01-logging-and-output.md)). Use XDG-compliant paths, defaulting to user
+   [01 — Logging & Output](./01-logging-and-output.md)). Use XDG-compliant paths, defaulting to user
    XDG paths under `$HOME`. Provide at least `info`, `warn`, `error`, and `debug` levels, with room
    to extend. Coding agents are expected log consumers too.
 
@@ -160,12 +160,13 @@ Otherwise, don't pre-extract.
 
 **Errors**: each adapter defines its own error type (e.g. `GitError`, `HttpError`). The top-level
 `AppError` aggregates them at the boundary. Mechanism is language-specific (Rust: `#[from]`; Python:
-exception hierarchy; Bash: namespaced exit codes) — see [02 — Error Messages](02-error-messages.md).
+exception hierarchy; Bash: namespaced exit codes) — see
+[02 — Error Messages](./02-error-messages.md).
 
 ### `config/`
 
 **Owns**: layered config loading. Defines the resolved `Config` struct and the merge chain. See
-[03 — Config Precedence](03-config-precedence.md).
+[03 — Config Precedence](./03-config-precedence.md).
 
 **Does NOT own**: global mutable state, business invariants (those live in `domain/`).
 
@@ -191,12 +192,12 @@ Resolve once here, never recompute. Language-specific defaults live in each `cli
 ### `error.rs`
 
 **Owns**: the top-level `AppError` enum and its `exit_code()` mapping. See
-[02 — Error Messages](02-error-messages.md).
+[02 — Error Messages](./02-error-messages.md).
 
 ### `logging.rs`
 
 **Owns**: the install helper for the logging subsystem. See
-[01 — Logging & Output](01-logging-and-output.md).
+[01 — Logging & Output](./01-logging-and-output.md).
 
 **Does NOT own**: log emission. Only the install.
 
@@ -250,7 +251,7 @@ where you parse strings into newtypes, compile patterns, validate enums, and rej
 combinations.
 
 After projection, downstream code **cannot represent an invalid state**. This is the "parse, don't
-validate" principle made concrete (see [04 — Coding Style](04-coding-style-rust-zig.md), rule 2).
+validate" principle made concrete (see [04 — Coding Style](./04-coding-style-rust-zig.md), rule 2).
 
 ---
 
@@ -259,9 +260,9 @@ validate" principle made concrete (see [04 — Coding Style](04-coding-style-rus
 Adding a new subcommand `widget` touches exactly four files:
 
 1. `cli/widget.rs` — parse-shape struct.
-1. `cli/<root>` — register the variant in the subcommand enum.
-1. `commands/widget.rs` — handler (free `run` function).
-1. `main.rs` (or the dispatch arm) — dispatch.
+2. `cli/<root>` — register the variant in the subcommand enum.
+3. `commands/widget.rs` — handler (free `run` function).
+4. `main.rs` (or the dispatch arm) — dispatch.
 
 No registry macros, no auto-discovery, no plugin trait. Explicit dispatch over magic. The compiler
 tells you when you forgot an arm.
@@ -280,8 +281,8 @@ The default is: keep the work inline in `commands/widget.rs`. Extract `services/
 **at least one** is true:
 
 1. Another command needs the same orchestration.
-1. The pure core is non-trivial and you want to unit-test it without the parser.
-1. The handler exceeds ~200 LOC.
+2. The pure core is non-trivial and you want to unit-test it without the parser.
+3. The handler exceeds ~200 LOC.
 
 Otherwise, inline. Premature service extraction creates passthrough wrappers that obscure the call
 graph.
@@ -316,7 +317,7 @@ main()
 
 The context carries:
 
-- `config: Arc<Config>` — resolved config (see [03](03-config-precedence.md)).
+- `config: Arc<Config>` — resolved config (see [03](./03-config-precedence.md)).
 - `paths: Paths` — computed (data dir, state dir, cache dir).
 - `ui: Ui` — the only renderer for human-facing tools; machine-facing tools carry a structured
   output/protocol facility instead.
@@ -338,12 +339,12 @@ Migrate to a workspace only when **one** of these triggers fires (do not migrate
 
 1. **Second binary sharing ≥30% of code.** A daemon, a helper, a TUI variant. Split into `app-core`
    (library) + `app-cli` (binary) + new consumer.
-1. **A subsystem is publishable on its own.** `ripgrep` extracted `grep-matcher`, `grep-regex`,
+2. **A subsystem is publishable on its own.** `ripgrep` extracted `grep-matcher`, `grep-regex`,
    `grep-searcher`, `grep-printer` because each is reusable. If it has zero app-specific concerns,
    it earns its own crate.
-1. **Compile time exceeds tolerance.** Incremental `check` over ~10 s and the slow code is
+3. **Compile time exceeds tolerance.** Incremental `check` over ~10 s and the slow code is
    structurally separable.
-1. **Plugins/adapters need independent dep trees.** Helix splits `helix-lsp` so the LSP client's
+4. **Plugins/adapters need independent dep trees.** Helix splits `helix-lsp` so the LSP client's
    deps don't bloat the core.
 
 **Hard threshold**: at ~8k LOC of application code, take a serious look. Below that, the cost of
@@ -356,7 +357,7 @@ workspace navigation outweighs the wins.
 - **Domain crates + glue** (the `ripgrep` pattern): `app-domain/`, `app-adapter-<system>/`,
   `app-service/`, `app-cli/`. Use when subsystems are publishable.
 
-See [10 — Reference Projects](10-reference-projects.md) for organizational patterns from
+See [10 — Reference Projects](./10-reference-projects.md) for organizational patterns from
 well-studied codebases.
 
 ### Directory rules across a workspace
@@ -379,7 +380,7 @@ The single-crate rules above still hold per-crate. Specifically:
 Only when one of these is true:
 
 1. Another consumer (a second crate, a Tauri app, a sibling binary) needs the same logic.
-1. Integration tests need access to internals that aren't reachable from a binary-only crate.
+2. Integration tests need access to internals that aren't reachable from a binary-only crate.
 
 A no-op library file that just declares private modules is dead weight. If you don't have a real
 consumer, **don't** create the public surface — keep modules internal.
@@ -388,10 +389,10 @@ consumer, **don't** create the public surface — keep modules internal.
 
 ## See also
 
-- [04 — Coding Style](04-coding-style-rust-zig.md) — explicit errors, parse-don't-validate,
+- [04 — Coding Style](./04-coding-style-rust-zig.md) — explicit errors, parse-don't-validate,
   composition, no globals.
-- [08 — Naming & Documentation](08-naming-and-docs.md) — verb/noun discipline, module headers ("what
-  it is, what it isn't").
+- [08 — Naming & Documentation](./08-naming-and-docs.md) — verb/noun discipline, module headers
+  ("what it is, what it isn't").
 - [09 — Testing Strategy](09-testing-and-quality/testing-strategy.md) — what tests live where in the
   tree.
 - Language-specific spec:

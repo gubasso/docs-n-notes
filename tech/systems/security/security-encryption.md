@@ -2,8 +2,6 @@
 
 # Related
 
-- [SSH / Openssh](./it/security-encryption-ssh.md)
-
 # General
 
 - verify secret / password in git repo pre-commit precommit

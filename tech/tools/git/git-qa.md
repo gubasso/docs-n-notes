@@ -43,7 +43,7 @@ Here's how it works:
 1. `git merge-base --fork-point <branch_name>`: This finds the point where the branch diverged from
    its upstream (i.e., where the branch started).
 
-1. `git diff <starting_point>..<branch_name>`: This command then shows the difference between the
+2. `git diff <starting_point>..<branch_name>`: This command then shows the difference between the
    starting point (where the branch started) and the current state of the branch.
 
 If you're already on the branch, you can simplify it to:

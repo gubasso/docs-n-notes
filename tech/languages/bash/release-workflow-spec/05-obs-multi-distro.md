@@ -1,7 +1,7 @@
 # Bash Release — OBS (openSUSE, Fedora, Debian, Ubuntu)
 
-Part of the [bash release-workflow spec](README.md). General principle: **distribution channels** —
-see the [general principles](../../../programming/release-workflow/README.md).
+Part of the [bash release-workflow spec](./README.md). General principle: **distribution channels**
+— see the [general principles](../../../programming/release-workflow/README.md).
 
 The [openSUSE Build Service](https://openbuildservice.org/) builds `.rpm` and `.deb` from a single
 `.spec` + `debian.*` set and **hosts the signed repos** at
@@ -11,8 +11,8 @@ once; `zypper` / `dnf` / `apt` handle updates from then on.
 OBS pulls source from your `v*` tag via
 [`obs_scm`](https://github.com/openSUSE/obs-service-tar_scm), so the GitHub tag stays the single
 source of truth — CI never uploads tarballs to OBS. The CI step in the
-[CI release chapter](03-ci-release-workflow.md) only posts a one-line `curl` that tells OBS "the tag
-moved, re-run services" — OBS does the rest.
+[CI release chapter](./03-ci-release-workflow.md) only posts a one-line `curl` that tells OBS "the
+tag moved, re-run services" — OBS does the rest.
 
 ## One-time OBS setup
 
@@ -22,7 +22,7 @@ Do these **once** in the web UI at [build.opensuse.org](https://build.opensuse.o
 1. **Create the project.** `home:<user>` is auto-created on first login; create a sub-project
    `home:<user>:<tool>` to isolate this tool's repos and metadata.
 
-1. **Enable target repositories** in `_meta`. From the WebUI use _Repositories → Add from a
+2. **Enable target repositories** in `_meta`. From the WebUI use _Repositories → Add from a
    Distribution_; from the CLI use `osc meta prj -e home:<user>:<tool>` and paste the XML below.
    Always cross-check current repo names in the WebUI picker — Leap versions move and Fedora numbers
    bump.
@@ -59,13 +59,13 @@ Do these **once** in the web UI at [build.opensuse.org](https://build.opensuse.o
    For a `noarch` package, one `x86_64` per repo is enough — OBS builds the noarch artifact once per
    repo and serves it for every architecture.
 
-1. **Create the package container.**
+3. **Create the package container.**
 
    ```bash
    osc meta pkg -e home:<user>:<tool> <tool>
    ```
 
-1. **Create a scoped trigger token** (a leaked token can then only re-run _this_ package's services,
+4. **Create a scoped trigger token** (a leaked token can then only re-run _this_ package's services,
    not your whole account):
 
    ```bash
@@ -77,7 +77,7 @@ Do these **once** in the web UI at [build.opensuse.org](https://build.opensuse.o
    also includes a numeric `id`; the `runservice` endpoint uses the secret string in the
    `Authorization` header, not the id.
 
-1. **Sanity-check the project once** before wiring CI: stand it up in `home:<user>:test-<tool>`, run
+5. **Sanity-check the project once** before wiring CI: stand it up in `home:<user>:test-<tool>`, run
    one full cycle (manual tag push → `curl` → green Tumbleweed build), then rename to the real
    project. Renaming a published project breaks every `zypper addrepo` URL your users may have
    saved.
@@ -176,7 +176,8 @@ via tooling. Skip `spec2deb`.
 
 ## CI trigger from GitHub Actions
 
-Already wired in the [CI release chapter](03-ci-release-workflow.md) — repeated here for reference:
+Already wired in the [CI release chapter](./03-ci-release-workflow.md) — repeated here for
+reference:
 
 ```yaml
 - name: Trigger OBS service run
@@ -235,4 +236,4 @@ Build status badge for the README:
 - **[nfpm](https://github.com/goreleaser/nfpm) for `.rpm`/`.deb`** — was the lean choice before OBS,
   but it only emits files (you'd still need to host a repo). OBS does both. Keep nfpm in mind only
   if you want `.rpm`/`.deb` _attached to the GitHub Release itself_ with zero external service — see
-  the [release ritual & alternatives chapter](06-release-ritual-and-alternatives.md).
+  the [release ritual & alternatives chapter](./06-release-ritual-and-alternatives.md).

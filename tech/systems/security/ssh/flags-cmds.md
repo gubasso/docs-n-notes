@@ -65,7 +65,7 @@ hello gubasso, this is git@srv123465 running gitolite3 3.6.12-1 (Debian) on git 
    You’ll get a clean “Hi <username>! You’ve successfully authenticated…” response instead of any
    shell prompt, since GitHub only speaks the Git protocol, not an interactive shell.
 
-1. **Running a one-off remote command in a script**
+2. **Running a one-off remote command in a script**
 
    ```bash
    ssh -T user@server.example.com "uptime"
@@ -73,7 +73,7 @@ hello gubasso, this is git@srv123465 running gitolite3 3.6.12-1 (Debian) on git 
 
    Because you’re just sending a command and capturing its output, you don’t need—or want—a TTY.
 
-1. **Non-interactive port-forwarding (with `-N`)**
+3. **Non-interactive port-forwarding (with `-N`)**
 
    ```bash
    ssh -N -T -L 8080:localhost:80 user@remote.example.com
@@ -82,7 +82,7 @@ hello gubasso, this is git@srv123465 running gitolite3 3.6.12-1 (Debian) on git 
    - `-N` tells SSH to not run a remote command (just forward ports)
    - `-T` ensures no TTY is allocated This is ideal for background tunnels.
 
-1. **Piping data through SSH**
+4. **Piping data through SSH**
 
    ```bash
    tar czf - /some/dir | ssh -T user@backup.example.com "cat > /backups/dir.tar.gz"
@@ -90,7 +90,7 @@ hello gubasso, this is git@srv123465 running gitolite3 3.6.12-1 (Debian) on git 
 
    You’re streaming the tarball over SSH; no interactive shell is needed.
 
-1. **Using `rsync` over SSH when you’ve customized SSH options**
+5. **Using `rsync` over SSH when you’ve customized SSH options**
 
    ```bash
    rsync -avz -e "ssh -T -i ~/.ssh/keys/id_ed25519" ./local/ user@host:/remote/

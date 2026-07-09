@@ -9,7 +9,7 @@ This chapter shows two Python implementations of the canonical 5-layer ladder:
 
 1. A **manual implementation** with `platformdirs`, suitable for small CLIs (≤ ~3 knobs) or when you
    cannot pull in `pydantic-settings`.
-1. A **`pydantic-settings` implementation** for anything larger, with the mapping back to the
+2. A **`pydantic-settings` implementation** for anything larger, with the mapping back to the
    canonical ladder spelled out.
 
 Both implementations:
@@ -283,4 +283,4 @@ human-debuggable form of the provenance dict.
   rule and XDG paths.
 - [General — Logging & Output](../../../programming/cli-design/01-logging-and-output.md) — same
   provenance discipline applies to log destinations.
-- [`typer-patterns.md`](typer-patterns.md) — wiring this into Typer commands.
+- [`typer-patterns.md`](./typer-patterns.md) — wiring this into Typer commands.

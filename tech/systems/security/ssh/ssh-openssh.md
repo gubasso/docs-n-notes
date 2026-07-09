@@ -93,12 +93,12 @@ Match host=SERVER2,SERVER3
 `[service]-[role]-[tier]-[opt.location]-[sysadmin]`
 
 1. **Project/Service**: The name of the project or service the server is associated with.
-1. **Role/Purpose**: The role or primary function of the server (e.g., web, db, git).
-1. **Tier**: The environment or stage (e.g., prod, staging, dev).
-1. **Location**: If applicable, the geographical location or data center.
-1. **User/Sysadmin**: The primary user or role accessing the server.
-1. **Uniqueness**:
-1. **opt**: optional fields
+2. **Role/Purpose**: The role or primary function of the server (e.g., web, db, git).
+3. **Tier**: The environment or stage (e.g., prod, staging, dev).
+4. **Location**: If applicable, the geographical location or data center.
+5. **User/Sysadmin**: The primary user or role accessing the server.
+6. **Uniqueness**:
+7. **opt**: optional fields
 
 ### Unorganized
 

@@ -7,10 +7,10 @@ document surveys those implementations, leading with the closest complete refere
 the broader ecosystem that exercises the same stack.
 
 For the runtime rationale behind this stack see
-[20-decision-libkrun-linux.md](20-decision-libkrun-linux.md); for the microVM-vs-jailer trade-off
-see [30-libkrun-vs-firecracker.md](30-libkrun-vs-firecracker.md); for the threat model that
+[20-decision-libkrun-linux.md](./20-decision-libkrun-linux.md); for the microVM-vs-jailer trade-off
+see [30-libkrun-vs-firecracker.md](./30-libkrun-vs-firecracker.md); for the threat model that
 motivates a hardware-virt boundary see
-[00-threat-model-and-principles.md](00-threat-model-and-principles.md).
+[00-threat-model-and-principles.md](./00-threat-model-and-principles.md).
 
 ## The closest complete reference: ai-agents-sandbox
 
@@ -128,7 +128,7 @@ tool would need to add on top of this same runtime core:
   a fuller tool composes reusable layers into a manifest.
 - **No-KVM CI parity.** There is no equivalent to running the same image under a software-isolation
   runtime for KVM-less CI. A fuller implementation designates gVisor (`runsc`) for that slot; see
-  [10-runtimes-catalog.md](10-runtimes-catalog.md).
+  [10-runtimes-catalog.md](./10-runtimes-catalog.md).
 
 Critically, none of these gaps live in the runtime/security layer — that layer is fully shared with
 any richer tool. They are all product-surface concerns layered _above_ an identical
@@ -161,9 +161,9 @@ libkrun is developed within the container-tools ecosystem alongside Podman and c
 Together these show the stack is not a single project's bet: an inference server, a general code
 sandbox, a bare microVM launcher, and an agent runner all sit on the same libkrun core. For
 operational specifics of running libkrun under Podman see
-[60-podman-libkrun-operational-notes.md](60-podman-libkrun-operational-notes.md); for why native
+[60-podman-libkrun-operational-notes.md](./60-podman-libkrun-operational-notes.md); for why native
 orchestration was chosen over a heavier stack see
-[50-native-orchestration-decision.md](50-native-orchestration-decision.md).
+[50-native-orchestration-decision.md](./50-native-orchestration-decision.md).
 
 ## References
 
@@ -193,4 +193,4 @@ orchestration was chosen over a heavier stack see
 - [emirb — microvm-2026](https://emirb.github.io/blog/microvm-2026/) — hypervisor-escape bug-class
   economics.
 
-See also [90-references.md](90-references.md) for the shelf-wide source list.
+See also [90-references.md](./90-references.md) for the shelf-wide source list.

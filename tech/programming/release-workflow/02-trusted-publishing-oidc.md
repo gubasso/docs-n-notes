@@ -8,10 +8,10 @@ crates.io, PyPI, and npm all support it, and the shape is the same everywhere.
 
 1. The CI job requests an **OIDC identity token** from the platform (GitHub Actions / GitLab CI/CD).
    On GitHub this needs `permissions: id-token: write`.
-1. The job presents that token to the registry.
-1. The registry checks it against a **trusted publisher** you configured on the package settings —
+2. The job presents that token to the registry.
+3. The registry checks it against a **trusted publisher** you configured on the package settings —
    matching on repository owner, repository name, workflow filename, and an optional environment.
-1. On a match, the registry mints a **short-lived, scoped token** (minutes, not forever) and the
+4. On a match, the registry mints a **short-lived, scoped token** (minutes, not forever) and the
    publish proceeds. Nothing long-lived is ever stored in CI.
 
 The trusted-publisher match is keyed on **repo + workflow file (+ environment)** — it is

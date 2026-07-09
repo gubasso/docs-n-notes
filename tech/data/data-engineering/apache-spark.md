@@ -55,26 +55,26 @@ main use cases for Apache Spark:
    computing and optimized execution. Common big data tasks include ETL (extract, transform, load),
    data cleansing, aggregations, joins, etc.
 
-1. Machine Learning: Spark's MLlib library provides distributed implementations of many machine
+2. Machine Learning: Spark's MLlib library provides distributed implementations of many machine
    learning and statistical algorithms. It's used for building ML models on large datasets for
    applications like recommendation engines, fraud detection, predictive maintenance, etc. Spark
    enables data scientists to train models on huge datasets quickly.
 
-1. Real-time Stream Processing: With Spark Streaming, you can process real-time data streams from
+3. Real-time Stream Processing: With Spark Streaming, you can process real-time data streams from
    sources like Kafka, Flume, Kinesis, or TCP sockets. It's used for real-time analytics, live
    dashboards, anomaly detection, and ETL on streaming data. Spark can process millions of events
    per second with low latency.
 
-1. Interactive Analytics: Spark SQL allows querying structured data inside Spark programs using SQL
+4. Interactive Analytics: Spark SQL allows querying structured data inside Spark programs using SQL
    or DataFrames/Datasets API. It's used for ad-hoc queries, BI reporting, and powering
    SQL-on-Hadoop engines. Spark's in-memory caching enables interactive analysis on large datasets.
 
-1. Graph Processing: GraphX is Spark's API for graphs and graph-parallel computation. It's used for
+5. Graph Processing: GraphX is Spark's API for graphs and graph-parallel computation. It's used for
    building and transforming interactive graphs, running parallel algorithms (e.g. PageRank,
    connected components), and doing graph analytics or pattern matching on social networks, fraud
    rings, etc.
 
-1. Data Integration: Spark can combine data from disparate sources like Hadoop, Cassandra, HBase, S3
+6. Data Integration: Spark can combine data from disparate sources like Hadoop, Cassandra, HBase, S3
    and more. It's used for data integration workloads that transform data from multiple systems into
    a unified view for downstream applications.
 

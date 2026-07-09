@@ -1,7 +1,7 @@
 # Bash Release — CI Release Workflow
 
-Part of the [bash release-workflow spec](README.md). General principle: **release automation** — see
-the [general principles](../../../programming/release-workflow/README.md).
+Part of the [bash release-workflow spec](./README.md). General principle: **release automation** —
+see the [general principles](../../../programming/release-workflow/README.md).
 
 `.github/workflows/release.yml` — trigger on `v*` tag push:
 
@@ -89,7 +89,7 @@ The OBS trigger uses a per-package scoped token (see the OBS chapter) — endpoi
 surfaces OBS errors so the Action doesn't silently succeed when OBS rejects the request.
 
 **`master` is written only by CI.** The maintainer cuts the signed tag on `develop` (the release
-ritual, [06](06-release-ritual-and-alternatives.md)); the human-pushed tag triggers this workflow,
+ritual, [06](./06-release-ritual-and-alternatives.md)); the human-pushed tag triggers this workflow,
 and the `promote` job fast-forwards `master` onto that tag — ancestry-checked against `develop`,
 `--ff-only`, no force. A human never writes to `master`; it always mirrors the latest released tag.
 If `master` is a protected branch, keep `github-actions[bot]` in the ruleset bypass list (see

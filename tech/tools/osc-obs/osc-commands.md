@@ -6,8 +6,8 @@
 checkout, edit, build locally, commit, submit-request.
 
 This page is a compact cheat sheet of the verbs grouped by workflow. For end-to-end walkthroughs,
-see [setup-home-project-from-upstream.md](setup-home-project-from-upstream.md) and the case studies
-under [case-studies/](case-studies/).
+see [setup-home-project-from-upstream.md](./setup-home-project-from-upstream.md) and the case
+studies under [case-studies/](case-studies/).
 
 ## Authentication and setup
 
@@ -16,7 +16,7 @@ osc ls                    # sanity-check your login / list projects
 ```
 
 For credential setup in a devcontainer (no host keyring), see
-[auth-in-devcontainers.md](auth-in-devcontainers.md).
+[auth-in-devcontainers.md](./auth-in-devcontainers.md).
 
 ## Checkout and branch
 
@@ -40,7 +40,7 @@ osc co home:<your-user> <package>
 
 The four-arg `osc branch` form lets you rename the target package on the fly — useful when the
 source-package name differs from the binary you actually want to override. See
-[libexpat-source-naming.md](libexpat-source-naming.md) for a worked example.
+[libexpat-source-naming.md](./libexpat-source-naming.md) for a worked example.
 
 ## Working with sources
 
@@ -55,7 +55,7 @@ osc addpatch fix-foo.patch  # add a patch file
 
 `osc ar` is what you reach for after renaming, deleting, or adding files in the working copy — it
 reconciles the local file set with what OBS expects. See
-[broken-state-link-drift.md](broken-state-link-drift.md) for the failure mode this prevents.
+[broken-state-link-drift.md](./broken-state-link-drift.md) for the failure mode this prevents.
 
 ## Changelog
 
@@ -99,8 +99,8 @@ osc buildresults <project> <package>
 osc buildlog                     # view build log for the current lane
 ```
 
-For interpreting result states, see [blocked-state-is-transient.md](blocked-state-is-transient.md)
-and [broken-state-link-drift.md](broken-state-link-drift.md).
+For interpreting result states, see [blocked-state-is-transient.md](./blocked-state-is-transient.md)
+and [broken-state-link-drift.md](./broken-state-link-drift.md).
 
 ```bash
 # Submit request (like a PR — merge branch into target project)
@@ -145,9 +145,9 @@ merge it server-side.
 
 ## See also
 
-- [setup-home-project-from-upstream.md](setup-home-project-from-upstream.md) — end-to-end
+- [setup-home-project-from-upstream.md](./setup-home-project-from-upstream.md) — end-to-end
   home-project walkthrough.
-- [common-mistakes-and-pitfalls.md](common-mistakes-and-pitfalls.md) — the CLI foot-guns and
+- [common-mistakes-and-pitfalls.md](./common-mistakes-and-pitfalls.md) — the CLI foot-guns and
   workspace mistakes worth memorizing before you hit them.
 - [`~/DocsNNotes/tech/systems/linux/opensuse/opensuse-build-service-obs.md`](../../systems/linux/opensuse/opensuse-build-service-obs.md)
   — curated upstream-URL index (user guides, packaging guidelines, cheat sheets).

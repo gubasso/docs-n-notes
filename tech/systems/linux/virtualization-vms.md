@@ -258,7 +258,7 @@ qemu-img resize openSUSE-Tumbleweed-JeOS.x86_64-kvm-and-xen.qcow2 +10G
 1. **Create a Cloud-Init Config Drive (Optional):** If you need to configure the VM using
    cloud-init.
 
-1. **Define and Start the VM:**
+2. **Define and Start the VM:**
 
 ```bash
 virt-install \

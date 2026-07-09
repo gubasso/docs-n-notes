@@ -18,22 +18,22 @@ overlay that slots into it.
 
 1. **Scaffold the project.** `uv init <name>` (add `--package` / `--lib` for a distributable
    package). This lays down `pyproject.toml` (PEP 621) and a `.python-version`. →
-   [00 — Toolchain & layout](00-toolchain-and-layout.md).
+   [00 — Toolchain & layout](./00-toolchain-and-layout.md).
 
 2. **Adopt the src layout and pin Python.** Move the package under `src/`, and let
    `.python-version` + the Nix devShell pin one interpreter for local and CI. →
-   [00 — Toolchain & layout](00-toolchain-and-layout.md),
+   [00 — Toolchain & layout](./00-toolchain-and-layout.md),
    [nix/02-per-project-devshell](../../../tools/nix/02-per-project-devshell.md).
 
 3. **Configure quality gates.** `ruff` (format + lint), `mypy`/`pyright` (typecheck), `pytest`
    (tests), and `pip-audit` for the security baseline — all configured in `pyproject.toml`. →
-   [01 — Quality gates](01-quality-gates.md).
+   [01 — Quality gates](./01-quality-gates.md).
 
 4. **Wire pre-commit.** Add the ruff/mypy/pytest hooks so failures surface locally. →
-   [01 — Quality gates](01-quality-gates.md). _Automate:_ `bootstrap-precommit`.
+   [01 — Quality gates](./01-quality-gates.md). _Automate:_ `bootstrap-precommit`.
 
-5. **Pick the implementation kind.** For a CLI, follow [`cli-project.md`](cli-project.md); for a
-   distributable package, follow [`library-project.md`](library-project.md).
+5. **Pick the implementation kind.** For a CLI, follow [`cli-project.md`](./cli-project.md); for a
+   distributable package, follow [`library-project.md`](./library-project.md).
 
 6. **Continue the general spine.** Return to the
    [general runbook](../../../programming/project-bootstrap/runbook.md) for governance, CI, and
@@ -45,6 +45,7 @@ overlay that slots into it.
 
 ## Reference
 
-- [00 — Toolchain & layout](00-toolchain-and-layout.md) · [01 — Quality gates](01-quality-gates.md)
-  · [general runbook](../../../programming/project-bootstrap/runbook.md) ·
+- [00 — Toolchain & layout](./00-toolchain-and-layout.md) ·
+  [01 — Quality gates](./01-quality-gates.md) ·
+  [general runbook](../../../programming/project-bootstrap/runbook.md) ·
   [`../release-workflow-spec/`](../release-workflow-spec/README.md)

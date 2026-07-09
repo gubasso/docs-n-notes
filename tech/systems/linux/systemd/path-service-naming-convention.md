@@ -27,7 +27,7 @@ PathExists=/dev/snd/by-id/usb-Lenovo_ThinkPad_Thunderbolt_4_Dock_USB_Audio_…-0
 
 1. When you **enable** and **start** `fix-speaker-dock.path`, systemd registers an in‑kernel watch
    (via inotify) on that filesystem path.
-1. If that file **already exists**, or as soon as it **appears**, systemd considers the `.path` unit
+2. If that file **already exists**, or as soon as it **appears**, systemd considers the `.path` unit
    “activated.”
 
 ---

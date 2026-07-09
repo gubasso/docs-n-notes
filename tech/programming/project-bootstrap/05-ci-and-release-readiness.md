@@ -6,9 +6,9 @@ gated — and so the project is _ready_ for the release phase without yet config
 ## First CI workflow
 
 Add a CI workflow that, on every push and pull request, sets up the toolchain (reuse the Nix flake
-from chapter [03](03-local-dev-environment.md)), then runs the quality gates from chapter
-[04](04-quality-gates.md): build, test, format-check, lint. This is the minimum gate; the job names
-it emits are what branch protection will require, so name them deliberately.
+from chapter [03](./03-local-dev-environment.md)), then runs the quality gates from chapter
+[04](./04-quality-gates.md): build, test, format-check, lint. This is the minimum gate; the job
+names it emits are what branch protection will require, so name them deliberately.
 
 ## Branch protection
 
@@ -34,4 +34,4 @@ phase.
 
 `bootstrap-ci` scaffolds the CI workflow (GitHub Actions / GitLab CI), reusing the project flake.
 The CI + protection steps above are the SoT; see
-[07 — Automation with cog](07-automation-with-cog.md).
+[07 — Automation with cog](./07-automation-with-cog.md).

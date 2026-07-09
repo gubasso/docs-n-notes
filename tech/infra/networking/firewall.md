@@ -87,10 +87,10 @@ run `sudo ufw status` to check
   - then installs and enables firewalld
 - replace firewalld with ufw 0\. How to switch firewalls from FirewallD to UFW[^fw2]
   1. Install UFW packages
-  1. Enable UFW
-  1. Disable firewalld
-  1. Reboot
-  1. Remove the firewalld packages
+  2. Enable UFW
+  3. Disable firewalld
+  4. Reboot
+  5. Remove the firewalld packages
 
 [^on1]: [Python Flask Tutorial: Deploying Your Application (Option #1) - Deploy to a Linux Server - Corey Schafer](https://www.youtube.com/watch?v=goToXTC96Co)
 

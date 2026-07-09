@@ -22,20 +22,20 @@ an artifact to a registry that _is_ the release. **Bash has no such registry.** 
 **Tagging is publishing.** There is nothing to `cargo publish` / `npm publish`; the tag fans out to
 every channel instead.
 
-> **New project?** Follow the [**runbook**](runbook.md) — the ordered, once-per-project setup steps
-> (repo settings, enabling Actions, branch protection, first tag, distribution channels).
+> **New project?** Follow the [**runbook**](./runbook.md) — the ordered, once-per-project setup
+> steps (repo settings, enabling Actions, branch protection, first tag, distribution channels).
 
 ## Index
 
-| # | Chapter                                                                      | One-line hook                                                                | General principle                 |
-| - | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | --------------------------------- |
-| 0 | [Versioning & source of truth](00-versioning-and-source-of-truth.md)         | `VERSION` file as SoT, signed `v*` tag, SemVer, `git describe` dev fallback. | versioning & source of truth      |
-| 1 | [Conventional commits & changelog](01-conventional-commits-and-changelog.md) | Conventional Commits + `git-cliff` `CHANGELOG.md`; why not release-please.   | changelog                         |
-| 2 | [Makefile & GNU standards](02-makefile-gnu-standards.md)                     | `PREFIX`/`DESTDIR` install contract + reproducible `dist` tarball.           | build & install contract          |
-| 3 | [CI release workflow](03-ci-release-workflow.md)                             | Tag-triggered Actions: `make dist` → notes → provenance → release → OBS.     | release automation                |
-| 4 | [install.sh & AUR](04-install-sh-and-aur.md)                                 | `curl \| bash` installer (checksum-verified) + stable/`-git` AUR packages.   | distribution channels             |
-| 5 | [OBS multi-distro](05-obs-multi-distro.md)                                   | openSUSE/Fedora/Debian/Ubuntu signed repos from one `.spec` + `debian.*`.    | distribution channels             |
-| 6 | [Release ritual & alternatives](06-release-ritual-and-alternatives.md)       | The tag-and-push ritual, files checklist, when to pick other tooling.        | release process & tooling choices |
+| # | Chapter                                                                        | One-line hook                                                                | General principle                 |
+| - | ------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- | --------------------------------- |
+| 0 | [Versioning & source of truth](./00-versioning-and-source-of-truth.md)         | `VERSION` file as SoT, signed `v*` tag, SemVer, `git describe` dev fallback. | versioning & source of truth      |
+| 1 | [Conventional commits & changelog](./01-conventional-commits-and-changelog.md) | Conventional Commits + `git-cliff` `CHANGELOG.md`; why not release-please.   | changelog                         |
+| 2 | [Makefile & GNU standards](./02-makefile-gnu-standards.md)                     | `PREFIX`/`DESTDIR` install contract + reproducible `dist` tarball.           | build & install contract          |
+| 3 | [CI release workflow](./03-ci-release-workflow.md)                             | Tag-triggered Actions: `make dist` → notes → provenance → release → OBS.     | release automation                |
+| 4 | [install.sh & AUR](./04-install-sh-and-aur.md)                                 | `curl \| bash` installer (checksum-verified) + stable/`-git` AUR packages.   | distribution channels             |
+| 5 | [OBS multi-distro](./05-obs-multi-distro.md)                                   | openSUSE/Fedora/Debian/Ubuntu signed repos from one `.spec` + `debian.*`.    | distribution channels             |
+| 6 | [Release ritual & alternatives](./06-release-ritual-and-alternatives.md)       | The tag-and-push ritual, files checklist, when to pick other tooling.        | release process & tooling choices |
 
 ## TL;DR
 

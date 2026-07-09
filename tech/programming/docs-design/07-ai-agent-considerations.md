@@ -77,7 +77,7 @@ The pattern is:
 - Local `AGENTS.md` digests: concise maps derived from source notes.
 
 Do not let an agent digest become the source of truth. Digests summarize. Chapters and project docs
-own the rules. See [04 — Single Source of Truth](04-single-source-of-truth.md).
+own the rules. See [04 — Single Source of Truth](./04-single-source-of-truth.md).
 
 When an agent asks where to edit, the entry point should answer with ownership, not prose volume.
 The best answer is usually a path and a rule: "edit the ADR for why," "edit the reference page for
@@ -98,12 +98,12 @@ author-instructions file. That section should say:
 - Keep drafts outside shipped docs.
 - Write facts once at the owning home and cross-link elsewhere.
 - Do not paste filesystem trees into markdown; see
-  [04 — Single Source of Truth](04-single-source-of-truth.md).
+  [04 — Single Source of Truth](./04-single-source-of-truth.md).
 - Preserve placeholders in project-agnostic material.
 
 These rules prevent well-meaning agents from creating sprawling summaries, duplicating facts, or
 promoting drafts without review. The rules also give reviewers a compact checklist to enforce. See
-[99 — Checklist](99-checklist.md) and [02 — Lean ADRs](02-lean-adrs.md).
+[99 — Checklist](./99-checklist.md) and [02 — Lean ADRs](./02-lean-adrs.md).
 
 The maintenance section should be project-specific, not a pasted copy of this shelf. Link to this
 pattern or summarize its local adoption. Then state any local exceptions, such as a different

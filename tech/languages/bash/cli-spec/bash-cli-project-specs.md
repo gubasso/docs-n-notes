@@ -26,12 +26,14 @@ my-cli/
 │   ├── loader.sh                 # source-on-dispatch
 │   ├── core.sh                   # main(), global flags, dispatch
 │   ├── helpers.sh                # __log_err, __require, etc. (eager)
-│   ├── commands/
-│   │   ├── cmd_foo.sh            # defines mycli::cmd::foo
-│   │   └── cmd_bar.sh
-│   └── functions/
-│       ├── fn_parse_args.sh      # defines mycli::fn::parse_args
-│       └── fn_render_table.sh
+│   └── render.sh                 # shared libraries only
+├── libexec/
+│   └── commands/
+│       ├── cmd_foo.sh            # defines mycli::cmd::foo
+│       └── cmd_bar.sh
+├── functions/
+│   ├── fn_parse_args.sh          # defines mycli::fn::parse_args
+│   └── fn_render_table.sh
 ├── completions/
 │   └── my-cli.bash
 ├── man/
@@ -50,8 +52,10 @@ my-cli/
 └── uninstall.sh
 ```
 
-One public function per file; filename encodes the function name; `lib/` holds shared machinery.
-Same shape as a well-organised interactive-shell package, applied to a standalone CLI.
+One public function per file; filename encodes the function name. `lib/` holds shared libraries,
+`libexec/commands/` holds CLI subcommands, and top-level `functions/` holds sourced user-facing
+functions when the project also exposes a shell framework. Same shape as a well-organised
+interactive-shell package, applied to a standalone CLI.
 
 ---
 
@@ -123,12 +127,13 @@ and keeps startup O(1) via lazy sourcing.
 
 ### Naming
 
-| Path                      | Defines                     | Visibility |
-| ------------------------- | --------------------------- | ---------- |
-| `lib/commands/cmd_<n>.sh` | `mycli::cmd::<n>`           | public     |
-| `lib/functions/fn_<n>.sh` | `mycli::fn::<n>`            | public     |
-| `lib/helpers.sh`          | `__log_err`, `__require`, … | shared     |
-| (any file) `__<n>`        | private helper, same file   | private    |
+| Path                          | Defines                     | Visibility |
+| ----------------------------- | --------------------------- | ---------- |
+| `libexec/commands/cmd_<n>.sh` | `mycli::cmd::<n>`           | public     |
+| `functions/fn_<n>.sh`         | `mycli::fn::<n>`            | public     |
+| `lib/helpers.sh`              | `__log_err`, `__require`, … | shared     |
+| `lib/<name>.sh`               | shared helpers/libraries    | shared     |
+| (any file) `__<n>`            | private helper, same file   | private    |
 
 - **One public function per file.** Filename mirrors the function name so the dispatcher can derive
   it without a lookup table.
@@ -161,7 +166,7 @@ help generator on demand.
 # shellcheck shell=bash
 mycli::loader::dispatch() {
   local sub="$1"; shift
-  local path="${LIB_DIR}/commands/cmd_${sub}.sh"
+  local path="${LIB_DIR}/../libexec/commands/cmd_${sub}.sh"
   if [[ ! -r "$path" ]]; then
     mycli::helpers::die 2 "unknown command: ${sub}"
   fi
@@ -176,9 +181,12 @@ shape as a Bash autoloader: source on first use, cache nothing.
 
 ### Host / env overlays
 
-`${XDG_CONFIG_HOME:-$HOME/.config}/my-cli/conf.d/*.sh` sourced last so users override defaults
-without forking. Same idea as per-host overlays in interactive Bash startup files: drop-in files in
-a known directory, sourced in lexical order after the built-in defaults.
+Use XDG paths by role. True configuration belongs under `${XDG_CONFIG_HOME:-$HOME/.config}/my-cli/`;
+user-authored code or command sources belong under `${XDG_DATA_HOME:-$HOME/.local/share}/my-cli/`.
+Expose any user command on `PATH` with an explicit symlink in `~/.local/bin` instead of implicitly
+prepending a whole commands directory. Same idea as per-host overlays in interactive Bash startup
+files: drop-in config files are sourced in lexical order after built-in defaults, while executable
+exposure remains intentional.
 
 ---
 
@@ -413,16 +421,16 @@ jobs:
 ## Non-Negotiables
 
 1. `set -euo pipefail` + `shopt -s inherit_errexit` (with documented caveats).
-1. shellcheck clean; `source=`/`source-path=` directives wired up.
-1. shfmt clean (`-i 2 -ci -bn -s`), config checked in.
-1. Namespaced functions (`mycli::<ns>::<fn>`), one public function per file.
-1. XDG-aware, `PREFIX`-overridable installer; uninstall via manifest.
-1. bats-core tests under `test/` with `test_helper/` submodules; `common-setup.bash` clears git's
+2. shellcheck clean; `source=`/`source-path=` directives wired up.
+3. shfmt clean (`-i 2 -ci -bn -s`), config checked in.
+4. Namespaced functions (`mycli::<ns>::<fn>`), one public function per file.
+5. XDG-aware, `PREFIX`-overridable installer; uninstall via manifest.
+6. bats-core tests under `test/` with `test_helper/` submodules; `common-setup.bash` clears git's
    repo-local env (`unset $(git rev-parse --local-env-vars)`) so hook-run suites stay hermetic.
-1. `trap ... EXIT INT TERM` cleanup for any script that creates temp state.
-1. `printf` over `echo`; program logs default to XDG state file; stdout is data/machine-output;
+7. `trap ... EXIT INT TERM` cleanup for any script that creates temp state.
+8. `printf` over `echo`; program logs default to XDG state file; stdout is data/machine-output;
    stderr carries terminal UX and only mirrors logs by explicit option.
-1. Agent-facing surface per
+9. Agent-facing surface per
    [Designing for LLM Coding Agents](../../../programming/cli-design/05-designing-for-llm-agents.md)
    (`help`/usage, `--json`, error shape, `doctor`, `init`, completion, man-via-subcommand, dry-run,
    exit codes).

@@ -48,7 +48,7 @@ kill -39 "$(pidof dwmblocks)" # signal 5 + 34 = 39
 pkill -RTMIN+5 dwmblocks
 ```
 
-For an optional external bar setup, see [polybar integration](polybar-dwm-integration.md).
+For an optional external bar setup, see [polybar integration](./polybar-dwm-integration.md).
 
 ## Applying patches
 

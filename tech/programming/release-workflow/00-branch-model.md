@@ -32,11 +32,11 @@ CI does automatically — in exchange for a release branch that cannot drift.
 On release, CI:
 
 1. Determines the release **tag** the release tool just created (e.g. `v1.4.0`).
-1. **Verifies the tagged commit is an ancestor of `develop`** — a tag on a commit not reachable from
+2. **Verifies the tagged commit is an ancestor of `develop`** — a tag on a commit not reachable from
    `develop` must be rejected, never promoted.
-1. **Fast-forwards `master` to that tag** (`git merge --ff-only`). If `master` does not exist yet
+3. **Fast-forwards `master` to that tag** (`git merge --ff-only`). If `master` does not exist yet
    (first release), it is created at the tag.
-1. Pushes `master`.
+4. Pushes `master`.
 
 Fast-forward-only promotion is what keeps `master` linear and honest: it can only ever advance to a
 commit already integrated on `develop`.
@@ -52,7 +52,7 @@ history).
 > **CI retrigger caveat.** On GitHub, a push made with the default `GITHUB_TOKEN` does **not**
 > trigger further workflows. If `master` needs its own CI to run on promotion, either run the
 > promotion as a job in the same release run, or mint a GitHub App token so its push retriggers
-> downstream workflows. See [03 — Tooling by ecosystem](03-tooling-by-ecosystem.md) and the rust
+> downstream workflows. See [03 — Tooling by ecosystem](./03-tooling-by-ecosystem.md) and the rust
 > binding for a worked example.
 
 ## Feeding `develop`

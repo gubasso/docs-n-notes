@@ -87,8 +87,7 @@ Any React component (`.jsx`/`.tsx`/`.js`/`.ts` importing `react`).
 
 ## See also
 
-- [typescript.md](typescript.md) — type-system layer.
-- General: [../performance-review.md](../performance-review.md),
-  [../security-review.md](../security-review.md).
+- [typescript.md](./typescript.md) — type-system layer.
+- General: performance-review, security-review.
 - Upstream: <https://github.com/awesome-skills/code-review-skill/blob/main/reference/react.md>
   (extensive; load when reviewing a large React PR).

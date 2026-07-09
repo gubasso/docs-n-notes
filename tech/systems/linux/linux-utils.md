@@ -238,8 +238,7 @@ ls *old | xargs -I {} mv {} {}.old
 
 # sxhkd
 
-Script to kill and refresh keybindings (shortcuts). Can be used in vim, after save
-file.[^5](gubasso/references)
+Script to kill and refresh keybindings (shortcuts). Can be used in vim, after save file.[^5]
 
 ```
 killall sxhkd; setsid sxhkd &
@@ -380,7 +379,7 @@ paste -s -d+ lines_to_sum | \bc
 ## bulk rename
 
 - Bulk rename files
-  - [Bulk rename files with vim](./it/vim-neovim.md#bulk-rename-files-with-vim)
+  - [Bulk rename files with vim](../../tools/vim-neovim/vim-neovim.md#bulk-rename-files-with-vim)
 
 ---
 

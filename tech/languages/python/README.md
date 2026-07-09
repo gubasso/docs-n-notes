@@ -12,14 +12,14 @@ Notes and specs for Python development.
 
 ## Notes
 
-- [python.md](python.md) — general Python notes and snippets.
-- [python-poetry.md](python-poetry.md) — Poetry usage.
-- [django-code-review-guide.md](django-code-review-guide.md) — Django review guide.
-- [python-flask.md](python-flask.md) — Flask notes.
-- [python-eve.md](python-eve.md) — Eve framework notes.
-- [python-mongo.md](python-mongo.md) — MongoDB with Python.
-- [pydantic-mixins-with-enums.md](pydantic-mixins-with-enums.md) — Pydantic mixins with enums.
-- [pydantic-validators.md](pydantic-validators.md) — Pydantic validators.
-- [pytest-conftest-fixture.md](pytest-conftest-fixture.md) — pytest conftest fixtures.
-- [install-local-python-module-with-cli-access-in-a-virtual-environment.md](install-local-python-module-with-cli-access-in-a-virtual-environment.md)
+- [python.md](./python.md) — general Python notes and snippets.
+- [python-poetry.md](./python-poetry.md) — Poetry usage.
+- [django-code-review-guide.md](./django-code-review-guide.md) — Django review guide.
+- [python-flask.md](./python-flask.md) — Flask notes.
+- [python-eve.md](./python-eve.md) — Eve framework notes.
+- [python-mongo.md](./python-mongo.md) — MongoDB with Python.
+- [pydantic-mixins-with-enums.md](./pydantic-mixins-with-enums.md) — Pydantic mixins with enums.
+- [pydantic-validators.md](./pydantic-validators.md) — Pydantic validators.
+- [pytest-conftest-fixture.md](./pytest-conftest-fixture.md) — pytest conftest fixtures.
+- [install-local-python-module-with-cli-access-in-a-virtual-environment.md](./install-local-python-module-with-cli-access-in-a-virtual-environment.md)
   — installing a local module with CLI access in a virtualenv.

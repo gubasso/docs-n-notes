@@ -19,27 +19,27 @@ overlay that slots into it.
 ## Steps
 
 1. **Scaffold the flake.** `nix flake init` (or `nix flake init -t <template>`) to drop a
-   `flake.nix`. → [00 — Toolchain & layout](00-toolchain-and-layout.md). _Automate:_ `bootstrap-nix`
-   lays down a starting flake.
+   `flake.nix`. → [00 — Toolchain & layout](./00-toolchain-and-layout.md). _Automate:_
+   `bootstrap-nix` lays down a starting flake.
 
 2. **Choose the outputs harness.** `flake-utils` (`eachDefaultSystem`) for a small flake, or
-   `flake-parts` for a larger, modular one. → [00 — Toolchain & layout](00-toolchain-and-layout.md),
-   [`02-flakes.md`](../02-flakes.md).
+   `flake-parts` for a larger, modular one. →
+   [00 — Toolchain & layout](./00-toolchain-and-layout.md), [`02-flakes.md`](../02-flakes.md).
 
 3. **Pin `nixpkgs` and commit `flake.lock`.** Pin `inputs.nixpkgs` to a branch, run
    `nix flake lock`, and commit the lockfile so builds are reproducible. →
-   [00 — Toolchain & layout](00-toolchain-and-layout.md).
+   [00 — Toolchain & layout](./00-toolchain-and-layout.md).
 
 4. **Lay out packages / modules / overlays.** Split `flake.nix` from `nix/` (or `packages/`,
    `modules/`, `overlays/`) so outputs stay readable. →
-   [00 — Toolchain & layout](00-toolchain-and-layout.md).
+   [00 — Toolchain & layout](./00-toolchain-and-layout.md).
 
 5. **Configure quality gates.** Pick a formatter (`nixpkgs-fmt` or `alejandra`), add `statix` +
    `deadnix`, expose `checks` so `nix flake check` gates them, and wire git hooks via
-   `git-hooks.nix`. → [01 — Quality gates](01-quality-gates.md).
+   `git-hooks.nix`. → [01 — Quality gates](./01-quality-gates.md).
 
 6. **Pick the implementation kind.** For the standard packages+devShells flake, follow
-   [`flake-project.md`](flake-project.md); overlay-only and module-only kinds are followups.
+   [`flake-project.md`](./flake-project.md); overlay-only and module-only kinds are followups.
 
 7. **Continue the general spine.** Return to the
    [general runbook](../../../programming/project-bootstrap/runbook.md) for governance, CI, and
@@ -47,6 +47,7 @@ overlay that slots into it.
 
 ## Reference
 
-- [00 — Toolchain & layout](00-toolchain-and-layout.md) · [01 — Quality gates](01-quality-gates.md)
-  · [general runbook](../../../programming/project-bootstrap/runbook.md) ·
+- [00 — Toolchain & layout](./00-toolchain-and-layout.md) ·
+  [01 — Quality gates](./01-quality-gates.md) ·
+  [general runbook](../../../programming/project-bootstrap/runbook.md) ·
   [Nix language shelf](../README.md) · [`tech/tools/nix`](../../../tools/nix/README.md)

@@ -169,4 +169,4 @@ pgrep sxhkd
 
 ## Next Steps
 
-- [setup-arch-linux](setup-arch-linux.md) - Complete bspwm stack reference
+- [setup-arch-linux](./setup-arch-linux.md) - Complete bspwm stack reference

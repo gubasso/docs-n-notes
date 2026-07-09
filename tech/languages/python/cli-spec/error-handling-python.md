@@ -262,7 +262,7 @@ def run_with_error_boundary(call) -> None:
 
 For machine-facing CLIs, structured JSON to `stderr` is the default. Human prose belongs only behind
 an explicit human-UX mode. `stdout` remains reserved for successful command output. Program logs
-still go through the file-first logging setup in [Python — Logging](logging-python.md).
+still go through the file-first logging setup in [Python — Logging](./logging-python.md).
 
 ## try/except rules
 

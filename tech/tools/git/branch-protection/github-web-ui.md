@@ -1,6 +1,6 @@
 # Branch Protection — GitHub Web UI
 
-Spec, strategy, prerequisites, caveats: [workflow](workflow.md).
+Spec, strategy, prerequisites, caveats: [workflow](./workflow.md).
 
 UI labels verified against docs.github.com on 2026-04-22.
 
@@ -83,4 +83,4 @@ UI labels verified against docs.github.com on 2026-04-22.
 
 - **Settings → Code and automation → Rules → Rulesets** — each ruleset shows `Active` with expected
   target count.
-- Run the [cross-platform checklist](workflow.md#verification-checklist).
+- Run the [cross-platform checklist](./workflow.md#verification-checklist).

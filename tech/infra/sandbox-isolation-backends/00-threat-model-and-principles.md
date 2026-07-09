@@ -1,8 +1,8 @@
 # Threat model and first principles for sandboxing untrusted code
 
 > The premises and threat model that motivate everything else in this shelf. Read this first; the
-> runtime catalog ([10-runtimes-catalog.md](10-runtimes-catalog.md)) and the libkrun decision
-> ([20-decision-libkrun-linux.md](20-decision-libkrun-linux.md)) are downstream of the reasoning
+> runtime catalog ([10-runtimes-catalog.md](./10-runtimes-catalog.md)) and the libkrun decision
+> ([20-decision-libkrun-linux.md](./20-decision-libkrun-linux.md)) are downstream of the reasoning
 > here.
 
 ## 0. Purpose — the workload being isolated
@@ -63,7 +63,7 @@ here; any deviation must be called out explicitly.
 - Workflows stay simple, declarative, composable, and shareable across machines and teams.
 - It is acceptable to **implement parts of the build/run plumbing yourself** if that buys a stronger
   boundary — provided the scope is bounded and the user-facing surface stays declarative. See the
-  bare-Firecracker cost estimate in [10-runtimes-catalog.md](10-runtimes-catalog.md) (~3–5 weeks
+  bare-Firecracker cost estimate in [10-runtimes-catalog.md](./10-runtimes-catalog.md) (~3–5 weeks
   one-time plus ongoing rootfs/kernel maintenance).
 
 ### 1.4 Anti-premises (what is explicitly rejected)
@@ -83,7 +83,7 @@ here; any deviation must be called out explicitly.
 - **CI-only / cluster-only runtimes** (firecracker-containerd, flintlock, AWS Nomad FC driver) as
   the laptop default. Useful as components; wrong shape for a per-developer CLI.
 - **Larger-TCB hypervisors when a smaller-TCB one is available.** Full-fat QEMU is rejected as the
-  laptop default for this reason; see [10-runtimes-catalog.md](10-runtimes-catalog.md).
+  laptop default for this reason; see [10-runtimes-catalog.md](./10-runtimes-catalog.md).
 
 ### 1.5 Why bare containers are insufficient
 
@@ -108,7 +108,7 @@ Rootless mode reduces _blast radius_ (an escape lands as the invoking user inste
 does not change the _probability_: every kernel LPE still lands on the host, and the November 2025
 runc CVEs explicitly affect rootless Podman. Rootless Podman remains valuable as a **controller
 around** a microVM (see libkrun + `crun --krun` in
-[10-runtimes-catalog.md](10-runtimes-catalog.md)); it is not the boundary.
+[10-runtimes-catalog.md](./10-runtimes-catalog.md)); it is not the boundary.
 
 ## 2. Defense-in-depth posture inside the boundary
 
@@ -130,7 +130,7 @@ even reaches the (much harder) hypervisor boundary. A sound posture:
 - **`/tmp` is a tmpfs**, never a host bind.
 - **Egress allowlisted by default** — only model APIs, package mirrors, and the workspace's git
   remotes are reachable. Under libkrun's TSI networking this policy lives _inside_ the guest as an
-  nftables ruleset; see [20-decision-libkrun-linux.md](20-decision-libkrun-linux.md).
+  nftables ruleset; see [20-decision-libkrun-linux.md](./20-decision-libkrun-linux.md).
 - **Per-workspace identity.** Each container carries a workspace-folder label so that work-clones of
   the same repository produce distinct containers.
 
@@ -192,7 +192,7 @@ persistence and mount policy.
 ## 4. Boundary classes and residual surface
 
 The viable boundaries fall into three classes, examined per-option in
-[10-runtimes-catalog.md](10-runtimes-catalog.md):
+[10-runtimes-catalog.md](./10-runtimes-catalog.md):
 
 - **Shared-kernel** (plain containers, hardened containers, bubblewrap/Landlock/seccomp) — rejected
   as primary; defense-in-depth only.
@@ -231,8 +231,8 @@ is **wrong on the boundary class** — the guest runs its own kernel (`init.krun
 `libkrunfw` bundles it), runc-class breakouts do not reach the host, and kernel LPEs inside the
 guest stay inside the guest. But the underlying intuition (libkrun's host-side device-backend
 surface is non-zero and **wider** than bare Firecracker's) is correct; it is accepted as a
-documented trade-off in [20-decision-libkrun-linux.md](20-decision-libkrun-linux.md) and
-[30-libkrun-vs-firecracker.md](30-libkrun-vs-firecracker.md). The bare-Firecracker escape hatch
+documented trade-off in [20-decision-libkrun-linux.md](./20-decision-libkrun-linux.md) and
+[30-libkrun-vs-firecracker.md](./30-libkrun-vs-firecracker.md). The bare-Firecracker escape hatch
 remains documented for cases where minimizing this surface is worth the plumbing cost.
 
 ### 4.2 Selection criteria
@@ -249,9 +249,9 @@ When choosing a hardware-virt backend, decide on, in priority order:
    backends.
 
 The concrete outcome of applying these criteria to a shippable Linux backend is recorded in
-[20-decision-libkrun-linux.md](20-decision-libkrun-linux.md).
+[20-decision-libkrun-linux.md](./20-decision-libkrun-linux.md).
 
 ## References
 
-See [90-references.md](90-references.md) for the consolidated bibliography covering runc CVEs, the
+See [90-references.md](./90-references.md) for the consolidated bibliography covering runc CVEs, the
 microVM VMMs, and the microarchitectural-security literature cited above.

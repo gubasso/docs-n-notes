@@ -2,7 +2,7 @@
 
 > Status: Decided. Scope: selection and implementation contract for the primary sandbox/isolation
 > runtime backend on Linux. The broader multi-slot catalog view (macOS, escape hatches, contingency
-> adapters) lives in [10-runtimes-catalog.md](10-runtimes-catalog.md); this document narrows that
+> adapters) lives in [10-runtimes-catalog.md](./10-runtimes-catalog.md); this document narrows that
 > catalog to the single shippable Linux backend and states why.
 
 The primary default backend on Linux is **libkrun via `crun --krun`, fronted by rootless Podman.**
@@ -12,7 +12,7 @@ The no-KVM fallback, used only on CI runners without hardware virtualization, is
 This ships **one** working Linux backend plus **one** CI-only fallback. Every other candidate — bare
 Firecracker, Kata-Firecracker, Kata-Cloud-Hypervisor, Apple `container` on macOS, libkrun-on-HVF —
 remains a catalog item that can be added later behind the same adapter interface without changing
-the user-facing surface. See [10-runtimes-catalog.md](10-runtimes-catalog.md).
+the user-facing surface. See [10-runtimes-catalog.md](./10-runtimes-catalog.md).
 
 | Slot                              | Pick                        | One-line rationale                                                                                                                                 |
 | --------------------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -23,8 +23,8 @@ the user-facing surface. See [10-runtimes-catalog.md](10-runtimes-catalog.md).
 
 A hardware-virtualization boundary (KVM-class, no shared host kernel) is a **precondition**, not a
 criterion — only options that already clear it are ranked here. See
-[00-threat-model-and-principles.md](00-threat-model-and-principles.md). Given that, the criteria, in
-priority order:
+[00-threat-model-and-principles.md](./00-threat-model-and-principles.md). Given that, the criteria,
+in priority order:
 
 1. **Security is the primary goal.** The sandbox exists to run LLM agents that may execute
    attacker-controlled or model-generated instructions. A **KVM-class hardware-virtualization
@@ -51,7 +51,7 @@ Two things are explicitly **not** criteria:
   never a requirement. The product goal is sandboxing LLM agents; do not couple the runtime to a
   heavyweight upstream orchestrator. If `devcontainer.json` compatibility keeps working as a
   downstream consequence, that is welcome but does not drive the runtime choice. See
-  [50-native-orchestration-decision.md](50-native-orchestration-decision.md).
+  [50-native-orchestration-decision.md](./50-native-orchestration-decision.md).
 - **A multi-backend catalog at runtime.** This implementation ships one backend value plus the
   documented CI fallback; alternatives remain catalog-only.
 
@@ -90,7 +90,7 @@ plumbing on the host side.**
   trust path than a minimal bare-VMM stack, but the boundary class is identical (KVM). Boundary
   class is the security-relevant variable; trust-path size is a secondary consideration weighed
   against engineering cost. The detailed device-surface analysis is in the next section and in
-  [30-libkrun-vs-firecracker.md](30-libkrun-vs-firecracker.md).
+  [30-libkrun-vs-firecracker.md](./30-libkrun-vs-firecracker.md).
 
 ### Criterion 2 — production-proven and well-maintained
 
@@ -101,7 +101,7 @@ plumbing on the host side.**
 - **v1.18.0** shipped **2026-04-24**; active commit cadence; cross-platform (Linux KVM and macOS HVF
   backends).
 - Concrete production users (see
-  [40-reference-implementations.md](40-reference-implementations.md)):
+  [40-reference-implementations.md](./40-reference-implementations.md)):
   - **RamaLama** — Red Hat's primary AI-isolation story for local model execution. See
     [Red Hat Developer — "Supercharging AI isolation: microVMs with RamaLama and libkrun" (Jul 2025)](https://developers.redhat.com/articles/2025/07/02/supercharging-ai-isolation-microvms-ramalama-libkrun).
   - **Microsandbox** — an open-source sandboxing platform built on libkrun.
@@ -181,7 +181,7 @@ This delta is the technical content behind the maintainer's framing in
 same security context." It is a **different** host-side surface from a TAP+netfilter microVM, not a
 strictly smaller one. None of these surfaces converts the boundary back to shared-kernel, but they
 are exactly the right thing to evaluate when comparing libkrun against a minimal bare-VMM stack. The
-full side-by-side is in [30-libkrun-vs-firecracker.md](30-libkrun-vs-firecracker.md).
+full side-by-side is in [30-libkrun-vs-firecracker.md](./30-libkrun-vs-firecracker.md).
 
 The first two surfaces are unavoidable under this design; the third is off by default. All three are
 accepted as the cost of the smaller adapter footprint.
@@ -271,7 +271,7 @@ Two options were considered:
 
 Operational detail — pasta networking defaults, the unpinned rootless network backend on the `krun`
 path, and the egress bootstrap — is in
-[60-podman-libkrun-operational-notes.md](60-podman-libkrun-operational-notes.md).
+[60-podman-libkrun-operational-notes.md](./60-podman-libkrun-operational-notes.md).
 
 ## CI vs. adversarial threat distinction
 
@@ -336,7 +336,7 @@ Each risk is logged so it can be re-evaluated if conditions change.
 
 ## References
 
-Full annotated bibliography: [90-references.md](90-references.md).
+Full annotated bibliography: [90-references.md](./90-references.md).
 
 ### libkrun / `crun --krun` / Podman
 

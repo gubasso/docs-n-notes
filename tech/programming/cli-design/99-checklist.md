@@ -18,7 +18,7 @@ waive it in an ADR — don't ship with silent gaps.
 - [ ] If a `lib.rs` (or public package surface) exists, it has a real second consumer. Otherwise,
       delete it.
 
-→ Detail: [00 — Architecture](00-architecture.md)
+→ Detail: [00 — Architecture](./00-architecture.md)
 
 ## Logging & output
 
@@ -41,7 +41,7 @@ waive it in an ADR — don't ship with silent gaps.
 - [ ] Log schema has stable field names (`ts`, `level`, `target`, `op`, `status`, `dur_ms`,
       `err.kind`).
 
-→ Detail: [01 — Logging & Output](01-logging-and-output.md)
+→ Detail: [01 — Logging & Output](./01-logging-and-output.md)
 
 ## Error messages
 
@@ -55,7 +55,7 @@ waive it in an ADR — don't ship with silent gaps.
 - [ ] No `panic`/`unwrap`/`expect`/bare exceptions outside `main`, tests, build scripts, and
       once-init blocks.
 
-→ Detail: [02 — Error Messages](02-error-messages.md)
+→ Detail: [02 — Error Messages](./02-error-messages.md)
 
 ## Configuration
 
@@ -70,7 +70,7 @@ waive it in an ADR — don't ship with silent gaps.
       one.
 - [ ] `--print-config` (or `config show`) subcommand exists and shows resolved values + sources.
 
-→ Detail: [03 — Config Precedence](03-config-precedence.md)
+→ Detail: [03 — Config Precedence](./03-config-precedence.md)
 
 ## Coding style
 
@@ -84,7 +84,7 @@ waive it in an ADR — don't ship with silent gaps.
 - [ ] Module headers state purpose and non-purpose ("what it is, what it isn't").
 - [ ] Strict lints enabled at the project level; per-line `allow` only with a justifying comment.
 
-→ Detail: [04 — Coding Style](04-coding-style-rust-zig.md)
+→ Detail: [04 — Coding Style](./04-coding-style-rust-zig.md)
 
 ## Designing for LLM coding agents
 
@@ -103,7 +103,7 @@ waive it in an ADR — don't ship with silent gaps.
 - [ ] Error messages include a stable `err.kind` an agent can pattern-match on.
 - [ ] The log-message format is documented in the README so an agent can reason about it.
 
-→ Detail: [05 — Designing for LLM Agents](05-designing-for-llm-agents.md)
+→ Detail: [05 — Designing for LLM Agents](./05-designing-for-llm-agents.md)
 
 ## Preflight & health checks
 
@@ -116,20 +116,20 @@ waive it in an ADR — don't ship with silent gaps.
 - [ ] Guards, `doctor`, and `init` share one probe set; refusals carry a stable exit code +
       remediation.
 
-→ Detail: [06 — Preflight & Health Checks](06-preflight-and-health-checks.md)
+→ Detail: [06 — Preflight & Health Checks](./06-preflight-and-health-checks.md)
 
 ## Naming & docs
 
 - [ ] Visibility defaults to the least public modifier that works. No blanket `pub mod` across the
       codebase.
-- [ ] Verb/noun naming follows the table in [08](08-naming-and-docs.md): `<Verb>Args`,
+- [ ] Verb/noun naming follows the table in [08](./08-naming-and-docs.md): `<Verb>Args`,
       `<Verb>Request`, `<Layer>Error`.
 - [ ] Every public and crate-public item has a doc comment.
 - [ ] Doc comments on CLI flag fields are written for the user; they become `--help` text.
 - [ ] Crate root has a module map linking to the architecture spec.
 - [ ] No `Manager` / `Helper` / `Utils` / `Handler` / `Wrapper` suffix soup.
 
-→ Detail: [08 — Naming & Documentation](08-naming-and-docs.md)
+→ Detail: [08 — Naming & Documentation](./08-naming-and-docs.md)
 
 ## Testing
 
@@ -205,6 +205,6 @@ If the CLI wraps another binary (orchestrates a subprocess), additionally:
 
 ## See also
 
-- [README](README.md) — index of every chapter.
+- [README](./README.md) — index of every chapter.
 - Language-specific specs: [rust](../../languages/rust/cli-spec/) ·
   [python](../../languages/python/cli-spec/) · [bash](../../languages/bash/cli-spec/).

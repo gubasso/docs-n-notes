@@ -65,10 +65,10 @@ Field rules:
 Use this structure and heading order:
 
 1. `# AGENTS`
-1. `## Scope`
-1. `## Key Points`
-1. `## Source Map`
-1. `## Maintenance Notes`
+2. `## Scope`
+3. `## Key Points`
+4. `## Source Map`
+5. `## Maintenance Notes`
 
 Body rules:
 
@@ -115,9 +115,9 @@ Body rules:
 When an LLM skill/process consumes repository context, use this order:
 
 1. Read nearest `AGENTS.md` first (if present) for scoped digest context.
-1. Read the directory `README.md` for index and navigation.
-1. Read referenced source files from `source-files` and `Source Map`.
-1. If details are missing or ambiguous, read primary notes directly and treat them as authoritative
+2. Read the directory `README.md` for index and navigation.
+3. Read referenced source files from `source-files` and `Source Map`.
+4. If details are missing or ambiguous, read primary notes directly and treat them as authoritative
    over `AGENTS.md`.
 
 ## Authoring and Formatting Notes

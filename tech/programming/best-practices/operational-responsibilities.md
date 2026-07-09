@@ -73,5 +73,5 @@
 **Next Steps**
 
 1. Assign owners and review dates to each checklist item.
-1. Develop detailed runbooks for each responsibility.
-1. Automate wherever possible (patching, backups, scanning, alerting).
+2. Develop detailed runbooks for each responsibility.
+3. Automate wherever possible (patching, backups, scanning, alerting).

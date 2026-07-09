@@ -20,9 +20,9 @@ installation, distribution, and Bash idioms for the general facing-category taxo
   `lib/loader.sh`, `lib/core.sh`, then calling `mycli::main "$@"`.
 - **Strict mode**: `set -euo pipefail` + `shopt -s inherit_errexit`. Know caveats:
   `local var=$(...)` masks exit, pipefail can fail on SIGPIPE, never set `IFS=$'\n\t'` globally.
-- **Module layout**: One public function per file. `lib/commands/cmd_<n>.sh` defines
-  `mycli::cmd::<n>`. `lib/functions/fn_<n>.sh` defines `mycli::fn::<n>`. Private helpers prefixed
-  `__`.
+- **Module layout**: One public function per file. `libexec/commands/cmd_<n>.sh` defines
+  `mycli::cmd::<n>`. Top-level `functions/fn_<n>.sh` defines `mycli::fn::<n>` when a sourced
+  framework surface exists. `lib/` is for shared libraries; private helpers are prefixed `__`.
 - **Lazy loading**: `lib/loader.sh` sources commands on dispatch, keeping startup O(1).
 - **ShellCheck**: `.shellcheckrc` with `external-sources=true`, `source-path=SCRIPTDIR`. Every
   `source` gets an explicit `# shellcheck source=` directive. Disables require justification
@@ -37,8 +37,11 @@ installation, distribution, and Bash idioms for the general facing-category taxo
 - **Testing**: `bats-core` with `bats-support`, `bats-assert`, `bats-file` as submodules. One test
   file per subcommand.
 - **Formatting**: `shfmt -i 2 -ci -bn -s`. All checks via pre-commit.
-- **Install/XDG**: `install.sh` honors `PREFIX` (system) and XDG (user). Bash completions, man pages
-  via scdoc; expose man text through a subcommand when agents need to read it from the CLI.
+- **Install/XDG**: `install.sh` honors `PREFIX` (system) and XDG (user). Split config
+  (`${XDG_CONFIG_HOME:-$HOME/.config}`) from data/code (`${XDG_DATA_HOME:-$HOME/.local/share}`);
+  expose user commands through explicit `~/.local/bin` symlinks. Bash completions and man pages are
+  generated via scdoc; expose man text through a subcommand when agents need to read it from the
+  CLI.
 - **Non-negotiables**: Namespaced functions, XDG-aware installer, trap cleanup, agent-facing surface
   (`help`/usage, `--json`, `doctor`, `init`, completion, man-via-subcommand, exit codes).
 

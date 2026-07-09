@@ -34,8 +34,8 @@ only `description` is _recommended_ so automatic invocation works.
 
 > **Codex is not at parity.** This table is **Claude Code** only. A **Codex** `SKILL.md` supports
 > only `name` + `description` — no `model` / `effort` field; Codex model+effort are session-global
-> and chosen via `--profile`. See [`../codex-conventions.md`](../codex-conventions.md) §Codex Skill
-> Frontmatter before porting a tier decision across engines.
+> and chosen via `--profile`. See `../codex-conventions.md` §Codex Skill Frontmatter before porting
+> a tier decision across engines.
 
 ## String substitutions
 
@@ -75,7 +75,7 @@ a _new_ top-level skills directory requires a restart.
 - **SKILL.md body** — loaded when the skill triggers. **Keep under 500 lines.** If approaching the
   limit, move detail into sibling files and reference them. Deterministic shell costs body tokens on
   every invocation — move it into versioned `agent-helper` subcommands per
-  [`skill-script-extraction.md`](skill-script-extraction.md) rather than inlining heredocs.
+  `skill-script-extraction.md` rather than inlining heredocs.
 - **Bundled resources** — loaded on demand when SKILL.md links to them.
 - **Skill listing budget** — dynamic (~1% of context window, fallback 8,000 chars). Raise via
   `SLASH_COMMAND_TOOL_CHAR_BUDGET`.

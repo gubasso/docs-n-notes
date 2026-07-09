@@ -7,14 +7,14 @@ flag/subcommand parsing, error/exit-code handling, and configuration. This file 
 ## Prerequisites
 
 - The [general runbook](../../../programming/project-bootstrap/runbook.md) and the Go
-  [binding runbook](runbook.md) are done — a buildable, gated module exists.
+  [binding runbook](./runbook.md) are done — a buildable, gated module exists.
 
 ## Add these, in this order
 
 When scaffolding a CLI, layer these on the buildable module in order:
 
 1. **Command layout.** Put the entrypoint under `cmd/<name>/main.go` and keep `main` thin; push
-   logic into `internal/`. → [00 — Toolchain & layout](00-toolchain-and-layout.md).
+   logic into `internal/`. → [00 — Toolchain & layout](./00-toolchain-and-layout.md).
 2. **Argument parsing & subcommands.** For a single command with a few flags, the stdlib `flag`
    package is enough; for a subcommand tree with help/completion, use `cobra`. Pick one and define
    the command surface.

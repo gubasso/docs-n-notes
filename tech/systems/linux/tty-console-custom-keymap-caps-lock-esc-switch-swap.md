@@ -75,14 +75,14 @@ Void sources `/etc/rc.local` in runit stage 2, making it perfect for boot-time c
    sudo vi /etc/rc.local
    ```
 
-1. Add:
+2. Add:
 
    ```sh
    #!/bin/sh
    loadkeys /usr/local/share/kbd/keymaps/us-caps-esc-swap.map
    ```
 
-1. Make it executable:
+3. Make it executable:
 
    ```bash
    sudo chmod +x /etc/rc.local
@@ -104,7 +104,7 @@ Void’s `/etc/rc.conf` supports a `KEYMAP` variable pointing to a keymap under
 
    ([linuxquestions.org][4])
 
-1. Edit `/etc/rc.conf` and set:
+2. Edit `/etc/rc.conf` and set:
 
    ```ini
    KEYMAP="personal/swapCapsEsc"

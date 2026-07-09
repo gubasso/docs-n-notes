@@ -7,14 +7,14 @@ shared/static build targets, install/export rules, and ABI hygiene. This file ow
 ## Prerequisites
 
 - The [general runbook](../../../programming/project-bootstrap/runbook.md) and the C
-  [binding runbook](runbook.md) are done — a buildable, gated project exists.
+  [binding runbook](./runbook.md) are done — a buildable, gated project exists.
 
 ## Add these, in this order
 
 1. **Public header API.** Place the consumer-facing headers under `include/<project>/`; keep
    implementation-private declarations out of them. Wrap headers in include guards (or
    `#pragma once`) and `extern "C"` so C++ callers link cleanly. →
-   [00 — Toolchain & layout](00-toolchain-and-layout.md).
+   [00 — Toolchain & layout](./00-toolchain-and-layout.md).
 
 2. **Library build target.** Add a shared and/or static target (CMake
    `add_library(... SHARED|STATIC)`, Meson `library()`/`shared_library()`/`static_library()`).

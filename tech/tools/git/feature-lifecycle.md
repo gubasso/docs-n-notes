@@ -7,13 +7,13 @@ and release.
 A **work-clone** is an isolated clone of the repository created with `git clone --reference`, placed
 as a sibling directory: `~/Projects/<org>/<repo>.<issue>-<slug>`. It shares the main repo's object
 store so disk usage is minimal. See
-[feature-lifecycle-git-commands](feature-lifecycle-git-commands.md) for the exact commands.
+[feature-lifecycle-git-commands](./feature-lifecycle-git-commands.md) for the exact commands.
 
 Related docs:
 
-- [feature-lifecycle-git-commands](feature-lifecycle-git-commands.md) — companion git commands for
+- [feature-lifecycle-git-commands](./feature-lifecycle-git-commands.md) — companion git commands for
   each phase
-- [rebase-workflow](rebase-workflow.md) — branching and rebase conventions
+- [rebase-workflow](./rebase-workflow.md) — branching and rebase conventions
 
 ---
 
@@ -65,7 +65,7 @@ The branch and work-clone share the same name, derived from the issue slug.
 ### Work
 
 Commit and push changes in the work-clone. Rebase onto the integration branch as needed to stay
-current. See [rebase-workflow](rebase-workflow.md) for the rebasing strategy.
+current. See [rebase-workflow](./rebase-workflow.md) for the rebasing strategy.
 
 ### Finish
 
@@ -91,7 +91,8 @@ After the PR is merged on the forge:
 
 From the main repository, open a PR from the integration branch into the default branch on the
 forge, merge remotely, pull locally, tag the release, and push the tag. See
-[feature-lifecycle-git-commands](feature-lifecycle-git-commands.md) for the full command reference.
+[feature-lifecycle-git-commands](./feature-lifecycle-git-commands.md) for the full command
+reference.
 
 ---
 

@@ -6,10 +6,10 @@ Run once per new project.
 Part of the once-per-project setup — see
 [project bootstrap](../../../programming/project-bootstrap/runbook.md).
 
-- [workflow](workflow.md) — strategy, prerequisites, caveats, verification checklist.
-- [first-run-enablement](first-run-enablement.md) — turning Actions/CI on and to write, after the
+- [workflow](./workflow.md) — strategy, prerequisites, caveats, verification checklist.
+- [first-run-enablement](./first-run-enablement.md) — turning Actions/CI on and to write, after the
   first push.
-- [github-web-ui](github-web-ui.md) / [gitlab-web-ui](gitlab-web-ui.md) — point-and-click
+- [github-web-ui](./github-web-ui.md) / [gitlab-web-ui](./gitlab-web-ui.md) — point-and-click
   alternatives to the setup scripts.
 
 ## Usage

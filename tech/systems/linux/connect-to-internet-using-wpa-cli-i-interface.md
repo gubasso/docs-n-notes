@@ -26,7 +26,7 @@ Next, configure that profile with `set_network <id> ssid "<SSID>"` and
    This command opens a prompt bound to `wlan0`, where you can enter commands interactively
    ([sirlagz.net][1]).
 
-1. **Verify prompt** At the prompt, you should see something like:
+2. **Verify prompt** At the prompt, you should see something like:
 
    ```
    Selected interface 'wlan0'
@@ -45,7 +45,7 @@ Next, configure that profile with `set_network <id> ssid "<SSID>"` and
 
    This requests wpa_supplicant to scan for nearby access points ([mankier.com][2]).
 
-1. **List scan results**
+2. **List scan results**
 
    ```
    > scan_results
@@ -70,7 +70,7 @@ Next, configure that profile with `set_network <id> ssid "<SSID>"` and
    The client returns a network ID (e.g., `0`) that you’ll use for subsequent commands
    ([rbftech.com][3]).
 
-1. **Set the SSID**
+2. **Set the SSID**
 
    ```
    > set_network 0 ssid "MyNetworkSSID"
@@ -78,7 +78,7 @@ Next, configure that profile with `set_network <id> ssid "<SSID>"` and
 
    Wrap the SSID in quotes if it contains spaces or special characters ([cnblogs.com][4]).
 
-1. **Set the passphrase**
+3. **Set the passphrase**
 
    ```
    > set_network 0 psk "MySecretPass"
@@ -86,7 +86,7 @@ Next, configure that profile with `set_network <id> ssid "<SSID>"` and
 
    This writes the pre-shared key for WPA/WPA2 networks ([cnblogs.com][4]).
 
-1. **Enable or select the network**
+4. **Enable or select the network**
 
    - **Enable** (allows multiple profiles):
 
@@ -102,7 +102,7 @@ Next, configure that profile with `set_network <id> ssid "<SSID>"` and
 
    Both commands trigger association with the chosen SSID ([cnblogs.com][4]).
 
-1. **Verify connection status**
+5. **Verify connection status**
 
    ```
    > status
@@ -121,7 +121,7 @@ Next, configure that profile with `set_network <id> ssid "<SSID>"` and
    This writes your network block into `/etc/wpa_supplicant.conf` for automatic reconnection on
    reboot ([cnblogs.com][4]).
 
-1. **Exit interactive mode**
+2. **Exit interactive mode**
 
    ```
    > quit

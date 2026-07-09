@@ -53,5 +53,5 @@ Any `.py` file with `django.` / `rest_framework.` imports, or project with `mana
 
 ## See also
 
-- [python.md](python.md).
+- [python.md](./python.md).
 - Upstream: <https://github.com/awesome-skills/code-review-skill/blob/main/reference/django.md>.

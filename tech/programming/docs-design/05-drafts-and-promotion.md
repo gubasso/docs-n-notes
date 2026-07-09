@@ -29,10 +29,10 @@ temporary research that intentionally remains local and ignored.
 The typical path for a decision is:
 
 1. Draft the exploration in `<project>/.draft/<topic>.md`.
-1. Extract one decision into `<project>/docs/decisions/ADR-<number>-<topic>.md`.
-1. Trim the filled ADR to the lean format from [02 — Lean ADRs](02-lean-adrs.md).
-1. Link any supporting reference or explanation pages.
-1. Delete the promoted draft.
+2. Extract one decision into `<project>/docs/decisions/ADR-<number>-<topic>.md`.
+3. Trim the filled ADR to the lean format from [02 — Lean ADRs](./02-lean-adrs.md).
+4. Link any supporting reference or explanation pages.
+5. Delete the promoted draft.
 
 Do not preserve every sentence. Drafts contain uncertainty, repeated facts, and abandoned options.
 The promoted document should contain only the durable result.
@@ -56,8 +56,8 @@ Promote to explanation when the draft teaches a mental model: architecture, subs
 design forces, or conceptual background.
 
 If one draft contains all four, split it. Use the zone map in
-[01 — Diataxis Zones](01-diataxis-zones.md) and the placement rules in
-[04 — Single Source of Truth](04-single-source-of-truth.md).
+[01 — Diataxis Zones](./01-diataxis-zones.md) and the placement rules in
+[04 — Single Source of Truth](./04-single-source-of-truth.md).
 
 When the draft records a rejected path, decide whether the rejection is durable. If future
 maintainers are likely to rediscover the same option, promote it as a rejected ADR. If the rejection

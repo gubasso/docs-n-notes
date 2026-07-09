@@ -17,24 +17,24 @@ overlay that slots into it.
 ## Steps
 
 1. **Initialize the module.** `go mod init <module-path>` (e.g. `github.com/<org>/<name>`) to create
-   `go.mod`. → [00 — Toolchain & layout](00-toolchain-and-layout.md).
+   `go.mod`. → [00 — Toolchain & layout](./00-toolchain-and-layout.md).
 
 2. **Lay out the module.** Add `cmd/`, `internal/`, and (only if publishing importable packages)
-   `pkg/` as needed. → [00 — Toolchain & layout](00-toolchain-and-layout.md).
+   `pkg/` as needed. → [00 — Toolchain & layout](./00-toolchain-and-layout.md).
 
 3. **Pin the Go version.** Set the `go` and `toolchain` directives in `go.mod` and wire the same Go
    version into the Nix devShell so local and CI match. →
-   [00 — Toolchain & layout](00-toolchain-and-layout.md),
+   [00 — Toolchain & layout](./00-toolchain-and-layout.md),
    [nix/02 — Per-project devShell](../../../tools/nix/02-per-project-devshell.md). _Automate:_
    `bootstrap-nix`.
 
 4. **Configure quality gates.** `gofmt`/`goimports` for format, `go vet` + `golangci-lint` for lint,
    `go test -race` for tests, and `govulncheck` for the security baseline; wire them into
-   pre-commit. → [01 — Quality gates](01-quality-gates.md). _Automate:_ `bootstrap-precommit`,
+   pre-commit. → [01 — Quality gates](./01-quality-gates.md). _Automate:_ `bootstrap-precommit`,
    `bootstrap-taskrunner`.
 
-5. **Pick the implementation kind.** For a CLI, follow [`cli-project.md`](cli-project.md); for an
-   HTTP service, follow [`web-service.md`](web-service.md); a library is a followup.
+5. **Pick the implementation kind.** For a CLI, follow [`cli-project.md`](./cli-project.md); for an
+   HTTP service, follow [`web-service.md`](./web-service.md); a library is a followup.
 
 6. **Continue the general spine.** Return to the
    [general runbook](../../../programming/project-bootstrap/runbook.md) for governance, CI, and
@@ -42,6 +42,7 @@ overlay that slots into it.
 
 ## Reference
 
-- [00 — Toolchain & layout](00-toolchain-and-layout.md) · [01 — Quality gates](01-quality-gates.md)
-  · [general runbook](../../../programming/project-bootstrap/runbook.md) ·
+- [00 — Toolchain & layout](./00-toolchain-and-layout.md) ·
+  [01 — Quality gates](./01-quality-gates.md) ·
+  [general runbook](../../../programming/project-bootstrap/runbook.md) ·
   [nix/02 — Per-project devShell](../../../tools/nix/02-per-project-devshell.md)

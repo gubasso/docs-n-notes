@@ -4,8 +4,8 @@ General counterpart:
 [Workflow file conventions](../../../programming/release-workflow/04-workflow-file-conventions.md).
 
 Publishing to crates.io ships **source** — users run `cargo install` or add a dependency and build
-it themselves ([04](04-release-plz-config.md)). If you also want to hand out **prebuilt binaries and
-installers**, that is a separate concern handled by `dist` (cargo-dist). It is orthogonal to
+it themselves ([04](./04-release-plz-config.md)). If you also want to hand out **prebuilt binaries
+and installers**, that is a separate concern handled by `dist` (cargo-dist). It is orthogonal to
 registry publishing: a crate can do either, both, or neither. Reach for it when the crate is a
 CLI/app that users should be able to install without a Rust toolchain.
 
@@ -50,13 +50,13 @@ dist generate              # regenerate release.yml after editing dist-workspace
 
 > **`release.yml` is not the crates.io publisher.** It builds binaries and does not publish to the
 > registry, so it must **not** be registered as the trusted publisher — that is `release-plz.yml`
-> ([03](03-trusted-publishing-oidc.md)). Keep the two files distinct; never merge them. See
+> ([03](./03-trusted-publishing-oidc.md)). Keep the two files distinct; never merge them. See
 > [workflow file conventions](../../../programming/release-workflow/04-workflow-file-conventions.md).
 
 ## How it fits the branch model
 
 cargo-dist's `release.yml` triggers on the `v*` **tag** that release-plz creates when the release PR
-merges ([00](00-branch-model-and-release-plz.md)). The ordering per release:
+merges ([00](./00-branch-model-and-release-plz.md)). The ordering per release:
 
 1. Merge the release PR → release-plz tags `vX.Y.Z` and publishes source to crates.io over OIDC
    (`release-plz.yml`).
@@ -65,7 +65,7 @@ merges ([00](00-branch-model-and-release-plz.md)). The ordering per release:
 
 Caveat: a tag pushed by release-plz with the default `GITHUB_TOKEN` may not retrigger a separate
 workflow — the same limitation that shapes `master` promotion
-([00](00-branch-model-and-release-plz.md)). If `release.yml` does not fire on release-plz's tag,
+([00](./00-branch-model-and-release-plz.md)). If `release.yml` does not fire on release-plz's tag,
 mint a GitHub App token for release-plz so its tag push retriggers, or follow cargo-dist's own
 release-CI guidance.
 

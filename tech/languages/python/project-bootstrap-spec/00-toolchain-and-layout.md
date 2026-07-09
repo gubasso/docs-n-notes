@@ -45,8 +45,8 @@ on my machine" gap before any code is written.
 ## Layout detail
 
 For a single package, the default `uv init` layout is enough to start. For a CLI with subcommands or
-a distributable library, follow the implementation-kind file: [`cli-project.md`](cli-project.md) or
-[`library-project.md`](library-project.md). Bootstrap owns the _ordering_ (get an importable,
+a distributable library, follow the implementation-kind file: [`cli-project.md`](./cli-project.md)
+or [`library-project.md`](./library-project.md). Bootstrap owns the _ordering_ (get an importable,
 buildable project first); the kind files own the shape-specific additions.
 
 ## Automation

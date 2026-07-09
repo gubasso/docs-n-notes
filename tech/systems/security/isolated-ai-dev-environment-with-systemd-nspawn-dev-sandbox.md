@@ -560,7 +560,7 @@ This will:
    nvim .
    ```
 
-1. **On the host: enter `dev-sandbox` for this project**
+2. **On the host: enter `dev-sandbox` for this project**
 
    In another terminal:
 
@@ -569,7 +569,7 @@ This will:
    dev-sandbox
    ```
 
-1. **Inside the container as `dev` (fish)**
+3. **Inside the container as `dev` (fish)**
 
    You are now in `/workspace/my-project` with a fish shell.
 
@@ -592,7 +592,7 @@ This will:
      ai-env <ai-cli-command> refactor --target src/
      ```
 
-1. **Repeat per project**
+4. **Repeat per project**
 
    - Each project under `~/Projects/<project>`:
 
@@ -600,7 +600,7 @@ This will:
      - Is mounted as `/workspace/<project>`.
      - Uses the same `dev-sandbox` wrapper and `ai-env` helper.
 
-1. **Exit**
+5. **Exit**
 
    - Exit the container shell with `exit`.
    - Continue editing on host as usual.

@@ -1,13 +1,13 @@
 # 06 — Preflight & Health Checks
 
-> Prerequisite: [README](README.md) for the vocabulary. This chapter covers two halves of one idea:
-> a first-class `doctor` command that aggregates **every** environment prerequisite, and
+> Prerequisite: [README](./README.md) for the vocabulary. This chapter covers two halves of one
+> idea: a first-class `doctor` command that aggregates **every** environment prerequisite, and
 > **per-subcommand preflight guards** that reuse those same checks to fail fast before doing work.
 >
-> Closely related: [00 — Architecture](00-architecture.md) for the `AppContext` the checks read
-> from; [02 — Error Messages](02-error-messages.md) for stable `err.kind` keys and exit codes;
-> [05 — Designing for LLM coding agents](05-designing-for-llm-agents.md) §2.8 for `doctor` as a
-> machine surface; [99 — Checklist](99-checklist.md) for the pre-ship rubric.
+> Closely related: [00 — Architecture](./00-architecture.md) for the `AppContext` the checks read
+> from; [02 — Error Messages](./02-error-messages.md) for stable `err.kind` keys and exit codes;
+> [05 — Designing for LLM coding agents](./05-designing-for-llm-agents.md) §2.8 for `doctor` as a
+> machine surface; [99 — Checklist](./99-checklist.md) for the pre-ship rubric.
 
 Every non-trivial CLI has prerequisites: a device or dependency present, a config readable, an auth
 token valid, a service reachable. Two failure modes are common and both are bad. One: the tool
@@ -20,14 +20,14 @@ same checks.
 ## Contents
 
 1. [TL;DR](#tldr)
-1. [Per-subcommand preflight guards](#1-per-subcommand-preflight-guards)
-1. [The doctor command as aggregator](#2-the-doctor-command-as-aggregator)
-1. [Hard vs soft prerequisites](#3-hard-vs-soft-prerequisites)
-1. [One source of truth](#4-one-source-of-truth)
-1. [Exit codes & remediation](#5-exit-codes--remediation)
-1. [Worked example: `pigeon`](#6-worked-example-pigeon)
-1. [Checklist](#checklist)
-1. [See also](#see-also)
+2. [Per-subcommand preflight guards](#1-per-subcommand-preflight-guards)
+3. [The doctor command as aggregator](#2-the-doctor-command-as-aggregator)
+4. [Hard vs soft prerequisites](#3-hard-vs-soft-prerequisites)
+5. [One source of truth](#4-one-source-of-truth)
+6. [Exit codes & remediation](#5-exit-codes--remediation)
+7. [Worked example: `pigeon`](#6-worked-example-pigeon)
+8. [Checklist](#checklist)
+9. [See also](#see-also)
 
 ## TL;DR
 
@@ -39,8 +39,8 @@ same checks.
 - **One probe set, three call sites.** `doctor` (whole catalog), per-command preflight guards (the
   subset that command depends on), and `init`/setup (reuse the checks). Never a parallel, ad-hoc
   check that can drift from the catalog.
-- **Every check has a stable ID.** IDs double as `err.kind` keys ([02](02-error-messages.md)) and as
-  doc anchors, so automation and remediation can rely on them.
+- **Every check has a stable ID.** IDs double as `err.kind` keys ([02](./02-error-messages.md)) and
+  as doc anchors, so automation and remediation can rely on them.
 - **Hard prerequisites block (fail fast, non-zero exit); soft ones warn and fall back.** Classify
   each one explicitly; never let a soft check gate, never let a hard check pass silently.
 - **A guard emits the check's remediation verbatim** — the same actionable string `doctor` would
@@ -87,7 +87,7 @@ short TTL, or make it a `doctor`-only check and let the command surface the fail
 exactly what do I fix?" It MUST check **all** program requirements — dependencies, permissions,
 config and schema validity, credentials, connectivity, state consistency, known-bad conditions — and
 MUST NOT limit itself to probing a single dependency or path. Each finding names the requirement
-precisely and gives a concrete remediation. (See [05 §2.8](05-designing-for-llm-agents.md) for why
+precisely and gives a concrete remediation. (See [05 §2.8](./05-designing-for-llm-agents.md) for why
 agents lean on this so heavily.)
 
 Give `doctor` a `--scope` selector (host, config, auth, network, …) so it can run a category in
@@ -132,7 +132,7 @@ doctor (all)   command guard (subset)   init (setup subset)
 ## 5. Exit codes & remediation
 
 A guard's refusal must carry a **specific, stable exit code**, not a generic `1`. Reuse your error
-taxonomy from [02 — Error Messages](02-error-messages.md): BSD sysexits give you `EX_CONFIG` (78)
+taxonomy from [02 — Error Messages](./02-error-messages.md): BSD sysexits give you `EX_CONFIG` (78)
 for bad config, `EX_NOPERM` (77) for permissions, `EX_UNAVAILABLE` (69) for a missing dependency or
 unreachable service. Many CLIs instead define a small stable numeric taxonomy and reserve one code
 for "unmet prerequisite" (e.g. podbox reserves exit `3` for an unmet host/runtime requirement).
@@ -189,9 +189,9 @@ catalog, per-command subsets, no drift.
 
 ## See also
 
-- [02 — Error Messages](02-error-messages.md) — stable `err.kind` keys and BSD sysexits the guards
+- [02 — Error Messages](./02-error-messages.md) — stable `err.kind` keys and BSD sysexits the guards
   reuse.
-- [05 — Designing for LLM coding agents](05-designing-for-llm-agents.md) §2.8 — `doctor`/`init` as
+- [05 — Designing for LLM coding agents](./05-designing-for-llm-agents.md) §2.8 — `doctor`/`init` as
   machine surfaces agents run first.
-- [00 — Architecture](00-architecture.md) — the `AppContext` the checks read from.
-- [99 — Checklist](99-checklist.md) — the one-page pre-ship rubric.
+- [00 — Architecture](./00-architecture.md) — the `AppContext` the checks read from.
+- [99 — Checklist](./99-checklist.md) — the one-page pre-ship rubric.

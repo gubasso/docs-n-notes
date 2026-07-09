@@ -74,7 +74,7 @@ Device      Size        Type
 
 ---
 
-[^2]: ../checking-disk-advanced-formats-hd-ssd-nvme.md
+[^2]: ./checking-disk-advanced-formats-hd-ssd-nvme.md
 
 [^3]: https://wiki.archlinux.org/title/EFI_system_partition#Create_the_partition
 

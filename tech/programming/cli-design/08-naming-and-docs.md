@@ -215,8 +215,8 @@ belongs here, and pushes back on creep.
 The library root (or `main`'s entry file) starts with:
 
 1. A one-sentence statement of the crate's purpose.
-1. A bullet list of the major modules with one-line summaries.
-1. A link to the architecture spec that governs the layout.
+2. A bullet list of the major modules with one-line summaries.
+3. A link to the architecture spec that governs the layout.
 
 ```rust
 //! `my-cli`: synchronizes widgets between local and remote stores.
@@ -232,7 +232,8 @@ The library root (or `main`'s entry file) starts with:
 
 ### "Comment why, not what"
 
-The code says what. Comments say why. See [04 — Coding Style](04-coding-style-rust-zig.md), rule 11.
+The code says what. Comments say why. See [04 — Coding Style](./04-coding-style-rust-zig.md),
+rule 11.
 
 Bad:
 
@@ -293,8 +294,8 @@ modules public only when consumers must reach into them.
 
 ## See also
 
-- [00 — Architecture](00-architecture.md) — the directory roles whose names this chapter governs.
-- [04 — Coding Style](04-coding-style-rust-zig.md) — module size cap, "comment why not what".
+- [00 — Architecture](./00-architecture.md) — the directory roles whose names this chapter governs.
+- [04 — Coding Style](./04-coding-style-rust-zig.md) — module size cap, "comment why not what".
 - Language-specific spec:
   [`rust/cli-spec/08-naming-and-visibility.md`](../../languages/rust/cli-spec/08-naming-and-visibility.md).
 

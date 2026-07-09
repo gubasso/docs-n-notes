@@ -4,8 +4,8 @@ One-page reference for invoking the user-facing orchestrator skills. If you hit 
 used with Skill tool due to `disable-model-invocation`" error, jump to
 [Troubleshooting](#troubleshooting).
 
-For the full delegation/dispatch model and the empirical findings behind this cheatsheet, see
-[Skills and Orchestration](skills-and-orchestration.md).
+For the full delegation/dispatch model and the empirical findings behind this cheatsheet, see Skills
+and Orchestration.
 
 ## Plan-review-exec (Codex plans, Claude reviews, Codex implements, Claude reviews)
 
@@ -33,6 +33,5 @@ body, nested skill, etc.). The fix is always the same: invoke the skill directly
 
 The short shims (`/pre`, `/prea`, `/prear`) have been deleted because chain-expansion through a shim
 body does not work — Claude Code injects shim bodies as literal prompt text and does not recursively
-re-parse them for nested slash commands. See
-[Skills and Orchestration §Invocation Patterns](skills-and-orchestration.md#invocation-patterns-direct-vs-shim-vs-agent-delegation)
-for the empirical test that confirmed this.
+re-parse them for nested slash commands. See Skills and Orchestration §Invocation Patterns for the
+empirical test that confirmed this.

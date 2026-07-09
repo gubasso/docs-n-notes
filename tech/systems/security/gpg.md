@@ -77,10 +77,10 @@ gpg -a --output decrypted_file.txt --decrypt my_file.txt.asc
 Steps:
 
 1. Creating a GPG Key Pair
-1. List the key pair and fingerprint
-1. Exporting and Importing Public Keys
-1. Signing a Public Key
-1. **Encrypting and Decrypting a File**
+2. List the key pair and fingerprint
+3. Exporting and Importing Public Keys
+4. Signing a Public Key
+5. **Encrypting and Decrypting a File**
 
 Encrypt file:
 

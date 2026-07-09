@@ -6,12 +6,13 @@ parsing, and a consistent exit-code strategy. This file owns only the **bootstra
 ## Prerequisites
 
 - The [general runbook](../../../programming/project-bootstrap/runbook.md) and the C
-  [binding runbook](runbook.md) are done — a buildable, gated project exists.
+  [binding runbook](./runbook.md) are done — a buildable, gated project exists.
 
 ## Add these, in this order
 
 1. **Entry point & build target.** Add `src/main.c` and a build-system executable target (CMake
-   `add_executable`, Meson `executable()`). → [00 — Toolchain & layout](00-toolchain-and-layout.md).
+   `add_executable`, Meson `executable()`). →
+   [00 — Toolchain & layout](./00-toolchain-and-layout.md).
 
 2. **Argument parsing.** Define the command surface. Use POSIX `getopt`/`getopt_long` for simple
    tools; reach for `argp` (glibc) or a vendored parser like `argparse` for richer subcommand trees.

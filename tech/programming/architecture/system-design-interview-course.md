@@ -20,4 +20,4 @@
 - works backwards
 
 1. WHO costumers are
-1. HOW they use the system
+2. HOW they use the system

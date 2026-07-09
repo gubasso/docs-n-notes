@@ -28,12 +28,14 @@ their flake, not the profile.
 
 ## Read in order
 
-1. [00-overview](00-overview.md) — concepts, the three files, mental model.
-2. [01-install-opensuse](01-install-opensuse.md) — host install (openSUSE daemon, NixOS).
-3. [02-per-project-devshell](02-per-project-devshell.md) — flake + `.envrc` + direnv; the
+1. [00-overview](./00-overview.md) — concepts, the three files, mental model.
+2. [01-install-opensuse](./01-install-opensuse.md) — host install (openSUSE daemon, NixOS).
+3. [02-per-project-devshell](./02-per-project-devshell.md) — flake + `.envrc` + direnv; the
    Poetry-venv layer.
-4. [03-rust-toolchain](03-rust-toolchain.md) — the hybrid `rust-toolchain.toml` + oxalica approach.
-5. [04-migrate-a-project](04-migrate-a-project.md) — step-by-step to move one repo off mise/rustup.
+4. [03-rust-toolchain](./03-rust-toolchain.md) — the hybrid `rust-toolchain.toml` + oxalica
+   approach.
+5. [04-migrate-a-project](./04-migrate-a-project.md) — step-by-step to move one repo off
+   mise/rustup.
 
 Copy-paste starting points live in [`templates/`](templates/) (python, rust, node, zig, generic).
 

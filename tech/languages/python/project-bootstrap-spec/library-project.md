@@ -7,9 +7,9 @@ Python binding: a public API surface, packaging metadata, and docs. This file ow
 ## Prerequisites
 
 - The [general runbook](../../../programming/project-bootstrap/runbook.md) and the Python
-  [binding runbook](runbook.md) are done — an importable, gated project exists.
+  [binding runbook](./runbook.md) are done — an importable, gated project exists.
 - The project uses the **src layout** and declares a build backend in `[build-system]` — see
-  [00 — Toolchain & layout](00-toolchain-and-layout.md).
+  [00 — Toolchain & layout](./00-toolchain-and-layout.md).
 
 ## Add these, in this order
 
@@ -18,10 +18,10 @@ Python binding: a public API surface, packaging metadata, and docs. This file ow
 
 2. **Type-checking support.** Add a `py.typed` marker file to the package so downstream users get
    your type hints (PEP 561). This pairs with the `mypy`/`pyright` gate from
-   [01 — Quality gates](01-quality-gates.md).
+   [01 — Quality gates](./01-quality-gates.md).
 
 3. **Test the installed package.** The src layout already forces tests to run against the built
-   package; keep `tests/` outside `src/`. → [01 — Quality gates](01-quality-gates.md).
+   package; keep `tests/` outside `src/`. → [01 — Quality gates](./01-quality-gates.md).
 
 4. **Docs skeleton.** Seed a `README.md` (the packaging `readme`) and, if the API is non-trivial, a
    docs tree (e.g. `mkdocs` or `sphinx`). Bootstrap only stubs it; content grows with the code.

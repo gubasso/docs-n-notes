@@ -449,6 +449,6 @@ See also:
   branched-provider topology this case study extends.
 - [`../common-mistakes-and-pitfalls.md`](../common-mistakes-and-pitfalls.md) — the wider catalog of
   `osc` foot-guns, including the binary-vs-source naming trap.
-- [`01-broken-link-drift-after-patch-rename.md`](01-broken-link-drift-after-patch-rename.md) — this
-  case study's sibling, covering the source-tree drift that preceded the SP7 work in the same
+- [`01-broken-link-drift-after-patch-rename.md`](./01-broken-link-drift-after-patch-rename.md) —
+  this case study's sibling, covering the source-tree drift that preceded the SP7 work in the same
   project.

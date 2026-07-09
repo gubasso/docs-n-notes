@@ -104,9 +104,9 @@ psql --set=outputdir="$outputdir" <conn parameters> -f /path/to/yourscript.sql
 - `\l` : list all databases
 
 1. `\c adventureworks`: Switch to the database
-1. `\dn`: list of schemas in this database
-1. `\dt sales.*`: list of tables in sales schema.
-1. `\dt *.*`: get tables from all schemas
+2. `\dn`: list of schemas in this database
+3. `\dt sales.*`: list of tables in sales schema.
+4. `\dt *.*`: get tables from all schemas
 
 **Run postgresql sql script from another script:** **import script:**
 
@@ -247,7 +247,7 @@ There are usually two default ways to login to PostgreSQL server:[^sql5]
 
 1. By running the "psql" command as a UNIX user (so-called IDENT/PEER authentication), e.g.:
    `sudo -u postgres psql`. Note that `sudo -u` does NOT unlock the UNIX user.
-1. by TCP/IP connection using PostgreSQL's own managed username/password (so-called TCP
+2. by TCP/IP connection using PostgreSQL's own managed username/password (so-called TCP
    authentication) (i.e., NOT the UNIX password).
 
 So you never want to set the password for UNIX account "postgres". Leave it locked as it is by

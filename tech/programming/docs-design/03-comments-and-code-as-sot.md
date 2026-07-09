@@ -122,7 +122,7 @@ cleanup_after_upload()
 ```
 
 Do not put the whole ADR in the comment. The local comment explains the surprising code shape. The
-ADR owns the decision. See [04 — Single Source of Truth](04-single-source-of-truth.md).
+ADR owns the decision. See [04 — Single Source of Truth](./04-single-source-of-truth.md).
 
 Another common boundary is a cleanup or retry path:
 

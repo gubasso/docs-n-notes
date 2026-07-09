@@ -8,7 +8,7 @@ tiny Docker-based toolchain that:
    - **Your cloud VPS** (e.g. a $5/month Ubuntu droplet on DigitalOcean) and
    - **Your home-lab or self-hosted server**
 
-1. **Automatically reverse-proxies** traffic for any number of subdomains on your domain through
+2. **Automatically reverse-proxies** traffic for any number of subdomains on your domain through
    that tunnel, without requiring any port-forwards on your home router.
 
 ---
@@ -42,11 +42,11 @@ tiny Docker-based toolchain that:
    make gateway
    ```
 
-1. **In your DNS**
+2. **In your DNS**
 
    - Create an A record (or wildcard `*.yourdomain.com`) pointing at your VPS IP.
 
-1. **On your home/self-hosted machine**
+3. **On your home/self-hosted machine**
 
    ```bash
    git clone https://github.com/self-hosted-gateway.git
@@ -60,14 +60,14 @@ tiny Docker-based toolchain that:
      EXPOSE=getmy:3000
    ```
 
-1. **Paste the generated snippet** into your existing `docker-compose.yml` for the app you want to
+4. **Paste the generated snippet** into your existing `docker-compose.yml` for the app you want to
    expose, then:
 
    ```bash
    docker-compose up -d
    ```
 
-1. **Visit** `https://myget.routemehome.org` (or whatever `FQDN` you chose)—requests will hop
+5. **Visit** `https://myget.routemehome.org` (or whatever `FQDN` you chose)—requests will hop
    through your VPS into the WireGuard tunnel and land on your local app.
 
 ---

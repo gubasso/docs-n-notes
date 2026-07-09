@@ -46,7 +46,7 @@ Structure the code so ShellCheck can see it: keep sourced files discoverable (ad
 `# shellcheck source=lib/core.sh` directive above dynamic `source` lines), and prefer functions over
 top-level code so the linter can reason about scope. Treating ShellCheck warnings as errors from the
 first commit shapes the layout — this is enforced as a gate in
-[01 — Quality gates](01-quality-gates.md).
+[01 — Quality gates](./01-quality-gates.md).
 
 ## Toolchain + Nix
 

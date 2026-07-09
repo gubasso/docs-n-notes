@@ -21,7 +21,7 @@
 - [server-vps](../server-vps/server-vps.md)
 - [home server](../server-vps/server-vps-home_server.md)
 - [dns](../networking/dns.md)
-- [backups](backups.md)
+- [backups](./backups.md)
 
 ## Notes in this directory
 
@@ -43,13 +43,13 @@
 
 ## Proxy / Reverse Proxy
 
-- \*[Traefik](./traefik.md)
+- \*[Traefik](../networking/traefik.md)
 - caddy
 - nginx proxy manager
 
 ## Network / DNS
 
-- [Netmaker](./netmaker.md)
+- [Netmaker](../networking/netmaker.md)
 
 - [What is FQDN for? Fully Qualified Domain Name (FQDN)](https://www.linode.com/community/questions/19375/how-should-i-configure-my-hostname-and-fqdn#answer-71105)
 

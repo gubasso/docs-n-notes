@@ -3,15 +3,15 @@
 [release-plz](https://release-plz.dev/) automates the release cycle: it watches the default branch,
 opens a **release PR** that bumps versions and updates the changelog, and — on merge — tags the
 release and publishes to crates.io. Combined with
-[Trusted Publishing](03-trusted-publishing-oidc.md) it needs no stored registry token.
+[Trusted Publishing](./03-trusted-publishing-oidc.md) it needs no stored registry token.
 
 ## The release-PR workflow
 
 1. Merge feature work to the default branch.
-1. release-plz opens or updates a **release PR** containing the version bump, changelog entries, and
+2. release-plz opens or updates a **release PR** containing the version bump, changelog entries, and
    updated `Cargo.toml` / `Cargo.lock`.
-1. Review the PR like any other change; merge it when ready.
-1. On merge, release-plz tags the release and publishes the new version.
+3. Review the PR like any other change; merge it when ready.
+4. On merge, release-plz tags the release and publishes the new version.
 
 The release PR is the human control point — nothing is published until you merge it. This keeps
 automation from surprising you while removing the manual bump + changelog toil.
@@ -41,7 +41,7 @@ publish = false
 
 Wire release-plz into GitHub Actions with OIDC auth (no `CARGO_REGISTRY_TOKEN`). Save this as
 **`.github/workflows/release-plz.yml`** — that filename is what you register with the crates.io
-trusted publisher ([03](03-trusted-publishing-oidc.md)), and keeping it distinct from cargo-dist's
+trusted publisher ([03](./03-trusted-publishing-oidc.md)), and keeping it distinct from cargo-dist's
 `release.yml` avoids the collision described in
 [workflow file conventions](../../../programming/release-workflow/04-workflow-file-conventions.md):
 
@@ -71,14 +71,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-See [03 — Trusted Publishing / OIDC](03-trusted-publishing-oidc.md) for why `id-token: write` and no
-registry token are all the auth this needs.
+See [03 — Trusted Publishing / OIDC](./03-trusted-publishing-oidc.md) for why `id-token: write` and
+no registry token are all the auth this needs.
 
 > **Branch model.** release-plz auto-detects the default branch; the example runs on `develop`
 > (integration + release trigger). To keep a `master` release branch as a mirror of the latest
 > published version, add a `promote` job that fast-forwards `master` onto the release tag. The
-> [branch model & `master` promotion](00-branch-model-and-release-plz.md) shows the full `develop` →
-> tag → promote-`master` wiring; the
+> [branch model & `master` promotion](./00-branch-model-and-release-plz.md) shows the full `develop`
+> → tag → promote-`master` wiring; the
 > [general principles](../../../programming/release-workflow/00-branch-model.md) explain the model.
 
 ## Local operator commands
@@ -107,14 +107,14 @@ cargo release patch --execute  # bump + tag + publish directly (no review PR)
 ```
 
 Because it publishes directly rather than through a reviewed release PR, it still needs
-[configured auth](02-api-tokens-and-scopes.md) (a local `cargo login` token, or OIDC in CI). Choose
-it over release-plz only when you deliberately want the local, no-bot workflow; for CI-first
+[configured auth](./02-api-tokens-and-scopes.md) (a local `cargo login` token, or OIDC in CI).
+Choose it over release-plz only when you deliberately want the local, no-bot workflow; for CI-first
 releases, prefer release-plz.
 
 ## SemVer gating
 
-With `semver_check = true`, release-plz runs [`cargo-semver-checks`](07-semver-yank-rollback.md) on
-library crates and picks a version bump consistent with the public-API delta. Binary-only crates
+With `semver_check = true`, release-plz runs [`cargo-semver-checks`](./07-semver-yank-rollback.md)
+on library crates and picks a version bump consistent with the public-API delta. Binary-only crates
 have no public API to check.
 
 ## Reference

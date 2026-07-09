@@ -1,8 +1,8 @@
 # Testing Tools
 
 Per-language tooling reference for the principles laid out in
-[09 — Testing Strategy](testing-strategy.md). Pick from the matrix; copy the snippets at the bottom
-into the target project.
+[09 — Testing Strategy](./testing-strategy.md). Pick from the matrix; copy the snippets at the
+bottom into the target project.
 
 This file is a directory, not a tutorial. Each tool's home page is one click away; the value here is
 the _selection_ and the _wiring_ (when to use what, what plays nicely with what, what to put in
@@ -74,8 +74,8 @@ reviewed line by line, and the PR includes both the code change and the snapshot
 
 `proptest` and `hypothesis` both shrink failing inputs to a minimal counterexample and persist
 failing seeds in a regression file — check that file into the repo so the regression is locked down.
-See [09 § Property-based testing](testing-strategy.md#property-based-testing) for when to reach for
-it.
+See [09 § Property-based testing](./testing-strategy.md#property-based-testing) for when to reach
+for it.
 
 ### Mutation testing
 
@@ -91,7 +91,7 @@ it.
 
 **Rule:** run mutation testing nightly in CI, not on every PR. Cap mutants per module so a run
 finishes in minutes. Track score per critical module; a drop is a regression in test quality even if
-all tests pass. See [09 § Mutation testing](testing-strategy.md#mutation-testing-as-quality-gate).
+all tests pass. See [09 § Mutation testing](./testing-strategy.md#mutation-testing-as-quality-gate).
 
 ### Recording / HTTP fakes
 
@@ -136,12 +136,12 @@ relevant the moment your CLI talks to a service you also own.
 | Bash   | [`kcov`](http://simonkagstrom.github.io/kcov/), [`bashcov`](https://github.com/infertux/bashcov)                    |
 
 Coverage as a _floor_ against accidental regressions is fine; coverage as a _goal_ is the road to
-[the third-party-library testing anti-pattern](testing-strategy.md#detecting-testing-the-third-party-library).
+[the third-party-library testing anti-pattern](./testing-strategy.md#detecting-testing-the-third-party-library).
 Pair it with mutation testing for real signal.
 
 ## Pre-commit / CI tiering
 
-The principle from [09 § CI essentials](testing-strategy.md#ci-essentials): each tier has a time
+The principle from [09 § CI essentials](./testing-strategy.md#ci-essentials): each tier has a time
 budget; assign each test type to the tier whose budget it fits.
 
 | Tier       | Time budget      | Tests run                                |
@@ -356,7 +356,7 @@ that module to gated.
 ### Test-isolation enforcement snippets
 
 For each language, a snippet that enforces the "no shared state, no global env, no real clock" rules
-from [09 § Test isolation](testing-strategy.md#test-isolation--the-single-most-important-rule).
+from [09 § Test isolation](./testing-strategy.md#test-isolation--the-single-most-important-rule).
 
 **Python — `conftest.py`:**
 
@@ -423,31 +423,31 @@ teardown() {
 ## Tool selection by failure mode
 
 When the symptom is X, reach for tool Y. Pairing this with the heuristics in
-[09 § Detecting "testing the third-party library"](testing-strategy.md#detecting-testing-the-third-party-library)
+[09 § Detecting "testing the third-party library"](./testing-strategy.md#detecting-testing-the-third-party-library)
 covers the most common test-quality failures.
 
-| Symptom                                                                              | Likely cause                                                                                      | Tool / pattern to reach for                                          |
-| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| High coverage, regressions still slip through                                        | Tests cover lines but don't check behavior.                                                       | **Mutation testing** (`stryker`, `mutmut`, `cargo-mutants`).         |
-| Flaky integration tests on CI but not locally                                        | Test pollution: shared env, shared tmpdir, real clock.                                            | **Isolation snippets** above + `env_clear` discipline.               |
-| HTTP tests break the moment the upstream service is down                             | Live network calls in the suite.                                                                  | **Recording fakes** (`vcrpy`, `msw`, `wiremock`).                    |
-| Test file is 90% setup, 10% assertions                                               | Over-DRY scenarios, or every test rebuilds the world.                                             | **DAMP refactor** + a single shared `Fixture` mechanic.              |
-| Hand-written assertion for every field of a 30-field struct                          | Brittle, painful, drifts from reality.                                                            | **Snapshot testing** (`insta`, `syrupy`, `vitest`-snap).             |
-| Parser handles "common" inputs but crashes on weird ones                             | Example tests miss the input space.                                                               | **Property-based testing** (`proptest`, `hypothesis`, `fast-check`). |
-| Wrapper CLI passed the wrong argv to the child after a refactor                      | argv builder isn't pinned.                                                                        | **Argv-contract tests** + recording stub on `PATH`.                  |
-| Test asserts on `mock.call_args` and never on the SUT's return value                 | The mock is the only subject — [heuristic 2](testing-strategy.md#2-the-mock-is-the-only-subject). | **Rewrite with a fake at the boundary**, assert on the return value. |
-| AI-generated test file with 100% coverage but readers can't tell what's being tested | Doc-mirroring + over-stubbing — [heuristics 3 & 4](testing-strategy.md#3-doc-mirroring).          | **Run the `test-review` skill**; refactor against the heuristics.    |
+| Symptom                                                                              | Likely cause                                                                                        | Tool / pattern to reach for                                          |
+| ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| High coverage, regressions still slip through                                        | Tests cover lines but don't check behavior.                                                         | **Mutation testing** (`stryker`, `mutmut`, `cargo-mutants`).         |
+| Flaky integration tests on CI but not locally                                        | Test pollution: shared env, shared tmpdir, real clock.                                              | **Isolation snippets** above + `env_clear` discipline.               |
+| HTTP tests break the moment the upstream service is down                             | Live network calls in the suite.                                                                    | **Recording fakes** (`vcrpy`, `msw`, `wiremock`).                    |
+| Test file is 90% setup, 10% assertions                                               | Over-DRY scenarios, or every test rebuilds the world.                                               | **DAMP refactor** + a single shared `Fixture` mechanic.              |
+| Hand-written assertion for every field of a 30-field struct                          | Brittle, painful, drifts from reality.                                                              | **Snapshot testing** (`insta`, `syrupy`, `vitest`-snap).             |
+| Parser handles "common" inputs but crashes on weird ones                             | Example tests miss the input space.                                                                 | **Property-based testing** (`proptest`, `hypothesis`, `fast-check`). |
+| Wrapper CLI passed the wrong argv to the child after a refactor                      | argv builder isn't pinned.                                                                          | **Argv-contract tests** + recording stub on `PATH`.                  |
+| Test asserts on `mock.call_args` and never on the SUT's return value                 | The mock is the only subject — [heuristic 2](./testing-strategy.md#2-the-mock-is-the-only-subject). | **Rewrite with a fake at the boundary**, assert on the return value. |
+| AI-generated test file with 100% coverage but readers can't tell what's being tested | Doc-mirroring + over-stubbing — [heuristics 3 & 4](./testing-strategy.md#3-doc-mirroring).          | **Run the `test-review` skill**; refactor against the heuristics.    |
 
 ## References
 
 Per-tool documentation links are inline in the matrix above. For _why_ you'd reach for each tool
-category, see the cross-references back to [09 — Testing Strategy](testing-strategy.md):
+category, see the cross-references back to [09 — Testing Strategy](./testing-strategy.md):
 
-- [§ Non-negotiable principles](testing-strategy.md#non-negotiable-principles)
-- [§ Test-shape models](testing-strategy.md#test-shape-models--pyramid-vs-trophy-vs-honeycomb)
-- [§ Test-structure vocabulary](testing-strategy.md#test-structure-vocabulary)
-- [§ DRY vs DAMP in tests](testing-strategy.md#dry-vs-damp-in-tests)
-- [§ Detecting "testing the third-party library"](testing-strategy.md#detecting-testing-the-third-party-library)
-- [§ Mutation testing as quality gate](testing-strategy.md#mutation-testing-as-quality-gate)
-- [§ Property-based testing](testing-strategy.md#property-based-testing)
-- [§ CI essentials](testing-strategy.md#ci-essentials)
+- [§ Non-negotiable principles](./testing-strategy.md#non-negotiable-principles)
+- [§ Test-shape models](./testing-strategy.md#test-shape-models--pyramid-vs-trophy-vs-honeycomb)
+- [§ Test-structure vocabulary](./testing-strategy.md#test-structure-vocabulary)
+- [§ DRY vs DAMP in tests](./testing-strategy.md#dry-vs-damp-in-tests)
+- [§ Detecting "testing the third-party library"](./testing-strategy.md#detecting-testing-the-third-party-library)
+- [§ Mutation testing as quality gate](./testing-strategy.md#mutation-testing-as-quality-gate)
+- [§ Property-based testing](./testing-strategy.md#property-based-testing)
+- [§ CI essentials](./testing-strategy.md#ci-essentials)

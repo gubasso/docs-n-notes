@@ -15,12 +15,12 @@ and 12 SP5 in the worked example — SP4 and 12 SP5 are LTSS-only as of 2026, st
 maintained; the shape is the same for any distro family).
 
 For the related auth setup and the recovery flow when an overlay goes wrong, see the
-[README index](README.md) in this subtree.
+[README index](./README.md) in this subtree.
 
 ## 0. Prerequisites
 
 - `osc` is installed (`zypper in osc` on SUSE; available in most distro repos elsewhere) — see
-  [auth-in-devcontainers.md](auth-in-devcontainers.md) if you're running inside a devcontainer.
+  [auth-in-devcontainers.md](./auth-in-devcontainers.md) if you're running inside a devcontainer.
 - You have an OBS account on the instance you're targeting (`https://api.opensuse.org` for the
   public instance; SUSE IBS has its own URL). `osc -A <api> api /person/<user>` returns a `<person>`
   XML body — that's the canonical scripted auth probe.
@@ -154,7 +154,7 @@ Older docs use `<topadd>` to prepend a few lines to the spec. Use `<apply>` inst
 > `SUSE:SLE-15-SP<n>:Update`), adding a `<path>` to your project's `_meta` is strictly less work
 > than `osc branch` — no source package to own, no `_link` to keep in sync, and the resolver
 > auto-tracks every new EVR upstream publishes. See
-> [sle-update-pool-vs-standard.md](sle-update-pool-vs-standard.md) for the probe recipe and the
+> [sle-update-pool-vs-standard.md](./sle-update-pool-vs-standard.md) for the probe recipe and the
 > canonical `<path>` shape. Reach for the `osc branch` flow below only when you actually need to
 > patch the source or the upstream project doesn't publish the binary you need.
 
@@ -176,8 +176,8 @@ enough to match what Factory ships (or upstream-distro-Update, depending on whic
 branched from).
 
 > Before you go further: every section below has a corresponding entry in
-> [common-mistakes-and-pitfalls.md](common-mistakes-and-pitfalls.md) for the failure mode each step
-> prevents. If you hit something unexpected, that doc is the first place to look.
+> [common-mistakes-and-pitfalls.md](./common-mistakes-and-pitfalls.md) for the failure mode each
+> step prevents. If you hit something unexpected, that doc is the first place to look.
 
 ## 5. The orphan-patch trap
 
@@ -196,7 +196,7 @@ one — OBS's source service can't expand, every lane goes
 Any script that mechanically converges this state (a bootstrap script, a Python subcommand, etc.)
 **must** enumerate the server-tracked files (`osc ls <project> <pkg>`), filter to `*.patch`, and
 `osc rm` anything that isn't the current intended filename. See
-[broken-state-link-drift.md](broken-state-link-drift.md) for the full recovery flow when this has
+[broken-state-link-drift.md](./broken-state-link-drift.md) for the full recovery flow when this has
 already happened.
 
 ## 6. Verification sequence
@@ -230,7 +230,7 @@ grep 'bdep name="<provider>"' /tmp/verify/_buildenv
 
 When something fails: the per-lane `osc -v results` message is usually the only diagnostic you need
 to classify the failure (`broken: …`, `unresolvable: nothing provides …`, `failed`). For `broken`,
-jump to [broken-state-link-drift.md](broken-state-link-drift.md). For `unresolvable`, the
+jump to [broken-state-link-drift.md](./broken-state-link-drift.md). For `unresolvable`, the
 `osc buildinfo -d <project> <pkg> <repo> <arch>` call surfaces the resolver's full attempt and what
 was missing. For `failed`, `osc buildlog … | tail -200` gives the compile error.
 
@@ -243,8 +243,8 @@ was missing. For `failed`, `osc buildlog … | tail -200` gives the compile erro
 - Packaging conventions: <https://en.opensuse.org/openSUSE:Packaging_Conventions_RPM_Macros>
 - Source service concept: <https://en.opensuse.org/openSUSE:Build_Service_Concept_SourceService>
 - Companion files in this subtree:
-  - [broken-state-link-drift.md](broken-state-link-drift.md)
-  - [auth-in-devcontainers.md](auth-in-devcontainers.md)
-  - [common-mistakes-and-pitfalls.md](common-mistakes-and-pitfalls.md)
+  - [broken-state-link-drift.md](./broken-state-link-drift.md)
+  - [auth-in-devcontainers.md](./auth-in-devcontainers.md)
+  - [common-mistakes-and-pitfalls.md](./common-mistakes-and-pitfalls.md)
 - Curated upstream-URL index:
   `~/DocsNNotes/tech/systems/linux/opensuse/opensuse-build-service-obs.md`

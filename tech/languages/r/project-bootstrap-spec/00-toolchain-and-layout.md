@@ -12,8 +12,8 @@ Use [`usethis`](https://usethis.r-lib.org/) to lay down a conventional skeleton:
   machinery).
 
 Both are idempotent enough to run in an existing directory. Pick the kind here; the shape-specific
-additions live in [`package-project.md`](package-project.md) and
-[`analysis-project.md`](analysis-project.md).
+additions live in [`package-project.md`](./package-project.md) and
+[`analysis-project.md`](./analysis-project.md).
 
 ## `DESCRIPTION` baseline metadata
 
@@ -51,9 +51,9 @@ owns the R _interpreter_ and system libraries; `renv` owns the R _packages_ laye
 ## Layout
 
 The `usethis` scaffold is enough to start. Package layout (`R/`, `man/`, `tests/`, `vignettes/`) is
-detailed in [`package-project.md`](package-project.md); analysis layout (`renv`, `targets`, Quarto)
-in [`analysis-project.md`](analysis-project.md). Bootstrap owns the _ordering_ (get a loadable
-project first); the kind files own the shape-specific _how_.
+detailed in [`package-project.md`](./package-project.md); analysis layout (`renv`, `targets`,
+Quarto) in [`analysis-project.md`](./analysis-project.md). Bootstrap owns the _ordering_ (get a
+loadable project first); the kind files own the shape-specific _how_.
 
 ## Automation
 

@@ -34,7 +34,7 @@ Stylesheet correctness is visual, so a snapshot layer catches what linters canno
 - **Storybook + Chromatic** or **BackstopJS** for design-system component galleries.
 
 Adopt one only when a component library exists — see
-[`stylesheet-library.md`](stylesheet-library.md). Bootstrap only requires lint + format to pass.
+[`stylesheet-library.md`](./stylesheet-library.md). Bootstrap only requires lint + format to pass.
 
 ## Pre-commit wiring
 
@@ -45,5 +45,5 @@ locally in seconds. Expose them as task-runner recipes (`lint`, `fmt`) via `boot
 ## Publish-readiness (later phase)
 
 Publish-grade checks (package contents, `npm publish --dry-run`) belong to the distribution step of
-[`stylesheet-library.md`](stylesheet-library.md), not the general gates. Bootstrap only guarantees
+[`stylesheet-library.md`](./stylesheet-library.md), not the general gates. Bootstrap only guarantees
 the stylesheets build, format, and lint clean.

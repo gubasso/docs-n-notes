@@ -7,7 +7,7 @@ executable entry point, argument parsing, and packaging so the command runs. Thi
 ## Prerequisites
 
 - The [general runbook](../../../programming/project-bootstrap/runbook.md) and the JavaScript
-  [binding runbook](runbook.md) are done — an installable, gated package exists.
+  [binding runbook](./runbook.md) are done — an installable, gated package exists.
 
 ## Add these, in this order
 
@@ -15,7 +15,7 @@ Layer these on the initialized package in order:
 
 1. **Executable entry point.** Add a `bin` field to `package.json` mapping the command name to a
    script (e.g. `"bin": { "mytool": "./dist/cli.js" }`), and start that script with a shebang
-   (`#!/usr/bin/env node`). → [00 — Toolchain & layout](00-toolchain-and-layout.md).
+   (`#!/usr/bin/env node`). → [00 — Toolchain & layout](./00-toolchain-and-layout.md).
 
 2. **Argument parsing & subcommands.** Define the command surface. Node's built-in `util.parseArgs`
    covers simple cases; use [commander](https://github.com/tj/commander.js) or

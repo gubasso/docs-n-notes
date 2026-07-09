@@ -38,4 +38,4 @@ that routes to detail, not a place that duplicates it — the same
 
 `bootstrap-repo` lays down a language-aware `.gitignore`, an SPDX `LICENSE`, and a `README`
 skeleton. The manual steps above are the SoT; the skill accelerates them. See
-[07 — Automation with cog](07-automation-with-cog.md).
+[07 — Automation with cog](./07-automation-with-cog.md).

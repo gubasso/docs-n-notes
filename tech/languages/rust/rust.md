@@ -40,7 +40,7 @@
 
   - tracing subscriber
 
-[sqlx](sqlx.md)
+[sqlx](./sqlx.md)
 
 ## Cargo / Cargo Tools
 

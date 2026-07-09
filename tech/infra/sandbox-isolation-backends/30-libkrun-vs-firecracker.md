@@ -8,9 +8,10 @@ bare [Firecracker](https://firecracker-microvm.github.io/) microVMs.
 The core finding up front: both approaches sit in the **same KVM hardware-virtualization isolation
 class**. Neither shares the host kernel with the guest — so the real question is _which_ microVM
 stack, not _whether_ to use one. For related material see
-[10-runtimes-catalog.md](10-runtimes-catalog.md) (per-runtime catalog including flake-pilot),
-[20-decision-libkrun-linux.md](20-decision-libkrun-linux.md) (the libkrun-on-Linux decision), and
-[00-threat-model-and-principles.md](00-threat-model-and-principles.md) (threat model and premises).
+[10-runtimes-catalog.md](./10-runtimes-catalog.md) (per-runtime catalog including flake-pilot),
+[20-decision-libkrun-linux.md](./20-decision-libkrun-linux.md) (the libkrun-on-Linux decision), and
+[00-threat-model-and-principles.md](./00-threat-model-and-principles.md) (threat model and
+premises).
 
 ## 0. Summary
 
@@ -105,7 +106,7 @@ is technically correct **as a comparison against shared-kernel containers** — 
 qualitatively stronger than namespaces + seccomp + AppArmor + userns, and the Nov 2025 runc CVE
 cluster is the canonical recent precedent. libkrun and the flake-pilot approach **both** satisfy the
 hardware-virtualization premise (see
-[00-threat-model-and-principles.md](00-threat-model-and-principles.md)). The claim therefore
+[00-threat-model-and-principles.md](./00-threat-model-and-principles.md)). The claim therefore
 collapses to a choice **between two KVM stacks**, not between "VM" and "container." Interpreted as
 "Firecracker specifically is the only safe option," the framing is overstated: libkrun delivers the
 same boundary class with a far smaller owned plumbing surface and the same KVM-level guest kernel
@@ -170,7 +171,7 @@ invocation, simple networking, and production-proven upstream. The scorecard:
 | 4. Single working Linux implementation           | **Met.** One adapter, one manifest value.                                                               | **Partial.** Single Linux implementation in principle, but feature parity with the libkrun stack requires re-implementing the OCI build/distribution pipeline against KIS images, plus owning the host networking story. |
 | 5. Migration cheap                               | **Met.** Adapter is small; behind the runtime interface a future swap is mechanical.                    | **Partial.** Adopting flake-pilot now means moving the authoring surface off OCI; that is a deep migration and the inverse direction from the libkrun stack.                                                             |
 
-[10-runtimes-catalog.md](10-runtimes-catalog.md) catalogs flake-pilot and notes the same
+[10-runtimes-catalog.md](./10-runtimes-catalog.md) catalogs flake-pilot and notes the same
 architectural drivers visible here: the OCI-incompatible image flow on the Firecracker path, the
 operator-owned host networking, and a `firecracker-pilot` launcher binary that would land in the
 integrating tool's trust path.
@@ -209,7 +210,7 @@ this comparison because they do not correspond to the stated goals:
   and bare Firecracker. A smaller VMM TCB tightens the host trust path but does not raise the
   isolation class. If a future deployment ever requires the smallest possible VMM TCB on the host,
   the bare-Firecracker adapter slot remains documented in
-  [10-runtimes-catalog.md](10-runtimes-catalog.md) for opt-in — but it is catalog-only.
+  [10-runtimes-catalog.md](./10-runtimes-catalog.md) for opt-in — but it is catalog-only.
 - **"Distribution-specific (e.g. openSUSE-only) deployments"** is not a selection criterion here.
   The target is KVM-capable Linux broadly; distribution coverage is met by libkrun's
   `containers/`-org packaging across Fedora, openSUSE, Arch, Debian, and Ubuntu. A
@@ -239,14 +240,14 @@ host networking, the `firecracker-pilot` trust path) in exchange for no security
 
 ### Sibling shelf docs
 
-- [00-threat-model-and-principles.md](00-threat-model-and-principles.md) — threat model and
+- [00-threat-model-and-principles.md](./00-threat-model-and-principles.md) — threat model and
   premises.
-- [10-runtimes-catalog.md](10-runtimes-catalog.md) — per-runtime catalog, including libkrun and
+- [10-runtimes-catalog.md](./10-runtimes-catalog.md) — per-runtime catalog, including libkrun and
   flake-pilot.
-- [20-decision-libkrun-linux.md](20-decision-libkrun-linux.md) — the libkrun-on-Linux decision.
-- [60-podman-libkrun-operational-notes.md](60-podman-libkrun-operational-notes.md) — Podman +
+- [20-decision-libkrun-linux.md](./20-decision-libkrun-linux.md) — the libkrun-on-Linux decision.
+- [60-podman-libkrun-operational-notes.md](./60-podman-libkrun-operational-notes.md) — Podman +
   libkrun operational notes.
-- [90-references.md](90-references.md) — consolidated external references.
+- [90-references.md](./90-references.md) — consolidated external references.
 
 ### Firecracker / KIWI / flake-pilot
 

@@ -211,7 +211,7 @@ For full Python guidance see
 
 ## See also
 
-- [00 — Architecture](00-architecture.md) — where `config/` and `context.rs` sit in the tree.
-- [01 — Logging & Output](01-logging-and-output.md) — log-file path resolution uses the same
+- [00 — Architecture](./00-architecture.md) — where `config/` and `context.rs` sit in the tree.
+- [01 — Logging & Output](./01-logging-and-output.md) — log-file path resolution uses the same
   precedence.
 - Language-specific: [`rust/cli-spec/05-config.md`](../../languages/rust/cli-spec/05-config.md).

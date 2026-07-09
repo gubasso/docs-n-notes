@@ -1,6 +1,6 @@
 # Branch Protection — GitLab Web UI
 
-Spec, strategy, prerequisites, caveats: [workflow](workflow.md).
+Spec, strategy, prerequisites, caveats: [workflow](./workflow.md).
 
 UI labels verified against docs.gitlab.com on 2026-04-22 for GitLab 17.x / 18.x.
 
@@ -98,4 +98,4 @@ UI labels verified against docs.gitlab.com on 2026-04-22 for GitLab 17.x / 18.x.
   allow-lists.
 - **Settings → Repository → Protected tags** — `v*` listed, Allowed to create = `Maintainers`.
 - **Settings → CI/CD → Job token permissions** — Git push toggle in the expected state.
-- Run the [cross-platform checklist](workflow.md#verification-checklist).
+- Run the [cross-platform checklist](./workflow.md#verification-checklist).

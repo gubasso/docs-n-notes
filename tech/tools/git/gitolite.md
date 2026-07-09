@@ -446,7 +446,7 @@ git clone git@host:foo
 
 [^4]: [Gitolite: install and setup](https://gitolite.com/gitolite/install#your-server)
 
-[^1]: [Server / VPS](./it/server-vps.md)
+[^1]: [Server / VPS](../../infra/server-vps/server-vps.md)
     [Setup a server / vps / domain name / security measures](#setup-a-server-vps-domain-name-security-measures)
 
     - [manage security](#manage-security)

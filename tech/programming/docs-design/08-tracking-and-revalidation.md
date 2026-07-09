@@ -38,7 +38,7 @@ expire on a timer. Tracking is for facts whose truth depends on a source outside
 The tracked artifact remains the source of truth for its fact. The tracking file is not the fact's
 owner; it is the mechanism that keeps the owner from going stale. If the registry and the artifact
 disagree, update the artifact or the registry so there is still one owner. See
-[04 — Single Source of Truth](04-single-source-of-truth.md).
+[04 — Single Source of Truth](./04-single-source-of-truth.md).
 
 ## Revalidation workflow
 
@@ -49,10 +49,10 @@ artifact if the fact changed.
 Use this loop:
 
 1. Scan the tracking file.
-1. Pick overdue entries.
-1. Re-research from authoritative sources.
-1. Update the artifact and its own "data collected" or verified date.
-1. Bump the entry's `last_checked`.
+2. Pick overdue entries.
+3. Re-research from authoritative sources.
+4. Update the artifact and its own "data collected" or verified date.
+5. Bump the entry's `last_checked`.
 
 If the drift is uncertain, surface it. Do not silently overwrite a claim you could not re-verify.
 Open a follow-up, leave a clear note, or ask for review when the source is ambiguous, unavailable,
@@ -68,7 +68,7 @@ inspect instead of asking them to infer freshness from filenames or timestamps.
 The scan and overdue computation belong in deterministic tooling. Revalidation is judgment: fetch
 the current source, compare it with the artifact, decide whether the claim changed, and report
 uncertainty. This split keeps repeated mechanics out of prose while still requiring the agent or
-human to own the interpretation. See [07 — AI Agent Considerations](07-ai-agent-considerations.md)
+human to own the interpretation. See [07 — AI Agent Considerations](./07-ai-agent-considerations.md)
 for the broader retrieval and stale-docs risks.
 
 ## Worked example
@@ -104,4 +104,4 @@ tracked:
 A **temporary-workaround revert ledger** is a tracking artifact of the same shape: it records the
 exact condition (an upstream fix confirmed deployed) under which the workaround must be removed.
 That ledger lives with its case in the known-issues library, not here — see
-[09 — Known Issues](09-known-issues.md).
+[09 — Known Issues](./09-known-issues.md).

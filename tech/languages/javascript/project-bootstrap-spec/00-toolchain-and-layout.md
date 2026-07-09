@@ -69,7 +69,7 @@ Point the compiler at `src/`, emit to `dist/`, and choose modern targets:
 ```
 
 `strict: true` is the baseline. Typechecking as a gate lives in
-[01 — Quality gates](01-quality-gates.md).
+[01 — Quality gates](./01-quality-gates.md).
 
 ## Node version pinning + Nix
 

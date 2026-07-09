@@ -175,8 +175,8 @@ For real source-tracking output, walk figment's `Metadata` directly.
 ## See also
 
 - [General principle — Config Precedence](../../../programming/cli-design/03-config-precedence.md)
-- [04 — Logging (Rust)](04-logging.md) — log destination uses the same precedence
-- [07 — Dependencies (Rust)](07-dependencies.md) — figment + directories rationale
+- [04 — Logging (Rust)](./04-logging.md) — log destination uses the same precedence
+- [07 — Dependencies (Rust)](./07-dependencies.md) — figment + directories rationale
 
 ## References
 

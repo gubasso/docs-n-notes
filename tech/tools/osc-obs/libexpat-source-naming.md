@@ -116,7 +116,7 @@ When the agent runs as a SUSE-authenticated user, `SUSE:SLE-15-SP<n>:Update` is 
 the canonical source: it tracks exactly what `zypper up` on a production SP<n> system delivers, no
 toolchain drift.
 
-See also [`setup-home-project-from-upstream.md`](setup-home-project-from-upstream.md) for the
+See also [`setup-home-project-from-upstream.md`](./setup-home-project-from-upstream.md) for the
 broader home-project overlay topology and
-[`common-mistakes-and-pitfalls.md`](common-mistakes-and-pitfalls.md) for the binary-vs-source-name
+[`common-mistakes-and-pitfalls.md`](./common-mistakes-and-pitfalls.md) for the binary-vs-source-name
 foot-gun in the wider context of converger-script anti-patterns.

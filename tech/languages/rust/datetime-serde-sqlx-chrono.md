@@ -14,11 +14,11 @@ ChatGPT:
 
 1. **Add Chrono to Cargo.toml** : First, ensure that the `chrono` crate is added to your
    `Cargo.toml` file. This crate provides comprehensive date and time handling.
-1. **Define Your Struct** : Define a struct representing the JSON data, with the date time field as
+2. **Define Your Struct** : Define a struct representing the JSON data, with the date time field as
    a `DateTime<Utc>` or `DateTime<FixedOffset>` depending on your needs.
-1. **Use Serde for Deserialization** : Use the `serde` and `serde_json` crates for JSON
+3. **Use Serde for Deserialization** : Use the `serde` and `serde_json` crates for JSON
    deserialization. Make sure these are also included in your `Cargo.toml`.
-1. **Custom Deserialize with Chrono** : You can use `chrono`'s parsing capabilities to deserialize
+4. **Custom Deserialize with Chrono** : You can use `chrono`'s parsing capabilities to deserialize
    the string into a `DateTime` object. Chrono automatically handles ISO 8601 formatted strings,
    which your example appears to be.
 
@@ -129,7 +129,7 @@ ChatGPT:
 Here's how you can do it:
 
 1. \*\* attribute for automatic deserialization\*\* .
-1. **Implement a custom deserialization function** that correctly interprets the timezone
+2. **Implement a custom deserialization function** that correctly interprets the timezone
    information.
 
 Here is an updated example:
@@ -182,9 +182,9 @@ ChatGPT:
 
 1. **Include Chrono and Serde in Cargo.toml** : Make sure you have `chrono` (with serde feature) and
    `serde_json` in your project's dependencies.
-1. **Define a Struct for Deserialization** : Create a struct that represents your JSON data, with a
+2. **Define a Struct for Deserialization** : Create a struct that represents your JSON data, with a
    field for the date time as `DateTime<Utc>`.
-1. **Deserialize Using Serde and Chrono** : Utilize serde's deserialization capabilities along with
+3. **Deserialize Using Serde and Chrono** : Utilize serde's deserialization capabilities along with
    chrono's date time parsing.
 
 Here's an example:
@@ -317,10 +317,10 @@ ChatGPT:
 
 1. **Setup your Cargo.toml** : Ensure you have dependencies for `chrono`, `serde`, `serde_json`, and
    `sqlx` (with the appropriate feature for PostgreSQL).
-1. **Define a Struct** : Create a struct that represents your JSON data, including a date time
+2. **Define a Struct** : Create a struct that represents your JSON data, including a date time
    field.
-1. **Deserialize JSON to Struct** : Use `serde` to deserialize the JSON into your struct.
-1. **Insert Data into PostgreSQL** : Use `sqlx` to insert the data from the struct into your
+3. **Deserialize JSON to Struct** : Use `serde` to deserialize the JSON into your struct.
+4. **Insert Data into PostgreSQL** : Use `sqlx` to insert the data from the struct into your
    PostgreSQL database.
 
 Here's how to do it:

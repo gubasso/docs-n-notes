@@ -7,27 +7,27 @@ details.
 
 ## How to use this tree
 
-1. Read [00 — Architecture](00-architecture.md) first. It defines the vocabulary the other chapters
-   assume (parse-shape vs runtime-shape, `cli/` vs `commands/` vs `domain/`, etc.).
-1. When a design question comes up, search the chapter that owns it.
-1. Cross-link to the appropriate language-specific spec for code-level patterns.
+1. Read [00 — Architecture](./00-architecture.md) first. It defines the vocabulary the other
+   chapters assume (parse-shape vs runtime-shape, `cli/` vs `commands/` vs `domain/`, etc.).
+2. When a design question comes up, search the chapter that owns it.
+3. Cross-link to the appropriate language-specific spec for code-level patterns.
 
 ## Index
 
-| #  | Chapter                                                           | One-line hook                                                                                                                                 |
-| -- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0  | [Architecture](00-architecture.md)                                | Directory roles, parse-shape vs runtime-shape, one `AppContext` built once.                                                                   |
-| 1  | [Logging & output](01-logging-and-output.md)                      | Category-aware human-UX, machine-output, and log-messages (XDG state file, LLM-friendly).                                                     |
-| 2  | [Error messages](02-error-messages.md)                            | Expressive errors with stable `err.kind` keys, BSD sysexits, AI- and human-friendly.                                                          |
-| 3  | [Config precedence](03-config-precedence.md)                      | `CLI > env > project file > user file > defaults`. Source-tracking loaders.                                                                   |
-| 4  | [Coding style (Rust/Zig flavor)](04-coding-style-rust-zig.md)     | Explicit errors, parse-don't-validate, newtypes, composition over inheritance.                                                                |
-| 5  | [Designing for LLM coding agents](05-designing-for-llm-agents.md) | `--help`, `--json`, doctor commands, evaluation harnesses.                                                                                    |
-| 6  | [Preflight & health checks](06-preflight-and-health-checks.md)    | Per-subcommand fail-fast preflight guards + a first-class `doctor` that aggregates every environment check; one probe set, three call sites.  |
-| 7  | [CLI wrapper design](07-cli-wrapper-design/)                      | Wrapping/orchestrating _other_ CLI binaries: typed builders + POSIX process model.                                                            |
-| 8  | [Naming & documentation](08-naming-and-docs.md)                   | Visibility defaults, doc-comment strategy, "comment why, not what".                                                                           |
-| 9  | [Testing & quality](09-testing-and-quality/)                      | Testing pyramid, per-language tooling, regression safeguards, code quality gates. Strategy, tools, AI-agent verification, complexity metrics. |
-| 10 | [Reference projects](10-reference-projects.md)                    | Organizational patterns from well-studied CLIs (language-agnostic takeaways).                                                                 |
-| 99 | [Checklist](99-checklist.md)                                      | One-page sanity check before shipping a CLI.                                                                                                  |
+| #  | Chapter                                                             | One-line hook                                                                                                                                 |
+| -- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0  | [Architecture](./00-architecture.md)                                | Directory roles, parse-shape vs runtime-shape, one `AppContext` built once.                                                                   |
+| 1  | [Logging & output](./01-logging-and-output.md)                      | Category-aware human-UX, machine-output, and log-messages (XDG state file, LLM-friendly).                                                     |
+| 2  | [Error messages](./02-error-messages.md)                            | Expressive errors with stable `err.kind` keys, BSD sysexits, AI- and human-friendly.                                                          |
+| 3  | [Config precedence](./03-config-precedence.md)                      | `CLI > env > project file > user file > defaults`. Source-tracking loaders.                                                                   |
+| 4  | [Coding style (Rust/Zig flavor)](./04-coding-style-rust-zig.md)     | Explicit errors, parse-don't-validate, newtypes, composition over inheritance.                                                                |
+| 5  | [Designing for LLM coding agents](./05-designing-for-llm-agents.md) | `--help`, `--json`, doctor commands, evaluation harnesses.                                                                                    |
+| 6  | [Preflight & health checks](./06-preflight-and-health-checks.md)    | Per-subcommand fail-fast preflight guards + a first-class `doctor` that aggregates every environment check; one probe set, three call sites.  |
+| 7  | [CLI wrapper design](07-cli-wrapper-design/)                        | Wrapping/orchestrating _other_ CLI binaries: typed builders + POSIX process model.                                                            |
+| 8  | [Naming & documentation](./08-naming-and-docs.md)                   | Visibility defaults, doc-comment strategy, "comment why, not what".                                                                           |
+| 9  | [Testing & quality](09-testing-and-quality/)                        | Testing pyramid, per-language tooling, regression safeguards, code quality gates. Strategy, tools, AI-agent verification, complexity metrics. |
+| 10 | [Reference projects](./10-reference-projects.md)                    | Organizational patterns from well-studied CLIs (language-agnostic takeaways).                                                                 |
+| 99 | [Checklist](./99-checklist.md)                                      | One-page sanity check before shipping a CLI.                                                                                                  |
 
 ## Language-specific implementation
 
@@ -44,7 +44,7 @@ matching general chapter.
 ## TL;DR (the irreducible defaults)
 
 - **Declare the facing category and message types.** Use
-  [human-facing or machine-facing](00-architecture.md#facing-category--message-types); keep
+  [human-facing or machine-facing](./00-architecture.md#facing-category--message-types); keep
   human-UX, machine-output, and log-messages distinct.
 - **Default-log to `$XDG_STATE_HOME/<app>/<app>.log`** in structured `key=value` (or JSON), no ANSI.
   Terminal mirror is opt-in.
@@ -59,4 +59,4 @@ matching general chapter.
 - **Guard prerequisites up front, aggregate them in `doctor`.** One probe set, three call sites:
   `doctor` runs the whole catalog, each subcommand fail-fast-guards the subset it needs (refuse
   before any mutation), and setup verbs reuse the same checks. See
-  [06](06-preflight-and-health-checks.md).
+  [06](./06-preflight-and-health-checks.md).

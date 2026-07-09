@@ -56,14 +56,14 @@ Here’s the reasoning, with concrete takeaways:
      file access). ([Pydantic][7])
    - Rust: `impl Serialize/Deserialize`, `impl FromStr`, `impl Display`. ([Serde][4])
 
-1. **Adapters/services** own **I/O**:
+2. **Adapters/services** own **I/O**:
 
    - Python: `load_from_yaml(path | fp)` / `save_to_yaml(path | fp)` live in a `io_/persistence`
      module and accept file-like objects for testing.
    - Rust: `fn read_from<R: Read>(r: R) -> Result<T, _>` /
      `fn write_to<W: Write>(w: W, value: &T) -> Result<(), _>`. ([Rust Documentation][3])
 
-1. **Optional convenience** methods on the model (e.g., `ActiveProducts.save(path)`): if you keep
+3. **Optional convenience** methods on the model (e.g., `ActiveProducts.save(path)`): if you keep
    them, make them **thin wrappers** that delegate to the adapter. This preserves the clean
    separation while remaining ergonomic.
 

@@ -8,43 +8,43 @@ build-system errors that can't be inferred from prior context.
 
 ## Index
 
-- [setup-home-project-from-upstream.md](setup-home-project-from-upstream.md) — from-scratch
+- [setup-home-project-from-upstream.md](./setup-home-project-from-upstream.md) — from-scratch
   walkthrough for a home OBS project that overlays one or more upstream packages with local patches.
   Covers project meta, base-package import vs branch, satellite `_link` topology with
   `<apply name="…patch"/>`, branched providers, the orphan-patch trap, and the verification
   sequence.
-- [broken-state-link-drift.md](broken-state-link-drift.md) — what OBS's `broken` lane state means,
+- [broken-state-link-drift.md](./broken-state-link-drift.md) — what OBS's `broken` lane state means,
   the diagnostic recipe (verbose results + `?expand=1` body), and the `osc add` / `osc rm` /
   `osc ci` recovery for `_link.apply` ↔ source-tree drift. The class of error that bites you the
   second time you rename an overlay patch.
-- [auth-in-devcontainers.md](auth-in-devcontainers.md) — decision matrix and Tier 1 (obfuscated
+- [auth-in-devcontainers.md](./auth-in-devcontainers.md) — decision matrix and Tier 1 (obfuscated
   config file) walkthrough for `osc` auth in dctl / VS Code devcontainers without a host keyring.
   Covers all five tiers, the `osc vc` / `obs-build` dependency, and the troubleshooting section for
   the `NoneType` seed bug and the `trusted-certs` permission error.
-- [common-mistakes-and-pitfalls.md](common-mistakes-and-pitfalls.md) — the "what not to do"
+- [common-mistakes-and-pitfalls.md](./common-mistakes-and-pitfalls.md) — the "what not to do"
   companion to the setup guide. Five categories (auth, workspace, CLI foot-guns, patch/link
   evolution, diagnostic discipline) with one entry per real incident: what happened, why it bit, the
   rule that prevents recurrence. Read end-to-end the first time; cheat-sheet thereafter.
-- [libexpat-source-naming.md](libexpat-source-naming.md) — concrete instance of the binary-vs-source
-  naming convention: the `libexpat1` RPM ships from source pkg `expat`, not `libexpat`.
-  Authoritative probe (`/search/published/binary/id`), the
+- [libexpat-source-naming.md](./libexpat-source-naming.md) — concrete instance of the
+  binary-vs-source naming convention: the `libexpat1` RPM ships from source pkg `expat`, not
+  `libexpat`. Authoritative probe (`/search/published/binary/id`), the
   `osc branch <src-prj> <src-pkg> <tgt-prj> <tgt-pkg>` rename trick that keeps downstream consumers
   referring to `libexpat`, cross-project version + CVE patch matrix, and why
   `SUSE:SLE-15-SP<n>:Update` beats `openSUSE:Factory` as a branch source for SLES overlay work.
-- [blocked-state-is-transient.md](blocked-state-is-transient.md) — `osc results` reporting
+- [blocked-state-is-transient.md](./blocked-state-is-transient.md) — `osc results` reporting
   `blocked: <dep>` on a lane is a scheduler-waiting state (not terminal). Default 15–20 min wait
   before any intervention; `osc rebuild` is harmful when issued over an in-flight auto-rebuild.
   Decision table for wait vs probe vs escalate.
-- [sle-update-pool-vs-standard.md](sle-update-pool-vs-standard.md) — `SUSE:SLE-15-SP<n>:Update` (and
-  other `kind="maintenance_release"` projects) typically has project-level publish disabled; its
-  `standard` repo is empty. Maintenance binaries live under the `pool` repo. The canonical
+- [sle-update-pool-vs-standard.md](./sle-update-pool-vs-standard.md) — `SUSE:SLE-15-SP<n>:Update`
+  (and other `kind="maintenance_release"` projects) typically has project-level publish disabled;
+  its `standard` repo is empty. Maintenance binaries live under the `pool` repo. The canonical
   consumer-side resolver `<path>` is
   `<path project="<source-distro>:<version>:Update" repository="pool"/>`. Includes the probe recipe
   and the trade-off vs `osc branch` for the same purpose.
-- [osc-commands.md](osc-commands.md) — compact cheat sheet of the most-used `osc` verbs grouped by
+- [osc-commands.md](./osc-commands.md) — compact cheat sheet of the most-used `osc` verbs grouped by
   workflow (auth, checkout/branch, sources, changelog, build, commit/submit, services, install test,
   merge). Companion to the deeper guides; quickest answer to "what was the flag for X?".
-- [obs-github-coordination.md](obs-github-coordination.md) — the upstream-vs-OBS dual-repo
+- [obs-github-coordination.md](./obs-github-coordination.md) — the upstream-vs-OBS dual-repo
   discipline. Carry patches only while the upstream fix is pending; drop them the moment a release
   tagged with the fix lands. Covers tarball-based patch mechanics (`tar xf` + `diff -u` +
   `PatchN:`), the `Upstream-Status:` header convention, and the carry → drop lifecycle.
@@ -71,7 +71,7 @@ build-system errors that can't be inferred from prior context.
   links live there); cross-links into this `osc-obs` subtree.
 - `~/DocsNNotes/tech/tools/dctl.md` — `dctl` CLI surface used by `auth-in-devcontainers.md` when the
   host runs containers via dctl rather than vanilla VS Code remote-containers.
-- [`runbook-template.md`](runbook-template.md) — generic shape for a per-lane convergence runbook
+- [`runbook-template.md`](./runbook-template.md) — generic shape for a per-lane convergence runbook
   driven by a Claude self-debug loop. Placeholder-based so it can be copied into any OBS overlay
   project's `docs/` tree.
 - [`../../workflows/claude-self-debug-loop.md`](../../workflows/claude-self-debug-loop.md) —

@@ -37,7 +37,7 @@ language binding and the release phase respectively, not to the general spine.
 
 ## Using the annotations
 
-Each manual step in the [runbook](runbook.md) may carry an inline `Automate:` annotation naming the
-cog skill for that domain. Read the annotation as "this step _can_ be automated by that skill"; the
-manual command stays primary so the recipe is followable with or without cog. Run the skills in
+Each manual step in the [runbook](./runbook.md) may carry an inline `Automate:` annotation naming
+the cog skill for that domain. Read the annotation as "this step _can_ be automated by that skill";
+the manual command stays primary so the recipe is followable with or without cog. Run the skills in
 runbook order, verifying each step's outcome before the next.

@@ -12,9 +12,9 @@ For the four-edit rule's rationale and anti-patterns, see the general chapter. I
 the four files are:
 
 1. **`src/cli/widget.rs`** — parse-shape (clap struct).
-1. **`src/cli/mod.rs`** — register the variant in the `Commands` enum.
-1. **`src/commands/widget.rs`** — handler (free `run` function).
-1. **`src/main.rs`** — dispatch arm.
+2. **`src/cli/mod.rs`** — register the variant in the `Commands` enum.
+3. **`src/commands/widget.rs`** — handler (free `run` function).
+4. **`src/main.rs`** — dispatch arm.
 
 Real-world reminder of what this prevents: a 1500-line `cli.rs` (`riptask/src/cli.rs:1-1558`).
 
@@ -246,9 +246,9 @@ combination is genuinely insufficient.
 
 1. **Tier 1 (default).** `about` + `after_long_help = include_str!("../ui/help_extras.txt")`. clap
    owns USAGE / flags / subcommands; you own the narrative addendum.
-1. **Tier 2.** Add `help_template` if you need to reorder sections or hide one of clap's blocks.
+2. **Tier 2.** Add `help_template` if you need to reorder sections or hide one of clap's blocks.
    Still clap-driven.
-1. **Tier 3 (rare).** `disable_help_flag = true` + a custom `help` subcommand that reads
+3. **Tier 3 (rare).** `disable_help_flag = true` + a custom `help` subcommand that reads
    `include_str!("../ui/help.txt")` and prints it through `Ui`. Justified only when you have
    dynamically-discovered passthrough subcommands (cargo-plugin-style) clap can't enumerate, or
    other narrative the parser fundamentally can't express. Document the choice in an ADR — every new
@@ -259,7 +259,7 @@ without Tier 3's reason.
 
 ### Reconciling with the "no `println!` outside `ui/`" rule
 
-The rule in [09 — Coding Style §7](09-coding-style.md#7-ci-lint-for-the-no-println-rule) governs
+The rule in [09 — Coding Style §7](./09-coding-style.md#7-ci-lint-for-the-no-println-rule) governs
 **your** code's writes to stdout/stderr. clap's auto-generated help is the parser's output — it goes
 through `clap_builder::output::fmt` and is not subject to the lint. You don't need to route Tier 1
 help through `Ui`.

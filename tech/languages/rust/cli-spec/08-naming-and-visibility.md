@@ -148,8 +148,8 @@ well.
 `src/lib.rs` (or `src/main.rs` if there's no lib) starts with a top-of-file `//!` that:
 
 1. Names the crate's purpose in one sentence.
-1. Lists the major modules with one-line summaries.
-1. Links to the spec doc that governs the architecture.
+2. Lists the major modules with one-line summaries.
+3. Links to the spec doc that governs the architecture.
 
 ```rust
 //! `app-template` CLI.

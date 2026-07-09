@@ -16,15 +16,15 @@ attribute set). You describe _what things are_; Nix computes only what's actuall
 
 ## Files (learning order)
 
-1. [`01-language-basics.md`](01-language-basics.md) — values, attrsets, `let/in`, functions,
+1. [`01-language-basics.md`](./01-language-basics.md) — values, attrsets, `let/in`, functions,
    `inherit`, operators (`//`, `with`, `rec`, `?`, `${}`), `lib`/`builtins`.
-2. [`02-flakes.md`](02-flakes.md) — flake structure (`inputs`/`outputs`), `follows`, the
+2. [`02-flakes.md`](./02-flakes.md) — flake structure (`inputs`/`outputs`), `follows`, the
    `eachDefaultSystem` pattern, everyday `nix` commands.
-3. [`03-flake-outputs.md`](03-flake-outputs.md) — the full output schema (`packages`, `devShells`,
+3. [`03-flake-outputs.md`](./03-flake-outputs.md) — the full output schema (`packages`, `devShells`,
    `apps`, `checks`, `nixosConfigurations`, …).
-4. [`04-nixos-and-modules.md`](04-nixos-and-modules.md) — the NixOS module system (`options` vs
+4. [`04-nixos-and-modules.md`](./04-nixos-and-modules.md) — the NixOS module system (`options` vs
    `config`, `mkIf`/`mkForce`), `configuration.nix`, Home Manager.
-5. [`05-tooling-gotchas-resources.md`](05-tooling-gotchas-resources.md) — CLI, ecosystem
+5. [`05-tooling-gotchas-resources.md`](./05-tooling-gotchas-resources.md) — CLI, ecosystem
    (`flake-parts`, `crane`, `direnv`), common gotchas, best resources.
 
 ## Bootstrapping a Nix project

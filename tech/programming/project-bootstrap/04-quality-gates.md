@@ -7,7 +7,7 @@ language-agnostic as a _contract_; the concrete tool is named in the language bi
 
 A single, non-negotiable code formatter removes style debates and keeps diffs minimal. Run it in
 `--check` mode in CI so unformatted code cannot merge. The formatter is authoritative for code
-style; `.editorconfig` (chapter [03](03-local-dev-environment.md)) covers non-code files.
+style; `.editorconfig` (chapter [03](./03-local-dev-environment.md)) covers non-code files.
 
 ## Linter
 
@@ -32,4 +32,4 @@ can be augmented in place. This is the single command surface the other gates ha
 
 `bootstrap-precommit` installs the hook framework and a starter hook set; `bootstrap-taskrunner`
 scaffolds a `justfile` (or augments a `Makefile`). The gates above are the SoT; see
-[07 — Automation with cog](07-automation-with-cog.md).
+[07 — Automation with cog](./07-automation-with-cog.md).

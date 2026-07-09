@@ -262,11 +262,11 @@ Routing can be implemented via:
 Beyond the per-query caching, a periodic batch job can optimize the cache over time:
 
 1. Collect all questions from the last 7 days.
-1. Embed them all.
-1. Cluster (DBSCAN or k-means).
-1. Each cluster = one "canonical question" with a cached answer.
-1. Review: does the cached answer still apply? Are documents stale?
-1. Flag clusters with no cache hit → these are new question patterns to watch.
+2. Embed them all.
+3. Cluster (DBSCAN or k-means).
+4. Each cluster = one "canonical question" with a cached answer.
+5. Review: does the cached answer still apply? Are documents stale?
+6. Flag clusters with no cache hit → these are new question patterns to watch.
 
 This provides a feedback loop for understanding what customers ask most, whether cached answers are
 drifting, and where the agent spends the most tokens.
@@ -274,9 +274,9 @@ drifting, and where the agent spends the most tokens.
 **Recommended implementation timeline:**
 
 1. **Day 1:** API prompt caching (zero effort, just structure API calls correctly)
-1. **Day 1:** Exact match cache (~20 lines of code)
-1. **Week 2-3:** Semantic cache (after real traffic data exists)
-1. **Month 2+:** Clustering/analytics for automated cache management
+2. **Day 1:** Exact match cache (~20 lines of code)
+3. **Week 2-3:** Semantic cache (after real traffic data exists)
+4. **Month 2+:** Clustering/analytics for automated cache management
 
 ### 4.3 Subscription vs API Pricing — Critical Distinction
 
@@ -517,10 +517,10 @@ Adding RAG is a low-friction change in the agentic architecture:
 
 1. Set up a vector index (e.g., Qdrant, Chroma, or pgvector) alongside the existing knowledge
    directory.
-1. Create an embedding pipeline that indexes the knowledge directory.
-1. Register `vector_search` as a new tool in `pi-agent-core`.
-1. The agent code barely changes — it just has one more tool available.
-1. The agent naturally learns when to use vector search vs. grep vs. direct file reads.
+2. Create an embedding pipeline that indexes the knowledge directory.
+3. Register `vector_search` as a new tool in `pi-agent-core`.
+4. The agent code barely changes — it just has one more tool available.
+5. The agent naturally learns when to use vector search vs. grep vs. direct file reads.
 
 The architecture is the same. RAG becomes an optimization you bolt on later, not a foundational
 decision you commit to upfront.

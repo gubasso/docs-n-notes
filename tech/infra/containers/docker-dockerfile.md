@@ -16,20 +16,20 @@ ChatGPT:
    component of your project, name the Dockerfile after that service. For example,
    `Dockerfile-redis`, `Dockerfile-web`, `Dockerfile-db` for Redis, web server, and database
    services, respectively.
-1. **Use the Environment Name** : If Dockerfiles are meant for different environments (development,
+2. **Use the Environment Name** : If Dockerfiles are meant for different environments (development,
    testing, production), include the environment in the name. For example, `Dockerfile-dev`,
    `Dockerfile-test`, `Dockerfile-prod`.
-1. **Feature or Purpose Based Naming** : For Dockerfiles that are specialized for certain features
+3. **Feature or Purpose Based Naming** : For Dockerfiles that are specialized for certain features
    or purposes, include that in the name. For instance, `Dockerfile-ml` for a machine learning
    environment, or `Dockerfile-ci` for continuous integration.
-1. **Directory Structure** : Sometimes, instead of naming the Dockerfiles differently, they are
+4. **Directory Structure** : Sometimes, instead of naming the Dockerfiles differently, they are
    placed in separate directories named according to their purpose, with the Dockerfile named simply
    as `Dockerfile` within each directory.
-1. **Suffixes for Variants** : If there are slight variations of a similar setup, use suffixes. For
+5. **Suffixes for Variants** : If there are slight variations of a similar setup, use suffixes. For
    example, `Dockerfile-nginx-alpine`, `Dockerfile-nginx-ubuntu` for different base images.
-1. **Prefixes for Specificity** : In larger projects, you might want to prefix Dockerfiles with more
+6. **Prefixes for Specificity** : In larger projects, you might want to prefix Dockerfiles with more
    specific identifiers, like `frontend-Dockerfile`, `backend-Dockerfile`.
-1. **Use a Configuration File** : In some setups, especially with Docker Compose, you might have a
+7. **Use a Configuration File** : In some setups, especially with Docker Compose, you might have a
    configuration file (like `docker-compose.yml`) specifying different Dockerfiles for different
    services, allowing you to keep the Dockerfile names simple.
 

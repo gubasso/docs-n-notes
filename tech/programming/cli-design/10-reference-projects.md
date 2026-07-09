@@ -146,7 +146,7 @@ cli/src/
   other module emits through it.
 
 `jj` does both well. The `ui.rs` bound is what makes "no print outside ui/" a teachable, enforceable
-rule (see [04 — Coding Style, rule 12](04-coding-style-rust-zig.md)).
+rule (see [04 — Coding Style, rule 12](./04-coding-style-rust-zig.md)).
 
 ## Pattern 8 — `options/` vs `output/` separation (`eza`)
 
@@ -219,7 +219,7 @@ depends on nothing app-specific; `commands/` depends on everything below it; nev
 
 ## See also
 
-- [00 — Architecture](00-architecture.md) — the directory roles these patterns map onto.
+- [00 — Architecture](./00-architecture.md) — the directory roles these patterns map onto.
 - Language-specific deep dives:
   - [`rust/cli-spec/10-reference-projects.md`](../../languages/rust/cli-spec/10-reference-projects.md)
     — Rust-specific takeaways from the same projects.

@@ -1,15 +1,33 @@
-# Pre-commit hooks for this knowledge-base repo.
-# Template: ~/.dotfiles/pre-commit/markdown.pre-commit-config.yaml
+# Pre-commit hooks for Markdown knowledge bases / docs repos.
 #
-# First-time setup after this change:
-#   1. Migrate TOC markers (one-time):
-#        find . -name '*.md' -not -path './.git/*' -print0 \
-#          | xargs -0 sed -i 's/<!-- *toc *-->/<!--TOC-->/Ig'
-#   2. Install hooks:
-#        pre-commit install --install-hooks
-#   3. Baseline formatter (expect a large diff across all .md files):
-#        pre-commit run --all-files
-#        git add -A && git commit -m 'chore: formatter baseline'
+# Design goals:
+#   - Autofix where possible; gate where not. Sane defaults, not bureaucratic.
+#   - Stable canonical markdown (small diffs, predictable LLM tokens).
+#   - Per-stage budget:
+#       pre-commit  : fast, local, deterministic.
+#       pre-push    : slower, network-aware (link check).
+#       commit-msg  : Conventional Commits shape.
+#
+# Tooling stack (and what each owns):
+#   - pre-commit-hooks : whitespace, line endings, basic safety.
+#   - editorconfig-ec  : honor .editorconfig.
+#   - dprint           : canonical CommonMark/GFM formatter (autofix).
+#                        System binary; config in `./dprint.json`.
+#   - md-toc           : keep `<!--TOC-->` blocks in sync (autofix).
+#   - markdownlint-cli2: style gate beyond what dprint enforces, plus the one
+#                        autofix dprint can't do — ordered-list renumbering
+#                        (MD029). dprint owns all other formatting.
+#   - typos            : conservative spell check (autofix).
+#   - ripsecrets       : secret scanner (fast).
+#   - lychee           : link checker (pre-push only; network).
+#   - no-bare-relative-links : forbid bare-filename relative links (explicit ./ or path).
+#   - committed        : Conventional Commits shape on commit-msg (SoT: committed.toml).
+#
+# First-run note:
+#   dprint will rewrite every .md file once. Run
+#     `pre-commit run --all-files`
+#   and commit the result as a single "chore: dprint baseline" commit
+#   before turning hooks loose on normal work.
 
 default_install_hook_types: [pre-commit, commit-msg, pre-push]
 
@@ -19,7 +37,7 @@ repos:
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace
-        args: [--markdown-linebreak-ext=md]
+        args: [--markdown-linebreak-ext=md]   # keep two-space hard breaks
       - id: end-of-file-fixer
       - id: mixed-line-ending
         args: [--fix=lf]
@@ -28,8 +46,6 @@ repos:
       - id: check-case-conflict
       - id: check-merge-conflict
         args: ['--assume-in-merge']
-        # Documents merge-conflict markers as educational reference.
-        exclude: '^tech/workflows/git-rebase-workflow-complete-reference\.md$'
       - id: destroyed-symlinks
       - id: check-yaml
       - id: check-toml
@@ -37,13 +53,29 @@ repos:
 
   # --- EditorConfig ---
   - repo: https://github.com/editorconfig-checker/editorconfig-checker
-    rev: v3.6.1
+    rev: v3.7.0
     hooks:
       - id: editorconfig-checker
         alias: ec
+        # Repo-specific: final-newline + indentation are owned by dprint here.
         args: [-disable-insert-final-newline, -disable-indentation]
 
-  # --- Markdown formatter: dprint (CommonMark + GFM, config in ./dprint.json) ---
+  # --- Markdown formatter: dprint (canonical CommonMark + GFM) ---
+  #
+  # dprint is the single source of truth for whitespace, list style,
+  # emphasis, table padding, etc. Configure via the sibling `./dprint.json`
+  # at the repo root. The markdown plugin URL/version is pinned inside
+  # dprint.json.
+  #
+  # dprint.json is strict JSON (no comments). This repo sets textWrap=always
+  # (dprint reflows prose to the configured width); MD029 renumbering, fix-mode
+  # isolation, and the SoT decision are documented in this project's markdown
+  # formatting toolchain notes.
+  #
+  # External dependency: dprint must be on PATH (e.g., `cargo install dprint`
+  # or your package manager). Pinned through dprint.json, not pre-commit.
+  # git push may strip PATH, so this hook is pre-commit only — the format
+  # has already been applied by commit time, no need to re-run on push.
   - repo: local
     hooks:
       - id: dprint
@@ -52,38 +84,84 @@ repos:
         language: system
         types: [markdown]
         pass_filenames: true
-        # System binary (~/.cargo/bin/dprint); git push hooks may strip PATH.
-        # dprint already runs at commit time, so skip pre-push re-run.
         stages: [pre-commit]
 
-  # --- Table of contents (looks for `<!--TOC-->` markers) ---
+  # --- Table of contents ---
+  #
+  # md-toc updates the TOC block delimited by `<!--TOC-->` markers in
+  # any markdown file. Files without the marker are left untouched.
   - repo: https://github.com/frnmst/md-toc
     rev: 9.0.0
     hooks:
       - id: md-toc
         # -c: don't gate on TOC list coherence (free-form notes may diverge).
+        # -p: write in place. --skip-lines 1: don't TOC the H1 title.
         args: [-p, -c, --skip-lines, '1', github]
 
-  # --- Markdown lint (style gate; dprint owns formatting, so no --fix) ---
+  # --- Markdown lint (style gate + ordered-list renumber autofix) ---
+  #
+  # markdownlint-cli2 runs AFTER dprint. dprint owns all formatting; markdownlint
+  # flags issues dprint can't normalize (semantic style, link integrity, heading
+  # hierarchy) AND autofixes the one thing dprint can't do — ordered-list
+  # renumbering (MD029, 1.→2.→3.). Fix-mode is enabled via "fix": true in the
+  # config and isolated to MD029 (all other fixable rules disabled there) so it
+  # never fights dprint. Configure rules via the sibling
+  # `./.markdownlint-cli2.jsonc` at the repo root — without it, defaults (line
+  # length, inline HTML) will be too strict for a knowledge base.
+  #
+  # Uses the node variant; swap to `markdownlint-cli2-docker` if your
+  # CI doesn't have node available.
   - repo: https://github.com/DavidAnson/markdownlint-cli2
     rev: v0.22.1
     hooks:
       - id: markdownlint-cli2
+        additional_dependencies: ['markdownlint-rule-relative-links']
 
-  # --- Spelling ---
-  - repo: https://github.com/crate-ci/typos
-    rev: v1.46.2
+  # --- Explicit relative links (ambiguity guard; pre-commit, local) ---
+  #
+  # A bare-filename relative link like [x](runbook.md) is ambiguous: the same
+  # basename can exist in many directories, so neither humans nor tools (e.g. the
+  # Marksman LSP) can tell which file is meant, and the link silently rots when a
+  # file moves. Require an explicit prefix: ./name, ../dir/name, or a multi-segment
+  # path dir/name. Fragment-only (#...), root-absolute (/...), and URL links pass.
+  # Both forms are covered: inline links [x](target) and reference-style link
+  # definitions [label]: target (footnote/collapsed refs included).
+  #
+  # pygrep is built into pre-commit — no external dependency, no companion file.
+  - repo: local
     hooks:
-      - id: typos
-        args: ['--write-changes']
+      - id: no-bare-relative-links
+        name: inline markdown links must be explicit (./, ../, or a path)
+        language: pygrep
+        types: [markdown]
+        entry: '\]\((?!https?://|ftp://|mailto:|tel:|/|#|\.\.?/)[^)/\s:]+\.[A-Za-z0-9]+(?:#[^)]*)?\)'
+      - id: no-bare-relative-link-defs
+        name: markdown link definitions must be explicit (./, ../, or a path)
+        language: pygrep
+        types: [markdown]
+        entry: '^\s*\[[^\]]+\]:\s+(?!https?://|ftp://|mailto:|tel:|/|#|\.\.?/|<)[^\s/:#]+\.[A-Za-z0-9]+'
 
-  # --- Secrets ---
+  # --- Spelling (report-only) ---
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.47.2
+    hooks:
+      # Report-only (no --write-changes): typos auto-fix silently rewrites
+      # deliberate identifiers / error-kind strings and can break code when
+      # these hooks are layered into a code repo. Fix real typos by hand;
+      # allowlist false positives in _typos.toml.
+      - id: typos
+
+  # --- Secrets (fast, local) ---
   - repo: https://github.com/sirwart/ripsecrets
     rev: v0.1.11
     hooks:
       - id: ripsecrets
 
-  # --- Link checker (pre-push only) ---
+  # --- Link checker (pre-push only; network) ---
+  #
+  # Runs only on `git push` so commits stay snappy. The cache file
+  # `.lycheecache` should be gitignored. All tunables (concurrency, retries,
+  # accept/exclude rules) live in the sibling `lychee.toml` at the repo root.
   - repo: https://github.com/lycheeverse/lychee
     rev: lychee-v0.24.2
     hooks:
@@ -91,19 +169,20 @@ repos:
         stages: [pre-push]
         # Knowledge base is markdown — don't crawl template/config files.
         types: [markdown]
-        # Tunables (concurrency, retries, accept/exclude) live in ./lychee.toml;
-        # CLI args here are intentionally minimal so toml stays the source of truth.
+        # Args intentionally minimal so lychee.toml owns the behavior.
         args:
           - --no-progress
 
-  # --- Commit messages: Conventional Commits ---
-  - repo: https://github.com/commitizen-tools/commitizen
-    rev: v4.16.2
+  # --- Commit message: Conventional Commits (single SoT -> committed.toml) ---
+  - repo: https://github.com/crate-ci/committed
+    rev: v1.1.11
     hooks:
-      - id: commitizen
+      - id: committed
         stages: [commit-msg]
+  # commitizen is intentionally NOT the commit-msg linter (committed is the SoT).
+  # For version bumping / changelog only, add commitizen explicitly per-project.
 
-  # --- Meta ---
+  # --- Meta: keep the config itself honest ---
   - repo: meta
     hooks:
       - id: check-hooks-apply

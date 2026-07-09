@@ -10,8 +10,6 @@
 
 ## Related Articles
 
-- [PosgreSQL](./it/sql-db-databases-postgresql.md)
-
 ## General SQL
 
 - `Sqitch`: Sqitch is a database change management application.

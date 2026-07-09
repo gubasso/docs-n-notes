@@ -53,9 +53,9 @@ blog content that Google loves.
 
 1. https://unscreen.com Unscreen helps to remove background from any video or GIF.
 
-1. https://wappalyzer.com Whatrun helps to find out what all technologies are used in a website.
+2. https://wappalyzer.com Whatrun helps to find out what all technologies are used in a website.
 
-1. https://responsively.app Responsively helps to test a website in different devices and helps to
+3. https://responsively.app Responsively helps to test a website in different devices and helps to
    build responsive web apps.
 
 $webdev_tools
@@ -67,7 +67,7 @@ underrated.
 1. https://storytale.io Story tale makes your project eye-catching with awesome characters. Use it
    both for commercial and personal purposes.
 
-1. https://motion.dev Motion One is an animation library, built on the Web Animations API for the
+2. https://motion.dev Motion One is an animation library, built on the Web Animations API for the
    smallest filesize and the fastest performance.
 
 📌 Freelancing
@@ -148,35 +148,35 @@ week. A Thread 🧵👇
 
 1. https://getwaves.io Make beautiful looking svg waves for your projects with a lot of editing
    options.
-1. http://glassmorphism.com Glassmorphism was a killer trend of 2021 and this useful tool will help
+2. http://glassmorphism.com Glassmorphism was a killer trend of 2021 and this useful tool will help
    you create glassmorphic styles super easy.
-1. https://shadows.brumm.af Create smooth beautiful shadows for web development projects super easy.
+3. https://shadows.brumm.af Create smooth beautiful shadows for web development projects super easy.
    Adjust the shadown width and size and copy css code.
-1. https://cssgrid-generator.netlify.app CSS Grid generator helps you to generate css grid just my
+4. https://cssgrid-generator.netlify.app CSS Grid generator helps you to generate css grid just my
    adding or selecting it in the interactive playground.
-1. https://cssbuttons.io Amazing collection of eye catching css buttons ready to copy css.
-1. https://heropatterns.com Impressive collection of amazing patterns ready to copy css code. Add it
+5. https://cssbuttons.io Amazing collection of eye catching css buttons ready to copy css.
+6. https://heropatterns.com Impressive collection of amazing patterns ready to copy css code. Add it
    in 1 click and edit it easily.
-1. https://svgbackgrounds.com Try and build amazing looking svg backgrounds. Copy css and add it to
+7. https://svgbackgrounds.com Try and build amazing looking svg backgrounds. Copy css and add it to
    your project.
-1. https://9elements.github.io/fancy-border-radius/ Create border radius you think were impossible.
+8. https://9elements.github.io/fancy-border-radius/ Create border radius you think were impossible.
    Very useful when it comes to building fancy objects.
-1. https://neumorphism.io/#e0e0e0 Create soft neumorphic shadows for your project, choose your color
+9. https://neumorphism.io/#e0e0e0 Create soft neumorphic shadows for your project, choose your color
    and lot of ways to style the shadow.
-1. https://blobmaker.app/?ref=producthunt Generate random blobs in 1 click. Lot of ways to update
-   styling.
+10. https://blobmaker.app/?ref=producthunt Generate random blobs in 1 click. Lot of ways to update
+    styling.
 
 Parik 🌱 @parik36 5 FREE CSS Generators You Should Know About. A thread 🧵 ↓
 
 1. Neumorphism. io Neumorphism. io allows you to easily create soft neomorphic and soft shadows for
    your project. Simply choose your color and a bunch of neat ways to style the shadow.
-1. SVG Backgrounds SVG Backgrounds allows you to generate mind-blowing background textures for your
+2. SVG Backgrounds SVG Backgrounds allows you to generate mind-blowing background textures for your
    website. You can use its visual app to generate CSS code for the background.
-1. Get Waves Get Waves is a magnificent tool that allows you to create SVG waves. It has many
+3. Get Waves Get Waves is a magnificent tool that allows you to create SVG waves. It has many
    customizable options that let you create amazingly unique waves.
-1. CSS Grid Generator This is an extremely powerful app that lets you create CSS Grid visually using
+4. CSS Grid Generator This is an extremely powerful app that lets you create CSS Grid visually using
    an intuitive "grid playground". I personally use this a lot whenever I work with the grid system.
-1. Hero Patterns Get many beautiful repeatable SVG background designs with CSS code in a single tap.
+5. Hero Patterns Get many beautiful repeatable SVG background designs with CSS code in a single tap.
    It also provides many options to customize the background.
 
 **end: CSS generators**
@@ -193,7 +193,7 @@ $webdev_tools 📌 Design
 [Create reusable components with Mitosis and Builder.io](https://blog.logrocket.com/creating-reusable-components-mitosis-builder-io/)
 https://github.com/BuilderIO/mitosis#readme Write components once, run everywhere. Compiles to:
 
-**When use flexbox and when use grid?** [^wd3](6:15)
+**When use flexbox and when use grid?** [^wd3]
 
 - flexbox: when you don't know the size of content
   - natural size of the content
@@ -217,21 +217,21 @@ Savio ⚡️ @saviomartin7 Best websites to get Icons for web developers 🔥 A 
 
 1. https://useanimations.com The animated icons from useAnimations will help make your future
    projects stand out.
-1. https://getloaf.io Animated SVG icons everyone will love. Easy to use and integrate in projects.
-1. https://iconscout.com/unicons Unicons has 4k+ Smooth icons in 4 different styles to make websites
+2. https://getloaf.io Animated SVG icons everyone will love. Easy to use and integrate in projects.
+3. https://iconscout.com/unicons Unicons has 4k+ Smooth icons in 4 different styles to make websites
    more attractive.
-1. https://css.gg 700+ creative CSS icons completely Open-source and free to use.
-1. https://iconfinder.com Icons for anything you need, one of the best destinations to find high
+4. https://css.gg 700+ creative CSS icons completely Open-source and free to use.
+5. https://iconfinder.com Icons for anything you need, one of the best destinations to find high
    quality icons.
-1. https://lordicon.com Lordicon is a killer Animated Icon Library 200+ free icons ready to use in
+6. https://lordicon.com Lordicon is a killer Animated Icon Library 200+ free icons ready to use in
    your projects.
-1. https://flaticon.com Flaticon has one of the world's biggest free icon database with 6M+ icons in
+7. https://flaticon.com Flaticon has one of the world's biggest free icon database with 6M+ icons in
    total.
-1. https://ionic.io/ionicons Hand-crafted, open-source icons for web, mobile, and desktop use.
-1. https://heroicons.com Beautiful hand-crafted SVG icons, open source and free to use in 2
+8. https://ionic.io/ionicons Hand-crafted, open-source icons for web, mobile, and desktop use.
+9. https://heroicons.com Beautiful hand-crafted SVG icons, open source and free to use in 2
    different styles.
-1. https://tabler-icons.io A collection of over 1400 pixel-perfect icons designed to make your
-   website or app attractive, visually consistent, and simply beautiful.
+10. https://tabler-icons.io A collection of over 1400 pixel-perfect icons designed to make your
+    website or app attractive, visually consistent, and simply beautiful.
 
 - layout example:
 

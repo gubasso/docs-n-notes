@@ -11,8 +11,8 @@
   - Visualize event occurrences on CloudWatch dashboards
 - To set up the integration:
   1. Create a trail in CloudTrail
-  1. Choose a CloudWatch Logs log group as a delivery endpoint
-  1. Specify an IAM role for CloudTrail to assume for delivering logs to CloudWatch
+  2. Choose a CloudWatch Logs log group as a delivery endpoint
+  3. Specify an IAM role for CloudTrail to assume for delivering logs to CloudWatch
 - CloudTrail will then stream events to CloudWatch Logs in addition to S3
 - You can view the events in the CloudWatch console and create metrics/alarms
 

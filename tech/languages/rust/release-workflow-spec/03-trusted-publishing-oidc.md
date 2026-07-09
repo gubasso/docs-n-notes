@@ -17,7 +17,7 @@ crate's settings page which repository + workflow may mint tokens for it. Before
 the crate does not exist, so there is nothing to attach that trust to. Hence the very first version
 is published by hand with a scoped, short-lived `publish-new` token; only afterward do you configure
 the trusted publisher and let CI own every release. The ordered steps live in the
-[runbook](runbook.md#first-manual-publish).
+[runbook](./runbook.md#first-manual-publish).
 
 ## One-time setup on crates.io
 
@@ -29,13 +29,13 @@ Configure this on the **crate settings page** — `https://crates.io/crates/<cra
    - **Repository owner / name** — `<owner>` / `<repo>`.
    - **Workflow filename** — **`release-plz.yml`**. This is the workflow _file_ name, **not** the
      workflow's `name:` field. Our release-plz workflow file is `release-plz.yml`
-     ([04](04-release-plz-config.md)); enter exactly that.
+     ([04](./04-release-plz-config.md)); enter exactly that.
    - **Environment** — leave blank unless the job declares a GitHub `environment:`.
 3. Save. Only jobs from that repo + workflow (+ environment, if set) can now mint a publishing
    token.
 
 > **Do not register `release.yml`.** cargo-dist's generated binary-distribution workflow is
-> `.github/workflows/release.yml` ([05](05-binary-distribution-cargo-dist.md)) — a **different**
+> `.github/workflows/release.yml` ([05](./05-binary-distribution-cargo-dist.md)) — a **different**
 > file that builds binaries and does **not** publish to crates.io. Registering it here would point
 > the trusted publisher at the wrong workflow and every OIDC publish would be rejected. Register the
 > release-plz file (`release-plz.yml`) only. See
@@ -50,7 +50,7 @@ reconfiguration here, as long as the workflow _file_ name and owner/repo stay th
 release-plz performs the OIDC exchange itself. Grant the job `id-token: write` and **do not** set
 `CARGO_REGISTRY_TOKEN` — there is **no** `rust-lang/crates-io-auth-action` step and no registry
 token in `env`. The full workflow (and the `master` promote job) is in
-[04](04-release-plz-config.md).
+[04](./04-release-plz-config.md).
 
 ## In CI — with a plain `cargo publish` workflow
 
@@ -100,8 +100,8 @@ Trusted Publishing, closing those as bypass vectors.
 
 For self-hosted mirrors or registries without Trusted Publishing, fall back to a long-lived
 `CARGO_REGISTRY_TOKEN` secret with a `publish-update`-scoped, per-crate token
-([02](02-api-tokens-and-scopes.md)). Treat this as the exception. (It is incompatible with _require
-trusted publishing_ above — enforcement rejects token publishes.)
+([02](./02-api-tokens-and-scopes.md)). Treat this as the exception. (It is incompatible with
+_require trusted publishing_ above — enforcement rejects token publishes.)
 
 ## Reference
 

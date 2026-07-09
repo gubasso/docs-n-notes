@@ -19,7 +19,8 @@ Every bootstrap fact has exactly one owner, arranged in three descending layers:
 
 1. **General** — `tech/programming/project-bootstrap/` (this tree). Universal, cross-language steps:
    repo creation, `.gitignore`/`LICENSE`/`README`, governance docs, dev environment, quality gates,
-   CI, branch-protection reference, security baseline. The [`runbook.md`](runbook.md) is the spine.
+   CI, branch-protection reference, security baseline. The [`runbook.md`](./runbook.md) is the
+   spine.
 2. **Language** — `tech/languages/<lang>/project-bootstrap-spec/`. Ecosystem choices only: the crate
    layout and toolchain for Rust, packaging for Python, and so on. It _overlays_ the general spine
    and never restates it.

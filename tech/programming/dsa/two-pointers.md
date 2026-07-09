@@ -1,6 +1,6 @@
 # Two Pointers
 
 1. Reverse Words in a String III
-1. Reverse Only Letters
-1. Move Zeroes
-1. Reverse Prefix of Word
+2. Reverse Only Letters
+3. Move Zeroes
+4. Reverse Prefix of Word

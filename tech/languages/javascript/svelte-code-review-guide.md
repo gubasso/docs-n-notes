@@ -51,5 +51,5 @@ Any `.svelte` file, or `.ts`/`.js` in a SvelteKit project (`svelte.config.js` pr
 
 ## See also
 
-- [typescript.md](typescript.md).
+- [typescript.md](./typescript.md).
 - Upstream: <https://github.com/awesome-skills/code-review-skill/blob/main/reference/svelte.md>.

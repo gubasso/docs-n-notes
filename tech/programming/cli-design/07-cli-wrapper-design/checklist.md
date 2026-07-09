@@ -1,8 +1,8 @@
 # CLI Wrapper Design — Merged Checklist
 
 One-page sanity check for CLIs that wrap another CLI binary. Synthesizes the rules from
-[typing-and-validation.md](typing-and-validation.md) and
-[process-and-posix.md](process-and-posix.md).
+[typing-and-validation.md](./typing-and-validation.md) and
+[process-and-posix.md](./process-and-posix.md).
 
 If a box is unchecked, fix it or explicitly waive it in an ADR.
 
@@ -30,7 +30,7 @@ If a box is unchecked, fix it or explicitly waive it in an ADR.
       binary itself (e.g., `wrapper self update`, `wrapper self uninstall`). Introspection verbs
       (`version`, `help`, `completion`, `config`, `doctor`) live at the top level — never
       `self version`, `self help`. See
-      [process-and-posix.md §5.1](process-and-posix.md#51-the-self-rule--narrow-not-generic).
+      [process-and-posix.md §5.1](./process-and-posix.md#51-the-self-rule--narrow-not-generic).
 
 ## RESOLUTION — finding the wrapped binary
 
@@ -102,8 +102,8 @@ If a box is unchecked, fix it or explicitly waive it in an ADR.
 
 ## See also
 
-- [process-and-posix.md](process-and-posix.md) — detailed rules for each PROCESS / ARGV / SIGNAL
+- [process-and-posix.md](./process-and-posix.md) — detailed rules for each PROCESS / ARGV / SIGNAL
   section.
-- [typing-and-validation.md](typing-and-validation.md) — detailed patterns for each BUILD section.
-- [README.md](README.md) — the chapter intro.
+- [typing-and-validation.md](./typing-and-validation.md) — detailed patterns for each BUILD section.
+- [README.md](./README.md) — the chapter intro.
 - [99 — General checklist](../99-checklist.md) — wraps this one for the wrapper-CLI use case.

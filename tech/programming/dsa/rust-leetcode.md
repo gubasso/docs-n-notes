@@ -10,7 +10,7 @@
 
 # Related
 
-- [algorithms]('./algorithms.md')
+- [algorithms](./algorithms.md)
 
 # General
 

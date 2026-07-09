@@ -344,19 +344,19 @@ belongs in this file.
 When in doubt about where new code belongs, ask in this order:
 
 1. **Does this touch the outside world?** → `adapters/`.
-1. **Is it pure orchestration shared across commands?** → `services/`.
-1. **Does it enforce an invariant on a value?** → `domain/`.
-1. **Is it specific to one subcommand?** → `commands/<name>.<ext>`.
-1. **Is it CLI parsing?** → `cli/<name>.<ext>`.
-1. **Is it cross-cutting setup?** → `main`, `context`, `logging`, `config`.
-1. **None of the above?** → probably doesn't belong in the crate yet.
+2. **Is it pure orchestration shared across commands?** → `services/`.
+3. **Does it enforce an invariant on a value?** → `domain/`.
+4. **Is it specific to one subcommand?** → `commands/<name>.<ext>`.
+5. **Is it CLI parsing?** → `cli/<name>.<ext>`.
+6. **Is it cross-cutting setup?** → `main`, `context`, `logging`, `config`.
+7. **None of the above?** → probably doesn't belong in the crate yet.
 
 ---
 
 ## See also
 
-- [00 — Architecture](00-architecture.md) — the directory layout these rules apply to.
-- [02 — Error Messages](02-error-messages.md) — rule 1 in detail.
+- [00 — Architecture](./00-architecture.md) — the directory layout these rules apply to.
+- [02 — Error Messages](./02-error-messages.md) — rule 1 in detail.
 - Language-specific applications:
   - [`rust/cli-spec/09-coding-style.md`](../../languages/rust/cli-spec/09-coding-style.md) — Rust
     idioms (newtypes via `FromStr`, lints, `LazyLock`).

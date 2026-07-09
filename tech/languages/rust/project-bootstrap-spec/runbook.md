@@ -17,17 +17,17 @@ overlay that slots into it.
 ## Steps
 
 1. **Scaffold the crate.** `cargo new <name>` for a binary or `cargo new --lib <name>` for a library
-   (`cargo init` in an existing dir). → [00 — Toolchain & layout](00-toolchain-and-layout.md).
+   (`cargo init` in an existing dir). → [00 — Toolchain & layout](./00-toolchain-and-layout.md).
    _Automate:_ `bootstrap-rust`.
 
 2. **Pin the toolchain.** Add a `rust-toolchain.toml` and wire it into the Nix devShell so local and
-   CI use the same Rust version. → [00 — Toolchain & layout](00-toolchain-and-layout.md),
+   CI use the same Rust version. → [00 — Toolchain & layout](./00-toolchain-and-layout.md),
    [nix/03-rust-toolchain](../../../tools/nix/03-rust-toolchain.md).
 
 3. **Configure quality gates.** `rustfmt.toml`, `clippy` with denied lints, and `cargo-deny` /
-   `cargo-audit` for the security baseline. → [01 — Quality gates](01-quality-gates.md).
+   `cargo-audit` for the security baseline. → [01 — Quality gates](./01-quality-gates.md).
 
-4. **Pick the implementation kind.** For a CLI, follow [`cli-project.md`](cli-project.md); other
+4. **Pick the implementation kind.** For a CLI, follow [`cli-project.md`](./cli-project.md); other
    kinds are followups.
 
 5. **Continue the general spine.** Return to the
@@ -40,6 +40,7 @@ overlay that slots into it.
 
 ## Reference
 
-- [00 — Toolchain & layout](00-toolchain-and-layout.md) · [01 — Quality gates](01-quality-gates.md)
-  · [general runbook](../../../programming/project-bootstrap/runbook.md) ·
+- [00 — Toolchain & layout](./00-toolchain-and-layout.md) ·
+  [01 — Quality gates](./01-quality-gates.md) ·
+  [general runbook](../../../programming/project-bootstrap/runbook.md) ·
   [`../cli-spec/`](../cli-spec/README.md)

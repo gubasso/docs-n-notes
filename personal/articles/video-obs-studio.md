@@ -24,8 +24,8 @@
 - add filters
 
 1. if max system vol + max obs vol is less than yellow range, add "gain" filter
-1. noise suppression: speex
-1. 3-band equalizer
+2. noise suppression: speex
+3. 3-band equalizer
 
 - reduce mid a little bit (more professional)
 - maybe add a little to high

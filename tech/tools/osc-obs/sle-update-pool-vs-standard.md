@@ -70,7 +70,7 @@ maintenance-updated binary in `pool` should preempt the GA-shipped one.
 ## When to prefer `<path>` over `osc branch`
 
 This pattern is the **passive** counterpart to `osc branch`-style branched providers (see
-[`setup-home-project-from-upstream.md`](setup-home-project-from-upstream.md) §4). Both expose
+[`setup-home-project-from-upstream.md`](./setup-home-project-from-upstream.md) §4). Both expose
 upstream binaries to your home project; the trade-off is:
 
 | Approach               | Upstream tracking                                                | Maintenance cost                                                    | Best for                                                                         |
@@ -115,13 +115,13 @@ For an applied-version example with concrete project / package names, see the in
 
 ## Cross-references
 
-- [`setup-home-project-from-upstream.md`](setup-home-project-from-upstream.md) §4 — "Branched
+- [`setup-home-project-from-upstream.md`](./setup-home-project-from-upstream.md) §4 — "Branched
   providers" pattern. The note at the top of §4 references this file for the passive alternative.
 - [`case-studies/02-libexpat-abi-override-via-sles-update-branch.md`](case-studies/02-libexpat-abi-override-via-sles-update-branch.md)
   — that case branched the provider into the home project because the binary needed a local rebuild
   (cross-SP ABI). Compare and contrast with this file's pattern: branch when you need to _modify_
   the binary; add a `<path>` when you only need to _expose_ the upstream binary as-is.
-- [`common-mistakes-and-pitfalls.md`](common-mistakes-and-pitfalls.md) — the project-shape and
+- [`common-mistakes-and-pitfalls.md`](./common-mistakes-and-pitfalls.md) — the project-shape and
   resolver-topology category. When in doubt between `osc branch` and `<path>`, default to the
   cheaper option (this file's pattern) and only escalate to branching when you actually need to
   change the source.

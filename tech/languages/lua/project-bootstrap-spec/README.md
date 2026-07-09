@@ -15,19 +15,19 @@ then the Lua specifics here.
 
 1. Read the general [hub](../../../programming/project-bootstrap/README.md) and
    [general runbook](../../../programming/project-bootstrap/runbook.md) — the cross-language _what_.
-1. Follow this [`runbook.md`](runbook.md) for the Lua-specific overlay steps.
-1. Jump to your implementation-kind file (e.g. [`rock-library.md`](rock-library.md)).
+2. Follow this [`runbook.md`](./runbook.md) for the Lua-specific overlay steps.
+3. Jump to your implementation-kind file (e.g. [`rock-library.md`](./rock-library.md)).
 
 ## Index
 
-| # | Chapter                                          | One-line hook                                                                |
-| - | ------------------------------------------------ | ---------------------------------------------------------------------------- |
-| 0 | [Toolchain & layout](00-toolchain-and-layout.md) | Lua 5.x vs LuaJIT, LuaRocks + rockspec, `require` module tree, Nix devShell. |
-| 1 | [Quality gates](01-quality-gates.md)             | `stylua`, `luacheck`, `busted`, pre-commit wiring.                           |
+| # | Chapter                                            | One-line hook                                                                |
+| - | -------------------------------------------------- | ---------------------------------------------------------------------------- |
+| 0 | [Toolchain & layout](./00-toolchain-and-layout.md) | Lua 5.x vs LuaJIT, LuaRocks + rockspec, `require` module tree, Nix devShell. |
+| 1 | [Quality gates](./01-quality-gates.md)             | `stylua`, `luacheck`, `busted`, pre-commit wiring.                           |
 
 ## Implementation kinds
 
-- [`rock-library.md`](rock-library.md) — LuaRocks module: the bootstrap-time ordering for a
+- [`rock-library.md`](./rock-library.md) — LuaRocks module: the bootstrap-time ordering for a
   publishable rock (rockspec, module tree, `luarocks make`/`build`).
 
 `cli-project.md` (standalone Lua tool) and `neovim-plugin.md` (Neovim runtime plugin) are followups;

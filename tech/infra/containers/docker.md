@@ -30,7 +30,7 @@
   - [Using with Docker-Compose](#using-with-docker-compose)
 - [Users / Permissions:\[^3\]](#users--permissions3)
 - [Deploy in production](#deploy-in-production)
-  - [\[Kubernetes\](./it/containers-kubernetes.md)](#kubernetesitcontainers-kubernetesmd)
+  - [Kubernetes](#kubernetes)
 - [Resources](#resources)
 - [General](#general)
   - [Optimization: build image](#optimization-build-image)
@@ -174,8 +174,6 @@ PORT=8000
 ## Utils
 
 - [Yacht - an Open Source, Self Hosted, Modern, Web GUI for Docker Management similar to Portainer. :awesome_open_source:](https://www.youtube.com/watch?v=eTQ2iB-hjkk)
-
-- [Portainer](./containers-docker-portainer.md)
 
 ## After Install
 
@@ -820,7 +818,7 @@ like this, I don't think this is an issue at all for these "Utility Containers"
 
 - do NOT use bind mounts
 
-### [Kubernetes](./it/containers-kubernetes.md)
+### Kubernetes
 
 ## Resources
 

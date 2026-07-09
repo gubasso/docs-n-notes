@@ -2,13 +2,13 @@
 
 > Status: Reference Scope: Per-option evaluation of every sandbox/runtime/VMM considered as an
 > isolation backend for running untrusted or AI-agent code from OCI images. Reading order: the
-> [threat model and principles](00-threat-model-and-principles.md) first (premises and threat
+> [threat model and principles](./00-threat-model-and-principles.md) first (premises and threat
 > model), then this catalog.
 
 This document catalogs every sandbox option evaluated as an isolation backend for untrusted /
 AI-agent workloads, the verdict for each, and the reasoning behind it. The final default backend is
 **not chosen in this catalog** — see the candidate set and the criteria for selection in the
-[libkrun Linux decision](20-decision-libkrun-linux.md).
+[libkrun Linux decision](./20-decision-libkrun-linux.md).
 
 ## 0. How to read this document
 
@@ -39,7 +39,7 @@ Rejection reasoning is required so future revisions can audit whether the constr
 ## 1. Rejected — shared-kernel containers as the primary boundary
 
 These options are documented to make the rejection reasoning explicit (see the
-[threat model and principles](00-threat-model-and-principles.md)). They are **not** acceptable as
+[threat model and principles](./00-threat-model-and-principles.md)). They are **not** acceptable as
 the primary sandbox for the AI-agent threat model.
 
 ### 1.1 Bare Podman (rootful)
@@ -61,7 +61,7 @@ the primary sandbox for the AI-agent threat model.
 
 - **What it is** — Strong seccomp profile, AppArmor profile, `cap-drop=ALL`, `no-new-privileges`.
   The hygiene hardening enumerated in the
-  [threat model & principles](00-threat-model-and-principles.md) (§2).
+  [threat model & principles](./00-threat-model-and-principles.md) (§2).
 - **Security posture** — Defense-in-depth: each layer raises the cost of an exploit but cannot
   prevent kernel-level LPEs from succeeding.
 - **Verdict — `defense-in-depth only`.** Required **inside** the chosen primary boundary, not as a
@@ -121,8 +121,8 @@ the primary sandbox for the AI-agent threat model.
 ## 4. Hardware-virtualization microVMs — the primary candidate set
 
 These options meet the core premise: a hypervisor-class boundary between agent-executed code and the
-host kernel (see the [threat model and principles](00-threat-model-and-principles.md)). **No final
-default has been chosen** among them; the [libkrun Linux decision](20-decision-libkrun-linux.md)
+host kernel (see the [threat model and principles](./00-threat-model-and-principles.md)). **No final
+default has been chosen** among them; the [libkrun Linux decision](./20-decision-libkrun-linux.md)
 lists the selection criteria.
 
 ### 4.1 Bare Firecracker (integrating-tool-owned controller)
@@ -242,7 +242,7 @@ lists the selection criteria.
   `krun_set_gpu_options` (FC has no GPU support) but is **off by default** in
   `podman --runtime krun`. These are the technical content behind the §4.4 trade-off, not a
   boundary-class regression — a guest-kernel LPE remains a guest-kernel compromise, not a host
-  compromise. See the [libkrun vs Firecracker comparison](30-libkrun-vs-firecracker.md) for the
+  compromise. See the [libkrun vs Firecracker comparison](./30-libkrun-vs-firecracker.md) for the
   cross-candidate framing of residual host-kernel surface.
 - **OCI fit** — full. `podman --runtime krun run <image>` consumes OCI images directly; rootfs
   conversion is internal to `crun-krun`. No bespoke builder.
@@ -336,8 +336,8 @@ lists the selection criteria.
   Hardware-attested isolation.
 - **Verdict — `rejected (wrong threat model)`.** The AI-agent threat model trusts the host (the
   developer's laptop) and distrusts the workload (see the
-  [threat model and principles](00-threat-model-and-principles.md)). CoCo solves the inverse problem
-  (trusted workload, untrusted host).
+  [threat model and principles](./00-threat-model-and-principles.md)). CoCo solves the inverse
+  problem (trusted workload, untrusted host).
 
 ### 5.7 V8 isolates / WebAssembly sandboxes
 
@@ -388,4 +388,4 @@ lists the selection criteria.
 
 ## 7. References
 
-Cited inline; the consolidated list also lives in the [references](90-references.md).
+Cited inline; the consolidated list also lives in the [references](./90-references.md).

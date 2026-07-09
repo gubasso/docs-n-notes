@@ -52,7 +52,7 @@ sudo pacman -S gocryptfs
    mkdir -p ~/vault_plain
    ```
 
-1. **Initialize the encrypted directory**:
+2. **Initialize the encrypted directory**:
 
    ```bash
    gocryptfs -init ~/vault_encrypted
@@ -61,7 +61,7 @@ sudo pacman -S gocryptfs
    This generates a `gocryptfs.conf` file containing your encrypted master key and salt, secured by
    your passphrase ([Arch Manual Pages][6], [ArchWiki][1]).
 
-1. **Change passphrase** (optional):
+3. **Change passphrase** (optional):
 
    ```bash
    gocryptfs -passwd ~/vault_encrypted
@@ -152,7 +152,7 @@ other FUSE backends) visually:
    flatpak install flathub io.github.mhogomchungu.sirikali
    ```
 
-1. **Launch SiriKali**, click **“Add”**, choose the gocryptfs backend, configure your encrypted
+2. **Launch SiriKali**, click **“Add”**, choose the gocryptfs backend, configure your encrypted
    folder and mount point, then click **Mount** or **Unmount** as needed
    ([Flathub - Apps for Linux][13], [Mhogo Mchungu][14]).
 

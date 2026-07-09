@@ -6,13 +6,13 @@ logging, configuration, and a subcommand shape. This file owns only the **bootst
 ## Prerequisites
 
 - The [general runbook](../../../programming/project-bootstrap/runbook.md) and the Python
-  [binding runbook](runbook.md) are done — an importable, gated project exists.
+  [binding runbook](./runbook.md) are done — an importable, gated project exists.
 
 ## Add these, in this order
 
 1. **Console-script entry point.** Declare the CLI under `[project.scripts]` in `pyproject.toml`
    (e.g. `mytool = "mytool.cli:main"`) so `uv run mytool` and the installed package both expose it.
-   → [00 — Toolchain & layout](00-toolchain-and-layout.md).
+   → [00 — Toolchain & layout](./00-toolchain-and-layout.md).
 
 2. **Argument parsing & subcommands.** Define the command surface. Use `argparse` (stdlib, zero
    deps) for a small tool, or `click` / `typer` for richer subcommand trees, help, and completion.

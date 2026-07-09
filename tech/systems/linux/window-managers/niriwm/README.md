@@ -2,7 +2,7 @@
 
 > niriwm
 
-- [NVIDIA suspend and sleep](suspend-sleep-nvidia.md)
+- [NVIDIA suspend and sleep](./suspend-sleep-nvidia.md)
 
 Validate config file:
 

@@ -18,23 +18,24 @@
 
 ## Companion subtree (canonical OBS/osc notes)
 
-- [`~/DocsNNotes/tech/tools/osc-obs/`](../../tools/osc-obs/README.md) — dedicated OBS/osc subtree:
-  - [`setup-home-project-from-upstream.md`](../../tools/osc-obs/setup-home-project-from-upstream.md)
+- [`~/DocsNNotes/tech/tools/osc-obs/`](../../../tools/osc-obs/README.md) — dedicated OBS/osc
+  subtree:
+  - [`setup-home-project-from-upstream.md`](../../../tools/osc-obs/setup-home-project-from-upstream.md)
     — from-scratch home-project walkthrough (project meta, base import vs branch, satellite
     `_link` + `<apply>`, branched providers, verification sequence).
-  - [`broken-state-link-drift.md`](../../tools/osc-obs/broken-state-link-drift.md) — the `broken`
+  - [`broken-state-link-drift.md`](../../../tools/osc-obs/broken-state-link-drift.md) — the `broken`
     lane state (pre-build link-expansion failure), diagnostic recipe, and
     `osc add`/`osc rm`/`osc ci` recovery.
-  - [`auth-in-devcontainers.md`](../../tools/osc-obs/auth-in-devcontainers.md) — auth / `oscrc` /
+  - [`auth-in-devcontainers.md`](../../../tools/osc-obs/auth-in-devcontainers.md) — auth / `oscrc` /
     KWallet-free credential setup in devcontainers.
-  - [`common-mistakes-and-pitfalls.md`](../../tools/osc-obs/common-mistakes-and-pitfalls.md) —
+  - [`common-mistakes-and-pitfalls.md`](../../../tools/osc-obs/common-mistakes-and-pitfalls.md) —
     distilled lessons from real incidents (auth, workspace, CLI foot-guns, patch/link evolution,
     diagnostic discipline).
-  - [`libexpat-source-naming.md`](../../tools/osc-obs/libexpat-source-naming.md) — the `libexpat1`
-    binary RPM ships from source pkg `expat`; `osc branch` with target-rename trick; cross-project
-    version / CVE-2025-59375 patch matrix; why `SUSE:SLE-15-SP<n>:Update` beats `openSUSE:Factory`
-    for SLES overlay work.
-  - [`case-studies/`](../../tools/osc-obs/case-studies/README.md) — narrative reflections on real
+  - [`libexpat-source-naming.md`](../../../tools/osc-obs/libexpat-source-naming.md) — the
+    `libexpat1` binary RPM ships from source pkg `expat`; `osc branch` with target-rename trick;
+    cross-project version / CVE-2025-59375 patch matrix; why `SUSE:SLE-15-SP<n>:Update` beats
+    `openSUSE:Factory` for SLES overlay work.
+  - [`case-studies/`](../../../tools/osc-obs/case-studies/README.md) — narrative reflections on real
     OBS home-project incidents (goal → mistakes → fix → rule distilled → happy path → final result).
     Read once per topic to install the lesson; the topic notes above are the reference cards. Covers
     `broken` link drift after a patch rename, and overriding a buildroot ABI by branching a SUSE
@@ -78,7 +79,7 @@ Sometimes, you will see the obs://DOMAIN/PROJECT notation. The obs:// schema is 
 
 For the `osc` verb cheat sheet (branch / co / build / commit / sr / etc.), home-project setup,
 patch/link mechanics, build-state diagnostics, and metadata templates, see the dedicated subtree:
-**[`~/DocsNNotes/tech/tools/osc-obs/`](../../tools/osc-obs/README.md)**.
+**[`~/DocsNNotes/tech/tools/osc-obs/`](../../../tools/osc-obs/README.md)**.
 
 Upstream references:
 

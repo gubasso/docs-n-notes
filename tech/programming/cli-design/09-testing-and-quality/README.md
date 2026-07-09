@@ -8,12 +8,12 @@ both human and AI coding agents.
 
 ## Chapters
 
-| Chapter                                           | Question it answers                                                                                       |
-| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| [Testing strategy](testing-strategy.md)           | "What does the test pyramid look like for a CLI? What goes in each tier? How do I keep tests isolated?"   |
-| [Testing tools](testing-tools.md)                 | "Which runner, snapshot library, property framework, and mutation tool should I use for my language?"     |
-| [Regression safeguards](regression-safeguards.md) | "How do I prevent AI agents (and humans) from introducing regressions? What's the verification workflow?" |
-| [Code quality tools](code-quality-tools.md)       | "Which tools enforce complexity limits, catch unused deps, track binary size, and guard architecture?"    |
+| Chapter                                             | Question it answers                                                                                       |
+| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| [Testing strategy](./testing-strategy.md)           | "What does the test pyramid look like for a CLI? What goes in each tier? How do I keep tests isolated?"   |
+| [Testing tools](./testing-tools.md)                 | "Which runner, snapshot library, property framework, and mutation tool should I use for my language?"     |
+| [Regression safeguards](./regression-safeguards.md) | "How do I prevent AI agents (and humans) from introducing regressions? What's the verification workflow?" |
+| [Code quality tools](./code-quality-tools.md)       | "Which tools enforce complexity limits, catch unused deps, track binary size, and guard architecture?"    |
 
 Read in this order: strategy first (principles), then tools (implementation), then safeguards
 (workflow), then quality tools (structural gates).

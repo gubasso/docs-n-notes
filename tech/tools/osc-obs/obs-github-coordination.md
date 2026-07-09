@@ -61,7 +61,7 @@ osc build --local --clean
 ```
 
 For `_link`-based satellite packages, the mechanic is different (see
-[setup-home-project-from-upstream.md](setup-home-project-from-upstream.md) §3 — patches go through
+[setup-home-project-from-upstream.md](./setup-home-project-from-upstream.md) §3 — patches go through
 `<apply name="…"/>` in `_link`, not `Patch0:` in the spec).
 
 ## End-to-end lifecycle
@@ -133,10 +133,10 @@ For `_link`-based satellite packages, the mechanic is different (see
 
 ## See also
 
-- [setup-home-project-from-upstream.md](setup-home-project-from-upstream.md) — `_link` + `<apply>`
+- [setup-home-project-from-upstream.md](./setup-home-project-from-upstream.md) — `_link` + `<apply>`
   overlays for satellite packages (the patch mechanic for branched sources rather than tarball-based
   sources).
-- [osc-commands.md](osc-commands.md) — the verbs (`osc add`, `osc rm`, `osc vc`, `osc commit`,
+- [osc-commands.md](./osc-commands.md) — the verbs (`osc add`, `osc rm`, `osc vc`, `osc commit`,
   `osc sr`) called out above.
 - [openSUSE Patch Guidelines](https://en.opensuse.org/openSUSE%3APackaging_Patches_guidelines).
 - [openSUSE Git Packaging Workflow](https://en.opensuse.org/openSUSE%3AGit_Packaging_Workflow).

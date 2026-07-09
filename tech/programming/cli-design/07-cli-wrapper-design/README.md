@@ -12,11 +12,11 @@ binary, you can skip this entire chapter — go back to [00 — Architecture](..
 
 ## Two concerns, two chapters
 
-| Concern                 | Question it answers                                                                                  | Chapter                                              |
-| ----------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| **Typing & validation** | "How do I structure my code so I can't accidentally generate malformed args?"                        | [typing-and-validation.md](typing-and-validation.md) |
-| **Process & POSIX**     | "How do I reliably invoke a subprocess while respecting argv layout, signals, exit codes, and TTYs?" | [process-and-posix.md](process-and-posix.md)         |
-| **Checklist**           | "What must be true before I declare this wrapper shippable?"                                         | [checklist.md](checklist.md)                         |
+| Concern                 | Question it answers                                                                                  | Chapter                                                |
+| ----------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| **Typing & validation** | "How do I structure my code so I can't accidentally generate malformed args?"                        | [typing-and-validation.md](./typing-and-validation.md) |
+| **Process & POSIX**     | "How do I reliably invoke a subprocess while respecting argv layout, signals, exit codes, and TTYs?" | [process-and-posix.md](./process-and-posix.md)         |
+| **Checklist**           | "What must be true before I declare this wrapper shippable?"                                         | [checklist.md](./checklist.md)                         |
 
 Read both, in this order. The first tells you _what_ to build; the second tells you _how_ to run it.
 
@@ -46,7 +46,7 @@ argv become fragile — every new flag the child adds is a potential breakage in
 
 ## Quick checklist
 
-For the full checklist, see [checklist.md](checklist.md). Highlights:
+For the full checklist, see [checklist.md](./checklist.md). Highlights:
 
 - [ ] Wrapper's own flags are **before** the subcommand; everything after `--` passes through
       verbatim.

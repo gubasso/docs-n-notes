@@ -13,19 +13,19 @@ then the CSS specifics here.
 
 1. Read the general [hub](../../../programming/project-bootstrap/README.md) and
    [general runbook](../../../programming/project-bootstrap/runbook.md) — the cross-language _what_.
-1. Follow this [`runbook.md`](runbook.md) for the CSS-specific overlay steps.
-1. Jump to your implementation-kind file (e.g. [`stylesheet-library.md`](stylesheet-library.md)).
+2. Follow this [`runbook.md`](./runbook.md) for the CSS-specific overlay steps.
+3. Jump to your implementation-kind file (e.g. [`stylesheet-library.md`](./stylesheet-library.md)).
 
 ## Index
 
-| # | Chapter                                          | One-line hook                                                              |
-| - | ------------------------------------------------ | -------------------------------------------------------------------------- |
-| 0 | [Toolchain & layout](00-toolchain-and-layout.md) | ITCSS/BEM layout, tokens, PostCSS/Sass, npm/pnpm + Vite in a Nix devShell. |
-| 1 | [Quality gates](01-quality-gates.md)             | `stylelint`, `prettier`, visual regression, pre-commit wiring.             |
+| # | Chapter                                            | One-line hook                                                              |
+| - | -------------------------------------------------- | -------------------------------------------------------------------------- |
+| 0 | [Toolchain & layout](./00-toolchain-and-layout.md) | ITCSS/BEM layout, tokens, PostCSS/Sass, npm/pnpm + Vite in a Nix devShell. |
+| 1 | [Quality gates](./01-quality-gates.md)             | `stylelint`, `prettier`, visual regression, pre-commit wiring.             |
 
 ## Implementation kinds
 
-- [`stylesheet-library.md`](stylesheet-library.md) — a reusable stylesheet / design-system /
+- [`stylesheet-library.md`](./stylesheet-library.md) — a reusable stylesheet / design-system /
   component-library package: design tokens, theming, and npm distribution.
 
 `app-embedded-stylesheet.md` (stylesheets bundled into an app rather than published) is a followup;

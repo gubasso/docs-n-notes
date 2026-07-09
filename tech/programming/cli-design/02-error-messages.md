@@ -10,9 +10,9 @@ Every error report has four parts. Write them in this order; omit a part only wh
 redundant.
 
 1. **What** — the operation that failed, in one concrete line.
-1. **Where** — the specific input, file, or step that triggered it.
-1. **Why** — the root cause, walked from the error chain.
-1. **Hint** — actionable next step, when one is known.
+2. **Where** — the specific input, file, or step that triggered it.
+3. **Why** — the root cause, walked from the error chain.
+4. **Hint** — actionable next step, when one is known.
 
 Example (good):
 
@@ -56,8 +56,8 @@ hint is worse than nothing.
 
 Where the caller's error goes follows the **universal Unix stdout/stderr contract** and does **not**
 change with facing category (see
-[00 — Facing category & message types](00-architecture.md#facing-category--message-types) and the
-channels matrix in [01 — Logging & Output](01-logging-and-output.md)). The caller's error always
+[00 — Facing category & message types](./00-architecture.md#facing-category--message-types) and the
+channels matrix in [01 — Logging & Output](./01-logging-and-output.md)). The caller's error always
 goes to `stderr` with a non-zero exit code; `stdout` carries only a successful result. What differs
 is the _format_, not the channel: a **human-facing** tool writes a prose `What`/`Where`/`Hint`
 message to `stderr`, while a **machine-facing** tool writes a **structured (JSON) error to
@@ -80,9 +80,9 @@ not change between versions.
 The kind appears:
 
 1. In the program-log record (`err.kind=ConfigNotFound`).
-1. Optionally in the user-UX message (some tools show `[E0309]` style codes; do this only if your
+2. Optionally in the user-UX message (some tools show `[E0309]` style codes; do this only if your
    error space is small enough that codes are memorable).
-1. In documentation / runbook entries (`See "ConfigNotFound" in TROUBLESHOOTING.md`).
+3. In documentation / runbook entries (`See "ConfigNotFound" in TROUBLESHOOTING.md`).
 
 LLM agents pattern-match on these. Renaming a kind is a breaking change.
 
@@ -207,15 +207,15 @@ interactive humans, not for piping into another tool.
 When an LLM agent runs your CLI and reads its logs to debug:
 
 1. **Stable `err.kind`** lets the agent pattern-match against a known taxonomy.
-1. **Structured fields** (`err.path`, `err.line`, `err.value`) let the agent reason about the
+2. **Structured fields** (`err.path`, `err.line`, `err.value`) let the agent reason about the
    failure without parsing prose.
-1. **Predictable chain depth** — don't randomize whether you wrap N times.
-1. **No noisy stack traces in the default log**. Stack traces (when emitted) go behind `-vvv` or
+3. **Predictable chain depth** — don't randomize whether you wrap N times.
+4. **No noisy stack traces in the default log**. Stack traces (when emitted) go behind `-vvv` or
    into a separate `err.trace` field with a stable encoding.
-1. **One `op` per top-level command invocation**, with `status=error` and an `err.*` group when it
+5. **One `op` per top-level command invocation**, with `status=error` and an `err.*` group when it
    fails. The agent can grep `status=error` to find every failure in a session.
 
-See [05 — Designing for LLM Agents](05-designing-for-llm-agents.md) for the broader pattern.
+See [05 — Designing for LLM Agents](./05-designing-for-llm-agents.md) for the broader pattern.
 
 ---
 
@@ -253,9 +253,10 @@ For every error variant, confirm:
 
 - [Rust 03 — Error Handling](../../languages/rust/cli-spec/03-error-handling.md) — `thiserror` +
   `anyhow` stack, `#[from]` mechanics, `AppError::exit_code()`.
-- [01 — Logging & Output](01-logging-and-output.md) — how errors travel through the program-log
+- [01 — Logging & Output](./01-logging-and-output.md) — how errors travel through the program-log
   layer.
-- [05 — Designing for LLM Agents](05-designing-for-llm-agents.md) — agent-readable failure schemas.
+- [05 — Designing for LLM Agents](./05-designing-for-llm-agents.md) — agent-readable failure
+  schemas.
 
 ## References
 

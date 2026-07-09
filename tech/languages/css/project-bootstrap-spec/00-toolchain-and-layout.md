@@ -29,7 +29,7 @@ the flake; add the Node inputs to it. Do not restate the general devShell setup 
   stay flat and low-specificity.
 - **Design tokens.** Reserve a tokens/variables layer at the top: native CSS custom properties
   (`--color-*`, `--space-*`) and/or Sass variables for build-time values. Tokens are the theming
-  seam — see [`stylesheet-library.md`](stylesheet-library.md).
+  seam — see [`stylesheet-library.md`](./stylesheet-library.md).
 
 ## Processing pipeline
 
@@ -49,7 +49,7 @@ Both can coexist (Sass compiled, then PostCSS post-processes). Define a `browser
 Use **Vite** for a fast dev server, `@import`/`@use` resolution, and asset handling; its build step
 emits the distributable CSS. For a pure library with no app shell, `postcss-cli` or the Sass CLI
 (`sass src:dist`) is a lighter alternative. The bundler choice belongs to the implementation kind —
-see [`stylesheet-library.md`](stylesheet-library.md).
+see [`stylesheet-library.md`](./stylesheet-library.md).
 
 ## Layout
 

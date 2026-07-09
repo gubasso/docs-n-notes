@@ -9,7 +9,7 @@ auth.
 
 - `name` — must be unique on crates.io and unclaimed. Names are first-come and permanent once
   published.
-- `version` — a valid [SemVer](07-semver-yank-rollback.md) version.
+- `version` — a valid [SemVer](./07-semver-yank-rollback.md) version.
 - `description` — a short, one-sentence summary. **crates.io hard-rejects a publish that has no
   `description`.** This is the single most common first-publish blocker.
 - `license` **or** `license-file` — an [SPDX license expression](https://spdx.org/licenses/) (e.g.
@@ -144,7 +144,7 @@ cargo package --list      # exact file list that would ship
 
 The dry run is the acceptance gate for this chapter: it fails loudly on a missing `description`, an
 invalid `categories` slug, or a build error, and it needs no crates.io auth. See
-[06 — Helper scripts](06-helper-scripts.md) for wrapping these in a `publish-dry` script.
+[06 — Helper scripts](./06-helper-scripts.md) for wrapping these in a `publish-dry` script.
 
 ## Reference
 

@@ -92,7 +92,7 @@ interact
 #### Running the Script
 
 1. Save the script to a file (e.g., `ssh_login.expect`).
-1. Make the script executable:
+2. Make the script executable:
 
 ```bash
 chmod +x ssh_login.expect

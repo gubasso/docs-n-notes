@@ -48,7 +48,7 @@ rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "warning")
 ```
 
 Analysis projects have no `R CMD check`; their gate is styler/air + lintr + testthat plus a
-successful pipeline render (see [`analysis-project.md`](analysis-project.md)).
+successful pipeline render (see [`analysis-project.md`](./analysis-project.md)).
 
 ## Pre-commit wiring
 

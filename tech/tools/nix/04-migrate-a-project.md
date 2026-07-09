@@ -15,7 +15,7 @@ three files to a repo.
 2. **Tune `flake.nix`** to the runtime the project needs (e.g. `nodejs_22`, a Zig version, add
    `pkgs.<system-lib>` for native builds). **For Python/Poetry**, pin the version explicitly and add
    the `assert python.version == pkgs.poetry.python.version` guard so the venv can't drift from the
-   pin; see [`02-per-project-devshell.md`](02-per-project-devshell.md) ("Aligning the Python
+   pin; see [`02-per-project-devshell.md`](./02-per-project-devshell.md) ("Aligning the Python
    version").
 
 3. **Generate the lock** on a host with Nix + network (never fabricate it):
@@ -47,4 +47,4 @@ three files to a repo.
 - Once the repo has `flake.nix` + `.envrc`, the dctl lifecycle hooks
   (`direnv exec . poetry install`, etc.) light up automatically; before that they no-op.
 - Rust: keep `rust-toolchain.toml` — the flake reads it (see
-  [03-rust-toolchain](03-rust-toolchain.md)); no `~/.rustup` volume anymore.
+  [03-rust-toolchain](./03-rust-toolchain.md)); no `~/.rustup` volume anymore.

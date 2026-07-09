@@ -13,23 +13,23 @@ then the Go specifics here.
 
 1. Read the general [hub](../../../programming/project-bootstrap/README.md) and
    [general runbook](../../../programming/project-bootstrap/runbook.md) — the cross-language _what_.
-1. Follow this [`runbook.md`](runbook.md) for the Go-specific overlay steps.
-1. Jump to your implementation-kind file (e.g. [`cli-project.md`](cli-project.md) or
-   [`web-service.md`](web-service.md)).
+2. Follow this [`runbook.md`](./runbook.md) for the Go-specific overlay steps.
+3. Jump to your implementation-kind file (e.g. [`cli-project.md`](./cli-project.md) or
+   [`web-service.md`](./web-service.md)).
 
 ## Index
 
-| # | Chapter                                          | One-line hook                                                                  |
-| - | ------------------------------------------------ | ------------------------------------------------------------------------------ |
-| 0 | [Toolchain & layout](00-toolchain-and-layout.md) | `go mod init`, module path, `cmd/`/`internal/`/`pkg/`, Go version pin + Nix.   |
-| 1 | [Quality gates](01-quality-gates.md)             | `gofmt`/`goimports`, `go vet` + `golangci-lint`, `go test -race`, govulncheck. |
+| # | Chapter                                            | One-line hook                                                                  |
+| - | -------------------------------------------------- | ------------------------------------------------------------------------------ |
+| 0 | [Toolchain & layout](./00-toolchain-and-layout.md) | `go mod init`, module path, `cmd/`/`internal/`/`pkg/`, Go version pin + Nix.   |
+| 1 | [Quality gates](./01-quality-gates.md)             | `gofmt`/`goimports`, `go vet` + `golangci-lint`, `go test -race`, govulncheck. |
 
 ## Implementation kinds
 
-- [`cli-project.md`](cli-project.md) — Go CLI: the bootstrap-time ordering for command surface,
+- [`cli-project.md`](./cli-project.md) — Go CLI: the bootstrap-time ordering for command surface,
   flags/subcommands (`flag` or `cobra`), and config.
-- [`web-service.md`](web-service.md) — Go HTTP service: the bootstrap-time ordering for the server,
-  routing (`net/http` or a router), and graceful shutdown.
+- [`web-service.md`](./web-service.md) — Go HTTP service: the bootstrap-time ordering for the
+  server, routing (`net/http` or a router), and graceful shutdown.
 
 `library-project.md` is a followup; add it when you bootstrap a Go library.
 

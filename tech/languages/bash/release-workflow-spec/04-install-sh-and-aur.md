@@ -1,11 +1,11 @@
 # Bash Release — install.sh & AUR
 
-Part of the [bash release-workflow spec](README.md). General principle: **distribution channels** —
-see the [general principles](../../../programming/release-workflow/README.md).
+Part of the [bash release-workflow spec](./README.md). General principle: **distribution channels**
+— see the [general principles](../../../programming/release-workflow/README.md).
 
 End-user install methods, in priority order. This chapter covers the two user-driven channels: the
 `curl | bash` installer and the AUR packages. The OBS-hosted distro repos are covered in the
-[OBS chapter](05-obs-multi-distro.md).
+[OBS chapter](./05-obs-multi-distro.md).
 
 ## `install.sh` curl one-liner
 
@@ -18,11 +18,11 @@ curl -fsSL https://raw.githubusercontent.com/<user>/<tool>/master/install.sh | b
 The script **must**:
 
 1. Discover the latest tag via the GitHub Releases API.
-1. Download the tarball **and** its `.sha256`.
-1. **Verify the checksum before extracting.** This is the only legitimate complaint about the
+2. Download the tarball **and** its `.sha256`.
+3. **Verify the checksum before extracting.** This is the only legitimate complaint about the
    `curl|bash` pattern — address it.
-1. Unpack to a temp dir.
-1. Run `make install` (default `PREFIX=$HOME/.local`, overridable via env var).
+4. Unpack to a temp dir.
+5. Run `make install` (default `PREFIX=$HOME/.local`, overridable via env var).
 
 Optionally also verify with `gh attestation verify` when the user has `gh` installed.
 

@@ -27,7 +27,7 @@ Pick one mainstream, well-supported generator — do not hand-roll Makefiles for
 - **Meson** — simpler syntax, fast Ninja backend; set the standard with
   `default_options: ['c_std=c17']`.
 
-Both integrate cleanly with the quality gates in [01 — Quality gates](01-quality-gates.md) and
+Both integrate cleanly with the quality gates in [01 — Quality gates](./01-quality-gates.md) and
 export a `compile_commands.json` that clang-tidy and clangd consume.
 
 ## Compiler & C standard

@@ -1,6 +1,6 @@
 # Bash Release — Versioning & Source of Truth
 
-Part of the [bash release-workflow spec](README.md). General principle: **versioning & source of
+Part of the [bash release-workflow spec](./README.md). General principle: **versioning & source of
 truth** — see the [general principles](../../../programming/release-workflow/README.md).
 
 A lean, opinionated workflow for releasing and distributing a Bash CLI on Linux. Targets a
@@ -31,12 +31,12 @@ the committed version leads and the tag mirrors it.
 Six moving parts:
 
 1. `VERSION` file — the committed authoring source of truth; the tag is cut to mirror it.
-1. Conventional commits + `git-cliff` for `CHANGELOG.md`.
-1. `Makefile` that respects `PREFIX`/`DESTDIR` (GNU conventions) and has a `dist` target.
-1. GitHub Actions workflow triggered on `v*` tag → builds tarball, attaches `SHA256SUMS` + SLSA
+2. Conventional commits + `git-cliff` for `CHANGELOG.md`.
+3. `Makefile` that respects `PREFIX`/`DESTDIR` (GNU conventions) and has a `dist` target.
+4. GitHub Actions workflow triggered on `v*` tag → builds tarball, attaches `SHA256SUMS` + SLSA
    provenance, publishes release, triggers the OBS service run.
-1. AUR PKGBUILDs (stable + `-git`) pushed via `git subtree` from `packaging/aur/`.
-1. OBS project (`home:<user>:<tool>`) pulls the same `v*` tag via `obs_scm` and emits signed
+5. AUR PKGBUILDs (stable + `-git`) pushed via `git subtree` from `packaging/aur/`.
+6. OBS project (`home:<user>:<tool>`) pulls the same `v*` tag via `obs_scm` and emits signed
    `.rpm`/`.deb` repos for openSUSE Tumbleweed/Leap, Fedora, Debian, Ubuntu. End-user install: curl
    one-liner, AUR (`yay`/`paru`), or `zypper ar` / `dnf config-manager` / `apt` against the
    OBS-hosted repo.
@@ -44,7 +44,7 @@ Six moving parts:
 The maintainer's working branches are `develop` (integration + release trigger) and `master` (the
 release mirror). The signed release tag is cut on `develop`; CI fast-forwards `master` onto that tag
 — **`master` is written only by CI**, never by a human (see
-[03 — CI release workflow](03-ci-release-workflow.md)).
+[03 — CI release workflow](./03-ci-release-workflow.md)).
 
 ## Versioning — source of truth
 
@@ -55,7 +55,7 @@ Add a `VERSION` file at the repo root containing one line:
 ```
 
 This committed file is the **authoring** source of truth — the one place the number is bumped (by
-`git-cliff --bump`, see [06](06-release-ritual-and-alternatives.md)). The signed `v*` tag is then
+`git-cliff --bump`, see [06](./06-release-ritual-and-alternatives.md)). The signed `v*` tag is then
 cut to match it and is the **published record** every distribution channel keys off. Keeping the
 number authored in exactly one committed file is what GNU coding standards and packaging tools (OBS
 `set_version`, `nfpm`, RPM `%autosetup`) expect, and it leaves nothing to drift.

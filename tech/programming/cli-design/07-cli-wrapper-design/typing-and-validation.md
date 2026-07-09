@@ -24,11 +24,11 @@ into command arguments only at the execution boundary.
 
 1. **Type the domain, not the strings.** Flags become bools/enums, not scattered `.arg("--flag")`
    calls.
-1. **Separate build from execution.** Builder produces a `Command` / `list[str]`; caller decides how
+2. **Separate build from execution.** Builder produces a `Command` / `list[str]`; caller decides how
    to run it.
-1. **Make invalid states unrepresentable.** Mutually exclusive flags = enum, not two bools.
-1. **Error handling at the boundary.** Parse stdout/stderr into your own result types.
-1. **Common execution interface.** A trait/protocol shared across all wrapped CLIs.
+3. **Make invalid states unrepresentable.** Mutually exclusive flags = enum, not two bools.
+4. **Error handling at the boundary.** Parse stdout/stderr into your own result types.
+5. **Common execution interface.** A trait/protocol shared across all wrapped CLIs.
 
 ## Complexity Ladder
 

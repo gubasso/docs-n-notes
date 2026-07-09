@@ -6,7 +6,7 @@ or record an explicit exception in the owning source of truth.
 ## New or changed docs
 
 - [ ] The file has one primary reader need: task, lookup, understanding, or decision.
-- [ ] The file lives in the matching zone from [01 — Diataxis Zones](01-diataxis-zones.md).
+- [ ] The file lives in the matching zone from [01 — Diataxis Zones](./01-diataxis-zones.md).
 - [ ] The file does not restate a fact already owned elsewhere.
 - [ ] Cross-links point to the owning source instead of copying it.
 - [ ] No filesystem trees are pasted into markdown; index files (README/AGENTS) explain purpose and
@@ -16,11 +16,11 @@ or record an explicit exception in the owning source of truth.
       cadence, and an up-to-date tracking entry when needed.
 - [ ] The root docs README remains an index, not a duplicate source of rules.
 
-See [08 — Tracking and Revalidation](08-tracking-and-revalidation.md).
+See [08 — Tracking and Revalidation](./08-tracking-and-revalidation.md).
 
 ## ADRs
 
-- [ ] New ADRs use the sections from [02 — Lean ADRs](02-lean-adrs.md).
+- [ ] New ADRs use the sections from [02 — Lean ADRs](./02-lean-adrs.md).
 - [ ] The filled ADR body is at or below 350 words.
 - [ ] The ADR has exactly one canonical `Status:`.
 - [ ] Status is one of `Proposed`, `Accepted`, `Implemented`, `Superseded`, or `Rejected`.
@@ -42,7 +42,7 @@ See [08 — Tracking and Revalidation](08-tracking-and-revalidation.md).
 - [ ] Behavior contracts are expressed by names, types, and tests where possible.
 - [ ] The file that owns the fact is clear enough that future edits have one target.
 
-See [04 — Single Source of Truth](04-single-source-of-truth.md).
+See [04 — Single Source of Truth](./04-single-source-of-truth.md).
 
 ## Drafts
 
@@ -53,7 +53,7 @@ See [04 — Single Source of Truth](04-single-source-of-truth.md).
 - [ ] No draft is the only home for a real project decision.
 - [ ] Promotion removed temporary reasoning and repeated facts.
 
-See [05 — Drafts and Promotion](05-drafts-and-promotion.md).
+See [05 — Drafts and Promotion](./05-drafts-and-promotion.md).
 
 ## Agent readiness
 
@@ -64,7 +64,7 @@ See [05 — Drafts and Promotion](05-drafts-and-promotion.md).
 - [ ] Oversized ADRs, repeated tables, stale drafts, and broad summaries have been trimmed.
 - [ ] Filenames can be understood from search results without opening the files.
 
-See [07 — AI Agent Considerations](07-ai-agent-considerations.md).
+See [07 — AI Agent Considerations](./07-ai-agent-considerations.md).
 
 ## Known issues
 
@@ -78,7 +78,7 @@ See [07 — AI Agent Considerations](07-ai-agent-considerations.md).
       recurrence signal; the raw trail is left in version-control history.
 - [ ] The registry/index row matches the case directory and its status.
 
-See [09 — Known Issues](09-known-issues.md).
+See [09 — Known Issues](./09-known-issues.md).
 
 ## Verification
 
@@ -87,6 +87,6 @@ See [09 — Known Issues](09-known-issues.md).
 - [ ] Operational docs are under guides or reference, not topic directories beside the Diataxis
       zones.
 - [ ] Comments added with the docs change are load-bearing per
-      [03 — Comments and Code as SoT](03-comments-and-code-as-sot.md).
+      [03 — Comments and Code as SoT](./03-comments-and-code-as-sot.md).
 - [ ] The reviewer can name the source of truth for every durable fact touched by the change.
 - [ ] Any generated digest was updated from source files and does not introduce new guidance.

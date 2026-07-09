@@ -75,43 +75,43 @@ Macro helpers to input common texts:
 ```
 " js helpers
 augroup jshelpers
-    au! FileType javascript nnoremap <leader>c "cyiwoconsole.log(c)
+    au! FileType javascript nnoremap <leader>c "cyiwoconsole.log(<C-r>c)<Esc>
 augroup END
 
 " auto create docs markdown helpers
 augroup mdhelpers
     au!
     "" reference structure with a sequence number
-    au FileType markdown nnoremap <leader>ri o[^1]: []()"+pT)
+    au FileType markdown nnoremap <leader>ri o[^1]: []()<Esc>"+pT)
     au FileType markdown nnoremap <leader>rs :norm 0ll:let @n=0
-"nyiwo[^=n+1
-]: []()"+pT)
+"nyiwo[^<C-r>=<C-r>n+1
+]: []()<Esc>"+pT)
     "" code block: simple
     au FileType markdown nnoremap <leader>cc o
 ```
 
 ```
-kk
+<Esc>kk
     au FileType markdown nnoremap <leader>cp o
 ```
 
 ```
-kk"+p
+<Esc>kk"+p
     "" code block: with file name
     au FileType markdown nnoremap <leader>ff o
 **``**
 ```
 
 ```
-kkkklll
+<Esc>kkkklll
     au FileType markdown nnoremap <leader>fp o
 **``**
 ```
 
 ```
-kk"+p
+<Esc>kk"+p
     "" link and paste at end
-    au FileType markdown nnoremap <leader>i i[]()"+pT)
+    au FileType markdown nnoremap <leader>i i[]()<Esc>"+pT)
 augroup END
 ```
 
@@ -370,7 +370,7 @@ native diff mode is the simplest:
    :edit file1.txt
    ```
 
-1. Run:
+2. Run:
 
    ```vim
    :vert diffsplit file2.txt
