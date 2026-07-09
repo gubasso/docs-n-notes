@@ -54,5 +54,4 @@ Any `.py` file with `django.` / `rest_framework.` imports, or project with `mana
 ## See also
 
 - [python.md](python.md).
-- [../security-review.md](../security-review.md).
 - Upstream: <https://github.com/awesome-skills/code-review-skill/blob/main/reference/django.md>.

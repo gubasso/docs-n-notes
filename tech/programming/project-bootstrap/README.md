@@ -88,9 +88,8 @@ files):
   vitest, tsc; CLI + web-app kinds.
 - [`lua`](../../languages/lua/project-bootstrap-spec/) — LuaRocks, stylua/luacheck/busted;
   rock-library kind.
-- [`nix`](../../languages/nix/project-bootstrap-spec/) — flake init, statix/deadnix,
-  `nix flake
-  check`; flake-project kind.
+- [`nix`](../../languages/nix/project-bootstrap-spec/) — flake init, `nix flake check`,
+  statix/deadnix; flake-project kind.
 - [`python`](../../languages/python/project-bootstrap-spec/) — uv, ruff, mypy, pytest; CLI + library
   kinds.
 - [`r`](../../languages/r/project-bootstrap-spec/) — usethis/renv, lintr/testthat; package +
