@@ -11,6 +11,8 @@
 gh auth status
 ```
 
+> First-time setup, expired token, or credential-helper issues? See [gh-auth.md](../gh-auth.md).
+
 ## 01 — Open an Issue
 
 ```bash

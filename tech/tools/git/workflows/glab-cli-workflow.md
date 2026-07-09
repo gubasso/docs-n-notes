@@ -6,6 +6,8 @@
 glab auth status
 ```
 
+> First-time setup, expired token, or credential-helper issues? See [glab-auth.md](../glab-auth.md).
+
 ## 01 — Open an Issue
 
 ```bash

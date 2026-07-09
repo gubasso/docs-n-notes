@@ -1,22 +1,23 @@
 ---
 digest-of: tech/tools/git
-last-synced: 2026-07-06
+last-synced: 2026-07-09
 source-files:
   - README.md
   - cmds-examples.md
   - diffs.md
   - feature-lifecycle-git-commands.md
   - feature-lifecycle.md
+  - gh-auth.md
   - git-commit-signing-with-ssh-git-commit-s-cheatsheet.md
   - git-qa.md
   - github.md
   - gitolite.md
-  - glab-https-git-credential-helper-setup.md
+  - glab-auth.md
   - rebase-workflow.md
   - workflows/gh-cli-workflow.md
   - workflows/glab-cli-workflow.md
   - workflows/make-origin-match-your-local-branch-state.md
-token-estimate: 14700
+token-estimate: 15300
 ---
 
 # AGENTS
@@ -32,21 +33,24 @@ diffs, and repo administration; subtrees cover branch protection and workflow-sp
   recovery.
 - **Branching**: Feature-lifecycle notes and related command sequences for local and remote branch
   work.
-- **Administration**: GitHub, Gitolite, and GitLab credential or repository management notes.
+- **Administration**: GitHub, Gitolite, and GitLab repository management notes.
+- **Authentication**: `gh`/`glab` auth runbooks — check status, keyring token storage, and HTTPS git
+  credential-helper setup.
 - **Workflows**: Rebase and origin-state runbooks for repeatable branch operations.
 - **Comparison material**: Diffs and command examples complement the workflow guides.
 
 ## Source Map
 
-| Topic                                  | File / Subtree                                                          |
-| -------------------------------------- | ----------------------------------------------------------------------- |
-| Command examples and conflict handling | `cmds-examples.md`, `diffs.md`                                          |
-| Feature lifecycle and branch commands  | `feature-lifecycle*.md`                                                 |
-| Commit signing and QA notes            | `git-commit-signing-with-ssh-git-commit-s-cheatsheet.md`, `git-qa.md`   |
-| GitHub, Gitolite, GitLab setup         | `github.md`, `gitolite.md`, `glab-https-git-credential-helper-setup.md` |
-| Rebase workflow reference              | `rebase-workflow.md`                                                    |
-| Branch protection workflows            | `branch-protection/`                                                    |
-| Workflow runbooks                      | `workflows/`                                                            |
+| Topic                                  | File / Subtree                                                        |
+| -------------------------------------- | --------------------------------------------------------------------- |
+| Command examples and conflict handling | `cmds-examples.md`, `diffs.md`                                        |
+| Feature lifecycle and branch commands  | `feature-lifecycle*.md`                                               |
+| Commit signing and QA notes            | `git-commit-signing-with-ssh-git-commit-s-cheatsheet.md`, `git-qa.md` |
+| GitHub, Gitolite setup                 | `github.md`, `gitolite.md`                                            |
+| `gh` / `glab` authentication           | `gh-auth.md`, `glab-auth.md`                                          |
+| Rebase workflow reference              | `rebase-workflow.md`                                                  |
+| Branch protection workflows            | `branch-protection/`                                                  |
+| Workflow runbooks                      | `workflows/`                                                          |
 
 ## Maintenance Notes
 

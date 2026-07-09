@@ -209,8 +209,10 @@ mechanics; the workflow model and its per-language bindings are documented there
   - companion git commands for each lifecycle phase
 - [rebase-workflow.md](./rebase-workflow.md)
   - rebasing feature branches onto upstream
-- [glab-https-git-credential-helper-setup.md](./glab-https-git-credential-helper-setup.md)
-  - configuring the glab HTTPS credential helper
+- [glab-auth.md](./glab-auth.md)
+  - checking, fixing, and setting up `glab` authentication (keyring + HTTPS credential helper)
+- [gh-auth.md](./gh-auth.md)
+  - checking, fixing, and setting up `gh` authentication (keyring + HTTPS credential helper)
 - [branch-protection/](./branch-protection/)
   - GitHub/GitLab branch-protection rulesets, scripts, and workflows
 - [workflows/](./workflows/)
