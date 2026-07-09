@@ -1,6 +1,6 @@
 ---
 digest-of: tech/infra/devops
-last-synced: 2026-05-28
+last-synced: 2026-07-09
 source-files:
   - README.md
   - ansible.md

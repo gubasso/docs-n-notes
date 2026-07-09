@@ -51,7 +51,9 @@ Everyday work after setup is not here; this is the one-time scaffold.
 8. **Apply language + implementation-kind overlays.** Jump to your language binding and follow its
    runbook, then its implementation-kind file. →
    [`project-bootstrap-spec/`](../../languages/rust/project-bootstrap-spec/README.md) (Rust
-   reference binding).
+   reference binding). _Fast path (Rust):_ the
+   [Rust cookbook](../../languages/rust/cookbook/README.md) is a single-file, copy-paste runbook
+   spanning these steps plus the later release phase.
 
 ## Automation
 

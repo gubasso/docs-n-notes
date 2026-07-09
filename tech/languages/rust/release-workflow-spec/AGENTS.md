@@ -1,6 +1,6 @@
 ---
 digest-of: tech/languages/rust/release-workflow-spec
-last-synced: 2026-07-08
+last-synced: 2026-07-09
 source-files:
   - README.md
   - 00-branch-model-and-release-plz.md

@@ -28,12 +28,9 @@ Everyday releases after setup are not here — those are just "merge the release
 2. **Create the repo and set the default branch to `develop`.** release-plz auto-detects it. →
    [first-run enablement](../../../tools/git/branch-protection/first-run-enablement.md).
 
-3. **Enable Actions + workflow permissions.**
-   - GitHub: Settings → Actions → General → allow Actions; **Workflow permissions → Read and
-     write**; tick **Allow GitHub Actions to create and approve pull requests** (release-plz opens
-     the release PR).
-   - GitLab: enable CI/CD; allow the pipeline to run; configure the OIDC `id_token`.
-
+3. **Enable Actions + workflow permissions** so CI can run and write — release-plz commits the bump,
+   opens the release PR (needs "allow Actions to create PRs"), and the `promote` job pushes
+   `master`. The exact GitHub read/write toggles and the GitLab CI/CD + OIDC `id_token` steps are in
    → [first-run enablement](../../../tools/git/branch-protection/first-run-enablement.md).
 
 4. **Apply branch protection** for `develop`, `master`, and tags — `master` written only by CI (keep

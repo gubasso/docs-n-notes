@@ -12,15 +12,6 @@
 
 - [KDE ricing](../desktop-environments/kde/ricing-make-your-kde-sweet.md)
 
-## Notes in this directory
-
-- [color-management](./color-management.md)
-- [gtk-qt-ui-coherence-x11-window-managers](./gtk-qt-ui-coherence-x11-window-managers.md)
-- [picom-troubleshooting](./picom-troubleshooting.md)
-- [programming-fonts](./programming-fonts.md)
-- [colors/](colors/README.md)
-- [rofi/](rofi/README.md)
-
 ## Wallpapers
 
 xwallpapers

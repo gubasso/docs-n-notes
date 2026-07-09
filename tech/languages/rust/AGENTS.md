@@ -36,6 +36,10 @@ carries its own nested digest).
   `release.yml`), crate metadata, token scopes, helper scripts, SemVer/yank, cargo-dist binary
   distribution, and a per-new-project runbook. Own nested `AGENTS.md`. (Formerly split into a
   separate `crates-io-publishing/` shelf — now merged.)
+- **Cookbook**: the `cookbook/` sub-shelf is a single-file, TLDR ship-it runbook (scaffold → quality
+  gates → branch security → CI → release/publish) that inlines and footnotes the bootstrap and
+  release specs. It is the sanctioned SoT/DRY exception (repo `CLAUDE.md`; ADR-0002) — do **not**
+  de-duplicate it against the specs. Own nested `AGENTS.md`.
 
 ## Source Map
 
@@ -45,6 +49,7 @@ carries its own nested digest).
 | Axum web framework               | `axum.md`                       |
 | Bootstrap (sub-shelf)            | `project-bootstrap-spec/`       |
 | Release & publishing (sub-shelf) | `release-workflow-spec/`        |
+| Ship-it cookbook (sub-shelf)     | `cookbook/`                     |
 | DateTime + serde + SQLx + chrono | `datetime-serde-sqlx-chrono.md` |
 | General Rust patterns            | `patterns.md`                   |
 | General Rust notes               | `rust.md`                       |

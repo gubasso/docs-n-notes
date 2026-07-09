@@ -1,8 +1,5 @@
 # openSUSE
 
-- [openSUSE notes](./linux-opensuse.md)
-- [Build Service](./opensuse-build-service-obs.md)
-- [Tumbleweed installation settings](./opensuse-tumbleweed-installation-settings.md)
-- [Tumbleweed partition table](./opensuse-tumbleweed-partition-table.md)
-- [Minimal ClamAV setup](./opensuse-tumbleweed-minimal-workable-antivirus-antimalware-setup-clamav.md)
-- [SLES cloud](./sles-cloud.md)
+openSUSE notes — general reference, the Build Service (OBS), Tumbleweed installation settings and
+partition table, a minimal ClamAV antivirus setup, and SLES cloud live as topic files here; the
+[`AGENTS.md`](./AGENTS.md) Source Map indexes them file by file.

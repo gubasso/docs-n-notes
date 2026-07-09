@@ -1,6 +1,6 @@
 ---
 digest-of: tech/systems/linux/opensuse
-last-synced: 2026-06-09
+last-synced: 2026-07-09
 source-files:
   - README.md
   - linux-opensuse.md

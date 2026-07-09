@@ -6,39 +6,34 @@ Personal notes and documentations for tech and a bunch of unrelated topics.
 > [tech/programming/project-bootstrap/](tech/programming/project-bootstrap/README.md) — the
 > once-per-project setup recipe (general → language → implementation-kind), with a Rust reference
 > binding.
+>
+> **Shipping a Rust crate, fast?** →
+> [tech/languages/rust/cookbook/](tech/languages/rust/cookbook/README.md) — one-file TLDR runbook:
+> scaffold → gates → branch security → CI → release/publish.
 
 ## Structure
 
-```
-tech/                # tech knowledge base
-├── programming/     # language-agnostic: paradigms, patterns, principles, architecture,
-│                    # best-practices, design-decisions, dsa, research
-├── languages/       # specific languages: rust/, python/, javascript/ (incl. ts, svelte, node), r/, …
-├── platforms/       # specific runtimes/ecosystems: solana/, icp/, webdev/
-├── infra/           # ops & infrastructure: aws/, gcp/, devops/, containers/, networking/,
-│                    # server-vps/, web-server/, filesync/, research/
-├── systems/         # OS-level: linux/, shell/, security/ (incl. pass), emails/
-├── tools/           # editors, terminals, dev tools: git/, vim-neovim/, tmux, alacritty, …
-├── data/            # data-engineering/, dbs-databases/
-├── workflows/       # cross-cutting workflows
-└── projects/        # project-specific notes
+`tech/` is the tech knowledge base; `personal/` holds life / non-tech notes. Each top-level area
+reserves a domain — put new content where its domain matches (the directories themselves are the
+source of truth for what currently exists):
 
-personal/            # life / non-tech
-├── health/
-└── articles/        # notes from articles/videos
-```
+- **`tech/programming/`** — language-agnostic software engineering: paradigms, patterns, principles,
+  architecture, best-practices, design-decisions, dsa. _Any cross-cutting idea that holds for any
+  language or stack._
+- **`tech/languages/`** — language-specific guidance, one subdirectory per language. _"In
+  Rust/Python/JS, you do X."_
+- **`tech/platforms/`** — specific runtimes/ecosystems. _A Solana program, an ICP canister, the
+  browser DOM._
+- **`tech/infra/`** — provisioning and operating machines and networks. _Cloud, devops, containers,
+  networking, servers._
+- **`tech/systems/`** — what lives on the box. _Kernel/Linux, shell, mail, encryption/security._
+- **`tech/tools/`** — dev tooling you run on your laptop. _Git, Nix, editors, terminals._
+- **`tech/data/`** — schema and storage. _Data engineering, databases._
+- **`tech/workflows/`** — cross-cutting workflows that span the buckets above.
+- **`tech/projects/`** — notes scoped to one specific project.
+- **`personal/`** — life / non-tech (health, notes from articles and videos).
 
-### Where to add new content
-
-- Setting up a new project → `tech/programming/project-bootstrap/`
-- Cross-cutting idea (works for any language/stack) → `tech/programming/`
-- "In Rust/Python/JS, you do X" → `tech/languages/<lang>/`
-- Specific ecosystem (Solana program, ICP canister, browser DOM) → `tech/platforms/<name>/`
-- Provisioning/deploying machines/networks → `tech/infra/`
-- Lives on the box (kernel, shell, mail, encryption) → `tech/systems/`
-- Dev tooling you run on your laptop → `tech/tools/`
-- Schema/storage → `tech/data/`
-- Research notes → `<bucket>/research/` matching the topic
+Research notes live in a `research/` subdirectory of whichever bucket matches the topic.
 
 ## Web Resources (Utils)
 

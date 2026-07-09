@@ -9,6 +9,9 @@ implementation-kinds.
 This binding **overlays** the general spine; it does not restate it. Read the general recipe first,
 then the Rust specifics here.
 
+For a condensed, copy-paste hands-on path across bootstrap **and** release in one file, see the
+[cookbook](../cookbook/README.md) — it inlines and footnotes the chapters here.
+
 ## How to use this binding
 
 1. Read the general [hub](../../../programming/project-bootstrap/README.md) and

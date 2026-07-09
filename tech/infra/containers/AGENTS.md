@@ -1,6 +1,6 @@
 ---
 digest-of: tech/infra/containers
-last-synced: 2026-07-04
+last-synced: 2026-07-09
 source-files:
   - README.md
   - docker-devcontainer-cleanup.md

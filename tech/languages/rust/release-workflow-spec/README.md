@@ -17,6 +17,9 @@ Follow the [**runbook**](./runbook.md) — the ordered, per-project manual steps
 enabling Actions, branch protection, the one-time first publish, configuring the trusted publisher,
 optional cargo-dist). The numbered chapters below are the reference each step links to.
 
+For a single-file, copy-paste path that also covers the earlier scaffold/quality-gate/CI phase, see
+the [cookbook](../cookbook/README.md) — it inlines and footnotes this shelf.
+
 ## Index
 
 | # | Chapter                                                                    | One-line hook                                                                         |

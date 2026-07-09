@@ -1,6 +1,6 @@
 ---
 digest-of: tech/systems/linux/void
-last-synced: 2026-05-28
+last-synced: 2026-07-09
 source-files:
   - README.md
   - choose-ntp-clients-on-void-linux.md

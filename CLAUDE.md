@@ -12,6 +12,21 @@ including human-authored technical notes and generated agent digests.
   consumption.
 - No generated file may become the canonical source for technical decisions.
 
+## Single Source of Truth (SoT) & DRY
+
+- Every technical fact lives in exactly **one** canonical place; other pages link to it rather than
+  restate it. When two pages would state the same fact, one owns it and the rest link.
+- Layered overlays are **not** duplication: a language/tool binding may state its own specifics and
+  link up to the general principle it overlays, but must not restate that general principle. Local
+  operational summaries and `AGENTS.md` digests are likewise not duplication.
+- **Cookbook exception.** A cookbook / TLDR runbook — a self-contained, top-to-bottom task recipe
+  that lives in a `cookbook/` directory and/or opens with a TLDR/cookbook header — **may
+  inline-duplicate** content from canonical specs so it stays self-contained. It MUST footnote/link
+  each borrowed snippet to the spec that owns it, and MUST NOT be treated as the SoT for any
+  decision (on disagreement, the spec wins). The DRY discipline does not apply to cookbooks, and
+  SoT/de-duplication passes skip them. Rationale:
+  [design-decisions/cookbook-duplication-exception.md](tech/programming/design-decisions/cookbook-duplication-exception.md).
+
 ## Standard Repository Path
 
 Use `$DOCS_NOTES_REPO` as the canonical environment variable for path resolution.
@@ -106,9 +121,33 @@ Body rules:
   - `tech/tools/<tool>` for tool-specific usage and workflows
   - `tech/platforms`, `tech/infra`, `tech/systems`, `tech/data`, `tech/workflows` for their domain
     scopes
-- Use `README.md` as the index file for each directory.
+- Use `README.md` as the **semantic index** for each directory — it defines the directory's domain
+  and organization, not a mirror of the file listing. See
+  [README Content Rule](#readme-content-rule).
 - Use kebab-case file and directory names.
 - Prefer shallow, navigable trees unless depth is needed for clear separation.
+
+## README Content Rule
+
+`README.md` defines its directory's **domain, organization, and semantics** — what kind of content
+the directory reserves ("here we keep X"), how the area is arranged, and what its parts mean. That
+is the durable, human-facing meaning of the directory.
+
+- **Do not replicate disk state.** No ASCII directory trees, and no exhaustive `ls`-style
+  enumerations of child files/subdirectories. The filesystem is the SoT for _what exists_ and drifts
+  fast; a README that mirrors it goes stale silently.
+- **Links are allowed when justified.** Point to a specific file or directory when the link carries
+  organizational/semantic meaning (a curated landmark), not as a mechanical listing. Test: does this
+  README own the meaning of that part of the tree, or is it just echoing `ls`?
+- **Auto-generated tables of contents are exempt.** A ToC block delimited by generator markers (e.g.
+  `<!--TOC-->` … `<!--TOC-->` or `<!-- toc -->` … `<!-- tocstop -->`) lists the page's **own
+  headings** and is produced by tooling, so it is allowed — do not hand-trim it; let the generator
+  refresh it when the page's sections change. (This exemption is only for tool-managed in-page ToCs;
+  it does not license a hand-written enumeration of sibling files.)
+- **`AGENTS.md` is exempt** — mapping sources (including a file-level `Source Map`) is its job.
+
+Rationale:
+[design-decisions/readme-semantic-not-structural.md](tech/programming/design-decisions/readme-semantic-not-structural.md).
 
 ## Skill Consumption Order
 

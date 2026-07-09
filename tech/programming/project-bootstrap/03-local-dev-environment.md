@@ -6,25 +6,14 @@ the same toolchain, and a cross-editor formatting baseline.
 ## Nix devShell + `.envrc`
 
 A per-project Nix flake devShell pins the toolchain and dev tools declaratively, so the environment
-is reproducible rather than "whatever is on your machine". The idiomatic shape is a flake using
-`flake-utils.eachDefaultSystem` (or `forAllSystems`) over `nixpkgs`, exposing a `devShells.default`
-built with `mkShell`:
+is reproducible rather than "whatever is on your machine". Add an `.envrc` containing `use flake` so
+[direnv](https://direnv.net/) loads the shell automatically on `cd`, and reuse the same flake in CI
+so local and CI environments cannot drift apart.
 
-```nix
-{
-  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-  inputs.flake-utils.url = "github:numtide/flake-utils";
-  outputs = { nixpkgs, flake-utils, ... }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = import nixpkgs { inherit system; };
-      in { devShells.default = pkgs.mkShell { packages = [ /* tools */ ]; }; });
-}
-```
-
-Add an `.envrc` containing `use flake` so [direnv](https://direnv.net/) loads the shell
-automatically on `cd`. CI reuses the same flake, so local and CI environments cannot drift apart.
-References: [Flakes (NixOS wiki)](https://wiki.nixos.org/wiki/Flakes),
-[Nix devShell intro](https://nixos-and-flakes.thiscute.world/development/intro).
+The flake shape (a `devShells.default` built with `mkShell`), the direnv wiring, and per-language
+starting templates are owned by
+[`tools/nix/02 — Per-project devShell`](../../tools/nix/02-per-project-devshell.md) — follow it for
+the template; the language binding names the toolchain that goes inside.
 
 ## `.editorconfig`
 
