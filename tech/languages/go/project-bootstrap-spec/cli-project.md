@@ -26,5 +26,6 @@ When scaffolding a CLI, layer these on the buildable module in order:
 ## Binary distribution (later phase)
 
 Shipping prebuilt CLI binaries (release archives, `go install`, GoReleaser) is release-phase work,
-not bootstrap. Bootstrap stops at a working, gated CLI module. Add a Go `release-workflow-spec/` and
-link it here when you set up Go releases.
+not bootstrap. Bootstrap stops at a working, gated CLI module. The Go
+[`release-workflow-spec/`](../release-workflow-spec/README.md) is intentionally deferred until a
+real Go release need arises.

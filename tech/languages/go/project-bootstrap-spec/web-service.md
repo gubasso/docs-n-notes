@@ -28,5 +28,6 @@ When scaffolding an HTTP service, layer these on the buildable module in order:
 ## Deployment (later phase)
 
 Container images, deployment manifests, and release automation are later-phase work, not bootstrap.
-Bootstrap stops at a working, gated service module. Add a Go `release-workflow-spec/` and link it
-here when you set up Go releases.
+Bootstrap stops at a working, gated service module. The Go
+[`release-workflow-spec/`](../release-workflow-spec/README.md) is intentionally deferred until a
+real Go release need arises.

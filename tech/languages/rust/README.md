@@ -3,7 +3,6 @@
 Rust notes and workflow references.
 
 - [axum](axum.md)
-- [code-review-guide](code-review-guide.md)
 - [release-workflow-spec](release-workflow-spec/README.md) — the unified Rust release & publishing
   shelf: `develop`/`master` workflow with release-plz + `master` promotion, crates.io Trusted
   Publishing, crate metadata, token scopes, helper scripts, cargo-dist, and a per-new-project
