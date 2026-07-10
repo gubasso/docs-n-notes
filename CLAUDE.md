@@ -24,8 +24,7 @@ including human-authored technical notes and generated agent digests.
   inline-duplicate** content from canonical specs so it stays self-contained. It MUST footnote/link
   each borrowed snippet to the spec that owns it, and MUST NOT be treated as the SoT for any
   decision (on disagreement, the spec wins). The DRY discipline does not apply to cookbooks, and
-  SoT/de-duplication passes skip them. Rationale:
-  [design-decisions/cookbook-duplication-exception.md](tech/programming/design-decisions/cookbook-duplication-exception.md).
+  SoT/de-duplication passes skip them.
 
 ## Standard Repository Path
 
@@ -145,9 +144,6 @@ is the durable, human-facing meaning of the directory.
   refresh it when the page's sections change. (This exemption is only for tool-managed in-page ToCs;
   it does not license a hand-written enumeration of sibling files.)
 - **`AGENTS.md` is exempt** — mapping sources (including a file-level `Source Map`) is its job.
-
-Rationale:
-[design-decisions/readme-semantic-not-structural.md](tech/programming/design-decisions/readme-semantic-not-structural.md).
 
 ## Skill Consumption Order
 
