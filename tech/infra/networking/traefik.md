@@ -1,3 +1,0 @@
-# Traefik Proxy
-
-- traefik + portainer

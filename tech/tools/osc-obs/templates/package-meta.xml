@@ -1,5 +1,0 @@
-<package name="PACKAGENAME" project="home:YOURUSER:PROJECTNAME">
-  <title>Short package title</title>
-  <description>One-paragraph description of what this package does.</description>
-  <url>https://github.com/OWNER/REPO</url>
-</package>
